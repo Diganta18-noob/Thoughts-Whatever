@@ -1,0 +1,65 @@
+import type { Metadata } from "next";
+import { PageHeader } from "@/components/layout/page-header";
+import { PieceCard } from "@/components/pieces/piece-card";
+import { T } from "@/components/i18n/t";
+import { getRecentPieces, countPieces } from "@/lib/pieces";
+import { Count } from "@/components/i18n/values";
+
+export const revalidate = 300;
+
+export const metadata: Metadata = {
+  title: "রচনা",
+  description:
+    "প্রতিটি রিলের পিছনের সম্পূর্ণ লেখা — বাংলা সাহিত্য, পাঠ ও বিশ্লেষণ।",
+  alternates: { canonical: "/writing" },
+};
+
+export default async function WritingPage() {
+  const [pieces, total] = await Promise.all([
+    getRecentPieces({ kind: "RACHANA", take: 60 }),
+    countPieces("RACHANA"),
+  ]);
+
+  const [lead, ...rest] = pieces;
+
+  return (
+    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+      <PageHeader
+        labelEn="Writing"
+        titleBn="রচনা"
+        descBn="রিলে যতটা বলা যায় তা সামান্যই। এখানে প্রতিটি লেখার পুরোটা আছে — যেভাবে লেখা হয়েছিল।"
+        descEn="The full text behind each reel"
+        count={<Count k="common.count" value={total} />}
+      />
+
+      {pieces.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <>
+          {lead && (
+            <div className="border-b border-rule py-12">
+              <PieceCard piece={lead} lead />
+            </div>
+          )}
+
+          {rest.length > 0 && (
+            <div className="grid gap-9 py-12 sm:grid-cols-2 lg:grid-cols-3">
+              {rest.map((piece) => (
+                <PieceCard key={piece.slug} piece={piece} />
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+function EmptyState() {
+  return (
+    <p className="py-24 text-center text-bengali-base text-content-faint">
+      <T k="empty.nothingPublished" bnClassName="font-bengali" />{" "}
+      <T k="empty.comingSoon" bnClassName="font-bengali" />
+    </p>
+  );
+}
