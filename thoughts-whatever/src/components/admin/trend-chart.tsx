@@ -1,6 +1,6 @@
 "use client";
 
-import { toBengaliNumber } from "@/lib/bengali";
+import { useTranslation } from "@/components/providers/language-provider";
 
 interface TrendData {
   date: string;
@@ -13,10 +13,12 @@ interface TrendChartProps {
 }
 
 export function TrendChart({ data }: TrendChartProps) {
+  const t = useTranslation();
+
   if (!data || data.length === 0) {
     return (
-      <div className="flex h-64 items-center justify-center border border-rule font-bengali text-sm text-content-faint">
-        কোনও তথ্য পাওয়া যায়নি
+      <div className="flex h-64 items-center justify-center border border-rule font-sans text-sm text-content-faint">
+        {t("common.empty")}
       </div>
     );
   }
@@ -42,17 +44,17 @@ export function TrendChart({ data }: TrendChartProps) {
     <div className="border border-rule bg-surface p-5">
       <div className="flex items-center justify-between pb-4">
         <div>
-          <span className="label" lang="en">
+          <span className="label">
             Traffic Trends
           </span>
-          <h3 className="font-bengali text-lg font-medium text-content" lang="bn">
-            দৈনিক পাঠ ও পাঠক (শেষ ৩০ দিন)
+          <h3 className="font-sans text-lg font-medium text-content">
+            {t("admin.dashboard.trafficTrend")}
           </h3>
         </div>
         <div className="flex items-center gap-4 font-sans text-xs text-content-soft">
           <div className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-accent" />
-            <span>পাঠ সংখ্যা (Views)</span>
+            <span>{t("admin.dashboard.totalViews")}</span>
           </div>
         </div>
       </div>
@@ -84,7 +86,7 @@ export function TrendChart({ data }: TrendChartProps) {
               r="3"
               className="fill-surface stroke-accent text-accent transition hover:r-5"
             >
-              <title>{`${p.date}: ${toBengaliNumber(p.views)} views`}</title>
+              <title>{`${p.date}: ${p.views} views`}</title>
             </circle>
           ))}
         </svg>

@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useTranslation } from "@/components/providers/language-provider";
 
 export function LoginForm({ next }: { next: string }) {
   const router = useRouter();
+  const t = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -32,9 +34,9 @@ export function LoginForm({ next }: { next: string }) {
         router.replace(next);
         return;
       }
-      setError(data.error || "ঢোকা গেল না।");
+      setError(data.error || t("admin.login.errorDefault"));
     } catch {
-      setError("সংযোগে সমস্যা হচ্ছে।");
+      setError(t("admin.login.errorNetwork"));
     }
     setBusy(false);
   }
@@ -76,7 +78,7 @@ export function LoginForm({ next }: { next: string }) {
       </div>
 
       {error && (
-        <p className="font-bengali text-[0.875rem] text-accent" lang="bn">
+        <p className="text-[0.875rem] text-accent">
           {error}
         </p>
       )}
@@ -84,10 +86,10 @@ export function LoginForm({ next }: { next: string }) {
       <button
         type="submit"
         disabled={busy}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2.5 font-bengali text-[0.9375rem] text-surface transition hover:opacity-90 disabled:opacity-50"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2.5 text-[0.9375rem] text-surface transition hover:opacity-90 disabled:opacity-50"
       >
         {busy && <Loader2 className="h-4 w-4 animate-spin" />}
-        ঢুকুন
+        {t("admin.login.submit")}
       </button>
     </form>
   );

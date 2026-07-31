@@ -199,10 +199,28 @@ model Subscriber {
 // ─── Admin ──────────────────────────────────────────────────
 
 model AdminUser {
-  id           String    @id @default(cuid())
-  email        String    @unique
-  passwordHash String
-  nameBn       String?
-  lastLoginAt  DateTime?
-  createdAt    DateTime  @default(now())
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  nameBn        String?
+  lastLoginAt   DateTime?
+  createdAt     DateTime       @default(now())
+  refreshTokens RefreshToken[]
 }
+
+model RefreshToken {
+  id          String    @id @default(cuid())
+  token       String    @unique
+  adminUserId String
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+  lastUsedAt  DateTime  @default(now())
+  userAgent   String?
+  ipAddress   String?
+  revoked     Boolean   @default(false)
+
+  @@index([adminUserId])
+  @@index([token, revoked])
+}
+

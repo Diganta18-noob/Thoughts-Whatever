@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { createSessionCookie, hashPassword, verifyPassword } from "@/lib/auth";
+import { issueAuthCookies, hashPassword, verifyPassword } from "@/lib/auth";
 import { loginSchema } from "@/lib/validation";
 
 /**
@@ -21,7 +21,6 @@ function throwawayHash() {
   dummyHash ??= hashPassword("no-account-with-this-address");
   return dummyHash;
 }
-
 
 export async function POST(request: Request) {
   let payload: unknown;
@@ -53,7 +52,12 @@ export async function POST(request: Request) {
     );
   }
 
-  await createSessionCookie({ sub: admin.id, email: admin.email });
+  const userAgent = request.headers.get("user-agent") || undefined;
+  const ipAddress =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || undefined;
+
+  await issueAuthCookies(admin.id, admin.email, { userAgent, ipAddress });
+
   await prisma.adminUser.update({
     where: { id: admin.id },
     data: { lastLoginAt: new Date() },

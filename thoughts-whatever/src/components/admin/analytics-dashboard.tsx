@@ -5,9 +5,13 @@ import { StatsCard } from "./stats-card";
 import { TrendChart } from "./trend-chart";
 import { TopArticlesTable, type TopArticleItem } from "./top-articles-table";
 import { toBengaliNumber } from "@/lib/bengali";
-import { Eye, Users, FileText, Bookmark, ExternalLink } from "lucide-react";
+import { Eye, Users, Bookmark, ExternalLink } from "lucide-react";
+import { useTranslation, useLanguage } from "@/components/providers/language-provider";
 
 export function AnalyticsDashboard() {
+  const t = useTranslation();
+  const { isBn } = useLanguage();
+
   const [period, setPeriod] = useState<"7d" | "30d" | "all">("30d");
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<{
@@ -52,16 +56,18 @@ export function AnalyticsDashboard() {
 
   const overview = data.overview;
 
+  const formatNumber = (num: number) => (isBn ? toBengaliNumber(num) : num.toLocaleString());
+
   return (
     <div className="space-y-8">
       {/* Date Filter Bar */}
       <div className="flex items-center justify-between border-b border-rule pb-4">
         <div>
-          <span className="label" lang="en">
+          <span className="label">
             Analytics & Insights
           </span>
-          <h2 className="mt-1 font-bengali text-xl font-medium text-content" lang="bn">
-            পাঠক সংখ্যা ও পরিসংখ্যান
+          <h2 className="mt-1 font-sans text-xl font-medium text-content">
+            {t("admin.dashboard.title")}
           </h2>
         </div>
         <div className="flex items-center gap-1.5 rounded-sm border border-rule p-1 bg-surface">
@@ -69,13 +75,17 @@ export function AnalyticsDashboard() {
             <button
               key={p}
               onClick={() => setPeriod(p)}
-              className={`rounded-sm px-3 py-1 font-mono text-xs transition ${
+              className={`rounded-sm px-3 py-1 font-sans text-xs transition ${
                 period === p
                   ? "bg-accent text-surface"
                   : "text-content-soft hover:text-content"
               }`}
             >
-              {p === "7d" ? "৭ দিন" : p === "30d" ? "৩০ দিন" : "সবসময়"}
+              {p === "7d"
+                ? t("admin.dashboard.period.7d")
+                : p === "30d"
+                ? t("admin.dashboard.period.30d")
+                : t("common.all")}
             </button>
           ))}
         </div>
@@ -85,25 +95,25 @@ export function AnalyticsDashboard() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           labelEn="Total Views"
-          labelBn="মোট পাঠ"
+          labelBn={t("admin.dashboard.totalViews")}
           value={overview?.totalViews ?? 0}
           icon={<Eye className="h-4 w-4" />}
         />
         <StatsCard
           labelEn="Unique Visitors"
-          labelBn="স্বতন্ত্র পাঠক"
+          labelBn={t("admin.dashboard.totalPublished")}
           value={overview?.uniqueVisitors ?? 0}
           icon={<Users className="h-4 w-4" />}
         />
         <StatsCard
           labelEn="Instagram Clicks"
-          labelBn="ইনস্টাগ্রাম ক্লিক"
+          labelBn="Instagram Clicks"
           value={overview?.totalReelClicks ?? 0}
           icon={<ExternalLink className="h-4 w-4" />}
         />
         <StatsCard
           labelEn="Newsletter Subscribers"
-          labelBn="চিঠি গ্রাহক"
+          labelBn={t("admin.dashboard.subscribers")}
           value={overview?.totalSubscribers ?? 0}
           icon={<Bookmark className="h-4 w-4" />}
         />
@@ -120,11 +130,11 @@ export function AnalyticsDashboard() {
         <div className="border border-rule bg-surface p-5">
           <div className="flex items-center justify-between pb-4 border-b border-rule">
             <div>
-              <span className="label" lang="en">
+              <span className="label">
                 Series Completion Rates
               </span>
-              <h3 className="font-bengali text-lg font-medium text-content" lang="bn">
-                ধারাবাহিক পঠন ট্র্যাকিং
+              <h3 className="font-sans text-lg font-medium text-content">
+                {t("admin.series.title")}
               </h3>
             </div>
           </div>
@@ -137,15 +147,14 @@ export function AnalyticsDashboard() {
                     {s.titleBn}
                   </h4>
                   <span className="font-mono text-xs font-semibold text-accent">
-                    {toBengaliNumber(s.completionRate)}% সমাপ্তি
+                    {formatNumber(s.completionRate)}%
                   </span>
                 </div>
-                <div className="mt-2 flex items-center gap-4 text-xs text-content-faint font-bengali" lang="bn">
-                  <span>পর্ব: {toBengaliNumber(s.totalEpisodes)}টি</span>
-                  <span>মোট পাঠ: {toBengaliNumber(s.totalViews)}</span>
-                  <span>গড় পাঠ: {toBengaliNumber(s.avgViews)}</span>
+                <div className="mt-2 flex items-center gap-4 text-xs text-content-faint">
+                  <span>Episodes: {formatNumber(s.totalEpisodes)}</span>
+                  <span>Views: {formatNumber(s.totalViews)}</span>
+                  <span>Avg: {formatNumber(s.avgViews)}</span>
                 </div>
-                {/* Progress bar visual */}
                 <div className="mt-2.5 h-1.5 w-full rounded-full bg-rule/50 overflow-hidden">
                   <div
                     className="h-full bg-accent transition-all duration-300"
@@ -156,8 +165,8 @@ export function AnalyticsDashboard() {
             ))}
 
             {(!data.seriesAnalytics || data.seriesAnalytics.length === 0) && (
-              <p className="py-8 text-center font-bengali text-bengali-sm text-content-faint" lang="bn">
-                কোনও ধারাবাহিক পাওয়া যায়নি।
+              <p className="py-8 text-center font-sans text-xs text-content-faint">
+                {t("common.empty")}
               </p>
             )}
           </div>

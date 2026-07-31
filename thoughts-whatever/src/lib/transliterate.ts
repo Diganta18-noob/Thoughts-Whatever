@@ -38,6 +38,7 @@ export function toEnglishSlug(text: string): string {
   return clean
     .toLowerCase()
     .trim()
+    .replace(/_/g, "-")
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
@@ -67,13 +68,16 @@ export function autoTransliterate(text: string, targetLocale: "bn" | "en" = "en"
 /** Check if text contains Bengali transliterable brand names */
 export function hasBengaliTransliterableText(text: string): boolean {
   if (!text || typeof text !== "string") return false;
-  return BENGALI_BRAND_PATTERNS.some((pattern) => pattern.test(text));
+  return BENGALI_BRAND_PATTERNS.some((pattern) => {
+    pattern.lastIndex = 0;
+    return pattern.test(text);
+  });
 }
 
 /** Check if text contains English transliterable brand names */
 export function hasEnglishTransliterableText(text: string): boolean {
   if (!text || typeof text !== "string") return false;
-  return /thoughts\s+whatever/gi.test(text);
+  return /thoughts|whatever/gi.test(text);
 }
 
 /** Format bilingual text */

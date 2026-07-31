@@ -9,6 +9,7 @@ import { bengaliSlug, countBengaliWords, readingMinutes, toBengaliNumber } from 
 import { deriveExcerpt } from "@/lib/markdown";
 import { KIND_META, piecePath, type PieceKindKey } from "@/lib/nav";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/components/providers/language-provider";
 
 /**
  * The editor.
@@ -205,6 +206,7 @@ export function PieceEditor({
   series: EditorOption[];
 }) {
   const router = useRouter();
+  const t = useTranslation();
   const isNew = !initial.id;
 
   const [form, setForm] = useState<EditorPiece>(initial);
@@ -322,7 +324,7 @@ export function PieceEditor({
 
       if (!res.ok || !data.ok) {
         if (data.fieldErrors) setErrors(data.fieldErrors);
-        setNotice(data.error || "সংরক্ষণ হয়নি — উপরের ঘরগুলো দেখুন।");
+        setNotice(data.error || t("admin.editor.saveError"));
         setBusy(false);
         return;
       }
@@ -330,7 +332,7 @@ export function PieceEditor({
       setDirty(false);
       setForm((prev) => ({ ...prev, status }));
       setNotice(
-        status === "PUBLISHED" ? "প্রকাশ হয়ে গেল।" : "সংরক্ষিত হয়েছে।",
+        status === "PUBLISHED" ? t("admin.editor.published") : t("admin.editor.saved"),
       );
 
       if (isNew && data.id) {
@@ -339,7 +341,7 @@ export function PieceEditor({
         router.refresh();
       }
     } catch {
-      setNotice("সংযোগে সমস্যা হচ্ছে।");
+      setNotice(t("admin.editor.connectionError"));
     }
     setBusy(false);
   }
@@ -369,13 +371,12 @@ export function PieceEditor({
             {isNew ? "New piece" : `Editing · ${KIND_META[form.kind].labelEn}`}
           </span>
           <h1
-            className="mt-2 font-bengali text-[1.5rem] font-medium text-content"
-            lang="bn"
+            className="mt-2 text-[1.5rem] font-medium text-content"
           >
-            {form.titleBn || "নামহীন লেখা"}
+            {form.titleBn || t("admin.editor.untitled")}
           </h1>
           <p className="mt-1 font-mono text-[0.6875rem] text-content-faint">
-            {toBengaliNumber(words)} শব্দ · {toBengaliNumber(minutes)} মিনিট
+            {t("admin.editor.words", { count: words })} · {t("admin.editor.readTime", { count: minutes })}
             {form.status === "PUBLISHED" && form.slug && (
               <>
                 {" · "}
@@ -405,19 +406,19 @@ export function PieceEditor({
             type="button"
             onClick={() => void save("DRAFT")}
             disabled={busy}
-            className="rounded-sm border border-rule px-3 py-2 font-bengali text-[0.9375rem] text-content-soft transition hover:text-content disabled:opacity-50"
+            className="rounded-sm border border-rule px-3 py-2 text-[0.9375rem] text-content-soft transition hover:text-content disabled:opacity-50"
           >
-            খসড়া রাখুন
+            {t("admin.editor.saveDraft2")}
           </button>
 
           <button
             type="button"
             onClick={() => void save("PUBLISHED")}
             disabled={busy}
-            className="inline-flex items-center gap-2 rounded-sm bg-accent px-4 py-2 font-bengali text-[0.9375rem] text-surface transition hover:opacity-90 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-sm bg-accent px-4 py-2 text-[0.9375rem] text-surface transition hover:opacity-90 disabled:opacity-50"
           >
             {busy && <Loader2 className="h-4 w-4 animate-spin" />}
-            {form.status === "PUBLISHED" ? "আপডেট করুন" : "প্রকাশ করুন"}
+            {form.status === "PUBLISHED" ? t("admin.editor.update") : t("admin.editor.publishBtn")}
           </button>
         </div>
       </div>
@@ -446,7 +447,7 @@ export function PieceEditor({
           <div className="grid gap-4 sm:grid-cols-2">
             <Field
               labelEn="Slug"
-              hintBn="বাংলা স্লাগ চলবে — ঠিকানায় বাংলাই থাকবে।"
+              hintBn={t("admin.editor.slugHint")}
               error={errors.slug}
             >
               <input
@@ -480,7 +481,7 @@ export function PieceEditor({
 
           <Field
             labelEn="Standfirst"
-            hintBn="শিরোনামের নিচের এক-দুই লাইন — কার্ডেও এটাই দেখায়।"
+            hintBn={t("admin.editor.standfirstHint")}
             error={errors.dekBn}
           >
             <textarea
@@ -494,7 +495,7 @@ export function PieceEditor({
 
           <Field
             labelEn="Body (Markdown)"
-            hintBn="কবিতার জন্য ```verse ব্লক ব্যবহার করুন — লাইনভাঙা অক্ষত থাকবে।"
+            hintBn={t("admin.editor.bodyHint")}
             error={errors.bodyBn}
           >
             <textarea
@@ -522,10 +523,10 @@ export function PieceEditor({
           )}
 
           {/* ─── sources ────────────────────────────────── */}
-          <Panel labelEn={isDocumentary ? "Sources · তথ্যসূত্র" : "Sources (optional)"}>
+          <Panel labelEn={isDocumentary ? t("admin.editor.sourcesDocumentary") : t("admin.editor.sourcesOptional")}>
             {!isDocumentary && (
-              <p className="font-bengali text-xs text-content-faint" lang="bn">
-                রচনাতেও সূত্র দেওয়া যায় — যেখান থেকে উদ্ধৃতি নিয়েছেন।
+              <p className="text-xs text-content-faint">
+                {t("admin.editor.sourcesHint")}
               </p>
             )}
 
@@ -540,7 +541,7 @@ export function PieceEditor({
                         next[index] = { ...source, label: e.target.value };
                         set("sources", next);
                       }}
-                      placeholder="বই / প্রবন্ধ / সাক্ষাৎকারের পুরো উল্লেখ"
+                      placeholder={t("admin.editor.sourcePlaceholder")}
                       lang="bn"
                       className={inputClass}
                     />
@@ -551,7 +552,7 @@ export function PieceEditor({
                         next[index] = { ...source, url: e.target.value };
                         set("sources", next);
                       }}
-                      placeholder="https://… (থাকলে)"
+                      placeholder={t("admin.editor.sourceUrlPlaceholder")}
                       className={monoInputClass}
                     />
                     <input
@@ -561,7 +562,7 @@ export function PieceEditor({
                         next[index] = { ...source, note: e.target.value };
                         set("sources", next);
                       }}
-                      placeholder="টীকা — পৃষ্ঠা, সংস্করণ, বা কেন এই সূত্র"
+                      placeholder={t("admin.editor.sourceNotePlaceholder")}
                       lang="bn"
                       className={inputClass}
                     />
@@ -575,7 +576,7 @@ export function PieceEditor({
                       )
                     }
                     className="mt-2 text-content-faint transition hover:text-accent"
-                    title="সরান"
+                    title={t("admin.editor.removeTooltip")}
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -591,18 +592,17 @@ export function PieceEditor({
                   { label: "", url: "", note: "" },
                 ])
               }
-              className="inline-flex items-center gap-1.5 font-bengali text-[0.875rem] text-accent transition hover:opacity-75"
+              className="inline-flex items-center gap-1.5 text-[0.875rem] text-accent transition hover:opacity-75"
             >
               <Plus className="h-3.5 w-3.5" />
-              সূত্র যোগ করুন
+              {t("admin.editor.addSource")}
             </button>
           </Panel>
 
           {/* ─── timeline ───────────────────────────────── */}
-          <Panel labelEn="Timeline · কালরেখা">
-            <p className="font-bengali text-xs text-content-faint" lang="bn">
-              সাল হিসেবে &ldquo;১৯৪৭&rdquo; বা &ldquo;১৯৪৩–৪৪&rdquo; — দুটোই
-              চলবে।
+          <Panel labelEn={t("admin.editor.timeline")}>
+            <p className="text-xs text-content-faint">
+              {t("admin.editor.timelineHint")}
             </p>
 
             {form.timeline.map((event, index) => (
@@ -617,7 +617,7 @@ export function PieceEditor({
                           next[index] = { ...event, year: e.target.value };
                           set("timeline", next);
                         }}
-                        placeholder="সাল"
+                        placeholder={t("admin.editor.yearPlaceholder")}
                         lang="bn"
                         className={inputClass}
                       />
@@ -628,7 +628,7 @@ export function PieceEditor({
                           next[index] = { ...event, labelBn: e.target.value };
                           set("timeline", next);
                         }}
-                        placeholder="ঘটনা"
+                        placeholder={t("admin.editor.eventPlaceholder")}
                         lang="bn"
                         className={inputClass}
                       />
@@ -641,7 +641,7 @@ export function PieceEditor({
                         set("timeline", next);
                       }}
                       rows={2}
-                      placeholder="একটু বিস্তারে (ইচ্ছে হলে)"
+                      placeholder={t("admin.editor.detailPlaceholder")}
                       lang="bn"
                       className={cn(inputClass, "resize-y")}
                     />
@@ -655,7 +655,7 @@ export function PieceEditor({
                       )
                     }
                     className="mt-2 text-content-faint transition hover:text-accent"
-                    title="সরান"
+                    title={t("admin.editor.removeTooltip")}
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -671,10 +671,10 @@ export function PieceEditor({
                   { year: "", labelBn: "", descBn: "" },
                 ])
               }
-              className="inline-flex items-center gap-1.5 font-bengali text-[0.875rem] text-accent transition hover:opacity-75"
+              className="inline-flex items-center gap-1.5 text-[0.875rem] text-accent transition hover:opacity-75"
             >
               <Plus className="h-3.5 w-3.5" />
-              ঘটনা যোগ করুন
+              {t("admin.editor.addEvent")}
             </button>
           </Panel>
         </div>
@@ -705,10 +705,10 @@ export function PieceEditor({
                     onClick={() => set("status", status)}
                   >
                     {status === "DRAFT"
-                      ? "খসড়া"
+                      ? t("admin.editor.statusDraft")
                       : status === "PUBLISHED"
-                        ? "প্রকাশিত"
-                        : "সংরক্ষিত"}
+                        ? t("admin.editor.statusPublished")
+                        : t("admin.editor.statusArchived")}
                   </Toggle>
                 ))}
               </div>
@@ -716,7 +716,7 @@ export function PieceEditor({
 
             <Field
               labelEn="Publish date"
-              hintBn="ফাঁকা রাখলে প্রকাশের সময়টাই বসবে। ভবিষ্যতের তারিখ দিলে সেদিন থেকে দেখাবে।"
+              hintBn={t("admin.editor.publishDateHint")}
             >
               <input
                 type="datetime-local"
@@ -733,8 +733,8 @@ export function PieceEditor({
                 onChange={(e) => set("featured", e.target.checked)}
                 className="h-4 w-4 accent-[var(--accent)]"
               />
-              <span className="font-bengali text-[0.9375rem] text-content-soft">
-                প্রথম পাতায় তুলুন
+              <span className="text-[0.9375rem] text-content-soft">
+                {t("admin.editor.featureOnHome")}
               </span>
             </label>
           </Panel>
@@ -742,7 +742,7 @@ export function PieceEditor({
           <Panel labelEn="Media">
             <Field
               labelEn="Reel URL"
-              hintBn="ইনস্টাগ্রাম রিলের লিংক — লেখার মাথায় বসবে।"
+              hintBn={t("admin.editor.reelUrlHint")}
               error={errors.reelUrl}
             >
               <input
@@ -774,7 +774,7 @@ export function PieceEditor({
             <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_90px]">
               <Field
                 labelEn="Narration (audio)"
-                hintBn="রিলের ভয়েসওভারই আবৃত্তি হিসেবে চলবে।"
+                hintBn={t("admin.editor.narrationHint")}
                 error={errors.audioUrl}
               >
                 <input
@@ -795,14 +795,10 @@ export function PieceEditor({
             </div>
           </Panel>
 
-          <Panel labelEn="About whom · বিষয়">
+          <Panel labelEn={t("admin.editor.aboutWhom")}>
             {authors.length === 0 ? (
-              <p className="font-bengali text-xs text-content-faint" lang="bn">
-                এখনও কোনও নাম যোগ হয়নি —{" "}
-                <Link href="/admin/taxonomy" className="text-accent">
-                  Taxonomy
-                </Link>{" "}
-                থেকে যোগ করুন।
+              <p className="text-xs text-content-faint">
+                {t("admin.editor.noAuthorsYet")}
               </p>
             ) : (
               <div className="flex flex-wrap gap-1.5">
@@ -843,13 +839,13 @@ export function PieceEditor({
               );
             })}
             {tags.length === 0 && (
-              <p className="font-bengali text-xs text-content-faint" lang="bn">
-                এখনও কোনও বিষয় যোগ হয়নি।
+              <p className="text-xs text-content-faint">
+                {t("admin.editor.noTagsYet")}
               </p>
             )}
           </Panel>
 
-          <Panel labelEn="Series · ধারাবাহিক">
+          <Panel labelEn={t("admin.editor.series")}>
             <Field labelEn="Series">
               <select
                 value={form.seriesId}
@@ -857,7 +853,7 @@ export function PieceEditor({
                 className={inputClass}
                 lang="bn"
               >
-                <option value="">— কোনওটাই নয় —</option>
+                <option value="">{t("admin.editor.noSeries")}</option>
                 {series.map((item) => (
                   <option key={item.id} value={item.id}>
                     {item.labelBn}
@@ -869,7 +865,7 @@ export function PieceEditor({
             {form.seriesId && (
               <Field
                 labelEn="Order"
-                hintBn="কোন পর্ব — ১, ২, ৩…"
+                hintBn={t("admin.editor.orderHint")}
                 error={errors.seriesOrder}
               >
                 <input
@@ -885,7 +881,7 @@ export function PieceEditor({
           <Panel labelEn="Excerpt & SEO">
             <Field
               labelEn="Excerpt"
-              hintBn="ফাঁকা রাখলে লেখার শুরু থেকেই তৈরি হয়ে যাবে।"
+              hintBn={t("admin.editor.excerptHint")}
               error={errors.excerptBn}
             >
               <textarea
@@ -919,8 +915,8 @@ export function PieceEditor({
           </Panel>
 
           {dirty && (
-            <p className="font-bengali text-xs text-accent" lang="bn">
-              অসংরক্ষিত পরিবর্তন আছে।
+            <p className="text-xs text-accent">
+              {t("admin.editor.unsavedChanges")}
             </p>
           )}
         </div>

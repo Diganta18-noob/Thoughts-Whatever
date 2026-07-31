@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { toBengaliNumber } from "@/lib/bengali";
 import { KIND_META, piecePath } from "@/lib/nav";
+import { useTranslation, useLanguage } from "@/components/providers/language-provider";
 
 export interface TopArticleItem {
   id: string;
@@ -18,15 +21,20 @@ interface TopArticlesTableProps {
 }
 
 export function TopArticlesTable({ articles }: TopArticlesTableProps) {
+  const t = useTranslation();
+  const { isBn } = useLanguage();
+
+  const formatNumber = (num: number) => (isBn ? toBengaliNumber(num) : num.toLocaleString());
+
   return (
     <div className="border border-rule bg-surface p-5">
       <div className="flex items-center justify-between pb-4 border-b border-rule">
         <div>
-          <span className="label" lang="en">
+          <span className="label">
             Top Performing Content
           </span>
-          <h3 className="font-bengali text-lg font-medium text-content" lang="bn">
-            সর্বাধিক পঠিত রচনা ও তথ্যচিত্র
+          <h3 className="font-sans text-lg font-medium text-content">
+            {t("admin.dashboard.topArticles")}
           </h3>
         </div>
       </div>
@@ -35,10 +43,10 @@ export function TopArticlesTable({ articles }: TopArticlesTableProps) {
         <table className="w-full text-left font-sans text-xs">
           <thead>
             <tr className="border-b border-rule font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint">
-              <th className="py-3 pr-4">শিরোনাম</th>
-              <th className="py-3 px-3">ধরন</th>
-              <th className="py-3 px-3 text-right">পাঠ সংখ্যা</th>
-              <th className="py-3 pl-3 text-right">ইনস্টাগ্রাম ক্লিক</th>
+              <th className="py-3 pr-4">{t("admin.pieces.tableTitle")}</th>
+              <th className="py-3 px-3">{t("admin.pieces.tableKind")}</th>
+              <th className="py-3 px-3 text-right">{t("admin.pieces.tableViews")}</th>
+              <th className="py-3 pl-3 text-right">Instagram Clicks</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-rule/60">
@@ -59,19 +67,19 @@ export function TopArticlesTable({ articles }: TopArticlesTableProps) {
                     {KIND_META[art.kind]?.labelEn || art.kind}
                   </span>
                 </td>
-                <td className="py-3 px-3 text-right font-bengali text-bengali-base text-content" lang="bn">
-                  {toBengaliNumber(art.views)}
+                <td className="py-3 px-3 text-right font-sans text-content">
+                  {formatNumber(art.views)}
                 </td>
-                <td className="py-3 pl-3 text-right font-bengali text-bengali-base text-content-soft" lang="bn">
-                  {toBengaliNumber(art.clicks)}
+                <td className="py-3 pl-3 text-right font-sans text-content-soft">
+                  {formatNumber(art.clicks)}
                 </td>
               </tr>
             ))}
 
             {articles.length === 0 && (
               <tr>
-                <td colSpan={4} className="py-8 text-center font-bengali text-bengali-sm text-content-faint" lang="bn">
-                  এখনও কোনও তথ্য পাওয়া যায়নি।
+                <td colSpan={4} className="py-8 text-center font-sans text-xs text-content-faint">
+                  {t("common.empty")}
                 </td>
               </tr>
             )}

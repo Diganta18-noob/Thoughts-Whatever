@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Loader2, Upload, FileSpreadsheet, CheckCircle2 } from "lucide-react";
+import { useTranslation } from "@/components/providers/language-provider";
 
 interface ParsedRow {
   kind?: "RACHANA" | "BLOG" | "DOCUMENTARY";
@@ -25,7 +26,6 @@ function parseCSV(text: string): ParsedRow[] {
   const rows: ParsedRow[] = [];
 
   for (let i = 1; i < lines.length; i++) {
-    // Simple CSV parser for quoted fields
     const matches = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
     const cols = (matches || lines[i].split(",")).map((c) =>
       c.trim().replace(/^"|"$/g, "").replace(/""/g, '"')
@@ -60,6 +60,8 @@ function parseCSV(text: string): ParsedRow[] {
 }
 
 export function ImportForm() {
+  const t = useTranslation();
+
   const [rawCSV, setRawCSV] = useState("");
   const [parsedRows, setParsedRows] = useState<ParsedRow[]>([]);
   const [importing, setImporting] = useState(false);
@@ -99,14 +101,14 @@ export function ImportForm() {
       });
       const data = await res.json();
       if (res.ok && data.ok) {
-        setResultMessage(`সফলভাবে ${data.importedCount}টি লেখা খসড়া হিসেবে ইম্পোর্ট করা হয়েছে!`);
+        setResultMessage(t("admin.import.success", { count: data.importedCount }));
         setRawCSV("");
         setParsedRows([]);
       } else {
-        setResultMessage(data.error || "ইম্পোর্ট প্রক্রিয়া ব্যর্থ হয়েছে।");
+        setResultMessage(data.error || t("letter.msg.failed"));
       }
     } catch {
-      setResultMessage("সংযোগে সমস্যা হয়েছে।");
+      setResultMessage(t("letter.msg.network"));
     } finally {
       setImporting(false);
     }
@@ -117,22 +119,22 @@ export function ImportForm() {
       {/* Upload & CSV Input */}
       <div className="border border-rule bg-surface p-6 space-y-4">
         <div>
-          <span className="label" lang="en">
+          <span className="label">
             CSV Bulk Article Import
           </span>
-          <h2 className="mt-1 font-bengali text-lg font-medium text-content" lang="bn">
-            ইনস্টাগ্রাম/ওয়েবসাইট থেকে গণ-আমদানি (Bulk Import)
+          <h2 className="mt-1 font-sans text-lg font-medium text-content">
+            {t("admin.import.title")}
           </h2>
-          <p className="mt-1 font-bengali text-xs text-content-soft" lang="bn">
-            CSV ফাইলে থাকা সমস্ত লেখা একবারে খসড়া (Draft) হিসেবে সিস্টেমে নিয়ে আসুন।
+          <p className="mt-1 font-sans text-xs text-content-soft">
+            {t("admin.import.desc")}
           </p>
         </div>
 
         {/* File input */}
         <div className="flex items-center gap-4">
-          <label className="inline-flex items-center gap-2 rounded-sm border border-rule px-4 py-2 font-bengali text-sm text-content cursor-pointer transition hover:border-accent">
+          <label className="inline-flex items-center gap-2 rounded-sm border border-rule px-4 py-2 font-sans text-sm text-content cursor-pointer transition hover:border-accent">
             <Upload className="h-4 w-4" />
-            CSV ফাইল আপলোড করুন
+            {t("admin.import.uploadLabel")}
             <input
               type="file"
               accept=".csv,text/csv"
@@ -140,7 +142,7 @@ export function ImportForm() {
               className="hidden"
             />
           </label>
-          <span className="font-mono text-xs text-content-faint">অথবা নিচে সরাসরি CSV দিন</span>
+          <span className="font-mono text-xs text-content-faint">or paste raw CSV below</span>
         </div>
 
         {/* Textarea */}
@@ -154,7 +156,7 @@ export function ImportForm() {
       </div>
 
       {resultMessage && (
-        <div className="border-l-2 border-accent bg-accent/5 p-4 font-bengali text-sm text-accent flex items-center gap-2" lang="bn">
+        <div className="border-l-2 border-accent bg-accent/5 p-4 font-sans text-sm text-accent flex items-center gap-2">
           <CheckCircle2 className="h-4 w-4" />
           {resultMessage}
         </div>
@@ -165,21 +167,21 @@ export function ImportForm() {
         <div className="border border-rule bg-surface p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <span className="label" lang="en">
+              <span className="label">
                 Import Preview ({parsedRows.length} Rows)
               </span>
-              <h3 className="font-bengali text-lg font-medium text-content" lang="bn">
-                আমদানির পূর্বরূপ (Preview)
+              <h3 className="font-sans text-lg font-medium text-content">
+                Import Preview
               </h3>
             </div>
 
             <button
               onClick={handleImport}
               disabled={importing}
-              className="inline-flex items-center gap-2 rounded-sm bg-accent px-5 py-2 font-bengali text-sm text-surface transition hover:opacity-90 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-sm bg-accent px-5 py-2 font-sans text-sm text-surface transition hover:opacity-90 disabled:opacity-50"
             >
               {importing ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileSpreadsheet className="h-4 w-4" />}
-              {parsedRows.length}টি লেখা ইম্পোর্ট করুন
+              {t("admin.import.startBtn")} ({parsedRows.length})
             </button>
           </div>
 
@@ -187,10 +189,10 @@ export function ImportForm() {
             <table className="w-full text-left font-sans text-xs">
               <thead>
                 <tr className="border-b border-rule font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint">
-                  <th className="py-2.5 pr-4">শিরোনাম</th>
-                  <th className="py-2.5 px-3">ধরন</th>
-                  <th className="py-2.5 px-3">ধারাবাহিক</th>
-                  <th className="py-2.5 pl-3">রিল লিংক</th>
+                  <th className="py-2.5 pr-4">{t("admin.pieces.tableTitle")}</th>
+                  <th className="py-2.5 px-3">{t("admin.pieces.tableKind")}</th>
+                  <th className="py-2.5 px-3">{t("admin.series.name")}</th>
+                  <th className="py-2.5 pl-3">Reel URL</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-rule/60">

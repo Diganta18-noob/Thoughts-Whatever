@@ -3,26 +3,27 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/components/providers/language-provider";
+import type { TranslationKey } from "@/lib/i18n/en";
 
-const ITEMS = [
-  { href: "/admin", labelEn: "Overview" },
-  { href: "/admin/pieces", labelEn: "Pieces" },
-  { href: "/admin/series", labelEn: "Series" },
-  { href: "/admin/taxonomy", labelEn: "Taxonomy" },
-  { href: "/admin/subscribers", labelEn: "Letter" },
-  { href: "/admin/import", labelEn: "Import" },
-  { href: "/admin/transliteration", labelEn: "Transliteration" },
-  { href: "/admin/settings", labelEn: "Settings" },
+const ITEMS: { href: string; key: TranslationKey }[] = [
+  { href: "/admin", key: "admin.nav.dashboard" },
+  { href: "/admin/pieces", key: "admin.nav.pieces" },
+  { href: "/admin/series", key: "admin.nav.series" },
+  { href: "/admin/taxonomy", key: "admin.nav.taxonomy" },
+  { href: "/admin/subscribers", key: "admin.nav.subscribers" },
+  { href: "/admin/import", key: "admin.nav.import" },
+  { href: "/admin/transliteration", key: "admin.nav.transliteration" },
+  { href: "/admin/settings", key: "admin.nav.settings" },
 ];
 
 export function AdminNav() {
   const pathname = usePathname();
+  const t = useTranslation();
 
   return (
-    <nav className="flex flex-wrap items-center gap-1" lang="en">
+    <nav className="flex flex-wrap items-center gap-1">
       {ITEMS.map((item) => {
-        // Exact match for /admin, prefix match for the rest — otherwise
-        // Overview stays lit on every page.
         const active =
           item.href === "/admin"
             ? pathname === "/admin"
@@ -33,13 +34,13 @@ export function AdminNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "rounded-sm px-3 py-1.5 font-serif text-sm transition",
+              "rounded-sm px-3 py-1.5 font-sans text-sm transition",
               active
-                ? "bg-accent/10 text-accent"
+                ? "bg-accent/10 text-accent font-medium"
                 : "text-content-soft hover:text-content",
             )}
           >
-            {item.labelEn}
+            {t(item.key)}
           </Link>
         );
       })}

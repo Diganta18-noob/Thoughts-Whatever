@@ -1,17 +1,15 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 
-/**
- * Admin auth is deliberately small: one publisher, one password, a signed
- * httpOnly cookie. There are no reader accounts anywhere on this site —
- * bookmarks and reading preferences live in localStorage, so there is nothing
- * to log into and nothing to breach.
- */
+const LEGACY_COOKIE_NAME = "tw_session";
+const ACCESS_COOKIE_NAME = "tw_access";
+const REFRESH_COOKIE_NAME = "tw_refresh";
 
-const COOKIE_NAME = "tw_session";
-const MAX_AGE_SECONDS = 60 * 60 * 24 * 14; // two weeks
+const ACCESS_TOKEN_EXPIRY = 15 * 60; // 15 minutes in seconds
+const REFRESH_TOKEN_EXPIRY = 30 * 24 * 60 * 60; // 30 days in seconds
 
 function secret(): string {
   const value = process.env.AUTH_SECRET;
@@ -23,9 +21,18 @@ function secret(): string {
   return value;
 }
 
-export type SessionPayload = {
+export type AccessTokenPayload = {
   sub: string; // AdminUser id
   email: string;
+  type: "access";
+  exp?: number;
+};
+
+export type RefreshTokenPayload = {
+  sub: string;
+  type: "refresh";
+  jti: string; // Refresh token DB record ID
+  exp?: number;
 };
 
 export async function hashPassword(plain: string): Promise<string> {
@@ -36,36 +43,168 @@ export async function verifyPassword(plain: string, hash: string) {
   return bcrypt.compare(plain, hash);
 }
 
-export function signSession(payload: SessionPayload): string {
-  return jwt.sign(payload, secret(), { expiresIn: MAX_AGE_SECONDS });
+export function createAccessToken(userId: string, email: string): string {
+  const payload: AccessTokenPayload = {
+    sub: userId,
+    email,
+    type: "access",
+  };
+  return jwt.sign(payload, secret(), { expiresIn: ACCESS_TOKEN_EXPIRY });
 }
 
-export async function createSessionCookie(payload: SessionPayload) {
-  cookies().set(COOKIE_NAME, signSession(payload), {
+export async function createRefreshToken(
+  userId: string,
+  metadata: { userAgent?: string; ipAddress?: string } = {},
+) {
+  const expiresAt = new Date(Date.now() + REFRESH_TOKEN_EXPIRY * 1000);
+  const randomToken = crypto.randomUUID();
+
+  const dbToken = await prisma.refreshToken.create({
+    data: {
+      token: randomToken,
+      adminUserId: userId,
+      expiresAt,
+      userAgent: metadata.userAgent,
+      ipAddress: metadata.ipAddress,
+    },
+  });
+
+  const payload: RefreshTokenPayload = {
+    sub: userId,
+    type: "refresh",
+    jti: dbToken.id,
+  };
+
+  const token = jwt.sign(payload, secret(), { expiresIn: REFRESH_TOKEN_EXPIRY });
+  return { token, dbToken };
+}
+
+export async function issueAuthCookies(
+  userId: string,
+  email: string,
+  metadata: { userAgent?: string; ipAddress?: string } = {},
+) {
+  const accessToken = createAccessToken(userId, email);
+  const { token: refreshToken } = await createRefreshToken(userId, metadata);
+
+  const cookieStore = cookies();
+  const isProd = process.env.NODE_ENV === "production";
+
+  cookieStore.set(ACCESS_COOKIE_NAME, accessToken, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: isProd,
     path: "/",
-    maxAge: MAX_AGE_SECONDS,
+    maxAge: ACCESS_TOKEN_EXPIRY,
   });
+
+  cookieStore.set(REFRESH_COOKIE_NAME, refreshToken, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: isProd,
+    path: "/",
+    maxAge: REFRESH_TOKEN_EXPIRY,
+  });
+
+  // Clear legacy cookie if present
+  cookieStore.delete(LEGACY_COOKIE_NAME);
 }
 
-export async function destroySessionCookie() {
-  cookies().delete(COOKIE_NAME);
+export async function clearAuthCookies() {
+  const cookieStore = cookies();
+  const refreshTokenJwt = cookieStore.get(REFRESH_COOKIE_NAME)?.value;
+
+  if (refreshTokenJwt) {
+    try {
+      const payload = jwt.verify(refreshTokenJwt, secret()) as RefreshTokenPayload;
+      if (payload?.jti) {
+        await prisma.refreshToken.update({
+          where: { id: payload.jti },
+          data: { revoked: true },
+        }).catch(() => {});
+      }
+    } catch {
+      /* ignore invalid token cleanup errors */
+    }
+  }
+
+  cookieStore.delete(ACCESS_COOKIE_NAME);
+  cookieStore.delete(REFRESH_COOKIE_NAME);
+  cookieStore.delete(LEGACY_COOKIE_NAME);
 }
 
-/** Returns the session payload, or null. Never throws on a bad token. */
-export function readSession(): SessionPayload | null {
-  const token = cookies().get(COOKIE_NAME)?.value;
-  if (!token) return null;
+export async function verifyAndRefreshAccessToken(refreshTokenJwt: string) {
   try {
-    return jwt.verify(token, secret()) as SessionPayload;
+    const payload = jwt.verify(refreshTokenJwt, secret()) as RefreshTokenPayload;
+    if (payload.type !== "refresh" || !payload.jti) return null;
+
+    const dbToken = await prisma.refreshToken.findUnique({
+      where: { id: payload.jti },
+      include: { adminUser: true },
+    });
+
+    if (!dbToken || dbToken.revoked || dbToken.expiresAt < new Date()) {
+      return null;
+    }
+
+    // Revoke current token (rotation) and create fresh token pair
+    await prisma.refreshToken.update({
+      where: { id: dbToken.id },
+      data: { revoked: true, lastUsedAt: new Date() },
+    });
+
+    const newAccessToken = createAccessToken(
+      dbToken.adminUserId,
+      dbToken.adminUser.email,
+    );
+    const { token: newRefreshToken } = await createRefreshToken(
+      dbToken.adminUserId,
+      {
+        userAgent: dbToken.userAgent ?? undefined,
+        ipAddress: dbToken.ipAddress ?? undefined,
+      },
+    );
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+      user: dbToken.adminUser,
+    };
   } catch {
     return null;
   }
 }
 
-/** For server components and route handlers that must have an admin. */
+export function readSession(): { sub: string; email: string } | null {
+  const cookieStore = cookies();
+
+  // 1. Try access token
+  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME)?.value;
+  if (accessToken) {
+    try {
+      const payload = jwt.verify(accessToken, secret()) as AccessTokenPayload;
+      if (payload.type === "access" || !payload.type) {
+        return { sub: payload.sub, email: payload.email };
+      }
+    } catch {
+      /* token expired or invalid */
+    }
+  }
+
+  // 2. Fallback to legacy tw_session for smooth transition
+  const legacyToken = cookieStore.get(LEGACY_COOKIE_NAME)?.value;
+  if (legacyToken) {
+    try {
+      const payload = jwt.verify(legacyToken, secret()) as { sub: string; email: string };
+      return { sub: payload.sub, email: payload.email };
+    } catch {
+      return null;
+    }
+  }
+
+  return null;
+}
+
 export async function requireAdmin() {
   const session = readSession();
   if (!session) return null;
@@ -76,4 +215,10 @@ export async function requireAdmin() {
   return admin;
 }
 
-export { COOKIE_NAME };
+export {
+  LEGACY_COOKIE_NAME as COOKIE_NAME,
+  ACCESS_COOKIE_NAME,
+  REFRESH_COOKIE_NAME,
+  ACCESS_TOKEN_EXPIRY,
+  REFRESH_TOKEN_EXPIRY,
+};

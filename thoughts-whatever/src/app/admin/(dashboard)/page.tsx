@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { Plus } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { formatBengaliDate } from "@/lib/bengali";
 import { KIND_META, piecePath } from "@/lib/nav";
 import { AnalyticsDashboard } from "@/components/admin/analytics-dashboard";
+import { AdminDashboardHeader } from "@/components/admin/dashboard-header";
 
 export const dynamic = "force-dynamic";
 
@@ -25,34 +25,14 @@ export default async function AdminHomePage() {
 
   return (
     <div className="space-y-10">
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-rule pb-6">
-        <div>
-          <span className="label" lang="en">
-            Admin Dashboard
-          </span>
-          <h1
-            className="mt-2 font-bengali text-[1.75rem] font-medium text-content"
-            lang="bn"
-          >
-            আজ কী লিখবেন?
-          </h1>
-        </div>
-
-        <Link
-          href="/admin/pieces/new"
-          className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-bengali text-[0.9375rem] text-surface transition hover:opacity-90"
-        >
-          <Plus className="h-4 w-4" />
-          নতুন লেখা
-        </Link>
-      </div>
+      <AdminDashboardHeader />
 
       {/* Interactive Analytics Dashboard */}
       <AnalyticsDashboard />
 
       {/* Recently Edited Section */}
       <div className="pt-4">
-        <h2 className="label" lang="en">
+        <h2 className="label">
           Recently edited
         </h2>
         <ul className="mt-4 divide-y divide-rule border-y border-rule">
@@ -88,7 +68,6 @@ export default async function AdminHomePage() {
                     href={piecePath(piece.kind, piece.slug)}
                     target="_blank"
                     className="font-serif text-xs text-content-soft transition hover:text-accent"
-                    lang="en"
                   >
                     View
                   </Link>
@@ -98,8 +77,8 @@ export default async function AdminHomePage() {
           ))}
 
           {recent.length === 0 && (
-            <li className="py-6 font-bengali text-bengali-sm text-content-soft" lang="bn">
-              এখনও কিছু লেখা হয়নি। উপরের বোতাম থেকে শুরু করুন।
+            <li className="py-6 font-sans text-xs text-content-soft">
+              No pieces created yet.
             </li>
           )}
         </ul>

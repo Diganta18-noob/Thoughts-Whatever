@@ -121,7 +121,7 @@ describe('Prisma Middleware - Transliteration', () => {
       const nullData = null;
       const stringData = 'string';
       
-      expect(typeof nullData).not.toBe('object');
+      expect(nullData !== null && typeof nullData === 'object').toBe(false);
       expect(typeof stringData).not.toBe('object');
     });
   });

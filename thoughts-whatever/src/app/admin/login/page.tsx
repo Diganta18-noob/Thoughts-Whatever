@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { LoginForm } from "./login-form";
+import { LoginChrome } from "./login-chrome";
 
 /**
  * Deliberately outside the (dashboard) route group.
@@ -30,22 +31,7 @@ export default async function AdminLoginPage({
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface px-4">
       <div className="w-full max-w-sm">
-        <span className="label" lang="en">
-          Thoughts Whatever
-        </span>
-        <h1
-          className="mt-3 font-bengali text-[1.5rem] font-medium text-content"
-          lang="bn"
-        >
-          সম্পাদকের ঘর
-        </h1>
-        <p
-          className="mt-2 font-bengali text-bengali-sm text-content-soft"
-          lang="bn"
-        >
-          লেখা তৈরি, সম্পাদনা আর প্রকাশ — সবই এখান থেকে।
-        </p>
-
+        <LoginChrome />
         <LoginForm next={next} />
       </div>
     </div>

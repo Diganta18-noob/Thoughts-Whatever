@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { toBengaliNumber } from "@/lib/bengali";
 import { ArrowUp, ArrowDown, Save, Loader2, ExternalLink } from "lucide-react";
+import { useTranslation } from "@/components/providers/language-provider";
 
 export interface SeriesWithPieces {
   id: string;
@@ -30,6 +31,7 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
   );
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState("");
+  const t = useTranslation();
 
   const activeSeries = seriesList.find((s) => s.id === selectedSeriesId);
 
@@ -75,12 +77,12 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
       });
 
       if (res.ok) {
-        setNotice("পর্বের ক্রম সফলভাবে সংরক্ষিত হয়েছে।");
+        setNotice(t("admin.series.orderSaved"));
       } else {
-        setNotice("সংরক্ষণ করা যায়নি।");
+        setNotice(t("admin.series.orderSaveFailed"));
       }
     } catch {
-      setNotice("সংযোগে সমস্যা হয়েছে।");
+      setNotice(t("admin.series.connectionError"));
     } finally {
       setSaving(false);
     }
@@ -117,8 +119,8 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
             </button>
           ))}
           {seriesList.length === 0 && (
-            <p className="font-bengali text-xs text-content-faint" lang="bn">
-              কোনও ধারাবাহিক তৈরি হয়নি।
+             <p className="text-xs text-content-faint">
+              {t("admin.series.emptyList")}
             </p>
           )}
         </div>
@@ -156,7 +158,7 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
                 className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-bengali text-sm text-surface transition hover:opacity-90 disabled:opacity-50"
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                ক্রম সংরক্ষণ করুন
+                {t("admin.series.saveOrder")}
               </button>
             </div>
           </div>
@@ -191,7 +193,7 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
                       onClick={() => moveEpisode(index, "up")}
                       disabled={index === 0}
                       className="p-1.5 rounded border border-rule text-content-soft hover:text-accent hover:border-accent disabled:opacity-30"
-                      title="উপরে তুলুন"
+                      title={t("admin.series.moveUp")}
                     >
                       <ArrowUp className="h-4 w-4" />
                     </button>
@@ -199,7 +201,7 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
                       onClick={() => moveEpisode(index, "down")}
                       disabled={index === activeSeries.pieces.length - 1}
                       className="p-1.5 rounded border border-rule text-content-soft hover:text-accent hover:border-accent disabled:opacity-30"
-                      title="নিচে নামান"
+                      title={t("admin.series.moveDown")}
                     >
                       <ArrowDown className="h-4 w-4" />
                     </button>
@@ -208,16 +210,16 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
               ))}
 
               {activeSeries.pieces.length === 0 && (
-                <li className="py-8 text-center font-bengali text-bengali-sm text-content-faint" lang="bn">
-                  এই ধারাবাহিকে এখনও কোনও পর্ব যুক্ত করা হয়নি।
+                <li className="py-8 text-center text-sm text-content-faint">
+                  {t("admin.series.emptyEpisodes")}
                 </li>
               )}
             </ul>
           </div>
         </div>
       ) : (
-        <div className="border border-rule bg-surface p-12 text-center font-bengali text-content-faint" lang="bn">
-          কোনও ধারাবাহিক নির্বাচন করুন।
+        <div className="border border-rule bg-surface p-12 text-center text-content-faint">
+          {t("admin.series.selectPrompt")}
         </div>
       )}
     </div>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Loader2, Plus, Pencil, Trash2 } from "lucide-react";
 import { bengaliSlug, toBengaliNumber } from "@/lib/bengali";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/components/providers/language-provider";
 
 /**
  * One editor for authors, tags, and series.
@@ -66,6 +67,7 @@ export function TaxonomyManager({
   countNounBn: string;
 }) {
   const router = useRouter();
+  const t = useTranslation();
   const [editing, setEditing] = useState<string | null>(null); // row id, or "new"
   const [draft, setDraft] = useState<Record<string, string>>(emptyValues(fields));
   const [slugTouched, setSlugTouched] = useState(false);
@@ -124,7 +126,7 @@ export function TaxonomyManager({
       setError(
         data.error ||
           Object.values(data.fieldErrors ?? {})[0] ||
-          "সংরক্ষণ হয়নি।",
+          t("admin.taxonomy.saveFailed"),
       );
       setBusy(false);
       return;
@@ -136,13 +138,13 @@ export function TaxonomyManager({
   }
 
   async function remove(row: TaxonomyRow) {
-    if (!window.confirm(`"${row.values[primaryKey] ?? row.slug}" মুছে ফেলা হবে।`))
+    if (!window.confirm(t("admin.taxonomy.confirmDelete", { name: row.values[primaryKey] ?? row.slug })))
       return;
 
     const res = await fetch(`${endpoint}/${row.id}`, { method: "DELETE" });
     if (!res.ok) {
       const data = (await res.json().catch(() => ({}))) as { error?: string };
-      window.alert(data.error || "মোছা গেল না।");
+      window.alert(data.error || t("admin.taxonomy.deleteFailed"));
       return;
     }
     router.refresh();
@@ -219,14 +221,14 @@ export function TaxonomyManager({
           className="inline-flex items-center gap-2 rounded-sm bg-accent px-3.5 py-1.5 font-bengali text-[0.9375rem] text-surface transition hover:opacity-90 disabled:opacity-50"
         >
           {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-          সংরক্ষণ
+          {t("common.save")}
         </button>
         <button
           type="button"
           onClick={cancel}
           className="rounded-sm border border-rule px-3.5 py-1.5 font-bengali text-[0.9375rem] text-content-soft transition hover:text-content"
         >
-          বাতিল
+          {t("common.cancel")}
         </button>
       </div>
     </div>
@@ -290,7 +292,7 @@ export function TaxonomyManager({
                     type="button"
                     onClick={() => startEdit(row)}
                     className="text-content-faint transition hover:text-accent"
-                    title="সম্পাদনা"
+                    title={t("admin.taxonomy.editTooltip")}
                   >
                     <Pencil className="h-3.5 w-3.5" />
                   </button>
@@ -298,7 +300,7 @@ export function TaxonomyManager({
                     type="button"
                     onClick={() => void remove(row)}
                     className="text-content-faint transition hover:text-accent"
-                    title="মুছুন"
+                    title={t("admin.taxonomy.deleteTooltip")}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -309,8 +311,8 @@ export function TaxonomyManager({
         ))}
 
         {rows.length === 0 && editing !== "new" && (
-          <li className="py-6 font-bengali text-bengali-sm text-content-soft" lang="bn">
-            এখনও কিছু নেই।
+          <li className="py-6 text-sm text-content-soft">
+            {t("admin.taxonomy.emptyList")}
           </li>
         )}
       </ul>
