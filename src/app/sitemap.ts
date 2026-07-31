@@ -21,6 +21,7 @@ function pieceUrl(kind: keyof typeof KIND_META, slug: string) {
  * Rebuilt hourly, and immediately on publish — every admin mutation calls
  * `revalidatePath("/sitemap.xml")`.
  */
+export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

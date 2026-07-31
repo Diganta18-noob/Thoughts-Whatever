@@ -16,6 +16,7 @@ import { deriveExcerpt } from "@/lib/markdown";
  * does not fold the same few hundred strings on every page load.
  */
 
+export const dynamic = "force-dynamic";
 export const revalidate = 300;
 
 export async function GET() {

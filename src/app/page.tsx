@@ -10,6 +10,7 @@ import { toBanglaDate } from "@/lib/bengali";
 // Five minutes. Long enough that a burst of traffic from a reel does not turn
 // into a burst of database queries; short enough that a newly published piece
 // appears while the author is still looking at the page.
+export const dynamic = "force-dynamic";
 export const revalidate = 300;
 
 export default async function HomePage() {

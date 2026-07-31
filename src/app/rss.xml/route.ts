@@ -15,6 +15,7 @@ import { absoluteUrl, siteConfig } from "@/lib/utils";
 const ITEMS = 30;
 
 /** Rebuilt hourly; every admin mutation also revalidates this path. */
+export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
 /**
