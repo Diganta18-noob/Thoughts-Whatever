@@ -17,8 +17,12 @@ function decodeSlug(raw: string) {
 }
 
 export async function generateStaticParams() {
-  const list = await getSeriesList();
-  return list.map((s) => ({ slug: s.slug }));
+  try {
+    const list = await getSeriesList();
+    return list.map((s) => ({ slug: s.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({

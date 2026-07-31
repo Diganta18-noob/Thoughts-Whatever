@@ -25,10 +25,14 @@ function decodeSlug(raw: string) {
 }
 
 export async function generateStaticParams() {
-  const slugs = await getAllPublishedSlugs();
-  return slugs
-    .filter((p) => p.kind === "RACHANA")
-    .map((p) => ({ slug: p.slug }));
+  try {
+    const slugs = await getAllPublishedSlugs();
+    return slugs
+      .filter((p) => p.kind === "RACHANA")
+      .map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({

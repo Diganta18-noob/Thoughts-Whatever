@@ -19,8 +19,12 @@ function decodeSlug(raw: string) {
 }
 
 export async function generateStaticParams() {
-  const authors = await prisma.author.findMany({ select: { slug: true } });
-  return authors.map((a) => ({ slug: a.slug }));
+  try {
+    const authors = await prisma.author.findMany({ select: { slug: true } });
+    return authors.map((a) => ({ slug: a.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({
