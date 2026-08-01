@@ -57,17 +57,30 @@ export function AudioTranscribe({
   const [copied, setCopied] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Perform pre-flight API check on mount
+  const stopProgressTimer = () => {
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
+  };
+
+  // Perform pre-flight API check on mount (non-blocking with timeout)
   const checkApiAvailability = useCallback(async () => {
     setApiStatus("checking");
     setApiError(null);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
 
     try {
       const response = await fetch("/api/admin/transcribe/check", {
         method: "GET",
         credentials: "include",
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
 
       if (response.status === 401 || response.status === 403) {
         setApiError("Session expired. Please refresh the page and sign in again.");
@@ -83,9 +96,12 @@ export function AudioTranscribe({
       } else {
         setApiStatus("available");
       }
-    } catch (err) {
-      setApiError("Cannot connect to transcription service. Check your internet connection.");
-      setApiStatus("unavailable");
+    } catch (err: unknown) {
+      clearTimeout(timeoutId);
+      if (err instanceof Error && err.name === "AbortError") {
+        console.warn("Pre-flight check timed out after 6s. Falling back to available state.");
+      }
+      setApiStatus("available");
     }
   }, []);
 
@@ -176,6 +192,8 @@ export function AudioTranscribe({
       setRetryCount(0);
     }
 
+    stopProgressTimer();
+
     // Explicit state machine transition: CLEAR ALL STALE ERRORS
     setState("transcribing");
     setError("");
@@ -185,7 +203,7 @@ export function AudioTranscribe({
     setProgressMessage("Uploading audio file to Groq...");
 
     // Simulated progress updates
-    const progressInterval = setInterval(() => {
+    progressIntervalRef.current = setInterval(() => {
       setProgress((prev) => {
         if (prev < 30) {
           setProgressMessage("Uploading audio file to Groq...");
@@ -201,6 +219,8 @@ export function AudioTranscribe({
       });
     }, 400);
 
+    let isRetrying = false;
+
     try {
       const formData = new FormData();
       formData.append("file", audioFile);
@@ -208,7 +228,7 @@ export function AudioTranscribe({
       formData.append("storeAudio", String(storeAudio));
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 300000); // 5 min timeout
+      const timeoutId = setTimeout(() => controller.abort(), 180000); // 3 min timeout
 
       const response = await fetch("/api/admin/transcribe", {
         method: "POST",
@@ -218,7 +238,6 @@ export function AudioTranscribe({
       });
 
       clearTimeout(timeoutId);
-      clearInterval(progressInterval);
 
       // Store debug info in development
       if (process.env.NODE_ENV === "development") {
@@ -271,6 +290,7 @@ export function AudioTranscribe({
           response.status >= 500;
 
         if (isRetryable && retryCount < MAX_RETRIES) {
+          isRetrying = true;
           setRetryCount(retryCount + 1);
           setError(`${data.error || "Transcription failed"}. Retrying... (Attempt ${retryCount + 1}/${MAX_RETRIES})`);
           await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -281,6 +301,7 @@ export function AudioTranscribe({
       }
 
       // Success transition
+      stopProgressTimer();
       setProgress(100);
       setProgressMessage("Transcription complete!");
       setError(""); // Clear error again on success
@@ -292,35 +313,41 @@ export function AudioTranscribe({
       setRetryCount(0);
       setState("reviewing");
     } catch (err: unknown) {
-      clearInterval(progressInterval);
-      setProgress(0);
-      setState("error");
+      if (!isRetrying) {
+        stopProgressTimer();
+        setProgress(0);
+        setState("error");
 
-      if (err instanceof Error && err.name === "AbortError") {
-        setErrorCode("TIMEOUT");
-        setError("Transcription timed out after 5 minutes. Try a shorter audio file.");
-      } else {
-        const errMsg = err instanceof Error ? err.message : String(err);
-        if (errMsg.startsWith("AUTH_ERROR:")) {
-          setError(errMsg.replace("AUTH_ERROR: ", ""));
-          setApiStatus("unavailable");
+        if (err instanceof Error && err.name === "AbortError") {
+          setErrorCode("TIMEOUT");
+          setError("Transcription timed out after 3 minutes. Try a shorter audio file or try again.");
         } else {
-          setError(formatErrorMessage(err));
+          const errMsg = err instanceof Error ? err.message : String(err);
+          if (errMsg.startsWith("AUTH_ERROR:")) {
+            setError(errMsg.replace("AUTH_ERROR: ", ""));
+            setApiStatus("unavailable");
+          } else {
+            setError(formatErrorMessage(err));
+          }
+        }
+
+        if (process.env.NODE_ENV === "development") {
+          setDebugInfo((prev) => ({
+            ...prev,
+            error: err instanceof Error ? { name: err.name, message: err.message, stack: err.stack } : String(err),
+          }));
         }
       }
-
-      if (process.env.NODE_ENV === "development") {
-        setDebugInfo((prev) => ({
-          ...prev,
-          error: err instanceof Error ? { name: err.name, message: err.message, stack: err.stack } : String(err),
-        }));
-      }
     } finally {
-      clearInterval(progressInterval);
-      setTimeout(() => {
-        setProgress(0);
-        setProgressMessage("");
-      }, 1500);
+      if (!isRetrying) {
+        stopProgressTimer();
+        setTimeout(() => {
+          if (state !== "transcribing") {
+            setProgress(0);
+            setProgressMessage("");
+          }
+        }, 1500);
+      }
     }
   };
 
@@ -340,6 +367,7 @@ export function AudioTranscribe({
   };
 
   const handleReset = () => {
+    stopProgressTimer();
     setAudioFile(null);
     setError("");
     setErrorCode(null);
@@ -358,17 +386,7 @@ export function AudioTranscribe({
   const wordCount = countBengaliWords(reviewText);
   const readTime = readingMinutes(reviewText);
 
-  // 1. Pre-flight checking state
-  if (apiStatus === "checking") {
-    return (
-      <div className="rounded-sm border border-rule bg-surface-raised/90 p-5 text-center">
-        <Loader2 className="h-6 w-6 animate-spin mx-auto text-accent" />
-        <p className="mt-2 text-sm text-content-faint">Checking Groq transcription service status...</p>
-      </div>
-    );
-  }
-
-  // 2. Pre-flight unavailable state
+  // Pre-flight unavailable state
   if (apiStatus === "unavailable") {
     return (
       <div className="rounded-sm border border-red-500/20 bg-red-500/5 p-5">

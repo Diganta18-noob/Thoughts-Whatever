@@ -28,12 +28,17 @@ function uploadAudioToCloudinaryStream(
   return new Promise((resolve) => {
     let resolved = false;
 
-    const timeout = setTimeout(() => {
+    const safeResolve = (url: string | null) => {
       if (!resolved) {
         resolved = true;
-        console.warn("[Transcribe] Cloudinary audio upload timed out after", timeoutMs, "ms");
-        resolve(null);
+        clearTimeout(timeout);
+        resolve(url);
       }
+    };
+
+    const timeout = setTimeout(() => {
+      console.warn("[Transcribe] Cloudinary audio upload timed out after", timeoutMs, "ms");
+      safeResolve(null);
     }, timeoutMs);
 
     try {
@@ -50,28 +55,30 @@ function uploadAudioToCloudinaryStream(
           resource_type: "auto",
         },
         (error, result) => {
-          clearTimeout(timeout);
-          if (!resolved) {
-            resolved = true;
-            if (error || !result?.secure_url) {
-              console.warn("[Transcribe] Cloudinary upload stream error:", error?.message || "No secure URL");
-              resolve(null);
-            } else {
-              resolve(result.secure_url);
-            }
+          if (error || !result?.secure_url) {
+            console.warn("[Transcribe] Cloudinary upload stream error:", error?.message || "No secure URL");
+            safeResolve(null);
+          } else {
+            safeResolve(result.secure_url);
           }
         }
       );
 
+      uploadStream.on("error", (err) => {
+        console.warn("[Transcribe] Cloudinary uploadStream event error:", err);
+        safeResolve(null);
+      });
+
       const stream = Readable.from(buffer);
+      stream.on("error", (err) => {
+        console.warn("[Transcribe] Readable stream error:", err);
+        safeResolve(null);
+      });
+
       stream.pipe(uploadStream);
     } catch (err) {
-      clearTimeout(timeout);
-      if (!resolved) {
-        resolved = true;
-        console.warn("[Transcribe] Cloudinary stream setup error:", err);
-        resolve(null);
-      }
+      console.warn("[Transcribe] Cloudinary stream setup error:", err);
+      safeResolve(null);
     }
   });
 }
@@ -151,7 +158,8 @@ export async function POST(request: NextRequest) {
     if (groq) {
       try {
         console.log("[Transcribe] Initiating Groq Whisper transcription...");
-        const groqFile = await toFile(buffer, file.name, { type: file.type || "audio/mpeg" });
+        const safeFileName = file.name || "narration.mp3";
+        const groqFile = await toFile(buffer, safeFileName, { type: file.type || "audio/mpeg" });
 
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 45000);
@@ -179,14 +187,24 @@ export async function POST(request: NextRequest) {
           console.log("[Transcribe] Attempting OpenAI Whisper fallback...");
           try {
             const openai = getOpenAIClient();
-            const openaiFile = await toFile(buffer, file.name, { type: file.type || "audio/mpeg" });
-            const transcription = await openai.audio.transcriptions.create({
-              file: openaiFile,
-              model: "whisper-1",
-              language: language === "auto" ? undefined : language,
-              prompt: whisperPrompt,
-              temperature: 0.0,
-            });
+            const safeFileName = file.name || "narration.mp3";
+            const openaiFile = await toFile(buffer, safeFileName, { type: file.type || "audio/mpeg" });
+            
+            const openaiController = new AbortController();
+            const openaiTimeout = setTimeout(() => openaiController.abort(), 45000);
+
+            const transcription = await openai.audio.transcriptions.create(
+              {
+                file: openaiFile,
+                model: "whisper-1",
+                language: language === "auto" ? undefined : language,
+                prompt: whisperPrompt,
+                temperature: 0.0,
+              },
+              { signal: openaiController.signal }
+            );
+
+            clearTimeout(openaiTimeout);
             rawText = transcription.text;
             providerName = "OpenAI Whisper-1 (Fallback)";
           } catch (openaiErr) {
@@ -222,14 +240,24 @@ export async function POST(request: NextRequest) {
       try {
         console.log("[Transcribe] Groq key missing. Using OpenAI Whisper...");
         const openai = getOpenAIClient();
-        const openaiFile = await toFile(buffer, file.name, { type: file.type || "audio/mpeg" });
-        const transcription = await openai.audio.transcriptions.create({
-          file: openaiFile,
-          model: "whisper-1",
-          language: language === "auto" ? undefined : language,
-          prompt: whisperPrompt,
-          temperature: 0.0,
-        });
+        const safeFileName = file.name || "narration.mp3";
+        const openaiFile = await toFile(buffer, safeFileName, { type: file.type || "audio/mpeg" });
+        
+        const openaiController = new AbortController();
+        const openaiTimeout = setTimeout(() => openaiController.abort(), 45000);
+
+        const transcription = await openai.audio.transcriptions.create(
+          {
+            file: openaiFile,
+            model: "whisper-1",
+            language: language === "auto" ? undefined : language,
+            prompt: whisperPrompt,
+            temperature: 0.0,
+          },
+          { signal: openaiController.signal }
+        );
+
+        clearTimeout(openaiTimeout);
         rawText = transcription.text;
         providerName = "OpenAI Whisper-1";
       } catch (openaiErr: unknown) {
