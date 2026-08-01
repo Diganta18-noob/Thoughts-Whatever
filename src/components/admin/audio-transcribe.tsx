@@ -7,6 +7,14 @@ import { countBengaliWords, readingMinutes } from "@/lib/bengali";
 import { formatErrorMessage } from "@/lib/error-formatter";
 import { getErrorDetails } from "@/lib/transcription-errors";
 
+type TranscriptionState =
+  | "idle"           // No file selected
+  | "ready"          // File selected, ready to transcribe
+  | "transcribing"   // Transcription in progress
+  | "reviewing"      // Transcription complete, reviewing text
+  | "error"          // Error occurred
+  | "complete";      // Accepted and inserted into piece
+
 interface AudioTranscribeProps {
   onTranscriptionComplete: (text: string, audioUrl?: string) => void;
   label?: string;
@@ -24,8 +32,8 @@ export function AudioTranscribe({
   const [apiStatus, setApiStatus] = useState<"checking" | "available" | "unavailable">("checking");
   const [apiError, setApiError] = useState<string | null>(null);
 
-  // Transcriber state
-  const [transcribing, setTranscribing] = useState(false);
+  // State Machine
+  const [state, setState] = useState<TranscriptionState>("idle");
   const [error, setError] = useState("");
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
@@ -36,16 +44,17 @@ export function AudioTranscribe({
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 2;
 
+  // Debug info for development
+  const [debugInfo, setDebugInfo] = useState<Record<string, unknown> | null>(null);
+
   // Progress state
   const [progress, setProgress] = useState(0);
   const [progressMessage, setProgressMessage] = useState("");
 
   // Review stage state
-  const [reviewMode, setReviewMode] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [audioUrlResult, setAudioUrlResult] = useState<string | undefined>();
   const [copied, setCopied] = useState(false);
-  const [accepted, setAccepted] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -122,14 +131,14 @@ export function AudioTranscribe({
       const validationError = validateFile(file);
       if (validationError) {
         setError(validationError);
+        setState("error");
         return;
       }
 
       setAudioFile(file);
       setError("");
       setErrorCode(null);
-      setReviewMode(false);
-      setAccepted(false);
+      setState("ready");
 
       const dur = await estimateAudioDuration(file);
       setDuration(dur);
@@ -152,6 +161,14 @@ export function AudioTranscribe({
     [handleFileSelect]
   );
 
+  const dismissError = () => {
+    setError("");
+    setErrorCode(null);
+    if (state === "error") {
+      setState(audioFile ? "ready" : "idle");
+    }
+  };
+
   const handleTranscribe = async (isRetry = false) => {
     if (!audioFile) return;
 
@@ -159,9 +176,11 @@ export function AudioTranscribe({
       setRetryCount(0);
     }
 
-    setTranscribing(true);
+    // Explicit state machine transition: CLEAR ALL STALE ERRORS
+    setState("transcribing");
     setError("");
     setErrorCode(null);
+    setDebugInfo(null);
     setProgress(5);
     setProgressMessage("Uploading audio file to Groq...");
 
@@ -201,14 +220,43 @@ export function AudioTranscribe({
       clearTimeout(timeoutId);
       clearInterval(progressInterval);
 
+      // Store debug info in development
+      if (process.env.NODE_ENV === "development") {
+        setDebugInfo({
+          status: response.status,
+          statusText: response.statusText,
+          contentType: response.headers.get("content-type"),
+          url: response.url,
+          timestamp: new Date().toISOString(),
+        });
+      }
+
+      // Check authentication BEFORE parsing
+      if (response.status === 401 || response.status === 403) {
+        setErrorCode("AUTH_EXPIRED");
+        throw new Error("AUTH_ERROR: Your session has expired. Please refresh the page and sign in again.");
+      }
+
+      // Check content type BEFORE parsing
       const contentType = response.headers.get("content-type") || "";
 
       if (!contentType.includes("application/json")) {
-        if (response.status === 401 || response.status === 403) {
-          setErrorCode("AUTH_EXPIRED");
-          throw new Error("AUTH_EXPIRED: Session expired. Please refresh the page and sign in again.");
+        const responseText = await response.text();
+        if (process.env.NODE_ENV === "development") {
+          console.error("Non-JSON transcription response:", {
+            status: response.status,
+            contentType,
+            text: responseText.substring(0, 200),
+          });
         }
-        throw new Error(`Server returned HTTP ${response.status}. Please refresh and try again.`);
+
+        if (response.status === 404) {
+          throw new Error("Transcription endpoint not found. Please refresh the page.");
+        }
+        if (response.status >= 500) {
+          throw new Error("Server error occurred during transcription. Please try again.");
+        }
+        throw new Error(`Server returned ${contentType} instead of JSON (Status ${response.status}). Please refresh and try again.`);
       }
 
       const data = await response.json();
@@ -232,34 +280,43 @@ export function AudioTranscribe({
         throw new Error(data.error || "Transcription failed");
       }
 
-      // Success
+      // Success transition
       setProgress(100);
       setProgressMessage("Transcription complete!");
+      setError(""); // Clear error again on success
+      setErrorCode(null);
       setDuration(data.metadata?.duration || 0);
       setProvider(data.metadata?.provider || "Groq Whisper Large v3");
       setReviewText(data.text || "");
       setAudioUrlResult(data.audioUrl || undefined);
-      setReviewMode(true);
       setRetryCount(0);
+      setState("reviewing");
     } catch (err: unknown) {
       clearInterval(progressInterval);
       setProgress(0);
+      setState("error");
 
       if (err instanceof Error && err.name === "AbortError") {
         setErrorCode("TIMEOUT");
         setError("Transcription timed out after 5 minutes. Try a shorter audio file.");
       } else {
         const errMsg = err instanceof Error ? err.message : String(err);
-        if (errMsg.startsWith("AUTH_EXPIRED:")) {
-          setError(errMsg.replace("AUTH_EXPIRED: ", ""));
+        if (errMsg.startsWith("AUTH_ERROR:")) {
+          setError(errMsg.replace("AUTH_ERROR: ", ""));
           setApiStatus("unavailable");
         } else {
           setError(formatErrorMessage(err));
         }
       }
+
+      if (process.env.NODE_ENV === "development") {
+        setDebugInfo((prev) => ({
+          ...prev,
+          error: err instanceof Error ? { name: err.name, message: err.message, stack: err.stack } : String(err),
+        }));
+      }
     } finally {
       clearInterval(progressInterval);
-      setTranscribing(false);
       setTimeout(() => {
         setProgress(0);
         setProgressMessage("");
@@ -269,7 +326,7 @@ export function AudioTranscribe({
 
   const handleAcceptReview = () => {
     onTranscriptionComplete(reviewText, audioUrlResult);
-    setAccepted(true);
+    setState("complete");
   };
 
   const handleCopyText = async () => {
@@ -286,9 +343,9 @@ export function AudioTranscribe({
     setAudioFile(null);
     setError("");
     setErrorCode(null);
-    setReviewMode(false);
     setReviewText("");
-    setAccepted(false);
+    setDebugInfo(null);
+    setState("idle");
     if (inputRef.current) inputRef.current.value = "";
   };
 
@@ -334,21 +391,21 @@ export function AudioTranscribe({
     );
   }
 
-  // 3. Normal transcriber UI
+  // 3. Normal Transcriber UI with State Machine Guard
   return (
     <div className="space-y-4 rounded-sm border border-accent/20 bg-surface-raised/90 p-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Mic className="h-4 w-4 text-accent" />
           <h3 className="font-serif text-sm font-semibold text-content" lang="en">
-            {reviewMode ? "Transcription Final Review" : label}
+            {state === "reviewing" || state === "complete" ? "Transcription Final Review" : label}
           </h3>
           <span className="rounded-full bg-green-500/10 px-2 py-0.5 text-[0.65rem] font-medium text-green-500">
             Groq Whisper Ready
           </span>
         </div>
 
-        {!reviewMode && (
+        {state !== "reviewing" && state !== "complete" && (
           <div className="flex items-center gap-2">
             <label className="text-xs text-content-faint" lang="en">
               Language:
@@ -366,8 +423,8 @@ export function AudioTranscribe({
         )}
       </div>
 
-      {/* Upload State */}
-      {!audioFile && !reviewMode && (
+      {/* Upload State (Idle) */}
+      {!audioFile && state === "idle" && (
         <div
           onDrop={handleDrop}
           onDragOver={(e) => {
@@ -403,8 +460,8 @@ export function AudioTranscribe({
         </div>
       )}
 
-      {/* Audio Selected / Transcribing Progress State */}
-      {audioFile && !reviewMode && (
+      {/* Audio Selected / Ready State */}
+      {audioFile && (state === "ready" || state === "transcribing") && (
         <div className="space-y-3">
           <div className="flex items-center justify-between rounded-sm border border-rule bg-surface p-3">
             <div className="flex items-center gap-3">
@@ -417,7 +474,7 @@ export function AudioTranscribe({
               </div>
             </div>
 
-            {!transcribing && (
+            {state !== "transcribing" && (
               <button
                 type="button"
                 onClick={handleReset}
@@ -428,8 +485,8 @@ export function AudioTranscribe({
             )}
           </div>
 
-          {/* Progress Bar */}
-          {transcribing && (
+          {/* Progress Bar (ONLY during transcribing) */}
+          {state === "transcribing" && (
             <div className="space-y-2 rounded-sm border border-accent/20 bg-accent/5 p-3">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-content-soft font-medium flex items-center gap-1.5">
@@ -447,11 +504,11 @@ export function AudioTranscribe({
             </div>
           )}
 
-          {!transcribing && (
+          {state === "ready" && (
             <button
               type="button"
               onClick={() => handleTranscribe(false)}
-              className="w-full inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2.5 text-sm font-medium text-surface transition hover:opacity-90 disabled:opacity-50"
+              className="w-full inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2.5 text-sm font-medium text-surface transition hover:opacity-90"
             >
               <Mic className="h-4 w-4" />
               Start Groq Transcription & Review
@@ -461,7 +518,7 @@ export function AudioTranscribe({
       )}
 
       {/* Review Stage */}
-      {reviewMode && (
+      {(state === "reviewing" || state === "complete") && (
         <div className="space-y-3 border-t border-rule pt-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -500,13 +557,13 @@ export function AudioTranscribe({
                 onClick={handleAcceptReview}
                 className={cn(
                   "inline-flex items-center gap-2 rounded-sm px-4 py-2 text-sm font-medium transition",
-                  accepted
+                  state === "complete"
                     ? "bg-green-600 text-white"
                     : "bg-accent text-surface hover:opacity-90"
                 )}
               >
                 <Check className="h-4 w-4" />
-                {accepted ? "Inserted into Piece!" : "Accept & Insert into Piece"}
+                {state === "complete" ? "Inserted into Piece!" : "Accept & Insert into Piece"}
               </button>
 
               <button
@@ -531,28 +588,60 @@ export function AudioTranscribe({
         </div>
       )}
 
-      {/* Error display with Retry Button */}
-      {error && !transcribing && (
+      {/* Error display (ONLY when state === 'error' or error exists outside transcribing) */}
+      {error && state !== "transcribing" && (
         <div className="flex items-start gap-2.5 text-xs text-red-500 rounded-sm border border-red-500/20 bg-red-500/5 p-3">
           <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
           <div className="flex-1 space-y-1.5">
-            <p className="font-medium">{error}</p>
+            <p className="font-medium break-words">{error}</p>
             {errorCode && getErrorDetails(errorCode)?.solution && (
               <p className="text-red-500/80">{getErrorDetails(errorCode).solution}</p>
             )}
 
-            {audioFile && !error.includes("Session expired") && (
+            <div className="mt-2 flex items-center gap-2">
+              {audioFile && !error.includes("Session expired") && (
+                <button
+                  type="button"
+                  onClick={() => handleTranscribe(true)}
+                  className="inline-flex items-center gap-1.5 rounded-sm bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-500 transition hover:bg-red-500/20"
+                >
+                  <RefreshCw className="h-3 w-3" />
+                  Retry Transcription {retryCount > 0 ? `(Attempt ${retryCount + 1}/${MAX_RETRIES})` : ""}
+                </button>
+              )}
+
               <button
                 type="button"
-                onClick={() => handleTranscribe(true)}
-                className="inline-flex items-center gap-1.5 rounded-sm bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-500 transition hover:bg-red-500/20"
+                onClick={dismissError}
+                className="inline-flex items-center gap-1 text-xs text-content-faint hover:text-content transition"
               >
-                <RefreshCw className="h-3 w-3" />
-                Retry Transcription {retryCount > 0 ? `(Attempt ${retryCount + 1}/${MAX_RETRIES})` : ""}
+                <X className="h-3 w-3" />
+                Dismiss
               </button>
-            )}
+            </div>
           </div>
+
+          <button
+            type="button"
+            onClick={dismissError}
+            className="text-red-400 hover:text-red-600 transition"
+            aria-label="Close error"
+          >
+            <X className="h-4 w-4" />
+          </button>
         </div>
+      )}
+
+      {/* Development Debug Info Panel */}
+      {process.env.NODE_ENV === "development" && debugInfo && (
+        <details className="mt-3 text-xs">
+          <summary className="cursor-pointer text-content-faint hover:text-content font-mono text-[0.7rem]">
+            🔍 Debug Info (Development Only)
+          </summary>
+          <pre className="mt-2 rounded-sm bg-surface p-3 text-[0.65rem] font-mono text-content-faint overflow-auto max-h-40 border border-rule">
+            {JSON.stringify(debugInfo, null, 2)}
+          </pre>
+        </details>
       )}
     </div>
   );
