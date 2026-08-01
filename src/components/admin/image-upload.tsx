@@ -14,8 +14,8 @@ interface ImageUploadProps {
   aspectRatio?: number;
 }
 
-/** Client-side canvas compression helper */
-async function compressImage(file: File, maxWidth = 1600, quality = 0.85): Promise<File> {
+/** Client-side canvas compression helper preserving original aspect ratio & dimensions */
+async function compressImage(file: File, maxWidth = 2400, quality = 0.90): Promise<File> {
   if (!file.type.startsWith("image/")) return file;
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -199,28 +199,25 @@ export function ImageUpload({
 
       {preview ? (
         <div className="relative group">
-          <div
-            className="relative overflow-hidden rounded-sm border border-rule max-h-64"
-            style={aspectRatio ? { aspectRatio: String(aspectRatio) } : undefined}
-          >
+          <div className="relative overflow-hidden rounded-sm border border-rule bg-surface-raised/50 p-1">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={preview}
               alt="Preview"
-              className="h-full w-full object-cover"
+              className="h-auto w-full max-h-[32rem] object-contain rounded-sm mx-auto"
             />
           </div>
 
           <button
             type="button"
             onClick={handleRemove}
-            className="absolute top-2 right-2 rounded-full bg-red-500 p-1.5 text-white opacity-90 transition hover:opacity-100"
+            className="absolute top-3 right-3 rounded-full bg-red-500 p-1.5 text-white opacity-90 transition hover:opacity-100 shadow-md"
             title="Remove image"
           >
             <X className="h-4 w-4" />
           </button>
 
-          <div className="absolute top-2 left-2 rounded-full bg-green-500 p-1.5">
+          <div className="absolute top-3 left-3 rounded-full bg-green-500 p-1.5 shadow-md">
             <Check className="h-4 w-4 text-white" />
           </div>
 

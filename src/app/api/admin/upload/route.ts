@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
           folder: folder,
           resource_type: "image",
           transformation: [
-            { width: 1200, height: 630, crop: "limit" },
+            { width: 2400, crop: "limit" },
             { quality: "auto:good" },
             { fetch_format: "auto" },
           ],
