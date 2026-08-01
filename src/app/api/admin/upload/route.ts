@@ -16,61 +16,78 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json(
-        { ok: false, error: "No file provided" },
-        { status: 400 },
+        { ok: false, error: "No image file provided" },
+        { status: 400 }
       );
     }
 
     if (!file.type.startsWith("image/")) {
       return NextResponse.json(
-        { ok: false, error: "File must be an image" },
-        { status: 400 },
+        { ok: false, error: "File must be an image (JPEG, PNG, WebP, etc.)" },
+        { status: 400 }
       );
     }
 
     const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {
       return NextResponse.json(
-        { ok: false, error: "File size must be less than 10MB" },
-        { status: 400 },
+        { ok: false, error: "Image file size must be less than 10MB" },
+        { status: 400 }
       );
     }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const base64 = buffer.toString("base64");
-    const dataUri = `data:${file.type};base64,${base64}`;
+    const dataUri = `data:${file.type || "image/webp"};base64,${base64}`;
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
     const apiKey = process.env.CLOUDINARY_API_KEY;
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
+    // Try Cloudinary upload if credentials are environment variables
     if (cloudName && apiKey && apiSecret) {
-      cloudinary.config({
-        cloud_name: cloudName,
-        api_key: apiKey,
-        api_secret: apiSecret,
-      });
+      try {
+        // Sanitize cloud name if user entered dots instead of dashes
+        const sanitizedCloudName = cloudName.replace(/\./g, "-");
 
-      const result = await cloudinary.uploader.upload(dataUri, {
-        folder: folder,
-        resource_type: "image",
-        transformation: [
-          { width: 1200, height: 630, crop: "limit" },
-          { quality: "auto:good" },
-          { fetch_format: "auto" },
-        ],
-      });
+        cloudinary.config({
+          cloud_name: sanitizedCloudName,
+          api_key: apiKey,
+          api_secret: apiSecret,
+        });
 
-      return NextResponse.json({
-        ok: true,
-        url: result.secure_url,
-        publicId: result.public_id,
-        width: result.width,
-        height: result.height,
-        format: result.format,
-        size: result.bytes,
-      });
+        const result = await cloudinary.uploader.upload(dataUri, {
+          folder: folder,
+          resource_type: "image",
+          transformation: [
+            { width: 1200, height: 630, crop: "limit" },
+            { quality: "auto:good" },
+            { fetch_format: "auto" },
+          ],
+        });
+
+        return NextResponse.json({
+          ok: true,
+          url: result.secure_url,
+          publicId: result.public_id,
+          width: result.width,
+          height: result.height,
+          format: result.format,
+          size: result.bytes,
+        });
+      } catch (cloudinaryErr: unknown) {
+        const errMsg = cloudinaryErr instanceof Error ? cloudinaryErr.message : String(cloudinaryErr);
+        console.warn("Cloudinary upload failed, using Data URI fallback:", errMsg);
+
+        // Fallback: return dataUri when Cloudinary fails or credentials invalid
+        return NextResponse.json({
+          ok: true,
+          url: dataUri,
+          size: file.size,
+          warning: "Cloudinary CDN upload unavailable; image stored locally as Data URI",
+        });
+      }
     }
 
     // Fallback: return dataUri when Cloudinary credentials are not set
@@ -79,11 +96,12 @@ export async function POST(request: NextRequest) {
       url: dataUri,
       size: file.size,
     });
-  } catch (error: any) {
-    console.error("Upload error:", error);
+  } catch (error: unknown) {
+    console.error("Upload route error:", error);
+    const message = error instanceof Error ? error.message : "Upload failed";
     return NextResponse.json(
-      { ok: false, error: error?.message || "Upload failed" },
-      { status: 500 },
+      { ok: false, error: message },
+      { status: 500 }
     );
   }
 }
