@@ -239,31 +239,27 @@ export async function POST(request: NextRequest) {
         const errMsg = openRouterErr instanceof Error ? openRouterErr.message : String(openRouterErr);
         console.warn("[Transcribe] OpenRouter AI failed:", errMsg);
 
-        if (groq) {
-          try {
-            console.log("[Transcribe] Fallback to Groq Whisper...");
-            const groqFile = await toFile(buffer, file.name || "narration.mp3", { type: file.type || "audio/mpeg" });
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 45000);
-
-            const transcription = await groq.audio.transcriptions.create(
-              {
-                file: groqFile,
-                model: GROQ_WHISPER_MODEL,
-                language: language === "auto" ? undefined : language,
-                prompt: whisperPrompt,
-                temperature: 0.0,
-              },
-              { signal: controller.signal }
-            );
-
-            clearTimeout(timeout);
-            rawText = transcription.text;
-            providerName = "Groq Whisper Large v3 (Fallback)";
-          } catch (groqErr) {
-            console.warn("[Transcribe] Groq fallback failed:", groqErr);
-          }
+        if (errMsg.includes("401")) {
+          return errorResponse(
+            "OpenRouter API key is invalid or unauthorized (HTTP 401). Please check OPENROUTER_API_KEY in Vercel environment variables.",
+            "OPENROUTER_INVALID_KEY",
+            401
+          );
         }
+
+        if (errMsg.includes("429")) {
+          return errorResponse(
+            "OpenRouter API rate limit or credit limit reached. Please check your OpenRouter account balance.",
+            "OPENROUTER_RATE_LIMIT",
+            429
+          );
+        }
+
+        return errorResponse(
+          `OpenRouter AI error: ${errMsg}`,
+          "TRANSCRIPTION_FAILED",
+          500
+        );
       }
     }
 
