@@ -20,7 +20,7 @@ export async function PUT(
     where: { id: params.id },
     select: { slug: true },
   });
-  if (!before) return fail("ধারাবাহিকটি পাওয়া যায়নি।", 404);
+  if (!before) return fail("Series not found.", 404);
 
   try {
     const series = await prisma.series.update({
@@ -41,9 +41,9 @@ export async function PUT(
 
     return ok({ id: series.id, slug: series.slug });
   } catch (error) {
-    if (isSlugTaken(error)) return fail("এই স্লাগটি আগেই ব্যবহার হয়েছে।", 409);
+    if (isSlugTaken(error)) return fail("This slug is already taken.", 409);
     console.error("update series failed", error);
-    return fail("সংরক্ষণ করা যায়নি।", 500);
+    return fail("Could not save.", 500);
   }
 }
 
@@ -58,14 +58,14 @@ export async function DELETE(
     where: { id: params.id },
     select: { slug: true, _count: { select: { pieces: true } } },
   });
-  if (!series) return fail("ধারাবাহিকটি পাওয়া যায়নি।", 404);
+  if (!series) return fail("Series not found.", 404);
 
   // `onDelete: SetNull` in the schema means the pieces survive — but they lose
   // their ordering and the prev/next links between them, which is a bigger loss
   // than it looks. Ask first.
   if (series._count.pieces > 0) {
     return fail(
-      `এই ধারাবাহিকে ${series._count.pieces}টি লেখা আছে — আগে সেগুলো সরান।`,
+      `This series has ${series._count.pieces} pieces — remove them from the series first.`,
       409,
     );
   }

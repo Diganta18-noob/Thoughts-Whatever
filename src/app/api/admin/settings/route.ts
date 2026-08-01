@@ -64,7 +64,7 @@ export async function POST(req: Request) {
 
     if (action === "changePassword") {
       if (!currentPassword || !newPassword) {
-        return NextResponse.json({ error: "সকল পাসওয়ার্ডের ঘর পূরণ করুন" }, { status: 400 });
+        return NextResponse.json({ error: "Please fill in all password fields." }, { status: 400 });
       }
 
       const user = await prisma.adminUser.findUnique({ where: { id: admin.id } });
@@ -74,7 +74,7 @@ export async function POST(req: Request) {
 
       const valid = await verifyPassword(currentPassword, user.passwordHash);
       if (!valid) {
-        return NextResponse.json({ error: "বর্তমান পাসওয়ার্ড ভুল" }, { status: 400 });
+        return NextResponse.json({ error: "Current password is incorrect." }, { status: 400 });
       }
 
       const newHash = await hashPassword(newPassword);
@@ -83,17 +83,17 @@ export async function POST(req: Request) {
         data: { passwordHash: newHash },
       });
 
-      return NextResponse.json({ ok: true, message: "পাসওয়ার্ড পরিবর্তিত হয়েছে" });
+      return NextResponse.json({ ok: true, message: "Password updated successfully." });
     }
 
     if (action === "addAdmin") {
       if (!email || !newPassword) {
-        return NextResponse.json({ error: "ইমেইল ও পাসওয়ার্ড প্রয়োজন" }, { status: 400 });
+        return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
       }
 
       const existing = await prisma.adminUser.findUnique({ where: { email } });
       if (existing) {
-        return NextResponse.json({ error: "এই ইমেইল অ্যাকাউন্টটি নিবন্ধিত" }, { status: 400 });
+        return NextResponse.json({ error: "This email address is already registered." }, { status: 400 });
       }
 
       const passwordHash = await hashPassword(newPassword);
@@ -105,7 +105,7 @@ export async function POST(req: Request) {
         },
       });
 
-      return NextResponse.json({ ok: true, message: "নতুন এডমিন অ্যাকাউন্ট তৈরি হয়েছে" });
+      return NextResponse.json({ ok: true, message: "New admin account created successfully." });
     }
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });

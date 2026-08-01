@@ -29,9 +29,9 @@ export async function PUT(
     revalidateTaxonomy();
     return ok({ id: tag.id, slug: tag.slug });
   } catch (error) {
-    if (isSlugTaken(error)) return fail("এই স্লাগটি আগেই ব্যবহার হয়েছে।", 409);
+    if (isSlugTaken(error)) return fail("This slug is already taken.", 409);
     console.error("update tag failed", error);
-    return fail("সংরক্ষণ করা যায়নি।", 500);
+    return fail("Could not save.", 500);
   }
 }
 
@@ -46,13 +46,13 @@ export async function DELETE(
     where: { id: params.id },
     select: { _count: { select: { pieces: true } } },
   });
-  if (!tag) return fail("এই বিষয়টি পাওয়া যায়নি।", 404);
+  if (!tag) return fail("Tag not found.", 404);
 
   // A tag in use is a live filter link in the archive; removing it breaks URLs
   // readers have already shared.
   if (tag._count.pieces > 0) {
     return fail(
-      `এই বিষয়টি ${tag._count.pieces}টি লেখায় আছে — আগে সেগুলো থেকে সরান।`,
+      `This tag is used in ${tag._count.pieces} pieces — remove it from those first.`,
       409,
     );
   }

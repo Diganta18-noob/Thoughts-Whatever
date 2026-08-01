@@ -20,7 +20,7 @@ export async function PUT(
     where: { id: params.id },
     select: { slug: true },
   });
-  if (!before) return fail("এই নামটি পাওয়া যায়নি।", 404);
+  if (!before) return fail("Author not found.", 404);
 
   try {
     const author = await prisma.author.update({
@@ -42,9 +42,9 @@ export async function PUT(
 
     return ok({ id: author.id, slug: author.slug });
   } catch (error) {
-    if (isSlugTaken(error)) return fail("এই স্লাগটি আগেই ব্যবহার হয়েছে।", 409);
+    if (isSlugTaken(error)) return fail("This slug is already taken.", 409);
     console.error("update author failed", error);
-    return fail("সংরক্ষণ করা যায়নি।", 500);
+    return fail("Could not save.", 500);
   }
 }
 
@@ -59,13 +59,13 @@ export async function DELETE(
     where: { id: params.id },
     select: { slug: true, _count: { select: { pieces: true } } },
   });
-  if (!author) return fail("এই নামটি পাওয়া যায়নি।", 404);
+  if (!author) return fail("Author not found.", 404);
 
   // Deleting would silently strip the name off every piece it is on. Better to
   // refuse and let the publisher unpick it deliberately.
   if (author._count.pieces > 0) {
     return fail(
-      `এই নামটি ${author._count.pieces}টি লেখায় আছে — আগে সেগুলো থেকে সরান।`,
+      `This author is tagged on ${author._count.pieces} pieces — remove them from those pieces first.`,
       409,
     );
   }

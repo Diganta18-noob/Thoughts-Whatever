@@ -22,7 +22,7 @@ export async function PUT(
     where: { id: params.id },
     select: { slug: true, kind: true },
   });
-  if (!before) return fail("লেখাটি পাওয়া যায়নি।", 404);
+  if (!before) return fail("Piece not found.", 404);
 
   try {
     const piece = await updatePiece(params.id, body.data);
@@ -35,10 +35,10 @@ export async function PUT(
     return ok({ id: piece.id, slug: piece.slug });
   } catch (error) {
     if (isSlugTaken(error)) {
-      return fail("এই স্লাগটি অন্য একটি লেখায় ব্যবহার হয়েছে।", 409);
+      return fail("This slug is used in another piece.", 409);
     }
     console.error("updatePiece failed", error);
-    return fail("সংরক্ষণ করা যায়নি।", 500);
+    return fail("Could not save.", 500);
   }
 }
 
@@ -53,7 +53,7 @@ export async function DELETE(
     where: { id: params.id },
     select: { slug: true, kind: true },
   });
-  if (!piece) return fail("লেখাটি পাওয়া যায়নি।", 404);
+  if (!piece) return fail("Piece not found.", 404);
 
   await prisma.piece.delete({ where: { id: params.id } });
   revalidatePiece({ kind: piece.kind, slug: piece.slug });

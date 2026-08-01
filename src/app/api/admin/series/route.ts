@@ -26,8 +26,8 @@ export async function POST(request: Request) {
     revalidateTaxonomy();
     return ok({ id: series.id, slug: series.slug });
   } catch (error) {
-    if (isSlugTaken(error)) return fail("এই স্লাগটি আগেই ব্যবহার হয়েছে।", 409);
+    if (isSlugTaken(error)) return fail("This slug is already taken.", 409);
     console.error("create series failed", error);
-    return fail("সংরক্ষণ করা যায়নি।", 500);
+    return fail("Could not save.", 500);
   }
 }

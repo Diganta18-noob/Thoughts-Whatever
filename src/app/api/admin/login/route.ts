@@ -33,7 +33,7 @@ export async function POST(request: Request) {
   const parsed = loginSchema.safeParse(payload);
   if (!parsed.success) {
     return NextResponse.json(
-      { ok: false, error: "ইমেল ও পাসওয়ার্ড ঠিকভাবে দিন।" },
+      { ok: false, error: "Please enter a valid email and password." },
       { status: 400 },
     );
   }
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
 
     if (!admin || !valid) {
       return NextResponse.json(
-        { ok: false, error: "ইমেল বা পাসওয়ার্ড মিলছে না।" },
+        { ok: false, error: "Invalid email or password." },
         { status: 401 },
       );
     }
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         ok: false,
-        error: err?.message || "সার্ভারে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।",
+        error: err?.message || "Server error. Please try again later.",
       },
       { status: 500 },
     );

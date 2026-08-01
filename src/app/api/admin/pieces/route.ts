@@ -18,10 +18,10 @@ export async function POST(request: Request) {
     return ok({ id: piece.id, slug: piece.slug });
   } catch (error) {
     if (isSlugTaken(error)) {
-      return fail("এই স্লাগটি আগেই ব্যবহার হয়েছে।", 409);
+      return fail("This slug is already taken.", 409);
     }
     console.error("createPiece failed", error);
-    return fail("সংরক্ষণ করা যায়নি।", 500);
+    return fail("Could not save.", 500);
   }
 }
 
