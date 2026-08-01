@@ -8,9 +8,6 @@ import { WHISPER_SUPPORTED_FORMATS, MAX_AUDIO_SIZE_MB } from "@/lib/openai";
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
-/**
- * Helper to create consistent error responses
- */
 function errorResponse(message: string, code: string, status: number = 500) {
   console.error(`[Transcribe API] ${code}:`, message);
   return NextResponse.json(
@@ -20,7 +17,6 @@ function errorResponse(message: string, code: string, status: number = 500) {
 }
 
 export async function POST(request: NextRequest) {
-  // 1. Authentication Check
   const gate = await guard();
   if ("response" in gate) {
     return errorResponse(
@@ -31,7 +27,6 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // 2. Parse Form Data
     let formData: FormData;
     try {
       formData = await request.formData();
@@ -48,7 +43,6 @@ export async function POST(request: NextRequest) {
     const storeAudio = formData.get("storeAudio") === "true";
     const autoClean = formData.get("autoClean") !== "false";
 
-    // 3. File Validation
     if (!file) {
       return errorResponse(
         "No audio file provided. Please select an audio file and try again.",
@@ -74,7 +68,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 4. Check Groq API Configuration
     const groq = getGroqClient();
     if (!groq) {
       return errorResponse(
@@ -84,7 +77,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 5. Prepare Audio File Buffer
     let arrayBuffer: ArrayBuffer;
     try {
       arrayBuffer = await file.arrayBuffer();
@@ -102,7 +94,7 @@ export async function POST(request: NextRequest) {
     let rawText = "";
     const providerName = "Groq Whisper Large v3 (Free & Ultra-Fast)";
 
-    // 6. Transcribe using Groq Whisper Large v3
+    // 1. Transcribe using Groq Whisper Large v3 (Ultra-Fast)
     try {
       console.log("[Transcribe] Initiating Groq Whisper transcription...");
       const groqFile = await toFile(buffer, file.name, { type: file.type || "audio/mpeg" });
@@ -114,7 +106,7 @@ export async function POST(request: NextRequest) {
         temperature: 0.0,
       });
       rawText = transcription.text;
-      console.log("[Transcribe] Groq transcription completed successfully");
+      console.log("[Transcribe] Groq Whisper completed successfully");
     } catch (err: unknown) {
       const errMsg = err instanceof Error ? err.message : String(err);
       console.error("[Transcribe] Groq Whisper API error:", errMsg);
@@ -150,39 +142,48 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 7. AI Post-Processing Cleanup (Groq Llama-3.3-70b)
+    // 2. Fast AI Post-Processing Cleanup (Groq Llama-3.3-70b) with 3s Timeout Guard
     let finalText = rawText;
     if (autoClean && rawText) {
       try {
-        console.log("[Transcribe] Applying AI post-processing cleanup...");
-        finalText = await cleanMixedTranscription(rawText);
+        const cleanupPromise = cleanMixedTranscription(rawText);
+        const timeoutPromise = new Promise<string>((resolve) => setTimeout(() => resolve(rawText), 3000));
+        finalText = await Promise.race([cleanupPromise, timeoutPromise]);
       } catch (cleanErr) {
-        console.warn("[Transcribe] AI cleanup failed (non-fatal, using raw text):", cleanErr);
+        console.warn("[Transcribe] AI cleanup skipped (using raw text):", cleanErr);
       }
     }
 
-    // 8. Optional Cloudinary Audio Storage
+    // 3. Fast Optional Cloudinary Storage with 3s Timeout Guard (non-blocking)
     let audioUrl: string | null = null;
-    if (storeAudio && process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) {
+    const rawCloudName = process.env.CLOUDINARY_CLOUD_NAME;
+    const apiKey = process.env.CLOUDINARY_API_KEY;
+    const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+    if (storeAudio && rawCloudName && apiKey && apiSecret) {
       try {
-        console.log("[Transcribe] Uploading audio to Cloudinary...");
+        const cloudName = rawCloudName.replace(/\./g, "-");
         const dataUri = `data:${file.type || "audio/mpeg"};base64,${buffer.toString("base64")}`;
 
         cloudinary.config({
-          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-          api_key: process.env.CLOUDINARY_API_KEY,
-          api_secret: process.env.CLOUDINARY_API_SECRET,
+          cloud_name: cloudName,
+          api_key: apiKey,
+          api_secret: apiSecret,
         });
 
-        const result = await cloudinary.uploader.upload(dataUri, {
+        const uploadPromise = cloudinary.uploader.upload(dataUri, {
           folder: "thoughts-whatever/audio",
           resource_type: "video",
         });
 
-        audioUrl = result.secure_url;
-        console.log("[Transcribe] Audio uploaded to Cloudinary successfully");
+        const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000));
+        const result = await Promise.race([uploadPromise, timeoutPromise]);
+
+        if (result && typeof result === "object" && "secure_url" in result) {
+          audioUrl = result.secure_url as string;
+        }
       } catch (uploadErr) {
-        console.warn("[Transcribe] Cloudinary upload failed (non-fatal):", uploadErr);
+        console.warn("[Transcribe] Cloudinary upload timed out or failed (non-fatal):", uploadErr);
       }
     }
 
