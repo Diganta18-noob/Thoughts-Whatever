@@ -207,6 +207,8 @@ export function PieceEditor({
   series: EditorOption[];
 }) {
   const router = useRouter();
+  const t = useTranslation();
+  const isNew = !initial?.id;
   const safeInitial: EditorPiece = useMemo(() => ({
     ...EMPTY_PIECE,
     ...(initial || {}),
