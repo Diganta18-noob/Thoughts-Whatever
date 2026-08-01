@@ -119,7 +119,13 @@ async function transcribeOpenRouter(
   _language: string,
   prompt: string
 ): Promise<string> {
-  const key = process.env.OPENROUTER_API_KEY!;
+  const key = process.env.OPENROUTER_API_KEY!.trim();
+  const isAgentRouter = key.startsWith("sk-G8") || key.toLowerCase().includes("agent");
+  const endpointUrl = isAgentRouter
+    ? "https://agentrouter.org/v1/chat/completions"
+    : "https://openrouter.ai/api/v1/chat/completions";
+  const providerLabel = isAgentRouter ? "Agent Router" : "OpenRouter";
+
   const base64Data = buffer.toString("base64");
   const mediaType = mimeType || "audio/mpeg";
 
@@ -127,10 +133,10 @@ async function transcribeOpenRouter(
   const timeout = setTimeout(() => controller.abort(), 60000);
 
   try {
-    const res = await fetch("https://agentrouter.org/v1/chat/completions", {
+    const res = await fetch(endpointUrl, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${key.trim()}`,
+        Authorization: `Bearer ${key}`,
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
         Accept: "application/json",
         "HTTP-Referer": "https://thoughts-whatever.vercel.app",
@@ -164,18 +170,18 @@ async function transcribeOpenRouter(
 
     if (!res.ok) {
       const errText = await res.text();
-      throw new Error(`Agent Router HTTP ${res.status}: ${errText.substring(0, 200)}`);
+      throw new Error(`${providerLabel} HTTP ${res.status}: ${errText.substring(0, 200)}`);
     }
 
     const contentType = res.headers.get("content-type") || "";
     if (!contentType.includes("application/json")) {
       const sample = await res.text();
-      throw new Error(`Agent Router returned non-JSON response (${res.status}): ${sample.substring(0, 100)}`);
+      throw new Error(`${providerLabel} returned WAF HTML challenge (${res.status}): ${sample.substring(0, 80)}...`);
     }
 
     const data = await res.json();
     const text = data.choices?.[0]?.message?.content?.trim();
-    if (!text) throw new Error("No transcription text returned from Agent Router");
+    if (!text) throw new Error(`No transcription text returned from ${providerLabel}`);
     return text;
   } catch (err) {
     clearTimeout(timeout);
