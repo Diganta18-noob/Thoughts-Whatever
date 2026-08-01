@@ -25,7 +25,12 @@ const DICTIONARIES: Record<Locale, Dictionary> = { en, bn };
  * rather than blanked — a visible `{count}` in development is easier to catch
  * than a silent gap in production.
  */
-function interpolate(template: string, params?: TranslationParams) {
+function interpolate(
+  template?: string,
+  params?: TranslationParams,
+  fallbackKey?: string,
+) {
+  if (template === undefined || template === null) return fallbackKey || "";
   if (!params) return template;
   return template.replace(/\{(\w+)\}/g, (whole, name: string) =>
     name in params ? String(params[name]) : whole,
@@ -81,8 +86,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const t = useCallback(
-    (key: TranslationKey, params?: TranslationParams) =>
-      interpolate(DICTIONARIES[locale][key], params),
+    (key: TranslationKey, params?: TranslationParams) => {
+      const template =
+        DICTIONARIES[locale]?.[key] ?? DICTIONARIES[DEFAULT_LOCALE]?.[key];
+      return interpolate(template, params, key);
+    },
     [locale],
   );
 
@@ -115,7 +123,10 @@ export function useLanguageSafe(): Ctx {
     locale: DEFAULT_LOCALE,
     setLocale: () => {},
     toggle: () => {},
-    t: (key, params) => interpolate(DICTIONARIES[DEFAULT_LOCALE][key], params),
+    t: (key, params) => {
+      const template = DICTIONARIES[DEFAULT_LOCALE]?.[key];
+      return interpolate(template, params, key);
+    },
     isBn: DEFAULT_LOCALE === "bn",
     ready: false,
   };
