@@ -120,7 +120,7 @@ async function transcribeOpenRouter(
   prompt: string
 ): Promise<string> {
   const key = (process.env.AGENTROUTER_API_KEY || process.env.OPENROUTER_API_KEY || "").trim();
-  const isAgentRouter = key.startsWith("sk-G8") || key.toLowerCase().includes("agent");
+  const isAgentRouter = Boolean(process.env.AGENTROUTER_API_KEY?.trim()) || key.startsWith("sk-G8") || key.toLowerCase().includes("agent");
   const endpointUrl = isAgentRouter
     ? "https://agentrouter.org/v1/chat/completions"
     : "https://openrouter.ai/api/v1/chat/completions";
