@@ -13,7 +13,7 @@ export function AdminHeaderBrand() {
     >
       <Logo variant="compact" showSubtitle={false} className="transition-transform group-hover:scale-105" />
       <span className="font-serif text-base font-medium text-content group-hover:text-accent">
-        Editor's Room
+        Editor&apos;s Room
       </span>
     </Link>
   );

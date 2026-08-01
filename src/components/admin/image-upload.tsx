@@ -27,7 +27,7 @@ export function ImageUpload({
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const validateFile = (file: File): string | null => {
+  const validateFile = useCallback((file: File): string | null => {
     if (!file.type.startsWith("image/")) {
       return "File must be an image (JPEG, PNG, WebP, etc.)";
     }
@@ -38,9 +38,9 @@ export function ImageUpload({
     }
 
     return null;
-  };
+  }, [maxSizeMB]);
 
-  const uploadFile = async (file: File) => {
+  const uploadFile = useCallback(async (file: File) => {
     setUploading(true);
     setError("");
 
@@ -68,7 +68,7 @@ export function ImageUpload({
     } finally {
       setUploading(false);
     }
-  };
+  }, [folder, onChange]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -97,7 +97,7 @@ export function ImageUpload({
     }
 
     await uploadFile(file);
-  }, []);
+  }, [uploadFile, validateFile]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
