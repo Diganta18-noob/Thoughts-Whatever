@@ -119,7 +119,7 @@ async function transcribeOpenRouter(
   _language: string,
   prompt: string
 ): Promise<string> {
-  const key = process.env.OPENROUTER_API_KEY!.trim();
+  const key = (process.env.AGENTROUTER_API_KEY || process.env.OPENROUTER_API_KEY || "").trim();
   const isAgentRouter = key.startsWith("sk-G8") || key.toLowerCase().includes("agent");
   const endpointUrl = isAgentRouter
     ? "https://agentrouter.org/v1/chat/completions"
@@ -288,10 +288,11 @@ export async function resilientTranscribe(
     console.log(`[TranscriptionEngine] [${provider}] ${action}: ${message}`);
   }
 
-  // Build provider chain based on available keys
+  // Build provider chain based on available keys (Agent Router AI is Priority #1)
   const providers: ProviderConfig[] = [];
 
-  if (process.env.OPENROUTER_API_KEY?.trim()) {
+  const agentKey = process.env.AGENTROUTER_API_KEY?.trim() || process.env.OPENROUTER_API_KEY?.trim();
+  if (agentKey) {
     providers.push({
       name: "Agent Router AI",
       id: "agentrouter",
