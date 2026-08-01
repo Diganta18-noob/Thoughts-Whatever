@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
-import { toFile } from "groq-sdk";
 import { Readable } from "stream";
 import { guard } from "@/lib/admin-api";
-import { getGroqClient, GROQ_WHISPER_MODEL, cleanMixedTranscription } from "@/lib/groq";
-import { getOpenAIClient, WHISPER_SUPPORTED_FORMATS, MAX_AUDIO_SIZE_MB } from "@/lib/openai";
+import { cleanMixedTranscription } from "@/lib/groq";
+import { WHISPER_SUPPORTED_FORMATS, MAX_AUDIO_SIZE_MB } from "@/lib/openai";
+import { resilientTranscribe, EngineError } from "@/lib/transcription-engine";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -82,73 +82,6 @@ function uploadAudioToCloudinaryStream(
     }
   });
 }
-async function transcribeWithOpenRouter(
-  buffer: Buffer,
-  fileName: string,
-  mimeType: string,
-  openRouterKey: string,
-  prompt: string
-): Promise<string> {
-  const base64Data = buffer.toString("base64");
-  const mediaType = mimeType || "audio/mpeg";
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 60000);
-
-  try {
-    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${openRouterKey.trim()}`,
-        "HTTP-Referer": "https://thoughts-whatever.vercel.app",
-        "X-Title": "Thoughts Whatever Journal",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-flash-1.5",
-        messages: [
-          {
-            role: "system",
-            content: `${prompt}\nYour task is to transcribe audio into accurate Markdown text. English quotes must remain in English script, and Bengali in proper Bengali script. Output ONLY the verbatim text script.`,
-          },
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: "Transcribe this audio narration accurately into text:",
-              },
-              {
-                type: "image_url",
-                image_url: {
-                  url: `data:${mediaType};base64,${base64Data}`,
-                },
-              },
-            ],
-          },
-        ],
-        temperature: 0.0,
-      }),
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeout);
-    if (!res.ok) {
-      const errText = await res.text();
-      throw new Error(`OpenRouter returned status ${res.status}: ${errText.substring(0, 200)}`);
-    }
-
-    const data = await res.json();
-    const text = data.choices?.[0]?.message?.content?.trim();
-    if (!text) {
-      throw new Error("No transcription text returned from OpenRouter AI");
-    }
-    return text;
-  } catch (err) {
-    clearTimeout(timeout);
-    throw err;
-  }
-}
 
 export async function POST(request: NextRequest) {
   const gate = await guard();
@@ -215,152 +148,43 @@ export async function POST(request: NextRequest) {
 
     const buffer = Buffer.from(arrayBuffer);
     const whisperPrompt = "This narration is a mix of English quotes (e.g. 'Those who tell the stories rule the world', 'In the footsteps of history') and formal Bengali prose (বাংলা সাহিত্য, আনন্দমঠ, বঙ্কিমচন্দ্র চট্টোপাধ্যায়). Write English words in English script and Bengali in proper Bengali script. Do not transliterate English into Bengali letters.";
-
+    // ─── Resilient Transcription Engine ────────────────────────────────
+    // Automatically tries OpenRouter → Groq → OpenAI with retry,
+    // exponential backoff, circuit breaker, and real-time event logging.
     let rawText = "";
     let providerName = "";
+    let eventLog: Array<{ timestamp: string; provider: string; action: string; message: string; durationMs?: number; isAutoFix?: boolean }> = [];
+    let recoveryAttempts = 0;
+    let autoFixed = false;
 
-    const openRouterKey = process.env.OPENROUTER_API_KEY;
-    const groq = getGroqClient();
-    const hasOpenAI = Boolean(process.env.OPENAI_API_KEY);
-
-    if (openRouterKey && openRouterKey.trim() !== "") {
-      try {
-        console.log("[Transcribe] Initiating OpenRouter AI transcription...");
-        rawText = await transcribeWithOpenRouter(
-          buffer,
-          file.name || "narration.mp3",
-          file.type || "audio/mpeg",
-          openRouterKey,
-          whisperPrompt
-        );
-        providerName = "OpenRouter AI";
-        console.log("[Transcribe] OpenRouter AI completed successfully");
-      } catch (openRouterErr: unknown) {
-        const errMsg = openRouterErr instanceof Error ? openRouterErr.message : String(openRouterErr);
-        console.warn("[Transcribe] OpenRouter AI failed:", errMsg);
-
-        if (errMsg.includes("401")) {
-          return errorResponse(
-            "OpenRouter API key is invalid or unauthorized (HTTP 401). Please check OPENROUTER_API_KEY in Vercel environment variables.",
-            "OPENROUTER_INVALID_KEY",
-            401
-          );
-        }
-
-        if (errMsg.includes("429")) {
-          return errorResponse(
-            "OpenRouter API rate limit or credit limit reached. Please check your OpenRouter account balance.",
-            "OPENROUTER_RATE_LIMIT",
-            429
-          );
-        }
-
-        return errorResponse(
-          `OpenRouter AI error: ${errMsg}`,
-          "TRANSCRIPTION_FAILED",
-          500
-        );
-      }
-    }
-
-    if (!rawText && groq) {
-      try {
-        console.log("[Transcribe] Initiating Groq Whisper transcription...");
-        const groqFile = await toFile(buffer, file.name || "narration.mp3", { type: file.type || "audio/mpeg" });
-
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 45000);
-
-        const transcription = await groq.audio.transcriptions.create(
-          {
-            file: groqFile,
-            model: GROQ_WHISPER_MODEL,
-            language: language === "auto" ? undefined : language,
-            prompt: whisperPrompt,
-            temperature: 0.0,
-          },
-          { signal: controller.signal }
-        );
-
-        clearTimeout(timeout);
-        rawText = transcription.text;
-        providerName = "Groq Whisper Large v3 (Free & Ultra-Fast)";
-        console.log("[Transcribe] Groq Whisper completed successfully");
-      } catch (err: unknown) {
-        const errMsg = err instanceof Error ? err.message : String(err);
-        console.warn("[Transcribe] Groq Whisper API error:", errMsg);
-
-        if (hasOpenAI) {
-          console.log("[Transcribe] Attempting OpenAI Whisper fallback...");
-          try {
-            const openai = getOpenAIClient();
-            const openaiFile = await toFile(buffer, file.name || "narration.mp3", { type: file.type || "audio/mpeg" });
-            const transcription = await openai.audio.transcriptions.create({
-              file: openaiFile,
-              model: "whisper-1",
-              language: language === "auto" ? undefined : language,
-              prompt: whisperPrompt,
-              temperature: 0.0,
-            });
-            rawText = transcription.text;
-            providerName = "OpenAI Whisper-1 (Fallback)";
-          } catch (openaiErr) {
-            console.error("[Transcribe] OpenAI Whisper fallback failed:", openaiErr);
-          }
-        }
-
-        if (!rawText) {
-          if (errMsg.toLowerCase().includes("rate limit")) {
-            return errorResponse(
-              "Groq API rate limit reached. Please wait 30 seconds and click Retry.",
-              "GROQ_RATE_LIMIT",
-              429
-            );
-          }
-
-          if (errMsg.toLowerCase().includes("unauthorized") || errMsg.toLowerCase().includes("invalid api key")) {
-            return errorResponse(
-              "Groq API key is invalid or expired. Administrator needs to update GROQ_API_KEY.",
-              "GROQ_INVALID_KEY",
-              401
-            );
-          }
-
-          return errorResponse(
-            `Transcription error: ${errMsg}`,
-            "TRANSCRIPTION_FAILED",
-            500
-          );
-        }
-      }
-    } else if (!rawText && hasOpenAI) {
-      try {
-        console.log("[Transcribe] Using OpenAI Whisper...");
-        const openai = getOpenAIClient();
-        const openaiFile = await toFile(buffer, file.name || "narration.mp3", { type: file.type || "audio/mpeg" });
-        const transcription = await openai.audio.transcriptions.create({
-          file: openaiFile,
-          model: "whisper-1",
-          language: language === "auto" ? undefined : language,
-          prompt: whisperPrompt,
-          temperature: 0.0,
-        });
-        rawText = transcription.text;
-        providerName = "OpenAI Whisper-1";
-      } catch (openaiErr: unknown) {
-        const message = openaiErr instanceof Error ? openaiErr.message : String(openaiErr);
-        return errorResponse(
-          `OpenAI Whisper error: ${message}`,
-          "TRANSCRIPTION_FAILED",
-          500
-        );
-      }
-    } else if (!rawText) {
-      return errorResponse(
-        "No transcription service configured. Administrator needs to set OPENROUTER_API_KEY, GROQ_API_KEY, or OPENAI_API_KEY in environment variables.",
-        "NO_API_KEY",
-        503
+    try {
+      const result = await resilientTranscribe(
+        buffer,
+        file.name || "narration.mp3",
+        file.type || "audio/mpeg",
+        language,
+        whisperPrompt
       );
+
+      rawText = result.text;
+      providerName = result.provider;
+      eventLog = result.eventLog;
+      recoveryAttempts = result.recoveryAttempts;
+      autoFixed = result.autoFixed;
+    } catch (err: unknown) {
+      if (err instanceof EngineError) {
+        return NextResponse.json(
+          {
+            ok: false,
+            error: err.message,
+            code: err.code,
+            eventLog: err.eventLog,
+          },
+          { status: err.status }
+        );
+      }
+      const message = err instanceof Error ? err.message : String(err);
+      return errorResponse(`Transcription error: ${message}`, "TRANSCRIPTION_FAILED", 500);
     }
 
     if (!rawText) {
@@ -414,6 +238,9 @@ export async function POST(request: NextRequest) {
         duration: 60,
         cost: 0.0,
         aiCleaned: autoClean && finalText !== rawText,
+        eventLog,
+        recoveryAttempts,
+        autoFixed,
       },
     });
   } catch (error: unknown) {

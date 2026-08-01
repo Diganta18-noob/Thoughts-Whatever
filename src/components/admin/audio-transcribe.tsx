@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Mic, X, Loader2, Check, AlertCircle, Music, Copy, RefreshCw, FileText, Sparkles } from "lucide-react";
+import { Mic, X, Loader2, Check, AlertCircle, Music, Copy, RefreshCw, FileText, Sparkles, Activity, Zap, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { countBengaliWords, readingMinutes } from "@/lib/bengali";
 import { formatErrorMessage } from "@/lib/error-formatter";
@@ -43,6 +43,20 @@ export function AudioTranscribe({
   const [dragActive, setDragActive] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 2;
+
+  // Activity log state
+  interface EventLogEntry {
+    timestamp: string;
+    provider: string;
+    action: string;
+    message: string;
+    durationMs?: number;
+    isAutoFix?: boolean;
+  }
+  const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
+  const [autoFixed, setAutoFixed] = useState(false);
+  const [recoveryAttempts, setRecoveryAttempts] = useState(0);
+  const [showActivityLog, setShowActivityLog] = useState(false);
 
   // Debug info for development
   const [debugInfo, setDebugInfo] = useState<Record<string, unknown> | null>(null);
@@ -199,20 +213,24 @@ export function AudioTranscribe({
     setError("");
     setErrorCode(null);
     setDebugInfo(null);
+    setEventLog([]);
+    setAutoFixed(false);
+    setRecoveryAttempts(0);
+    setShowActivityLog(false);
     setProgress(5);
-    setProgressMessage("Uploading audio file to Groq...");
+    setProgressMessage("Connecting to transcription engine...");
 
     // Simulated progress updates
     progressIntervalRef.current = setInterval(() => {
       setProgress((prev) => {
         if (prev < 30) {
-          setProgressMessage("Uploading audio file to Groq...");
+          setProgressMessage("Uploading audio to AI transcription engine...");
           return prev + 5;
         } else if (prev < 75) {
-          setProgressMessage("Transcribing mixed speech via Groq Whisper Large v3...");
+          setProgressMessage("Transcribing mixed speech (auto-fallback active)...");
           return prev + 3;
         } else if (prev < 95) {
-          setProgressMessage("Formatting Bengali-English script with Llama-3.3...");
+          setProgressMessage("Formatting Bengali-English script with AI cleanup...");
           return prev + 1;
         }
         return prev;
@@ -280,13 +298,26 @@ export function AudioTranscribe({
 
       const data = await response.json();
 
+      // Store event log from response (even on error)
+      if (data.eventLog) {
+        setEventLog(data.eventLog);
+        setShowActivityLog(true);
+      }
+      if (data.metadata?.eventLog) {
+        setEventLog(data.metadata.eventLog);
+      }
+
       if (!response.ok || !data.ok) {
         const code = data.code || "TRANSCRIPTION_FAILED";
         setErrorCode(code);
 
+        // Show activity log on error so user can see what happened
+        setShowActivityLog(true);
+
         const isRetryable =
           (code === "TRANSCRIPTION_FAILED" || response.status >= 500) &&
-          code !== "GROQ_RATE_LIMIT";
+          code !== "GROQ_RATE_LIMIT" &&
+          code !== "ALL_PROVIDERS_FAILED";
 
         if (isRetryable && retryCount < MAX_RETRIES) {
           isRetrying = true;
@@ -306,10 +337,15 @@ export function AudioTranscribe({
       setError(""); // Clear error again on success
       setErrorCode(null);
       setDuration(data.metadata?.duration || 0);
-      setProvider(data.metadata?.provider || "Groq Whisper Large v3");
+      setProvider(data.metadata?.provider || "AI Transcription Engine");
       setReviewText(data.text || "");
       setAudioUrlResult(data.audioUrl || undefined);
       setRetryCount(0);
+      setAutoFixed(data.metadata?.autoFixed || false);
+      setRecoveryAttempts(data.metadata?.recoveryAttempts || 0);
+      if (data.metadata?.autoFixed) {
+        setShowActivityLog(true);
+      }
       setState("reviewing");
     } catch (err: unknown) {
       if (!isRetrying) {
@@ -471,7 +507,7 @@ export function AudioTranscribe({
               <span className="text-accent font-medium">Click to upload</span> or drag audio file
             </p>
             <p className="text-xs text-content-faint">
-              MP3, M4A, WAV, OGG up to {maxSizeMB}MB (Ultra-Fast & Free via Groq)
+              MP3, M4A, WAV, OGG up to {maxSizeMB}MB (Auto-Healing AI Engine)
             </p>
           </div>
         </div>
@@ -528,7 +564,7 @@ export function AudioTranscribe({
               className="w-full inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2.5 text-sm font-medium text-surface transition hover:opacity-90"
             >
               <Mic className="h-4 w-4" />
-              Start Groq Transcription & Review
+              Start AI Transcription & Review
             </button>
           )}
         </div>
@@ -646,6 +682,82 @@ export function AudioTranscribe({
           >
             <X className="h-4 w-4" />
           </button>
+        </div>
+      )}
+
+      {/* Auto-Recovery Success Banner */}
+      {autoFixed && state === "reviewing" && (
+        <div className="flex items-center gap-2 rounded-sm border border-green-500/20 bg-green-500/5 px-3 py-2 text-xs text-green-500">
+          <Zap className="h-4 w-4 shrink-0" />
+          <span className="font-medium">
+            ⚡ Auto-recovered using {provider} after {recoveryAttempts} recovery attempt{recoveryAttempts !== 1 ? "s" : ""}.
+          </span>
+          <button
+            type="button"
+            onClick={() => setShowActivityLog(!showActivityLog)}
+            className="ml-auto text-green-500/70 hover:text-green-500 transition"
+          >
+            {showActivityLog ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+          </button>
+        </div>
+      )}
+
+      {/* Live Activity Log */}
+      {eventLog.length > 0 && (
+        <div className="space-y-1">
+          <button
+            type="button"
+            onClick={() => setShowActivityLog(!showActivityLog)}
+            className="flex items-center gap-1.5 text-xs text-content-faint hover:text-content transition"
+          >
+            <Activity className="h-3.5 w-3.5" />
+            <span className="font-medium">Activity Log ({eventLog.length} events)</span>
+            {showActivityLog ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+          </button>
+
+          {showActivityLog && (
+            <div className="rounded-sm border border-rule bg-surface p-2 max-h-48 overflow-y-auto space-y-1">
+              {eventLog.map((event, i) => {
+                const icons: Record<string, string> = {
+                  ATTEMPT: "🔄",
+                  RETRY: "🔁",
+                  SKIP: "⏭️",
+                  FALLBACK: "🔀",
+                  SUCCESS: "✅",
+                  ERROR: "❌",
+                  CIRCUIT_OPEN: "🔴",
+                  AUTO_FIX: "🔧",
+                };
+                const colors: Record<string, string> = {
+                  ATTEMPT: "text-blue-400",
+                  RETRY: "text-yellow-400",
+                  SKIP: "text-orange-400",
+                  FALLBACK: "text-purple-400",
+                  SUCCESS: "text-green-400",
+                  ERROR: "text-red-400",
+                  CIRCUIT_OPEN: "text-red-500",
+                  AUTO_FIX: "text-green-500",
+                };
+                const time = new Date(event.timestamp).toLocaleTimeString();
+                return (
+                  <div
+                    key={i}
+                    className="flex items-start gap-2 text-[0.65rem] font-mono leading-tight"
+                  >
+                    <span className="shrink-0 w-4 text-center">{icons[event.action] || "·"}</span>
+                    <span className="text-content-faint shrink-0">{time}</span>
+                    <span className={`font-medium shrink-0 ${colors[event.action] || "text-content-soft"}`}>
+                      [{event.provider}]
+                    </span>
+                    <span className="text-content-soft break-words">{event.message}</span>
+                    {event.durationMs !== undefined && (
+                      <span className="text-content-faint shrink-0 ml-auto">{event.durationMs}ms</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
 

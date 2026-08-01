@@ -13,13 +13,18 @@ export const TRANSCRIPTION_ERRORS = {
 
   // Configuration Errors
   NO_API_KEY: {
-    message: "Groq transcription service not configured",
-    solution: "Administrator needs to set GROQ_API_KEY in Vercel environment variables.",
+    message: "Transcription service not configured",
+    solution: "Administrator needs to set OPENROUTER_API_KEY, GROQ_API_KEY, or OPENAI_API_KEY in Vercel environment variables.",
     retryable: false,
   },
   GROQ_INVALID_KEY: {
     message: "Groq API key is invalid",
     solution: "Administrator needs to update GROQ_API_KEY with a valid key from console.groq.com",
+    retryable: false,
+  },
+  OPENROUTER_INVALID_KEY: {
+    message: "OpenRouter API key is invalid",
+    solution: "Administrator needs to update OPENROUTER_API_KEY with a valid key from openrouter.ai/keys",
     retryable: false,
   },
 
@@ -54,6 +59,21 @@ export const TRANSCRIPTION_ERRORS = {
   GROQ_RATE_LIMIT: {
     message: "Groq rate limit reached",
     solution: "Free tier limit reached. Wait 30 seconds and click 'Retry'.",
+    retryable: true,
+  },
+  OPENROUTER_RATE_LIMIT: {
+    message: "OpenRouter rate/credit limit reached",
+    solution: "Check your OpenRouter account balance at openrouter.ai/credits, then retry.",
+    retryable: true,
+  },
+  ALL_PROVIDERS_FAILED: {
+    message: "All transcription providers failed",
+    solution: "The system tried all available providers (OpenRouter → Groq → OpenAI) with automatic retries. Check the activity log below for details.",
+    retryable: true,
+  },
+  CIRCUIT_BREAKER: {
+    message: "Provider temporarily disabled",
+    solution: "Too many recent failures. The provider will auto-recover after a 5-minute cooldown.",
     retryable: true,
   },
   NETWORK_ERROR: {
