@@ -23,22 +23,32 @@ Your task is to clean and refine raw audio transcriptions that mix English quote
 4. Do NOT change the speaker's original meaning or omit content.
 5. Output ONLY the polished output text. Do not add intro/outro commentary like "Here is the cleaned text:".`;
 
-  // 1. Try OpenRouter Claude if key is configured
+  // 1. Try Agent Router / OpenRouter Claude if key is configured
   if (openRouterKey && openRouterKey.trim() !== "") {
     try {
+      const isAgentRouter = openRouterKey.startsWith("sk-G8") || openRouterKey.toLowerCase().includes("agent");
+      const endpointUrl = isAgentRouter
+        ? "https://agentrouter.org/v1/chat/completions"
+        : "https://openrouter.ai/api/v1/chat/completions";
+      const modelName = isAgentRouter
+        ? "claude-3-5-sonnet-20241022"
+        : "anthropic/claude-3.5-sonnet";
+
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 6000);
 
-      const res = await fetch("https://agentrouter.org/v1/chat/completions", {
+      const res = await fetch(endpointUrl, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${openRouterKey.trim()}`,
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+          Accept: "application/json",
           "HTTP-Referer": "https://thoughts-whatever.vercel.app",
           "X-Title": "Thoughts Whatever Journal",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "anthropic/claude-3.5-sonnet",
+          model: modelName,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: rawText },
@@ -50,15 +60,18 @@ Your task is to clean and refine raw audio transcriptions that mix English quote
 
       clearTimeout(timeout);
       if (res.ok) {
-        const data = await res.json();
-        const cleaned = data.choices?.[0]?.message?.content?.trim();
-        if (cleaned) {
-          console.log("[Agent Router] Claude 3.5 Sonnet cleaned transcription successfully");
-          return cleaned;
+        const contentType = res.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+          const data = await res.json();
+          const cleaned = data.choices?.[0]?.message?.content?.trim();
+          if (cleaned) {
+            console.log(`[${isAgentRouter ? "Agent Router" : "OpenRouter"}] ${modelName} cleaned transcription successfully`);
+            return cleaned;
+          }
         }
       }
     } catch (err) {
-      console.warn("[Agent Router] Claude cleanup failed or timed out, trying fallback:", err);
+      console.warn("[AI Cleanup] Claude cleanup failed or timed out, trying fallback:", err);
     }
   }
 

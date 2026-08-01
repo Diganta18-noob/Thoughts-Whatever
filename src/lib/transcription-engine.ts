@@ -144,7 +144,7 @@ async function transcribeOpenRouter(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-flash-1.5",
+        model: isAgentRouter ? "claude-3-5-sonnet-20241022" : "google/gemini-flash-1.5",
         messages: [
           {
             role: "system",
