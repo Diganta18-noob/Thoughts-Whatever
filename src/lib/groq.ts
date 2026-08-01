@@ -1,8 +1,9 @@
 import Groq from "groq-sdk";
 
-export function getGroqClient() {
+export function getGroqClient(): Groq | null {
   const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) {
+  if (!apiKey || apiKey.trim() === "") {
+    console.warn("[Groq] GROQ_API_KEY is not configured in environment variables");
     return null;
   }
   return new Groq({ apiKey });
@@ -38,7 +39,7 @@ Your task is to clean and refine raw audio transcriptions that mix English quote
 
     return response.choices[0]?.message?.content?.trim() || rawText;
   } catch (err) {
-    console.warn("AI post-processing cleanup failed, returning raw transcription:", err);
+    console.warn("[Groq] AI post-processing cleanup failed, returning raw transcription:", err);
     return rawText;
   }
 }

@@ -1,139 +1,171 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { toFile } from "groq-sdk";
-import { toFile as openAiToFile } from "openai";
 import { guard } from "@/lib/admin-api";
-import { getOpenAIClient, WHISPER_SUPPORTED_FORMATS, MAX_AUDIO_SIZE_MB } from "@/lib/openai";
 import { getGroqClient, GROQ_WHISPER_MODEL, cleanMixedTranscription } from "@/lib/groq";
+import { WHISPER_SUPPORTED_FORMATS, MAX_AUDIO_SIZE_MB } from "@/lib/openai";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
+/**
+ * Helper to create consistent error responses
+ */
+function errorResponse(message: string, code: string, status: number = 500) {
+  console.error(`[Transcribe API] ${code}:`, message);
+  return NextResponse.json(
+    { ok: false, error: message, code },
+    { status }
+  );
+}
+
 export async function POST(request: NextRequest) {
+  // 1. Authentication Check
   const gate = await guard();
-  if ("response" in gate) return gate.response;
+  if ("response" in gate) {
+    return errorResponse(
+      "Authentication required. Your session may have expired. Please refresh and sign in again.",
+      "AUTH_REQUIRED",
+      401
+    );
+  }
 
   try {
-    const formData = await request.formData();
+    // 2. Parse Form Data
+    let formData: FormData;
+    try {
+      formData = await request.formData();
+    } catch (err) {
+      return errorResponse(
+        "Could not read upload data. File may be corrupted or too large.",
+        "FORM_DATA_ERROR",
+        400
+      );
+    }
+
     const file = formData.get("file") as File | null;
     const language = (formData.get("language") as string) || "bn";
     const storeAudio = formData.get("storeAudio") === "true";
     const autoClean = formData.get("autoClean") !== "false";
 
+    // 3. File Validation
     if (!file) {
-      return NextResponse.json(
-        { ok: false, error: "No audio file provided. Please select an audio file." },
-        { status: 400 }
+      return errorResponse(
+        "No audio file provided. Please select an audio file and try again.",
+        "NO_FILE",
+        400
       );
     }
 
     if (!WHISPER_SUPPORTED_FORMATS.includes(file.type) && !file.name.match(/\.(mp3|m4a|wav|webm|ogg)$/i)) {
-      return NextResponse.json(
-        { ok: false, error: "Unsupported audio format. Use MP3, M4A, WAV, WebM, or OGG." },
-        { status: 400 }
+      return errorResponse(
+        `Unsupported audio format: ${file.type || file.name}. Please use MP3, M4A, WAV, WebM, or OGG format.`,
+        "INVALID_FORMAT",
+        400
       );
     }
 
     const maxSize = MAX_AUDIO_SIZE_MB * 1024 * 1024;
     if (file.size > maxSize) {
-      return NextResponse.json(
-        { ok: false, error: `Audio file size must be under ${MAX_AUDIO_SIZE_MB}MB` },
-        { status: 400 }
+      return errorResponse(
+        `Audio file is ${(file.size / (1024 * 1024)).toFixed(2)}MB. Maximum allowed size is ${MAX_AUDIO_SIZE_MB}MB. Please compress or split your audio file.`,
+        "FILE_TOO_LARGE",
+        400
       );
     }
 
+    // 4. Check Groq API Configuration
     const groq = getGroqClient();
-    const openai = getOpenAIClient();
-
-    if (!groq && !openai) {
-      return NextResponse.json(
-        {
-          ok: false,
-          error: "No transcription API key configured. Please set GROQ_API_KEY or OPENAI_API_KEY in your environment variables.",
-        },
-        { status: 500 }
+    if (!groq) {
+      return errorResponse(
+        "Groq transcription service not configured. Administrator needs to set GROQ_API_KEY in environment variables.",
+        "NO_API_KEY",
+        503
       );
     }
 
-    let rawText = "";
-    let providerName = "";
-    let durationSeconds = 60;
+    // 5. Prepare Audio File Buffer
+    let arrayBuffer: ArrayBuffer;
+    try {
+      arrayBuffer = await file.arrayBuffer();
+    } catch (err) {
+      return errorResponse(
+        "Could not read audio file. File may be corrupted.",
+        "FILE_READ_ERROR",
+        400
+      );
+    }
 
+    const buffer = Buffer.from(arrayBuffer);
     const whisperPrompt = "This narration is a mix of English quotes (e.g. 'Those who tell the stories rule the world', 'In the footsteps of history') and formal Bengali prose (বাংলা সাহিত্য, আনন্দমঠ, বঙ্কিমচন্দ্র চট্টোপাধ্যায়). Write English words in English script and Bengali in proper Bengali script. Do not transliterate English into Bengali letters.";
 
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    let rawText = "";
+    const providerName = "Groq Whisper Large v3 (Free & Ultra-Fast)";
 
-    let groqError: string | null = null;
+    // 6. Transcribe using Groq Whisper Large v3
+    try {
+      console.log("[Transcribe] Initiating Groq Whisper transcription...");
+      const groqFile = await toFile(buffer, file.name, { type: file.type || "audio/mpeg" });
+      const transcription = await groq.audio.transcriptions.create({
+        file: groqFile,
+        model: GROQ_WHISPER_MODEL,
+        language: language === "auto" ? undefined : language,
+        prompt: whisperPrompt,
+        temperature: 0.0,
+      });
+      rawText = transcription.text;
+      console.log("[Transcribe] Groq transcription completed successfully");
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      console.error("[Transcribe] Groq Whisper API error:", errMsg);
 
-    // 1. Try Groq Whisper Large v3 (ultra-fast & free) if available
-    if (groq) {
-      try {
-        providerName = "Groq Whisper Large v3 (Free & Ultra-Fast)";
-        const groqFile = await toFile(buffer, file.name, { type: file.type || "audio/mpeg" });
-        const transcription = await groq.audio.transcriptions.create({
-          file: groqFile,
-          model: GROQ_WHISPER_MODEL,
-          language: language === "auto" ? undefined : language,
-          prompt: whisperPrompt,
-          temperature: 0.0,
-        });
-        rawText = transcription.text;
-      } catch (err: unknown) {
-        console.warn("Groq transcription failed, checking OpenAI fallback:", err);
-        groqError = err instanceof Error ? err.message : String(err);
-      }
-    }
-
-    // 2. Fallback to OpenAI Whisper-1 if Groq failed or is missing
-    if (!rawText && openai) {
-      try {
-        providerName = "OpenAI Whisper-1";
-        const openAiFile = await openAiToFile(buffer, file.name, { type: file.type || "audio/mpeg" });
-        const transcription = await openai.audio.transcriptions.create({
-          file: openAiFile,
-          model: "whisper-1",
-          language: language === "auto" ? undefined : language,
-          prompt: whisperPrompt,
-          response_format: "verbose_json",
-          temperature: 0.0,
-        });
-        rawText = transcription.text;
-        durationSeconds = transcription.duration || 60;
-      } catch (openAiErr: unknown) {
-        console.error("OpenAI transcription error:", openAiErr);
-        const openAiMsg = openAiErr instanceof Error ? openAiErr.message : String(openAiErr);
-        return NextResponse.json(
-          {
-            ok: false,
-            error: `Transcription failed: ${openAiMsg}${groqError ? ` (Groq error: ${groqError})` : ""}`,
-          },
-          { status: 500 }
+      if (errMsg.toLowerCase().includes("rate limit")) {
+        return errorResponse(
+          "Groq API rate limit reached (free tier). Please wait 30 seconds and click Retry.",
+          "GROQ_RATE_LIMIT",
+          429
         );
       }
+
+      if (errMsg.toLowerCase().includes("unauthorized") || errMsg.toLowerCase().includes("invalid api key")) {
+        return errorResponse(
+          "Groq API key is invalid or expired. Administrator needs to update GROQ_API_KEY.",
+          "GROQ_INVALID_KEY",
+          401
+        );
+      }
+
+      return errorResponse(
+        `Groq transcription error: ${errMsg}`,
+        "TRANSCRIPTION_FAILED",
+        500
+      );
     }
 
     if (!rawText) {
-      return NextResponse.json(
-        {
-          ok: false,
-          error: `Transcription failed. ${groqError ? `Groq error: ${groqError}.` : ""} Please check your GROQ_API_KEY or OPENAI_API_KEY in Vercel settings.`,
-        },
-        { status: 500 }
+      return errorResponse(
+        "No text could be generated from the audio file. Please check audio clarity.",
+        "NO_TRANSCRIPTION",
+        500
       );
     }
 
-    // Auto-fix phonetic transliteration and Bengali typos using Groq Llama-3.3-70b
+    // 7. AI Post-Processing Cleanup (Groq Llama-3.3-70b)
     let finalText = rawText;
     if (autoClean && rawText) {
-      finalText = await cleanMixedTranscription(rawText);
+      try {
+        console.log("[Transcribe] Applying AI post-processing cleanup...");
+        finalText = await cleanMixedTranscription(rawText);
+      } catch (cleanErr) {
+        console.warn("[Transcribe] AI cleanup failed (non-fatal, using raw text):", cleanErr);
+      }
     }
 
+    // 8. Optional Cloudinary Audio Storage
     let audioUrl: string | null = null;
-
-    // Store audio in Cloudinary if requested
     if (storeAudio && process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) {
       try {
+        console.log("[Transcribe] Uploading audio to Cloudinary...");
         const dataUri = `data:${file.type || "audio/mpeg"};base64,${buffer.toString("base64")}`;
 
         cloudinary.config({
@@ -148,12 +180,13 @@ export async function POST(request: NextRequest) {
         });
 
         audioUrl = result.secure_url;
+        console.log("[Transcribe] Audio uploaded to Cloudinary successfully");
       } catch (uploadErr) {
-        console.warn("Audio upload to Cloudinary failed, returning transcription text only:", uploadErr);
+        console.warn("[Transcribe] Cloudinary upload failed (non-fatal):", uploadErr);
       }
     }
 
-    const estimatedCost = providerName.includes("Groq") ? 0.0 : (durationSeconds / 60) * 0.006;
+    console.log(`[Transcribe] Success: Groq Whisper, ${finalText.length} chars generated`);
 
     return NextResponse.json({
       ok: true,
@@ -162,17 +195,18 @@ export async function POST(request: NextRequest) {
       audioUrl,
       metadata: {
         provider: providerName,
-        duration: Math.round(durationSeconds),
-        cost: Number(estimatedCost.toFixed(4)),
+        duration: 60,
+        cost: 0.0,
         aiCleaned: autoClean && finalText !== rawText,
       },
     });
   } catch (error: unknown) {
-    console.error("Transcription API error:", error);
-    const message = error instanceof Error ? error.message : "Transcription failed";
-    return NextResponse.json(
-      { ok: false, error: message },
-      { status: 500 }
+    const message = error instanceof Error ? error.message : "Unexpected error occurred";
+    console.error("[Transcribe] Unexpected error:", error);
+    return errorResponse(
+      `Unexpected error: ${message}. Please try again.`,
+      "UNEXPECTED_ERROR",
+      500
     );
   }
 }
