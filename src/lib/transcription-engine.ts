@@ -129,64 +129,82 @@ async function transcribeOpenRouter(
   const base64Data = buffer.toString("base64");
   const mediaType = mimeType || "audio/mpeg";
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 60000);
+  const modelsToTry = isAgentRouter
+    ? ["claude-3-5-sonnet-20241022", "gpt-4o-mini", "gpt-4o"]
+    : ["google/gemini-flash-1.5", "openai/gpt-4o-mini"];
 
-  try {
-    const res = await fetch(endpointUrl, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-        Accept: "application/json",
-        "HTTP-Referer": "https://thoughts-whatever.vercel.app",
-        "X-Title": "Thoughts Whatever Journal",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: isAgentRouter ? "claude-3-5-sonnet-20241022" : "google/gemini-flash-1.5",
-        messages: [
-          {
-            role: "system",
-            content: `${prompt}\nYour task is to transcribe audio into accurate Markdown text. English quotes must remain in English script, and Bengali in proper Bengali script. Output ONLY the verbatim text script.`,
-          },
-          {
-            role: "user",
-            content: [
-              { type: "text", text: "Transcribe this audio narration accurately into text:" },
-              {
-                type: "image_url",
-                image_url: { url: `data:${mediaType};base64,${base64Data}` },
-              },
-            ],
-          },
-        ],
-        temperature: 0.0,
-      }),
-      signal: controller.signal,
-    });
+  let lastError: Error | null = null;
 
-    clearTimeout(timeout);
+  for (const modelName of modelsToTry) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 60000);
 
-    if (!res.ok) {
-      const errText = await res.text();
-      throw new Error(`${providerLabel} HTTP ${res.status}: ${errText.substring(0, 200)}`);
+    try {
+      console.log(`[${providerLabel}] Trying model: ${modelName}...`);
+      const res = await fetch(endpointUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${key}`,
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+          Accept: "application/json",
+          "HTTP-Referer": "https://thoughts-whatever.vercel.app",
+          "X-Title": "Thoughts Whatever Journal",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: modelName,
+          messages: [
+            {
+              role: "system",
+              content: `${prompt}\nYour task is to transcribe audio into accurate Markdown text. English quotes must remain in English script, and Bengali in proper Bengali script. Output ONLY the verbatim text script.`,
+            },
+            {
+              role: "user",
+              content: [
+                { type: "text", text: "Transcribe this audio narration accurately into text:" },
+                {
+                  type: "image_url",
+                  image_url: { url: `data:${mediaType};base64,${base64Data}` },
+                },
+              ],
+            },
+          ],
+          temperature: 0.0,
+        }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeout);
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`${providerLabel} HTTP ${res.status} (${modelName}): ${errText.substring(0, 200)}`);
+      }
+
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        const sample = await res.text();
+        throw new Error(`${providerLabel} returned WAF HTML challenge (${res.status}): ${sample.substring(0, 80)}...`);
+      }
+
+      const data = await res.json();
+      const text = data.choices?.[0]?.message?.content?.trim();
+      if (!text) throw new Error(`No transcription text returned from ${providerLabel} (${modelName})`);
+      return text;
+    } catch (err) {
+      clearTimeout(timeout);
+      const errorObj = err instanceof Error ? err : new Error(String(err));
+      lastError = errorObj;
+      console.warn(`[${providerLabel}] Model ${modelName} failed:`, errorObj.message);
+
+      // If it's a WAF HTML response, don't waste time trying other models on the same WAF-blocked endpoint
+      if (errorObj.message.includes("WAF HTML challenge")) {
+        throw errorObj;
+      }
     }
-
-    const contentType = res.headers.get("content-type") || "";
-    if (!contentType.includes("application/json")) {
-      const sample = await res.text();
-      throw new Error(`${providerLabel} returned WAF HTML challenge (${res.status}): ${sample.substring(0, 80)}...`);
-    }
-
-    const data = await res.json();
-    const text = data.choices?.[0]?.message?.content?.trim();
-    if (!text) throw new Error(`No transcription text returned from ${providerLabel}`);
-    return text;
-  } catch (err) {
-    clearTimeout(timeout);
-    throw err;
   }
+
+  throw lastError || new Error(`${providerLabel} failed for all candidate models`);
 }
 
 async function transcribeGroq(
