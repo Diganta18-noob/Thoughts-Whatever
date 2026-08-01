@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import { Upload, X, Loader2, Check, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatErrorMessage } from "@/lib/error-formatter";
 
 interface ImageUploadProps {
   value?: string;
@@ -131,7 +132,7 @@ export function ImageUpload({
         setPreview(data.url);
         onChange(data.url);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Upload failed");
+        setError(formatErrorMessage(err));
         setPreview(null);
       } finally {
         setUploading(false);

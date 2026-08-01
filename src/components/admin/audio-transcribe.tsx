@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { Mic, X, Loader2, Check, AlertCircle, DollarSign, Music, Copy, RefreshCw, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { countBengaliWords, readingMinutes } from "@/lib/bengali";
+import { formatErrorMessage } from "@/lib/error-formatter";
 
 interface AudioTranscribeProps {
   onTranscriptionComplete: (text: string, audioUrl?: string) => void;
@@ -123,7 +124,13 @@ export function AudioTranscribe({
         body: formData,
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get("content-type") || "";
+      let data: any;
+      if (contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        throw new Error(`Server returned HTTP ${response.status}. Please refresh the page and try again.`);
+      }
 
       if (!response.ok || !data.ok) {
         throw new Error(data.error || "Transcription failed");
@@ -136,7 +143,7 @@ export function AudioTranscribe({
       setAudioUrlResult(data.audioUrl || undefined);
       setReviewMode(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Transcription failed");
+      setError(formatErrorMessage(err));
     } finally {
       setTranscribing(false);
     }

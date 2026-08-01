@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
+import { toFile } from "groq-sdk";
+import { toFile as openAiToFile } from "openai";
 import { guard } from "@/lib/admin-api";
 import { getOpenAIClient, WHISPER_SUPPORTED_FORMATS, MAX_AUDIO_SIZE_MB } from "@/lib/openai";
 import { getGroqClient, GROQ_WHISPER_MODEL, cleanMixedTranscription } from "@/lib/groq";
@@ -20,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json(
-        { ok: false, error: "No audio file provided" },
+        { ok: false, error: "No audio file provided. Please select an audio file." },
         { status: 400 }
       );
     }
@@ -35,19 +37,19 @@ export async function POST(request: NextRequest) {
     const maxSize = MAX_AUDIO_SIZE_MB * 1024 * 1024;
     if (file.size > maxSize) {
       return NextResponse.json(
-        { ok: false, error: `Audio file must be under ${MAX_AUDIO_SIZE_MB}MB` },
+        { ok: false, error: `Audio file size must be under ${MAX_AUDIO_SIZE_MB}MB` },
         { status: 400 }
       );
     }
 
     const groq = getGroqClient();
-    const hasOpenAI = Boolean(process.env.OPENAI_API_KEY);
+    const openai = getOpenAIClient();
 
-    if (!groq && !hasOpenAI) {
+    if (!groq && !openai) {
       return NextResponse.json(
         {
           ok: false,
-          error: "No transcription API key configured. Add GROQ_API_KEY (free & ultra-fast) or OPENAI_API_KEY to environment variables.",
+          error: "No transcription API key configured. Please set GROQ_API_KEY or OPENAI_API_KEY in your environment variables.",
         },
         { status: 500 }
       );
@@ -59,30 +61,66 @@ export async function POST(request: NextRequest) {
 
     const whisperPrompt = "This narration is a mix of English quotes (e.g. 'Those who tell the stories rule the world', 'In the footsteps of history') and formal Bengali prose (বাংলা সাহিত্য, আনন্দমঠ, বঙ্কিমচন্দ্র চট্টোপাধ্যায়). Write English words in English script and Bengali in proper Bengali script. Do not transliterate English into Bengali letters.";
 
-    // Use Groq Whisper Large v3 (ultra-fast & free) if available, otherwise OpenAI
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    let groqError: string | null = null;
+
+    // 1. Try Groq Whisper Large v3 (ultra-fast & free) if available
     if (groq) {
-      providerName = "Groq Whisper Large v3 (Free & Ultra-Fast)";
-      const transcription = await groq.audio.transcriptions.create({
-        file,
-        model: GROQ_WHISPER_MODEL,
-        language: language === "auto" ? undefined : language,
-        prompt: whisperPrompt,
-        temperature: 0.0,
-      });
-      rawText = transcription.text;
-    } else {
-      providerName = "OpenAI Whisper-1";
-      const openai = getOpenAIClient();
-      const transcription = await openai.audio.transcriptions.create({
-        file,
-        model: "whisper-1",
-        language: language === "auto" ? undefined : language,
-        prompt: whisperPrompt,
-        response_format: "verbose_json",
-        temperature: 0.0,
-      });
-      rawText = transcription.text;
-      durationSeconds = transcription.duration || 60;
+      try {
+        providerName = "Groq Whisper Large v3 (Free & Ultra-Fast)";
+        const groqFile = await toFile(buffer, file.name, { type: file.type || "audio/mpeg" });
+        const transcription = await groq.audio.transcriptions.create({
+          file: groqFile,
+          model: GROQ_WHISPER_MODEL,
+          language: language === "auto" ? undefined : language,
+          prompt: whisperPrompt,
+          temperature: 0.0,
+        });
+        rawText = transcription.text;
+      } catch (err: unknown) {
+        console.warn("Groq transcription failed, checking OpenAI fallback:", err);
+        groqError = err instanceof Error ? err.message : String(err);
+      }
+    }
+
+    // 2. Fallback to OpenAI Whisper-1 if Groq failed or is missing
+    if (!rawText && openai) {
+      try {
+        providerName = "OpenAI Whisper-1";
+        const openAiFile = await openAiToFile(buffer, file.name, { type: file.type || "audio/mpeg" });
+        const transcription = await openai.audio.transcriptions.create({
+          file: openAiFile,
+          model: "whisper-1",
+          language: language === "auto" ? undefined : language,
+          prompt: whisperPrompt,
+          response_format: "verbose_json",
+          temperature: 0.0,
+        });
+        rawText = transcription.text;
+        durationSeconds = transcription.duration || 60;
+      } catch (openAiErr: unknown) {
+        console.error("OpenAI transcription error:", openAiErr);
+        const openAiMsg = openAiErr instanceof Error ? openAiErr.message : String(openAiErr);
+        return NextResponse.json(
+          {
+            ok: false,
+            error: `Transcription failed: ${openAiMsg}${groqError ? ` (Groq error: ${groqError})` : ""}`,
+          },
+          { status: 500 }
+        );
+      }
+    }
+
+    if (!rawText) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: `Transcription failed. ${groqError ? `Groq error: ${groqError}.` : ""} Please check your GROQ_API_KEY or OPENAI_API_KEY in Vercel settings.`,
+        },
+        { status: 500 }
+      );
     }
 
     // Auto-fix phonetic transliteration and Bengali typos using Groq Llama-3.3-70b
@@ -96,10 +134,7 @@ export async function POST(request: NextRequest) {
     // Store audio in Cloudinary if requested
     if (storeAudio && process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) {
       try {
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const base64 = buffer.toString("base64");
-        const dataUri = `data:${file.type || "audio/mpeg"};base64,${base64}`;
+        const dataUri = `data:${file.type || "audio/mpeg"};base64,${buffer.toString("base64")}`;
 
         cloudinary.config({
           cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -118,7 +153,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const estimatedCost = groq ? 0.0 : (durationSeconds / 60) * 0.006;
+    const estimatedCost = providerName.includes("Groq") ? 0.0 : (durationSeconds / 60) * 0.006;
 
     return NextResponse.json({
       ok: true,
