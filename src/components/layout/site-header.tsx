@@ -33,15 +33,18 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
         <Link
           href="/"
-          className="group shrink-0 flex items-center gap-3"
+          className="group flex items-center gap-2.5 shrink-0"
           aria-label={t("header.home", { site: siteConfig.nameEn })}
         >
-          <Logo variant="compact" showSubtitle={false} className="transition-transform group-hover:scale-105" />
-          <div className="hidden sm:flex flex-col">
-            <span className="font-serif text-lg leading-none font-medium text-content group-hover:text-accent">
+          <span className="font-serif text-xl sm:text-2xl font-bold tracking-tighter text-content transition-colors group-hover:text-accent leading-none">
+            t.w
+          </span>
+          <span className="h-4 w-[1px] bg-rule/80 self-center hidden sm:block" />
+          <div className="hidden sm:flex flex-col justify-center">
+            <span className="font-serif text-sm font-semibold tracking-tight leading-none text-content transition-colors group-hover:text-accent">
               thoughts.whatever
             </span>
-            <span className="label mt-0.5">
+            <span className="label text-[0.6rem] leading-none mt-1 tracking-wider text-content-faint">
               {isBn ? siteConfig.tagline : siteConfig.taglineEn}
             </span>
           </div>
