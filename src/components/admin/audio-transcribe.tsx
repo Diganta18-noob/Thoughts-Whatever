@@ -285,9 +285,8 @@ export function AudioTranscribe({
         setErrorCode(code);
 
         const isRetryable =
-          code === "TRANSCRIPTION_FAILED" ||
-          code === "GROQ_RATE_LIMIT" ||
-          response.status >= 500;
+          (code === "TRANSCRIPTION_FAILED" || response.status >= 500) &&
+          code !== "GROQ_RATE_LIMIT";
 
         if (isRetryable && retryCount < MAX_RETRIES) {
           isRetrying = true;
