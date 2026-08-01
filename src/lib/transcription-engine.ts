@@ -322,7 +322,10 @@ export async function resilientTranscribe(
   }
 
   if (process.env.OPENROUTER_API_KEY?.trim()) {
-    providers.push({
+    const openRouterKey = process.env.OPENROUTER_API_KEY.trim();
+    const isOpenRouterOrgKey = openRouterKey.startsWith("sk-or-v1-");
+
+    const openRouterProviderConfig: ProviderConfig = {
       name: "OpenRouter AI",
       id: "openrouter",
       available: true,
@@ -332,12 +335,19 @@ export async function resilientTranscribe(
           file,
           mime,
           prompt,
-          process.env.OPENROUTER_API_KEY!.trim(),
+          openRouterKey,
           "https://openrouter.ai/api/v1/chat/completions",
           "OpenRouter",
-          ["anthropic/claude-3.5-sonnet", "google/gemini-flash-1.5", "openai/gpt-4o-mini"]
+          ["openai/gpt-4o-mini", "google/gemini-flash-1.5", "anthropic/claude-3.5-sonnet", "openai/gpt-4o"]
         ),
-    });
+    };
+
+    if (isOpenRouterOrgKey) {
+      // Put official OpenRouter AI at Priority #1!
+      providers.unshift(openRouterProviderConfig);
+    } else {
+      providers.push(openRouterProviderConfig);
+    }
   }
 
   if (getGroqClient()) {
