@@ -31,7 +31,7 @@ Your task is to clean and refine raw audio transcriptions that mix English quote
       : "https://openrouter.ai/api/v1/chat/completions";
     const modelsToTry = isAgentRouter
       ? ["claude-opus-4-8", "claude-opus-5", "gpt-5.6-sol", "claude-3-5-sonnet-20241022"]
-      : ["anthropic/claude-3.5-sonnet"];
+      : ["google/gemini-2.0-flash-exp:free", "meta-llama/llama-3.3-70b-instruct:free", "anthropic/claude-3.5-sonnet"];
 
     for (const modelName of modelsToTry) {
       try {

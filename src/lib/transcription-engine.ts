@@ -340,7 +340,7 @@ export async function resilientTranscribe(
           openRouterKey,
           "https://openrouter.ai/api/v1/chat/completions",
           "OpenRouter",
-          ["google/gemini-flash-1.5", "google/gemini-2.0-flash-exp", "anthropic/claude-3.5-sonnet"]
+          ["google/gemini-2.0-flash-exp:free", "google/gemini-flash-1.5", "meta-llama/llama-3.3-70b-instruct:free", "anthropic/claude-3.5-sonnet"]
         ),
     };
 
