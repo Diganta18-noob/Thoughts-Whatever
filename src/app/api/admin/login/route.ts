@@ -22,7 +22,7 @@ function throwawayHash() {
   return dummyHash;
 }
 
-async function withRetry<T>(fn: () => Promise<T>, retries = 2, delayMs = 1200): Promise<T> {
+async function withRetry<T>(fn: () => Promise<T>, retries = 2, delayMs = 300): Promise<T> {
   try {
     return await fn();
   } catch (err) {
