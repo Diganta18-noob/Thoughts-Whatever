@@ -112,26 +112,19 @@ function isRateLimitError(err: unknown): boolean {
 
 // ─── Provider Implementations ────────────────────────────────────────────────
 
-async function transcribeOpenRouter(
+async function transcribeOpenRouterWithEndpoint(
   buffer: Buffer,
   fileName: string,
   mimeType: string,
-  _language: string,
-  prompt: string
+  prompt: string,
+  key: string,
+  endpointUrl: string,
+  providerLabel: string,
+  candidateModels: string[]
 ): Promise<string> {
-  const key = (process.env.AGENTROUTER_API_KEY || process.env.OPENROUTER_API_KEY || "").trim();
-  const isAgentRouter = Boolean(process.env.AGENTROUTER_API_KEY?.trim()) || key.startsWith("sk-G8") || key.toLowerCase().includes("agent");
-  const endpointUrl = isAgentRouter
-    ? "https://agentrouter.org/v1/chat/completions"
-    : "https://openrouter.ai/api/v1/chat/completions";
-  const providerLabel = isAgentRouter ? "Agent Router" : "OpenRouter";
-
   const base64Data = buffer.toString("base64");
   const mediaType = mimeType || "audio/mpeg";
-
-  const modelsToTry = isAgentRouter
-    ? ["claude-opus-4-8", "claude-opus-5", "gpt-5.6-sol", "claude-3-5-sonnet-20241022", "gpt-4o-mini"]
-    : ["google/gemini-flash-1.5", "openai/gpt-4o-mini"];
+  const modelsToTry = candidateModels;
 
   let lastError: Error | null = null;
 
@@ -306,16 +299,44 @@ export async function resilientTranscribe(
     console.log(`[TranscriptionEngine] [${provider}] ${action}: ${message}`);
   }
 
-  // Build provider chain based on available keys (Agent Router AI is Priority #1)
+  // Build provider chain based on available keys
   const providers: ProviderConfig[] = [];
 
-  const agentKey = process.env.AGENTROUTER_API_KEY?.trim() || process.env.OPENROUTER_API_KEY?.trim();
-  if (agentKey) {
+  if (process.env.AGENTROUTER_API_KEY?.trim()) {
     providers.push({
       name: "Agent Router AI",
       id: "agentrouter",
       available: true,
-      transcribe: transcribeOpenRouter,
+      transcribe: (buf, file, mime, lang, prompt) =>
+        transcribeOpenRouterWithEndpoint(
+          buf,
+          file,
+          mime,
+          prompt,
+          process.env.AGENTROUTER_API_KEY!.trim(),
+          "https://agentrouter.org/v1/chat/completions",
+          "Agent Router",
+          ["claude-opus-4-8", "claude-opus-5", "gpt-5.6-sol", "claude-3-5-sonnet-20241022"]
+        ),
+    });
+  }
+
+  if (process.env.OPENROUTER_API_KEY?.trim()) {
+    providers.push({
+      name: "OpenRouter AI",
+      id: "openrouter",
+      available: true,
+      transcribe: (buf, file, mime, lang, prompt) =>
+        transcribeOpenRouterWithEndpoint(
+          buf,
+          file,
+          mime,
+          prompt,
+          process.env.OPENROUTER_API_KEY!.trim(),
+          "https://openrouter.ai/api/v1/chat/completions",
+          "OpenRouter",
+          ["anthropic/claude-3.5-sonnet", "google/gemini-flash-1.5", "openai/gpt-4o-mini"]
+        ),
     });
   }
 
