@@ -10,6 +10,7 @@ import { deriveExcerpt } from "@/lib/markdown";
 import { KIND_META, piecePath, type PieceKindKey } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/components/providers/language-provider";
+import { ImageUpload } from "@/components/admin/image-upload";
 
 /**
  * The editor.
@@ -762,14 +763,13 @@ export function PieceEditor({
               />
             </Field>
 
-            <Field labelEn="Cover image" error={errors.coverImage}>
-              <input
-                value={form.coverImage}
-                onChange={(e) => set("coverImage", e.target.value)}
-                placeholder="/covers/….jpg"
-                className={monoInputClass}
-              />
-            </Field>
+            <ImageUpload
+              value={form.coverImage}
+              onChange={(url) => set("coverImage", url)}
+              label="Cover Image"
+              folder="covers"
+              aspectRatio={16 / 9}
+            />
 
             <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_90px]">
               <Field

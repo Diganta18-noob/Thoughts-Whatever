@@ -6,6 +6,7 @@ import { Loader2, Plus, Pencil, Trash2 } from "lucide-react";
 import { bengaliSlug, toBengaliNumber } from "@/lib/bengali";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/components/providers/language-provider";
+import { ImageUpload } from "@/components/admin/image-upload";
 
 /**
  * One editor for authors, tags, and series.
@@ -158,7 +159,15 @@ export function TaxonomyManager({
             {field.labelEn}
           </span>
           <div className="mt-1.5">
-            {field.type === "textarea" ? (
+            {field.key === "coverImage" ? (
+              <ImageUpload
+                value={draft[field.key] ?? ""}
+                onChange={(url) => setField(field.key, url)}
+                label={field.labelEn}
+                folder="series"
+                aspectRatio={16 / 9}
+              />
+            ) : field.type === "textarea" ? (
               <textarea
                 value={draft[field.key] ?? ""}
                 onChange={(e) => setField(field.key, e.target.value)}
