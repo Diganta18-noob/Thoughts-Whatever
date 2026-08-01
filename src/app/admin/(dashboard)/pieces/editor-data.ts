@@ -22,6 +22,12 @@ export async function getEditorOptions() {
       }),
     ]);
 
+    console.log('✅ Editor options loaded:', {
+      authors: authors.length,
+      tags: tags.length,
+      series: series.length
+    });
+
     return {
       authors: authors.map(
         (a): EditorOption & { era?: string | null } => ({
