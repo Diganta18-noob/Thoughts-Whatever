@@ -29,7 +29,7 @@ Your task is to clean and refine raw audio transcriptions that mix English quote
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 6000);
 
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      const res = await fetch("https://agentrouter.org/v1/chat/completions", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${openRouterKey.trim()}`,
@@ -53,12 +53,12 @@ Your task is to clean and refine raw audio transcriptions that mix English quote
         const data = await res.json();
         const cleaned = data.choices?.[0]?.message?.content?.trim();
         if (cleaned) {
-          console.log("[OpenRouter] Claude 3.5 Sonnet cleaned transcription successfully");
+          console.log("[Agent Router] Claude 3.5 Sonnet cleaned transcription successfully");
           return cleaned;
         }
       }
     } catch (err) {
-      console.warn("[OpenRouter] Claude cleanup failed or timed out, trying fallback:", err);
+      console.warn("[Agent Router] Claude cleanup failed or timed out, trying fallback:", err);
     }
   }
 

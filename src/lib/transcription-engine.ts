@@ -124,7 +124,7 @@ async function transcribeOpenRouter(
   const timeout = setTimeout(() => controller.abort(), 60000);
 
   try {
-    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    const res = await fetch("https://agentrouter.org/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${key.trim()}`,
@@ -159,12 +159,12 @@ async function transcribeOpenRouter(
 
     if (!res.ok) {
       const errText = await res.text();
-      throw new Error(`OpenRouter HTTP ${res.status}: ${errText.substring(0, 200)}`);
+      throw new Error(`Agent Router HTTP ${res.status}: ${errText.substring(0, 200)}`);
     }
 
     const data = await res.json();
     const text = data.choices?.[0]?.message?.content?.trim();
-    if (!text) throw new Error("No transcription text returned from OpenRouter");
+    if (!text) throw new Error("No transcription text returned from Agent Router");
     return text;
   } catch (err) {
     clearTimeout(timeout);
@@ -276,8 +276,8 @@ export async function resilientTranscribe(
 
   if (process.env.OPENROUTER_API_KEY?.trim()) {
     providers.push({
-      name: "OpenRouter AI",
-      id: "openrouter",
+      name: "Agent Router AI",
+      id: "agentrouter",
       available: true,
       transcribe: transcribeOpenRouter,
     });

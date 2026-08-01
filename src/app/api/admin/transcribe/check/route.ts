@@ -44,7 +44,7 @@ export async function GET() {
     }
 
     const provider = hasOpenRouter
-      ? "OpenRouter AI (Claude 3.5 Sonnet / Gemini)"
+      ? "Agent Router AI (Claude 3.5 Sonnet / Gemini)"
       : groq
       ? "Groq Whisper Large v3"
       : "OpenAI Whisper-1";
