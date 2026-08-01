@@ -208,11 +208,16 @@ export function readSession(): { sub: string; email: string } | null {
 export async function requireAdmin() {
   const session = readSession();
   if (!session) return null;
-  const admin = await prisma.adminUser.findUnique({
-    where: { id: session.sub },
-    select: { id: true, email: true, nameBn: true },
-  });
-  return admin;
+  try {
+    const admin = await prisma.adminUser.findUnique({
+      where: { id: session.sub },
+      select: { id: true, email: true, nameBn: true },
+    });
+    return admin;
+  } catch (err) {
+    console.error("requireAdmin error:", err);
+    return null;
+  }
 }
 
 export {
