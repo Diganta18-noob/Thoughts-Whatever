@@ -23,12 +23,14 @@ const BN_DIGITS = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮"
 const BN_DIGIT_RE = new RegExp(`[${span(BN_ZERO, BN_NINE)}]`, "g");
 
 /** 2026 → ২০২৬ */
-export function toBengaliNumber(input: number | string): string {
+export function toBengaliNumber(input: number | string | undefined | null): string {
+  if (input === undefined || input === null || input === "") return "";
   return String(input).replace(/[0-9]/g, (d) => BN_DIGITS[Number(d)]);
 }
 
 /** ২০২৬ → 2026. Needed so Bengali numerals stay searchable by Latin digits. */
-export function toLatinNumber(input: string): string {
+export function toLatinNumber(input: string | undefined | null): string {
+  if (!input) return "";
   return input.replace(BN_DIGIT_RE, (d) => String(d.charCodeAt(0) - BN_ZERO));
 }
 
@@ -200,7 +202,8 @@ const HALANT = new RegExp(ch(0x09cd), "g");
 const NASAL_SIGNS = new RegExp(`[${span(0x0981, 0x0983)}]`, "g");
 
 /** Conservative fold: invisible characters, nukta forms, whitespace, case. */
-export function normalizeBengali(input: string): string {
+export function normalizeBengali(input: string | undefined | null): string {
+  if (!input) return "";
   return input
     .normalize("NFC")
     .replace(INVISIBLE, "")
@@ -256,7 +259,8 @@ const SLUG_ALLOWED = new RegExp(`[^${span(0x0980, 0x09ff)} a-z0-9-]`, "g");
  * everywhere now, they are readable to the actual audience, and they carry
  * more Bengali search signal than a lossy Latin approximation would.
  */
-export function bengaliSlug(input: string): string {
+export function bengaliSlug(input: string | undefined | null): string {
+  if (!input) return "";
   return input
     .normalize("NFC")
     .replace(INVISIBLE, "")

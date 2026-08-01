@@ -8,6 +8,7 @@ import { readingMinutes } from "@/lib/bengali";
 
 /** Strip markdown syntax down to plain text, for excerpts and OG descriptions. */
 export function stripMarkdown(md: string): string {
+  if (!md) return "";
   return md
     .replace(/^---[\s\S]*?---/m, "") // front matter, if any sneaks in
     .replace(/```[\s\S]*?```/g, " ")
