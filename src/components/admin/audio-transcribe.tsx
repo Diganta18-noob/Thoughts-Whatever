@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { Mic, X, Loader2, Check, AlertCircle, DollarSign, Music } from "lucide-react";
+import { Mic, X, Loader2, Check, AlertCircle, DollarSign, Music, Copy, RefreshCw, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { countBengaliWords, readingMinutes } from "@/lib/bengali";
 
 interface AudioTranscribeProps {
   onTranscriptionComplete: (text: string, audioUrl?: string) => void;
@@ -19,7 +20,6 @@ export function AudioTranscribe({
 }: AudioTranscribeProps) {
   const [transcribing, setTranscribing] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [estimatedCost, setEstimatedCost] = useState(0);
   const [actualCost, setActualCost] = useState(0);
@@ -27,6 +27,14 @@ export function AudioTranscribe({
   const [provider, setProvider] = useState("");
   const [language, setLanguage] = useState<"bn" | "en" | "auto">("bn");
   const [dragActive, setDragActive] = useState(false);
+
+  // Review stage state
+  const [reviewMode, setReviewMode] = useState(false);
+  const [reviewText, setReviewText] = useState("");
+  const [audioUrlResult, setAudioUrlResult] = useState<string | undefined>();
+  const [copied, setCopied] = useState(false);
+  const [accepted, setAccepted] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   const validateFile = useCallback(
@@ -72,7 +80,8 @@ export function AudioTranscribe({
 
       setAudioFile(file);
       setError("");
-      setSuccess(false);
+      setReviewMode(false);
+      setAccepted(false);
 
       const dur = await estimateAudioDuration(file);
       setDuration(dur);
@@ -102,7 +111,6 @@ export function AudioTranscribe({
 
     setTranscribing(true);
     setError("");
-    setSuccess(false);
 
     try {
       const formData = new FormData();
@@ -121,12 +129,12 @@ export function AudioTranscribe({
         throw new Error(data.error || "Transcription failed");
       }
 
-      setSuccess(true);
       setActualCost(data.metadata?.cost || 0);
       setDuration(data.metadata?.duration || 0);
       setProvider(data.metadata?.provider || "Whisper API");
-
-      onTranscriptionComplete(data.text, data.audioUrl || undefined);
+      setReviewText(data.text || "");
+      setAudioUrlResult(data.audioUrl || undefined);
+      setReviewMode(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Transcription failed");
     } finally {
@@ -134,10 +142,27 @@ export function AudioTranscribe({
     }
   };
 
-  const handleRemove = () => {
+  const handleAcceptReview = () => {
+    onTranscriptionComplete(reviewText, audioUrlResult);
+    setAccepted(true);
+  };
+
+  const handleCopyText = async () => {
+    try {
+      await navigator.clipboard.writeText(reviewText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
+
+  const handleReset = () => {
     setAudioFile(null);
     setError("");
-    setSuccess(false);
+    setReviewMode(false);
+    setReviewText("");
+    setAccepted(false);
     setEstimatedCost(0);
     setActualCost(0);
     if (inputRef.current) inputRef.current.value = "";
@@ -149,33 +174,39 @@ export function AudioTranscribe({
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
+  const wordCount = countBengaliWords(reviewText);
+  const readTime = readingMinutes(reviewText);
+
   return (
-    <div className="space-y-4 rounded-sm border border-accent/20 bg-surface-raised/80 p-5">
+    <div className="space-y-4 rounded-sm border border-accent/20 bg-surface-raised/90 p-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Mic className="h-4 w-4 text-accent" />
           <h3 className="font-serif text-sm font-semibold text-content" lang="en">
-            {label}
+            {reviewMode ? "Transcription Final Review" : label}
           </h3>
         </div>
 
-        <div className="flex items-center gap-2">
-          <label className="text-xs text-content-faint" lang="en">
-            Language:
-          </label>
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value as "bn" | "en" | "auto")}
-            className="rounded-sm border border-rule bg-surface px-2 py-1 text-xs text-content focus:border-accent"
-          >
-            <option value="bn">Bengali (বাংলা)</option>
-            <option value="en">English</option>
-            <option value="auto">Auto-detect</option>
-          </select>
-        </div>
+        {!reviewMode && (
+          <div className="flex items-center gap-2">
+            <label className="text-xs text-content-faint" lang="en">
+              Language:
+            </label>
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as "bn" | "en" | "auto")}
+              className="rounded-sm border border-rule bg-surface px-2 py-1 text-xs text-content focus:border-accent"
+            >
+              <option value="bn">Bengali (বাংলা)</option>
+              <option value="en">English</option>
+              <option value="auto">Auto-detect</option>
+            </select>
+          </div>
+        )}
       </div>
 
-      {!audioFile ? (
+      {/* Upload State */}
+      {!audioFile && !reviewMode && (
         <div
           onDrop={handleDrop}
           onDragOver={(e) => {
@@ -209,7 +240,10 @@ export function AudioTranscribe({
             </p>
           </div>
         </div>
-      ) : (
+      )}
+
+      {/* Audio Selected / Processing State */}
+      {audioFile && !reviewMode && (
         <div className="space-y-3">
           <div className="flex items-center justify-between rounded-sm border border-rule bg-surface p-3">
             <div className="flex items-center gap-3">
@@ -222,10 +256,10 @@ export function AudioTranscribe({
               </div>
             </div>
 
-            {!transcribing && !success && (
+            {!transcribing && (
               <button
                 type="button"
-                onClick={handleRemove}
+                onClick={handleReset}
                 className="text-content-faint transition hover:text-accent"
               >
                 <X className="h-4 w-4" />
@@ -233,44 +267,104 @@ export function AudioTranscribe({
             )}
           </div>
 
-          {estimatedCost > 0 && !success && (
+          {estimatedCost > 0 && (
             <div className="flex items-center gap-1.5 text-xs text-content-faint">
               <DollarSign className="h-3.5 w-3.5 text-accent" />
               <span>
-                Estimated Whisper API cost: <strong>${estimatedCost < 0.001 ? "<$0.001" : `$${estimatedCost.toFixed(4)}`}</strong>
+                Estimated cost: <strong>${estimatedCost < 0.001 ? "<$0.001" : `$${estimatedCost.toFixed(4)}`}</strong> (Free with Groq)
               </span>
             </div>
           )}
 
-          {!success && (
+          <button
+            type="button"
+            onClick={handleTranscribe}
+            disabled={transcribing}
+            className="w-full inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2.5 text-sm font-medium text-surface transition hover:opacity-90 disabled:opacity-50"
+          >
+            {transcribing ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Transcribing mixed audio via Whisper API...
+              </>
+            ) : (
+              <>
+                <Mic className="h-4 w-4" />
+                Start Transcription & Review
+              </>
+            )}
+          </button>
+        </div>
+      )}
+
+      {/* Review Stage */}
+      {reviewMode && (
+        <div className="space-y-3 border-t border-rule pt-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <FileText className="h-4 w-4 text-accent" />
+              <span className="text-xs font-semibold text-content uppercase tracking-wider">
+                Review Transcribed Text
+              </span>
+              <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[0.65rem] font-medium text-accent">
+                {provider}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3 text-xs text-content-faint">
+              <span>{wordCount} words</span>
+              <span>·</span>
+              <span>~{readTime} min read</span>
+              <span>·</span>
+              <span>{actualCost === 0 ? "Cost: FREE" : `$${actualCost.toFixed(4)}`}</span>
+            </div>
+          </div>
+
+          <textarea
+            value={reviewText}
+            onChange={(e) => setReviewText(e.target.value)}
+            rows={8}
+            lang="bn"
+            spellCheck={false}
+            className="w-full rounded-sm border border-rule bg-surface p-3 font-bengali text-bengali-base leading-relaxed text-content focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            placeholder="Transcribed text will appear here for review..."
+          />
+
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleAcceptReview}
+                className={cn(
+                  "inline-flex items-center gap-2 rounded-sm px-4 py-2 text-sm font-medium transition",
+                  accepted
+                    ? "bg-green-600 text-white"
+                    : "bg-accent text-surface hover:opacity-90"
+                )}
+              >
+                <Check className="h-4 w-4" />
+                {accepted ? "Inserted into Piece!" : "Accept & Insert into Piece"}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleCopyText}
+                className="inline-flex items-center gap-1.5 rounded-sm border border-rule bg-surface px-3 py-2 text-sm text-content-soft transition hover:text-content"
+              >
+                <Copy className="h-3.5 w-3.5" />
+                {copied ? "Copied!" : "Copy"}
+              </button>
+            </div>
+
             <button
               type="button"
-              onClick={handleTranscribe}
-              disabled={transcribing}
-              className="w-full inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2 text-sm font-medium text-surface transition hover:opacity-90 disabled:opacity-50"
+              onClick={handleReset}
+              className="inline-flex items-center gap-1.5 text-xs text-content-faint transition hover:text-accent"
             >
-              {transcribing ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Transcribing mixed audio via Whisper API...
-                </>
-              ) : (
-                <>
-                  <Mic className="h-4 w-4" />
-                  Transcribe & Auto-fill Body
-                </>
-              )}
+              <RefreshCw className="h-3.5 w-3.5" />
+              New Audio File
             </button>
-          )}
-
-          {success && (
-            <div className="flex items-center gap-2 rounded-sm border border-green-500/20 bg-green-500/10 p-3 text-sm text-green-500">
-              <Check className="h-4 w-4 shrink-0" />
-              <span>
-                Transcription complete via {provider}! {actualCost === 0 ? "Cost: FREE" : `Cost: $${actualCost.toFixed(4)}`}. Text added to Body.
-              </span>
-            </div>
-          )}
+          </div>
         </div>
       )}
 
