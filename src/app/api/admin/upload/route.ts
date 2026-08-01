@@ -3,6 +3,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { guard } from "@/lib/admin-api";
 
 export const runtime = "nodejs";
+export const maxDuration = 300;
 
 export async function POST(request: NextRequest) {
   const gate = await guard();

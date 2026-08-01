@@ -191,7 +191,20 @@ export function readSession(): { sub: string; email: string } | null {
     }
   }
 
-  // 2. Fallback to legacy tw_session for smooth transition
+  // 2. Fallback to refresh token if access token is expired
+  const refreshTokenJwt = cookieStore.get(REFRESH_COOKIE_NAME)?.value;
+  if (refreshTokenJwt) {
+    try {
+      const payload = jwt.verify(refreshTokenJwt, secret()) as RefreshTokenPayload;
+      if (payload.type === "refresh" && payload.sub) {
+        return { sub: payload.sub, email: "" };
+      }
+    } catch {
+      /* refresh token expired or invalid */
+    }
+  }
+
+  // 3. Fallback to legacy tw_session for smooth transition
   const legacyToken = cookieStore.get(LEGACY_COOKIE_NAME)?.value;
   if (legacyToken) {
     try {
