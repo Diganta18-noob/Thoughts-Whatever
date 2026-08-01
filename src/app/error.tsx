@@ -59,8 +59,14 @@ export default function Error({
           </Link>
         </div>
 
+        {error.message && (
+          <p className="mt-4 font-mono text-xs text-accent/90 break-words max-w-md mx-auto bg-surface-raised p-3 border border-rule">
+            {error.message}
+          </p>
+        )}
+
         {error.digest && (
-          <p className="mt-8 font-mono text-[0.6875rem] text-content-faint">
+          <p className="mt-4 font-mono text-[0.6875rem] text-content-faint">
             {error.digest}
           </p>
         )}
