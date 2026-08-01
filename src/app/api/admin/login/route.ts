@@ -38,30 +38,44 @@ export async function POST(request: Request) {
     );
   }
 
-  const email = parsed.data.email.trim().toLowerCase();
-  const admin = await prisma.adminUser.findUnique({ where: { email } });
+  try {
+    const email = parsed.data.email.trim().toLowerCase();
+    const admin = await prisma.adminUser.findUnique({ where: { email } });
 
-  const valid = admin
-    ? await verifyPassword(parsed.data.password, admin.passwordHash)
-    : await verifyPassword(parsed.data.password, await throwawayHash());
+    const valid = admin
+      ? await verifyPassword(parsed.data.password, admin.passwordHash)
+      : await verifyPassword(parsed.data.password, await throwawayHash());
 
-  if (!admin || !valid) {
+    if (!admin || !valid) {
+      return NextResponse.json(
+        { ok: false, error: "ইমেল বা পাসওয়ার্ড মিলছে না।" },
+        { status: 401 },
+      );
+    }
+
+    const userAgent = request.headers.get("user-agent") || undefined;
+    const ipAddress =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || undefined;
+
+    await issueAuthCookies(admin.id, admin.email, { userAgent, ipAddress });
+
+    await prisma.adminUser.update({
+      where: { id: admin.id },
+      data: { lastLoginAt: new Date() },
+    });
+
+    return NextResponse.json({ ok: true });
+  } catch (err: any) {
+    console.error("Login API route error:", err);
     return NextResponse.json(
-      { ok: false, error: "ইমেল বা পাসওয়ার্ড মিলছে না।" },
-      { status: 401 },
+      {
+        ok: false,
+        error:
+          process.env.NODE_ENV === "development"
+            ? err?.message || "Internal server error"
+            : "সার্ভারে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।",
+      },
+      { status: 500 },
     );
   }
-
-  const userAgent = request.headers.get("user-agent") || undefined;
-  const ipAddress =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || undefined;
-
-  await issueAuthCookies(admin.id, admin.email, { userAgent, ipAddress });
-
-  await prisma.adminUser.update({
-    where: { id: admin.id },
-    data: { lastLoginAt: new Date() },
-  });
-
-  return NextResponse.json({ ok: true });
 }

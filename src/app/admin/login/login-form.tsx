@@ -25,7 +25,19 @@ export function LoginForm({ next }: { next: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = (await res.json()) as { ok?: boolean; error?: string };
+
+      let data: { ok?: boolean; error?: string } = {};
+      try {
+        data = (await res.json()) as { ok?: boolean; error?: string };
+      } catch {
+        setError(
+          res.ok
+            ? t("admin.login.errorDefault")
+            : t("admin.login.errorNetwork"),
+        );
+        setBusy(false);
+        return;
+      }
 
       if (res.ok && data.ok) {
         // `refresh()` before navigating, or the layout's server-side auth check
