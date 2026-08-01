@@ -24,6 +24,7 @@ export function AudioTranscribe({
   const [estimatedCost, setEstimatedCost] = useState(0);
   const [actualCost, setActualCost] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [provider, setProvider] = useState("");
   const [language, setLanguage] = useState<"bn" | "en" | "auto">("bn");
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -121,8 +122,9 @@ export function AudioTranscribe({
       }
 
       setSuccess(true);
-      setActualCost(data.metadata.cost);
-      setDuration(data.metadata.duration);
+      setActualCost(data.metadata?.cost || 0);
+      setDuration(data.metadata?.duration || 0);
+      setProvider(data.metadata?.provider || "Whisper API");
 
       onTranscriptionComplete(data.text, data.audioUrl || undefined);
     } catch (err) {
@@ -265,7 +267,7 @@ export function AudioTranscribe({
             <div className="flex items-center gap-2 rounded-sm border border-green-500/20 bg-green-500/10 p-3 text-sm text-green-500">
               <Check className="h-4 w-4 shrink-0" />
               <span>
-                Transcription complete! Cost: ${actualCost < 0.001 ? "<$0.001" : `$${actualCost.toFixed(4)}`}. Text added to Body.
+                Transcription complete via {provider}! {actualCost === 0 ? "Cost: FREE" : `Cost: $${actualCost.toFixed(4)}`}. Text added to Body.
               </span>
             </div>
           )}

@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { guard } from "@/lib/admin-api";
 import { getOpenAIClient, WHISPER_SUPPORTED_FORMATS, MAX_AUDIO_SIZE_MB } from "@/lib/openai";
+import { getGroqClient, GROQ_WHISPER_MODEL } from "@/lib/groq";
 
 export const runtime = "nodejs";
-export const maxDuration = 300; // 5 minutes execution timeout for long audio files
+export const maxDuration = 300;
 
 export async function POST(request: NextRequest) {
   const gate = await guard();
@@ -38,26 +39,46 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!process.env.OPENAI_API_KEY) {
+    const groq = getGroqClient();
+    const hasOpenAI = Boolean(process.env.OPENAI_API_KEY);
+
+    if (!groq && !hasOpenAI) {
       return NextResponse.json(
         {
           ok: false,
-          error: "OpenAI API key not configured. Please add OPENAI_API_KEY to your environment variables.",
+          error: "No transcription API key configured. Add GROQ_API_KEY (free & ultra-fast) or OPENAI_API_KEY to your environment variables.",
         },
         { status: 500 }
       );
     }
 
-    const openai = getOpenAIClient();
+    let transcribedText = "";
+    let providerName = "";
+    let durationSeconds = 60;
 
-    // Call OpenAI Whisper API
-    const transcription = await openai.audio.transcriptions.create({
-      file,
-      model: "whisper-1",
-      language: language === "auto" ? undefined : language,
-      response_format: "verbose_json",
-      temperature: 0.0,
-    });
+    // Use Groq Whisper Large v3 (ultra-fast & free) if available, otherwise OpenAI
+    if (groq) {
+      providerName = "Groq Whisper Large v3 (Free & Ultra-Fast)";
+      const transcription = await groq.audio.transcriptions.create({
+        file,
+        model: GROQ_WHISPER_MODEL,
+        language: language === "auto" ? undefined : language,
+        temperature: 0.0,
+      });
+      transcribedText = transcription.text;
+    } else {
+      providerName = "OpenAI Whisper-1";
+      const openai = getOpenAIClient();
+      const transcription = await openai.audio.transcriptions.create({
+        file,
+        model: "whisper-1",
+        language: language === "auto" ? undefined : language,
+        response_format: "verbose_json",
+        temperature: 0.0,
+      });
+      transcribedText = transcription.text;
+      durationSeconds = transcription.duration || 60;
+    }
 
     let audioUrl: string | null = null;
 
@@ -86,18 +107,16 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const duration = transcription.duration || 60;
-    const cost = (duration / 60) * 0.006;
+    const estimatedCost = groq ? 0.0 : (durationSeconds / 60) * 0.006;
 
     return NextResponse.json({
       ok: true,
-      text: transcription.text,
+      text: transcribedText,
       audioUrl,
       metadata: {
-        language: transcription.language,
-        duration: Math.round(duration),
-        segments: transcription.segments?.length || 0,
-        cost: Number(cost.toFixed(4)),
+        provider: providerName,
+        duration: Math.round(durationSeconds),
+        cost: Number(estimatedCost.toFixed(4)),
       },
     });
   } catch (error: unknown) {
