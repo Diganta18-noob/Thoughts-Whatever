@@ -1,8 +1,12 @@
 import OpenAI from "openai";
 
-export const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "",
-});
+export function getOpenAIClient() {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error("OpenAI API key not configured. Please set OPENAI_API_KEY in environment variables.");
+  }
+  return new OpenAI({ apiKey });
+}
 
 export const WHISPER_SUPPORTED_FORMATS = [
   "audio/mpeg",  // .mp3

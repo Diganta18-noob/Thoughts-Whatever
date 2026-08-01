@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { guard } from "@/lib/admin-api";
-import { openai, WHISPER_SUPPORTED_FORMATS, MAX_AUDIO_SIZE_MB } from "@/lib/openai";
+import { getOpenAIClient, WHISPER_SUPPORTED_FORMATS, MAX_AUDIO_SIZE_MB } from "@/lib/openai";
 
 export const runtime = "nodejs";
 export const maxDuration = 300; // 5 minutes execution timeout for long audio files
@@ -47,6 +47,8 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    const openai = getOpenAIClient();
 
     // Call OpenAI Whisper API
     const transcription = await openai.audio.transcriptions.create({
