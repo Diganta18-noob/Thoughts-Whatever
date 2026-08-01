@@ -144,7 +144,8 @@ export function formatDualDate(date: Date | string): string {
  */
 const BENGALI_WPM = 150;
 
-export function countBengaliWords(text: string): number {
+export function countBengaliWords(text: string | undefined | null): number {
+  if (!text) return 0;
   const stripped = text
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1")
@@ -152,17 +153,20 @@ export function countBengaliWords(text: string): number {
   return stripped.split(/\s+/).filter(Boolean).length;
 }
 
-export function readingMinutes(text: string): number {
+export function readingMinutes(text: string | undefined | null): number {
+  if (!text) return 1;
   return Math.max(1, Math.round(countBengaliWords(text) / BENGALI_WPM));
 }
 
 /** ৭ মিনিট পাঠ */
-export function formatReadingTime(minutes: number): string {
+export function formatReadingTime(minutes: number | undefined | null): string {
+  if (minutes === undefined || minutes === null) return "১ মিনিট পাঠ";
   return `${toBengaliNumber(minutes)} মিনিট পাঠ`;
 }
 
 /** ১৮:৪২ — for the আবৃত্তি player and documentary runtimes. */
-export function formatBengaliDuration(totalSeconds: number): string {
+export function formatBengaliDuration(totalSeconds: number | undefined | null): string {
+  if (totalSeconds === undefined || totalSeconds === null) return "০:০০";
   const safe = Math.max(0, Math.floor(totalSeconds));
   const m = Math.floor(safe / 60);
   const s = safe % 60;
