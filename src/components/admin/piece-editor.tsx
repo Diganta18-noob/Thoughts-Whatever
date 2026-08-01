@@ -207,10 +207,33 @@ export function PieceEditor({
   series: EditorOption[];
 }) {
   const router = useRouter();
-  const t = useTranslation();
-  const isNew = !initial.id;
+  const safeInitial: EditorPiece = useMemo(() => ({
+    ...EMPTY_PIECE,
+    ...(initial || {}),
+    slug: initial?.slug ?? "",
+    titleBn: initial?.titleBn ?? "",
+    titleEn: initial?.titleEn ?? "",
+    subtitleBn: initial?.subtitleBn ?? "",
+    dekBn: initial?.dekBn ?? "",
+    bodyBn: initial?.bodyBn ?? "",
+    excerptBn: initial?.excerptBn ?? "",
+    coverImage: initial?.coverImage ?? "",
+    reelUrl: initial?.reelUrl ?? "",
+    videoUrl: initial?.videoUrl ?? "",
+    audioUrl: initial?.audioUrl ?? "",
+    audioSec: initial?.audioSec ?? "",
+    seoDescription: initial?.seoDescription ?? "",
+    ogImage: initial?.ogImage ?? "",
+    publishedAt: initial?.publishedAt ?? "",
+    seriesId: initial?.seriesId ?? "",
+    seriesOrder: initial?.seriesOrder ?? "",
+    authorIds: initial?.authorIds ?? [],
+    tagIds: initial?.tagIds ?? [],
+    sources: initial?.sources ?? [],
+    timeline: initial?.timeline ?? [],
+  }), [initial]);
 
-  const [form, setForm] = useState<EditorPiece>(initial);
+  const [form, setForm] = useState<EditorPiece>(safeInitial);
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [notice, setNotice] = useState("");
@@ -279,7 +302,7 @@ export function PieceEditor({
     const payload = {
       kind: form.kind,
       status,
-      slug: form.slug.trim(),
+      slug: (form.slug || "").trim(),
       titleBn: form.titleBn,
       titleEn: form.titleEn,
       subtitleBn: form.subtitleBn,
@@ -303,8 +326,8 @@ export function PieceEditor({
       tagIds: form.tagIds,
       seriesId: form.seriesId,
       seriesOrder: form.seriesId && form.seriesOrder ? form.seriesOrder : null,
-      sources: form.sources.filter((s) => s.label.trim()),
-      timeline: form.timeline.filter((t) => t.year.trim() && t.labelBn.trim()),
+      sources: (form.sources || []).filter((s) => s?.label?.trim()),
+      timeline: (form.timeline || []).filter((t) => t?.year?.trim() && t?.labelBn?.trim()),
     };
 
     try {
@@ -512,7 +535,7 @@ export function PieceEditor({
             />
           </Field>
 
-          {showPreview && form.bodyBn.trim() && (
+          {showPreview && (form.bodyBn || "").trim() && (
             <div>
               <span className="label" lang="en">
                 Preview
