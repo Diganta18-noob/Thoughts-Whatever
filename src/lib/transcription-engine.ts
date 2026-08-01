@@ -98,7 +98,10 @@ function isPermanentError(err: unknown): boolean {
     lower.includes("402") ||
     lower.includes("payment required") ||
     lower.includes("403") ||
-    lower.includes("forbidden")
+    lower.includes("forbidden") ||
+    lower.includes("unexpected token") ||
+    lower.includes("html") ||
+    lower.includes("doctype")
   );
 }
 
@@ -128,6 +131,8 @@ async function transcribeOpenRouter(
       method: "POST",
       headers: {
         Authorization: `Bearer ${key.trim()}`,
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        Accept: "application/json",
         "HTTP-Referer": "https://thoughts-whatever.vercel.app",
         "X-Title": "Thoughts Whatever Journal",
         "Content-Type": "application/json",
@@ -160,6 +165,12 @@ async function transcribeOpenRouter(
     if (!res.ok) {
       const errText = await res.text();
       throw new Error(`Agent Router HTTP ${res.status}: ${errText.substring(0, 200)}`);
+    }
+
+    const contentType = res.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      const sample = await res.text();
+      throw new Error(`Agent Router returned non-JSON response (${res.status}): ${sample.substring(0, 100)}`);
     }
 
     const data = await res.json();
