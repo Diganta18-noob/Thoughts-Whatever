@@ -346,6 +346,18 @@
   "admin.nav.subscribers": "Letter",
   "admin.nav.import": "Import",
   "admin.nav.transliteration": "Transliteration",
-  "admin.nav.settings": "Settings"
+  "admin.nav.settings": "Settings",
+  "admin.transcribe.title": "Audio Transcription",
+  "admin.transcribe.upload": "Upload Audio File",
+  "admin.transcribe.dragDrop": "Click to upload or drag audio file",
+  "admin.transcribe.formats": "MP3, M4A, WAV, OGG up to 25MB",
+  "admin.transcribe.button": "Transcribe Audio",
+  "admin.transcribe.transcribing": "Transcribing...",
+  "admin.transcribe.complete": "Transcription complete!",
+  "admin.transcribe.cost": "Cost:",
+  "admin.transcribe.estimatedCost": "Estimated cost:",
+  "admin.transcribe.hide": "Hide Transcriber",
+  "admin.transcribe.show": "Transcribe Audio"
 }
+
 

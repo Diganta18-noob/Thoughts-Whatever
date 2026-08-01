@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Loader2, Plus, X, ExternalLink } from "lucide-react";
+import { Loader2, Plus, X, ExternalLink, Mic } from "lucide-react";
 import { Prose } from "@/components/reader/prose";
 import { bengaliSlug, countBengaliWords, readingMinutes, toBengaliNumber } from "@/lib/bengali";
 import { deriveExcerpt } from "@/lib/markdown";
@@ -11,6 +11,7 @@ import { KIND_META, piecePath, type PieceKindKey } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/components/providers/language-provider";
 import { ImageUpload } from "@/components/admin/image-upload";
+import { AudioTranscribe } from "@/components/admin/audio-transcribe";
 
 /**
  * The editor.
@@ -241,6 +242,17 @@ export function PieceEditor({
   const [notice, setNotice] = useState("");
   const [dirty, setDirty] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
+  const [showTranscriber, setShowTranscriber] = useState(false);
+
+  const handleTranscriptionComplete = (text: string, audioUrl?: string) => {
+    setForm((prev) => ({
+      ...prev,
+      bodyBn: prev.bodyBn ? `${prev.bodyBn}\n\n${text}` : text,
+      audioUrl: audioUrl || prev.audioUrl,
+    }));
+    setDirty(true);
+    setNotice("Audio transcribed successfully via Whisper API! Transcribed text appended to Body.");
+  };
 
   // The slug follows the title only until the publisher edits it, and never on
   // an existing piece — a live URL must not change because a typo was fixed.
@@ -524,6 +536,28 @@ export function PieceEditor({
             hintBn={t("admin.editor.bodyHint")}
             error={errors.bodyBn}
           >
+            <div className="mb-3 flex items-center justify-between">
+              <span className="text-xs text-content-faint">
+                Supports mixed Bengali-English Markdown content
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowTranscriber(!showTranscriber)}
+                className="inline-flex items-center gap-1.5 rounded-sm border border-accent/30 bg-accent/10 px-3 py-1.5 text-xs font-medium text-accent transition hover:bg-accent/20"
+              >
+                <Mic className="h-3.5 w-3.5" />
+                {showTranscriber ? "Hide Transcriber" : "🎙️ Transcribe Audio Narration / Reel"}
+              </button>
+            </div>
+
+            {showTranscriber && (
+              <div className="mb-4">
+                <AudioTranscribe
+                  onTranscriptionComplete={handleTranscriptionComplete}
+                  storeAudio={true}
+                />
+              </div>
+            )}
             <textarea
               value={form.bodyBn}
               onChange={(e) => set("bodyBn", e.target.value)}
