@@ -23,16 +23,18 @@ export async function GET() {
   }
 
   try {
+    const hasOpenRouter = Boolean(process.env.OPENROUTER_API_KEY && process.env.OPENROUTER_API_KEY.trim() !== "");
     const groq = getGroqClient();
     const hasOpenAI = Boolean(process.env.OPENAI_API_KEY);
 
-    if (!groq && !hasOpenAI) {
+    if (!hasOpenRouter && !groq && !hasOpenAI) {
       return NextResponse.json(
         {
           ok: false,
-          error: "Transcription service not configured. Administrator needs to set GROQ_API_KEY or OPENAI_API_KEY in environment variables.",
+          error: "Transcription service not configured. Administrator needs to set OPENROUTER_API_KEY, GROQ_API_KEY, or OPENAI_API_KEY in environment variables.",
           code: "NO_API_KEY",
           details: {
+            openRouterConfigured: false,
             groqConfigured: false,
             openAIConfigured: false,
           },
@@ -41,12 +43,16 @@ export async function GET() {
       );
     }
 
-    const provider = groq ? "Groq Whisper Large v3" : "OpenAI Whisper-1";
+    const provider = hasOpenRouter
+      ? "OpenRouter AI (Claude 3.5 Sonnet / Gemini)"
+      : groq
+      ? "Groq Whisper Large v3"
+      : "OpenAI Whisper-1";
 
     return NextResponse.json({
       ok: true,
       provider,
-      message: `${provider} available`,
+      message: `${provider} ready`,
     });
   } catch (error) {
     console.error("Transcription health check error:", error);
