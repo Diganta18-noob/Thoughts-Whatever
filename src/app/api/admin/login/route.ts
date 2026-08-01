@@ -70,10 +70,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         ok: false,
-        error:
-          process.env.NODE_ENV === "development"
-            ? err?.message || "Internal server error"
-            : "সার্ভারে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।",
+        error: err?.message || "সার্ভারে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।",
       },
       { status: 500 },
     );
