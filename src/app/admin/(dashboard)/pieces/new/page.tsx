@@ -12,13 +12,16 @@ const KINDS = ["RACHANA", "BLOG", "DOCUMENTARY"] as const;
 export default async function NewPiecePage({
   searchParams,
 }: {
-  searchParams?: { kind?: string } | Promise<{ kind?: string }>;
+  searchParams?: { kind?: string };
 }) {
-  const resolvedParams = await Promise.resolve(searchParams ?? {});
-  const { authors, tags, series } = await getEditorOptions();
+  const kindParam = typeof searchParams?.kind === "string" ? searchParams.kind : undefined;
+  const options = await getEditorOptions();
 
-  // `/admin/pieces/new?kind=DOCUMENTARY` from the dashboard skips a click.
-  const kind = KINDS.find((k) => k === resolvedParams?.kind) ?? "RACHANA";
+  const authors = options?.authors ?? [];
+  const tags = options?.tags ?? [];
+  const series = options?.series ?? [];
+
+  const kind = KINDS.find((k) => k === kindParam) ?? "RACHANA";
 
   return (
     <div>

@@ -18,7 +18,8 @@ const ITEMS: { href: string; key: TranslationKey }[] = [
 ];
 
 export function AdminNav() {
-  const pathname = usePathname();
+  const rawPathname = usePathname();
+  const pathname = rawPathname ?? "";
   const t = useTranslation();
 
   return (
