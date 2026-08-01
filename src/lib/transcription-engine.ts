@@ -130,7 +130,7 @@ async function transcribeOpenRouter(
   const mediaType = mimeType || "audio/mpeg";
 
   const modelsToTry = isAgentRouter
-    ? ["claude-3-5-sonnet-20241022", "gpt-4o-mini", "gpt-4o"]
+    ? ["claude-opus-4-8", "claude-opus-5", "gpt-5.6-sol", "claude-3-5-sonnet-20241022", "gpt-4o-mini"]
     : ["google/gemini-flash-1.5", "openai/gpt-4o-mini"];
 
   let lastError: Error | null = null;

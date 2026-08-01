@@ -25,53 +25,55 @@ Your task is to clean and refine raw audio transcriptions that mix English quote
 
   // 1. Try Agent Router / OpenRouter Claude if key is configured
   if (openRouterKey && openRouterKey.trim() !== "") {
-    try {
-      const isAgentRouter = openRouterKey.startsWith("sk-G8") || openRouterKey.toLowerCase().includes("agent");
-      const endpointUrl = isAgentRouter
-        ? "https://agentrouter.org/v1/chat/completions"
-        : "https://openrouter.ai/api/v1/chat/completions";
-      const modelName = isAgentRouter
-        ? "claude-3-5-sonnet-20241022"
-        : "anthropic/claude-3.5-sonnet";
+    const isAgentRouter = openRouterKey.startsWith("sk-G8") || openRouterKey.toLowerCase().includes("agent");
+    const endpointUrl = isAgentRouter
+      ? "https://agentrouter.org/v1/chat/completions"
+      : "https://openrouter.ai/api/v1/chat/completions";
+    const modelsToTry = isAgentRouter
+      ? ["claude-opus-4-8", "claude-opus-5", "gpt-5.6-sol", "claude-3-5-sonnet-20241022"]
+      : ["anthropic/claude-3.5-sonnet"];
 
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 6000);
+    for (const modelName of modelsToTry) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 6000);
 
-      const res = await fetch(endpointUrl, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${openRouterKey.trim()}`,
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-          Accept: "application/json",
-          "HTTP-Referer": "https://thoughts-whatever.vercel.app",
-          "X-Title": "Thoughts Whatever Journal",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: modelName,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: rawText },
-          ],
-          temperature: 0.1,
-        }),
-        signal: controller.signal,
-      });
+        const res = await fetch(endpointUrl, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${openRouterKey.trim()}`,
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            Accept: "application/json",
+            "HTTP-Referer": "https://thoughts-whatever.vercel.app",
+            "X-Title": "Thoughts Whatever Journal",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: modelName,
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: rawText },
+            ],
+            temperature: 0.1,
+          }),
+          signal: controller.signal,
+        });
 
-      clearTimeout(timeout);
-      if (res.ok) {
-        const contentType = res.headers.get("content-type") || "";
-        if (contentType.includes("application/json")) {
-          const data = await res.json();
-          const cleaned = data.choices?.[0]?.message?.content?.trim();
-          if (cleaned) {
-            console.log(`[${isAgentRouter ? "Agent Router" : "OpenRouter"}] ${modelName} cleaned transcription successfully`);
-            return cleaned;
+        clearTimeout(timeout);
+        if (res.ok) {
+          const contentType = res.headers.get("content-type") || "";
+          if (contentType.includes("application/json")) {
+            const data = await res.json();
+            const cleaned = data.choices?.[0]?.message?.content?.trim();
+            if (cleaned) {
+              console.log(`[${isAgentRouter ? "Agent Router" : "OpenRouter"}] ${modelName} cleaned transcription successfully`);
+              return cleaned;
+            }
           }
         }
+      } catch (err) {
+        console.warn(`[AI Cleanup] ${modelName} cleanup failed or timed out:`, err);
       }
-    } catch (err) {
-      console.warn("[AI Cleanup] Claude cleanup failed or timed out, trying fallback:", err);
     }
   }
 
