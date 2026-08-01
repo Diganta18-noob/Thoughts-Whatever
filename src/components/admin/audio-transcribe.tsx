@@ -401,7 +401,7 @@ export function AudioTranscribe({
             {state === "reviewing" || state === "complete" ? "Transcription Final Review" : label}
           </h3>
           <span className="rounded-full bg-green-500/10 px-2 py-0.5 text-[0.65rem] font-medium text-green-500">
-            Groq Whisper Ready
+            {provider || "Whisper AI Ready"}
           </span>
         </div>
 

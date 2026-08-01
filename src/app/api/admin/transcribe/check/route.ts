@@ -24,26 +24,29 @@ export async function GET() {
 
   try {
     const groq = getGroqClient();
+    const hasOpenAI = Boolean(process.env.OPENAI_API_KEY);
 
-    if (!groq) {
+    if (!groq && !hasOpenAI) {
       return NextResponse.json(
         {
           ok: false,
-          error: "Groq transcription service not configured. Administrator needs to set GROQ_API_KEY in environment variables.",
+          error: "Transcription service not configured. Administrator needs to set GROQ_API_KEY or OPENAI_API_KEY in environment variables.",
           code: "NO_API_KEY",
           details: {
             groqConfigured: false,
+            openAIConfigured: false,
           },
         },
         { status: 503 }
       );
     }
 
-    // Service is available
+    const provider = groq ? "Groq Whisper Large v3" : "OpenAI Whisper-1";
+
     return NextResponse.json({
       ok: true,
-      provider: "Groq Whisper Large v3",
-      message: "Groq Whisper available (free & ultra-fast)",
+      provider,
+      message: `${provider} available`,
     });
   } catch (error) {
     console.error("Transcription health check error:", error);
