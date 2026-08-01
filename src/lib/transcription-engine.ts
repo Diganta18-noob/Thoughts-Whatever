@@ -99,6 +99,8 @@ function isPermanentError(err: unknown): boolean {
     lower.includes("payment required") ||
     lower.includes("403") ||
     lower.includes("forbidden") ||
+    lower.includes("400") ||
+    lower.includes("bad request") ||
     lower.includes("unexpected token") ||
     lower.includes("html") ||
     lower.includes("doctype")
@@ -338,7 +340,7 @@ export async function resilientTranscribe(
           openRouterKey,
           "https://openrouter.ai/api/v1/chat/completions",
           "OpenRouter",
-          ["openai/gpt-4o-mini", "google/gemini-flash-1.5", "anthropic/claude-3.5-sonnet", "openai/gpt-4o"]
+          ["google/gemini-flash-1.5", "google/gemini-2.0-flash-exp", "anthropic/claude-3.5-sonnet"]
         ),
     };
 
