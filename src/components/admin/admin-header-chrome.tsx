@@ -2,15 +2,19 @@
 
 import Link from "next/link";
 import { useTranslation } from "@/components/providers/language-provider";
+import { Logo } from "@/components/brand/logo";
 
 export function AdminHeaderBrand() {
   const t = useTranslation();
   return (
     <Link
       href="/admin"
-      className="font-display text-lg text-content"
+      className="flex items-center gap-2.5 group"
     >
-      {t("admin.brand")}
+      <Logo variant="compact" showSubtitle={false} className="transition-transform group-hover:scale-105" />
+      <span className="font-serif text-base font-medium text-content group-hover:text-accent">
+        Editor's Room
+      </span>
     </Link>
   );
 }

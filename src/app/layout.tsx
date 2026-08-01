@@ -91,6 +91,13 @@ export const metadata: Metadata = {
     canonical: "/",
     types: { "application/rss+xml": absoluteUrl("/rss.xml") },
   },
+  icons: {
+    icon: [
+      { url: "/brand/logo-icon.svg", type: "image/svg+xml" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: { url: "/brand/logo-icon.svg" },
+  },
   openGraph: {
     type: "website",
     locale: "bn_IN",
@@ -98,6 +105,14 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: "রিলের পিছনের সম্পূর্ণ লেখা, ব্লগ ও তথ্যচিত্র।",
+    images: [
+      {
+        url: absoluteUrl("/brand/logo-full.svg"),
+        width: 1200,
+        height: 630,
+        alt: "Thoughts Whatever — t.w logo",
+      },
+    ],
   },
   twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },

@@ -1,0 +1,16 @@
+{
+  "name": "Thoughts Whatever — বাংলা সাহিত্য, পাঠ ও তথ্যচিত্র",
+  "short_name": "t.w",
+  "description": "Bengali literary magazine and documentary space",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#141211",
+  "theme_color": "#141211",
+  "icons": [
+    {
+      "src": "/brand/logo-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

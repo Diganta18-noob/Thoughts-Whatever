@@ -11,6 +11,7 @@ import { SearchDialog } from "@/components/search/search-dialog";
 import { useBookmarks } from "@/components/providers/bookmarks-provider";
 import { useLanguage } from "@/components/providers/language-provider";
 import { LanguageToggle } from "@/components/layout/language-toggle";
+import { Logo } from "@/components/brand/logo";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -30,19 +31,20 @@ export function SiteHeader() {
       className="sticky top-0 z-30 border-b border-rule bg-surface/90 backdrop-blur"
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
-        {/* Wordmark — Bengali, in the display face. The brand is Bengali even
-            though the chrome around it is switchable. */}
         <Link
           href="/"
-          className="group shrink-0"
+          className="group shrink-0 flex items-center gap-3"
           aria-label={t("header.home", { site: siteConfig.nameEn })}
         >
-          <span className="block font-display text-[1.35rem] leading-none text-content transition-colors group-hover:text-accent">
-            Thoughts Whatever
-          </span>
-          <span className="label mt-1 hidden sm:block">
-            {isBn ? siteConfig.tagline : siteConfig.taglineEn}
-          </span>
+          <Logo variant="compact" showSubtitle={false} className="transition-transform group-hover:scale-105" />
+          <div className="hidden sm:flex flex-col">
+            <span className="font-serif text-lg leading-none font-medium text-content group-hover:text-accent">
+              thoughts.whatever
+            </span>
+            <span className="label mt-0.5">
+              {isBn ? siteConfig.tagline : siteConfig.taglineEn}
+            </span>
+          </div>
         </Link>
 
         <nav

@@ -1,12 +1,5 @@
-import { Loader2 } from "lucide-react";
+import { BrandLoading } from "@/components/brand/brand-loading";
 
 export default function NewPieceLoading() {
-  return (
-    <div className="flex min-h-[400px] items-center justify-center">
-      <div className="text-center">
-        <Loader2 className="mx-auto h-8 w-8 animate-spin text-accent" />
-        <p className="mt-4 text-sm text-content-soft">Loading editor...</p>
-      </div>
-    </div>
-  );
+  return <BrandLoading message="Loading editor..." />;
 }
