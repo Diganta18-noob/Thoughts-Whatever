@@ -28,6 +28,8 @@ export const cardSelect = {
   dekBn: true,
   excerptBn: true,
   coverImage: true,
+  coverImageWidth: true,
+  coverImageHeight: true,
   readingMinutes: true,
   publishedAt: true,
   audioUrl: true,

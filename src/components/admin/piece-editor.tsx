@@ -44,6 +44,8 @@ export type EditorPiece = {
   bodyBn: string;
   excerptBn: string;
   coverImage: string;
+  coverImageWidth?: number | null;
+  coverImageHeight?: number | null;
   reelUrl: string;
   videoUrl: string;
   audioUrl: string;
@@ -221,6 +223,8 @@ export function PieceEditor({
     bodyBn: initial?.bodyBn ?? "",
     excerptBn: initial?.excerptBn ?? "",
     coverImage: initial?.coverImage ?? "",
+    coverImageWidth: (initial as any)?.coverImageWidth ?? null,
+    coverImageHeight: (initial as any)?.coverImageHeight ?? null,
     reelUrl: initial?.reelUrl ?? "",
     videoUrl: initial?.videoUrl ?? "",
     audioUrl: initial?.audioUrl ?? "",
@@ -324,6 +328,8 @@ export function PieceEditor({
       bodyBn: form.bodyBn,
       excerptBn: form.excerptBn,
       coverImage: form.coverImage,
+      coverImageWidth: form.coverImageWidth,
+      coverImageHeight: form.coverImageHeight,
       reelUrl: form.reelUrl,
       videoUrl: form.videoUrl,
       audioUrl: form.audioUrl,
@@ -824,10 +830,13 @@ export function PieceEditor({
 
             <ImageUpload
               value={form.coverImage}
-              onChange={(url) => set("coverImage", url)}
+              onChange={(url, meta) => {
+                set("coverImage", url);
+                if (meta?.width) set("coverImageWidth", meta.width);
+                if (meta?.height) set("coverImageHeight", meta.height);
+              }}
               label="Cover Image"
               folder="covers"
-              aspectRatio={16 / 9}
             />
 
             <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_90px]">

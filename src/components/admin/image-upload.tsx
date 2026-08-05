@@ -7,7 +7,7 @@ import { formatErrorMessage } from "@/lib/error-formatter";
 
 interface ImageUploadProps {
   value?: string;
-  onChange: (url: string) => void;
+  onChange: (url: string, meta?: { width?: number; height?: number }) => void;
   label?: string;
   folder?: string;
   maxSizeMB?: number;
@@ -114,7 +114,7 @@ export function ImageUpload({
         });
 
         const contentType = response.headers.get("content-type") || "";
-        let data: { ok?: boolean; url?: string; error?: string };
+        let data: { ok?: boolean; url?: string; error?: string; width?: number; height?: number };
 
         if (contentType.includes("application/json")) {
           data = await response.json();
@@ -130,7 +130,7 @@ export function ImageUpload({
         }
 
         setPreview(data.url);
-        onChange(data.url);
+        onChange(data.url, { width: data.width, height: data.height });
       } catch (err) {
         setError(formatErrorMessage(err));
         setPreview(null);

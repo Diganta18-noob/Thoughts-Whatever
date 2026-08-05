@@ -42,6 +42,8 @@ export default async function EditPiecePage({
     bodyBn: piece.bodyBn,
     excerptBn: piece.excerptBn ?? "",
     coverImage: piece.coverImage ?? "",
+    coverImageWidth: piece.coverImageWidth,
+    coverImageHeight: piece.coverImageHeight,
     reelUrl: piece.reelUrl ?? "",
     videoUrl: piece.videoUrl ?? "",
     audioUrl: piece.audioUrl ?? "",

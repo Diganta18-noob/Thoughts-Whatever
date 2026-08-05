@@ -6,6 +6,7 @@ import { formatDate, formatNumber, formatReading } from "@/lib/i18n/format";
 import { KIND_META, piecePath, type PieceKindKey } from "@/lib/nav";
 import { useLanguage } from "@/components/providers/language-provider";
 import { cn } from "@/lib/utils";
+import { EditorialImage } from "@/components/pieces/editorial-image";
 
 export type PieceCardData = {
   slug: string;
@@ -14,6 +15,8 @@ export type PieceCardData = {
   dekBn?: string | null;
   excerptBn?: string | null;
   coverImage?: string | null;
+  coverImageWidth?: number | null;
+  coverImageHeight?: number | null;
   readingMinutes: number;
   publishedAt: Date | string | null;
   authors?: { slug: string; nameBn: string }[];
@@ -101,18 +104,14 @@ export function PieceCard({
     >
       <Link href={piecePath(piece.kind, piece.slug)} className="block">
         {piece.coverImage && (lead || archive) && (
-          <div
-            className={cn(
-              "mb-4 overflow-hidden rounded-sm border border-rule bg-surface-hover/30 flex items-center justify-center",
-              lead ? "aspect-[16/9]" : "aspect-video",
-            )}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+          <div className="mb-4">
+            <EditorialImage
               src={piece.coverImage}
-              alt=""
-              loading="lazy"
-              className="h-full w-full object-contain transition duration-500 group-hover:scale-[1.02]"
+              alt={piece.titleBn}
+              width={piece.coverImageWidth}
+              height={piece.coverImageHeight}
+              priority={lead}
+              layout={lead ? "auto" : "card"}
             />
           </div>
         )}

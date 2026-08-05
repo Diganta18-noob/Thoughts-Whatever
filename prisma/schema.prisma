@@ -53,8 +53,10 @@ model Piece {
   excerptBn  String? @db.Text // auto-derived on save if left empty
 
   // Media
-  coverImage String?
-  reelUrl    String? // https://www.instagram.com/reel/XXXX/
+  coverImage      String?
+  coverImageWidth Int?
+  coverImageHeight Int?
+  reelUrl         String? // https://www.instagram.com/reel/XXXX/
   videoUrl   String? // YouTube / Vimeo, for documentary pieces
   audioUrl   String? // আবৃত্তি — reuse of the reel voiceover
   audioSec   Int? // narration length, for the mini-player
@@ -144,8 +146,10 @@ model Series {
   slug       String  @unique
   titleBn    String
   titleEn    String?
-  descBn     String? @db.Text
-  coverImage String?
+  descBn           String? @db.Text
+  coverImage       String?
+  coverImageWidth  Int?
+  coverImageHeight Int?
 
   pieces Piece[]
 

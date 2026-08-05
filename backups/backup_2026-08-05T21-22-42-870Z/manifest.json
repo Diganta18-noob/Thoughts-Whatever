@@ -1,0 +1,24 @@
+{
+  "backupId": "backup_2026-08-05T21-22-42-870Z",
+  "timestamp": "2026-08-05T21:22:50.200Z",
+  "type": "full",
+  "checksums": {
+    "database.json.gz": "efbca6cd72901e6a59cc441a513461c54a70d3a7f0ba3f554a7ba00970fab04f",
+    "media-manifest.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "content.tar.gz": "201b66d395b9f074371901c92097fba33558bdb2d5071f288362b4b635320881"
+  },
+  "databaseStats": {
+    "tableCount": 10,
+    "totalRows": 116,
+    "sizeBytes": 2050238
+  },
+  "mediaStats": {
+    "fileCount": 0,
+    "totalSizeBytes": 0
+  },
+  "contentStats": {
+    "fileCount": 22,
+    "totalSizeBytes": 944262
+  },
+  "verified": true
+}

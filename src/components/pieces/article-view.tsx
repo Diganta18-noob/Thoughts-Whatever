@@ -11,6 +11,7 @@ import { Timeline } from "@/components/pieces/timeline";
 import { ContentsNav } from "@/components/pieces/contents-nav";
 import { SeriesNav, type Neighbour } from "@/components/pieces/series-nav";
 import { PieceCard, type PieceCardData } from "@/components/pieces/piece-card";
+import { EditorialImage } from "@/components/pieces/editorial-image";
 import { LetterBlock } from "@/components/newsletter/letter-block";
 import { SectionHeading } from "@/components/layout/page-header";
 import { T, Localized } from "@/components/i18n/t";
@@ -151,11 +152,13 @@ export function ArticleView({
         {/* Cover, when there is no video to lead with. */}
         {!piece.videoUrl && !piece.reelUrl && piece.coverImage && (
           <figure className="mx-auto mt-10 max-w-measure-wide">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <EditorialImage
               src={piece.coverImage}
-              alt=""
-              className="w-full rounded-sm border border-rule"
+              alt={piece.titleBn}
+              width={piece.coverImageWidth}
+              height={piece.coverImageHeight}
+              priority
+              layout="auto"
             />
           </figure>
         )}

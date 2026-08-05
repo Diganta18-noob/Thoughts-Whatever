@@ -85,6 +85,8 @@ export const pieceInputSchema = z.object({
   excerptBn: optionalText,
 
   coverImage: optionalUrl,
+  coverImageWidth: z.coerce.number().int().positive().nullable().optional(),
+  coverImageHeight: z.coerce.number().int().positive().nullable().optional(),
   reelUrl: optionalUrl,
   videoUrl: optionalUrl,
   audioUrl: optionalUrl,
