@@ -125,7 +125,7 @@ export function EditorialImage({
     <div
       ref={containerRef}
       className={cn(
-        "relative overflow-hidden rounded-sm bg-surface-raised/40 flex items-center justify-center w-full",
+        "relative overflow-hidden rounded-sm bg-surface-raised/40 flex items-center justify-center w-full max-h-[28rem] sm:max-h-[32rem]",
         showBorder && "border border-rule",
         aspectRatioOverride,
         inView && "editorial-image-reveal",
