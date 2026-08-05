@@ -14,6 +14,7 @@ export interface SystemHealthStatus {
     backupCount: { passed: boolean; details: string };
     r2Connectivity: { passed: boolean; details: string };
   };
+  lastMaintenanceReport?: any;
 }
 
 export async function checkHealth(): Promise<SystemHealthStatus> {
@@ -74,6 +75,24 @@ export async function checkHealth(): Promise<SystemHealthStatus> {
     }
   }
 
+  // Last maintenance report check
+  let lastMaintenanceReport = null;
+  if (fs.existsSync(BACKUPS_DIR)) {
+    const dirs = fs.readdirSync(BACKUPS_DIR).filter((d) => fs.statSync(path.join(BACKUPS_DIR, d)).isDirectory()).sort().reverse();
+    for (const d of dirs) {
+      const manifestPath = path.join(BACKUPS_DIR, d, "manifest.json");
+      if (fs.existsSync(manifestPath)) {
+        try {
+          const m = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
+          if (m.maintenanceReport) {
+            lastMaintenanceReport = m.maintenanceReport;
+            break;
+          }
+        } catch {}
+      }
+    }
+  }
+
   const allPassed = diskPassed && backupPassed && countPassed && r2Passed;
   const critical = !diskPassed || (!backupPassed && countPassed);
 
@@ -86,5 +105,6 @@ export async function checkHealth(): Promise<SystemHealthStatus> {
       backupCount: { passed: countPassed, details: countDetails },
       r2Connectivity: { passed: r2Passed, details: r2Details },
     },
+    lastMaintenanceReport,
   };
 }

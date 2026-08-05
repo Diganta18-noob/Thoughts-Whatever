@@ -170,6 +170,55 @@ export default function SystemHealthPage() {
         </div>
       </div>
 
+      {/* Maintenance Tasks Breakdown */}
+      {health?.lastMaintenanceReport && (
+        <div className="rounded-lg border border-rule bg-surface p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-serif text-lg text-content">Last Maintenance Tasks Report</h2>
+            <span className="font-sans text-xs text-content-faint">
+              {new Date(health.lastMaintenanceReport.timestamp).toLocaleString()}
+            </span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left font-sans text-xs">
+              <thead>
+                <tr className="border-b border-rule text-content-faint">
+                  <th className="py-2">Task</th>
+                  <th className="py-2">Status</th>
+                  <th className="py-2">Duration</th>
+                  <th className="py-2">Details</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-rule">
+                {health.lastMaintenanceReport.tasks?.map((t: any) => (
+                  <tr key={t.taskName} className="hover:bg-surface-hover/50">
+                    <td className="py-2.5 font-medium text-content">{t.taskName}</td>
+                    <td className="py-2.5">
+                      <span
+                        className={`rounded px-2 py-0.5 font-mono text-[0.6875rem] font-semibold ${
+                          t.status === "SUCCESS"
+                            ? "bg-emerald-500/10 text-emerald-500"
+                            : t.status === "WARNING"
+                            ? "bg-amber-500/10 text-amber-500"
+                            : t.status === "SKIPPED"
+                            ? "bg-surface-hover text-content-soft"
+                            : "bg-rose-500/10 text-rose-500"
+                        }`}
+                      >
+                        {t.status}
+                      </span>
+                    </td>
+                    <td className="py-2.5 font-mono text-content-soft">{t.durationMs}ms</td>
+                    <td className="py-2.5 text-content-soft">{t.message}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
       {/* Backup Browser */}
       <div className="rounded-lg border border-rule bg-surface p-6">
         <h2 className="font-serif text-lg text-content mb-4">Available Backups ({backups.length})</h2>
