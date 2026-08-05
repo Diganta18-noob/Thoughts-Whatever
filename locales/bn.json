@@ -116,6 +116,7 @@
   "admin.nav.subscribers": "Subscribers",
   "admin.nav.import": "Import CSV",
   "admin.nav.transliteration": "Transliteration",
+  "admin.nav.system": "System",
   "admin.nav.settings": "Settings",
 
   "admin.dashboard.title": "Editor's Room — Overview",

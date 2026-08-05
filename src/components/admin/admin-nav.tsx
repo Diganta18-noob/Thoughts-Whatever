@@ -14,6 +14,7 @@ const ITEMS: { href: string; key: TranslationKey }[] = [
   { href: "/admin/subscribers", key: "admin.nav.subscribers" },
   { href: "/admin/import", key: "admin.nav.import" },
   { href: "/admin/transliteration", key: "admin.nav.transliteration" },
+  { href: "/admin/system", key: "admin.nav.system" },
   { href: "/admin/settings", key: "admin.nav.settings" },
 ];
 
