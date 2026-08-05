@@ -4,6 +4,9 @@ import path from "path";
 import { requireAdmin } from "@/lib/auth";
 import { createBackup } from "@/lib/system/backup/orchestrator";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 const BACKUPS_DIR = path.join(process.cwd(), "backups");
 
 export async function GET() {

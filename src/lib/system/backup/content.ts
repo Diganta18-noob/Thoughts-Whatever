@@ -1,7 +1,5 @@
 import fs from "fs";
 import path from "path";
-
-const archiver = require("archiver");
 const CONTENT_SRC_DIR = path.join(process.cwd(), "Content");
 
 export async function backupContent(targetDir: string): Promise<{
@@ -18,9 +16,10 @@ export async function backupContent(targetDir: string): Promise<{
     return { filePath: archivePath, fileCount: 0, totalSizeBytes: 0 };
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
+    const archiver = await import("archiver");
     const output = fs.createWriteStream(archivePath);
-    const archive = new archiver.TarArchive({ gzip: true });
+    const archive = new (archiver as any).TarArchive({ gzip: true });
 
     output.on("close", () => {
       const stat = fs.statSync(archivePath);

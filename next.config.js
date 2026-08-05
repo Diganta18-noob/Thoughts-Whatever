@@ -3,6 +3,7 @@ const nextConfig = {
   compress: true,
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion", "date-fns"],
+    serverComponentsExternalPackages: ["archiver"],
   },
   images: {
     formats: ["image/avif", "image/webp"],
