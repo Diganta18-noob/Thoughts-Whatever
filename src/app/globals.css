@@ -11,13 +11,13 @@
 
 :root,
 [data-theme="cream"] {
-  --surface: 253 251 245;
-  --surface-raised: 255 255 255;
-  --content: 31 27 22;
-  --content-soft: 74 66 56;
-  --content-faint: 138 127 110;
-  --rule: 222 213 194;
-  --accent: 140 47 31;
+  --surface: 247 245 241;
+  --surface-raised: 252 251 248;
+  --content: 34 34 34;
+  --content-soft: 95 95 95;
+  --content-faint: 140 135 125;
+  --rule: 225 220 210;
+  --accent: 182 94 46;
 }
 
 [data-theme="sepia"] {
@@ -27,30 +27,22 @@
   --content-soft: 86 70 51;
   --content-faint: 145 126 99;
   --rule: 216 200 172;
-  --accent: 143 68 32;
+  --accent: 182 94 46;
 }
 
 [data-theme="night"] {
-  --surface: 13 13 14;
+  --surface: 15 15 16;
   --surface-raised: 22 22 24;
-  --content: 232 230 225;
-  --content-soft: 165 162 155;
-  --content-faint: 107 104 98;
-  --rule: 43 43 47;
-  --accent: 224 112 60;
+  --content: 243 241 236;
+  --content-soft: 180 180 180;
+  --content-faint: 120 120 120;
+  --rule: 40 40 44;
+  --accent: 208 106 47;
 }
 
-/* Documentary pages opt into the archive surface regardless of the
-   reader's theme — the cinematic treatment IS the section's identity.
-   Night-mode readers see no change, which is the point. */
+/* Unified Surface: data-surface="archive" follows reader theme seamlessly */
 [data-surface="archive"] {
-  --surface: 10 10 11;
-  --surface-raised: 19 19 21;
-  --content: 232 230 225;
-  --content-soft: 165 162 155;
-  --content-faint: 107 104 98;
-  --rule: 35 35 38;
-  --accent: 193 68 14;
+  --surface-raised: var(--surface-raised);
 }
 
 /* ══════════════════════════════════════════════════════════════

@@ -77,11 +77,10 @@ export default async function HomePage() {
 
       <EditorialDivider variant="ornament" />
 
-      {/* 4. Documentary Section (Cinematic Dark Surface) */}
+      {/* 4. Documentary Section */}
       {documentary.length > 0 && (
         <section
-          data-surface="archive"
-          className="bg-surface p-6 sm:p-10 rounded-2xl border border-rule/60 my-10"
+          className="bg-surface-raised/40 p-6 sm:p-10 rounded-2xl border border-rule/60 my-10"
         >
           <SectionHeading
             labelEn="Documentary"

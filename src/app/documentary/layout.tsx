@@ -13,10 +13,7 @@ export default function DocumentaryLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      data-surface="archive"
-      className="min-h-[calc(100vh-4rem)] bg-surface text-content"
-    >
+    <div className="min-h-[calc(100vh-4rem)] bg-surface text-content">
       {children}
     </div>
   );
