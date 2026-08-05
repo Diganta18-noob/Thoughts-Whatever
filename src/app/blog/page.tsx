@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/page-header";
-import { PieceCard } from "@/components/pieces/piece-card";
+import { ArticleCard } from "@/components/pieces/article-card";
 import { LetterBlock } from "@/components/newsletter/letter-block";
 import { T } from "@/components/i18n/t";
 import { getRecentPieces, countPieces } from "@/lib/pieces";
@@ -44,7 +44,7 @@ export default async function BlogPage() {
           <div className="divide-y divide-rule">
             {pieces.map((piece) => (
               <div key={piece.slug} className="py-8 first:pt-0">
-                <PieceCard piece={piece} />
+                <ArticleCard piece={piece} layout="stacked" />
               </div>
             ))}
           </div>

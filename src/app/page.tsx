@@ -1,5 +1,5 @@
 import { Instagram } from "lucide-react";
-import { PieceCard } from "@/components/pieces/piece-card";
+import { ArticleCard } from "@/components/pieces/article-card";
 import { SectionHeading } from "@/components/layout/page-header";
 import { LetterBlock } from "@/components/newsletter/letter-block";
 import { T, Localized } from "@/components/i18n/t";
@@ -57,21 +57,25 @@ export default async function HomePage() {
 
       {/* ─── Lead ───────────────────────────────────────────── */}
       {lead && (
-        <section className="grid gap-10 border-b border-rule py-12 lg:grid-cols-[1.6fr_1fr] lg:gap-14">
-          <PieceCard piece={lead} lead showKind />
+        <section className="border-b border-rule py-12">
+          <div className="grid gap-10 lg:grid-cols-[1.8fr_1fr] lg:gap-12">
+            <ArticleCard piece={lead} layout="hero" showKind priority />
 
-          {secondary.length > 0 && (
-            <div className="space-y-7 lg:border-l lg:border-rule lg:pl-10">
-              <T
-                k="home.alsoFeatured"
-                className="label block"
-                bnClassName="font-bengali-sans tracking-normal"
-              />
-              {secondary.map((piece) => (
-                <PieceCard key={piece.slug} piece={piece} showKind />
-              ))}
-            </div>
-          )}
+            {secondary.length > 0 && (
+              <div className="space-y-6 lg:border-l lg:border-rule lg:pl-10">
+                <T
+                  k="home.alsoFeatured"
+                  className="label block"
+                  bnClassName="font-bengali-sans tracking-normal"
+                />
+                <div className="space-y-6">
+                  {secondary.map((piece) => (
+                    <ArticleCard key={piece.slug} piece={piece} layout="stacked" showKind />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </section>
       )}
 
@@ -83,9 +87,9 @@ export default async function HomePage() {
             titleBn="রচনা — রিলের পুরো লেখা"
             href="/writing"
           />
-          <div className="grid gap-9 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {rest.map((piece) => (
-              <PieceCard key={piece.slug} piece={piece} />
+              <ArticleCard key={piece.slug} piece={piece} layout="stacked" />
             ))}
           </div>
         </section>
@@ -105,7 +109,7 @@ export default async function HomePage() {
 
           <div className="grid gap-6 md:grid-cols-3">
             {documentary.map((piece) => (
-              <PieceCard key={piece.slug} piece={piece} variant="archive" />
+              <ArticleCard key={piece.slug} piece={piece} variant="archive" layout="stacked" />
             ))}
           </div>
         </section>
@@ -115,9 +119,9 @@ export default async function HomePage() {
       {blog.length > 0 && (
         <section className="py-14">
           <SectionHeading labelEn="Blog" titleBn="ব্লগ" href="/blog" />
-          <div className="grid gap-9 sm:grid-cols-2">
+          <div className="grid gap-8 sm:grid-cols-2">
             {blog.map((piece) => (
-              <PieceCard key={piece.slug} piece={piece} />
+              <ArticleCard key={piece.slug} piece={piece} layout="stacked" />
             ))}
           </div>
         </section>

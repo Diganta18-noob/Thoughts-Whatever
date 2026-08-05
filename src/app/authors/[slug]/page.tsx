@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { PieceCard } from "@/components/pieces/piece-card";
+import { PageHeader } from "@/components/layout/page-header";
+import { ArticleCard } from "@/components/pieces/article-card";
 import { JsonLd } from "@/lib/seo";
 import { getAuthorBySlug } from "@/lib/pieces";
 import { prisma } from "@/lib/prisma";
@@ -140,9 +141,9 @@ export default async function AuthorPage({
           bnClassName="font-bengali"
         />
       ) : (
-        <div className="grid gap-9 py-12 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-3">
           {author.pieces.map((piece) => (
-            <PieceCard key={piece.slug} piece={piece} showKind />
+            <ArticleCard key={piece.slug} piece={piece} layout="stacked" showKind />
           ))}
         </div>
       )}

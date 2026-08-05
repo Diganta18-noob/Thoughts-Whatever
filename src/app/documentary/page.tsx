@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/page-header";
-import { PieceCard } from "@/components/pieces/piece-card";
+import { ArticleCard } from "@/components/pieces/article-card";
 import { T } from "@/components/i18n/t";
 import { getRecentPieces, countPieces } from "@/lib/pieces";
 import { Count } from "@/components/i18n/values";
@@ -44,14 +44,14 @@ export default async function DocumentaryPage() {
         <>
           {lead && (
             <div className="border-b border-rule py-12">
-              <PieceCard piece={lead} lead variant="archive" />
+              <ArticleCard piece={lead} variant="archive" layout="split" priority />
             </div>
           )}
 
           {rest.length > 0 && (
             <div className="grid gap-6 py-12 md:grid-cols-2 lg:grid-cols-3">
               {rest.map((piece) => (
-                <PieceCard key={piece.slug} piece={piece} variant="archive" />
+                <ArticleCard key={piece.slug} piece={piece} variant="archive" layout="stacked" />
               ))}
             </div>
           )}

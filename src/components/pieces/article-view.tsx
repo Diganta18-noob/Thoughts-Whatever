@@ -11,6 +11,7 @@ import { Timeline } from "@/components/pieces/timeline";
 import { ContentsNav } from "@/components/pieces/contents-nav";
 import { SeriesNav, type Neighbour } from "@/components/pieces/series-nav";
 import { PieceCard, type PieceCardData } from "@/components/pieces/piece-card";
+import { ArticleCard } from "@/components/pieces/article-card";
 import { EditorialImage } from "@/components/pieces/editorial-image";
 import { LetterBlock } from "@/components/newsletter/letter-block";
 import { SectionHeading } from "@/components/layout/page-header";
@@ -225,7 +226,7 @@ export function ArticleView({
             <SectionHeading labelEn="Keep reading" titleBn="এরপর পড়ুন" />
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {related.map((item) => (
-                <PieceCard key={item.slug} piece={item} showKind />
+                <ArticleCard key={item.slug} piece={item} layout="stacked" showKind />
               ))}
             </div>
           </section>
