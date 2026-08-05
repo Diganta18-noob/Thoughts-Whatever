@@ -74,10 +74,7 @@ export function ArticleCard({
     return (
       <article
         className={cn(
-          "group/article-card relative overflow-hidden rounded-2xl transition-all duration-300",
-          archive
-            ? "border border-archive-panelEdge bg-archive-panel/80 p-6 md:p-8"
-            : "border border-rule/60 bg-surface/50 p-6 md:p-8 hover:border-rule hover:bg-surface-raised/30",
+          "group/article-card relative overflow-hidden rounded-2xl border border-rule/60 bg-surface-raised/30 p-6 md:p-8 transition-all duration-300 hover:border-rule hover:bg-surface-raised/60",
           className
         )}
       >
@@ -169,10 +166,7 @@ export function ArticleCard({
   return (
     <article
       className={cn(
-        "group/article-card flex flex-col h-full rounded-xl transition-all duration-300",
-        archive
-          ? "border border-archive-panelEdge bg-archive-panel/60 p-5"
-          : "border border-rule/50 bg-surface/30 p-5 hover:border-rule hover:bg-surface-raised/40",
+        "group/article-card flex flex-col h-full rounded-xl border border-rule/60 bg-surface-raised/30 p-5 transition-all duration-300 hover:border-rule hover:bg-surface-raised/60",
         className
       )}
     >

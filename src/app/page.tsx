@@ -81,7 +81,7 @@ export default async function HomePage() {
       {documentary.length > 0 && (
         <section
           data-surface="archive"
-          className="-mx-4 bg-surface px-4 py-14 rounded-2xl sm:-mx-6 sm:px-6 my-10"
+          className="bg-surface p-6 sm:p-10 rounded-2xl border border-rule/60 my-10"
         >
           <SectionHeading
             labelEn="Documentary"
