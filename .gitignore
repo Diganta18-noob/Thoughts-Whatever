@@ -13,3 +13,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /public/uploads
+
+# Local raw content & backups (do not track in Git)
+/backups
+/Content
+/context
+/Thumnail
+/Voice
