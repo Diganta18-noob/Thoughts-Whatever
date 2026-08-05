@@ -1,236 +1,148 @@
+"use client";
+
+import { useRef } from "react";
 import { Prose } from "@/components/reader/prose";
 import { ReadingProgress } from "@/components/reader/reading-progress";
-import { BookmarkButton } from "@/components/reader/bookmark-button";
-import { PrintButton } from "@/components/reader/print-button";
 import { QuoteCardPicker } from "@/components/reader/quote-card-picker";
-import { NarrationButton } from "@/components/audio/narration-button";
 import { ReelEmbed, VideoEmbed } from "@/components/pieces/media-embed";
-import { PieceMeta, TagList, PieceEyebrow } from "@/components/pieces/piece-meta";
+import { TagList } from "@/components/pieces/piece-meta";
 import { SourceList } from "@/components/pieces/source-list";
 import { Timeline } from "@/components/pieces/timeline";
-import { ContentsNav } from "@/components/pieces/contents-nav";
-import { SeriesNav, type Neighbour } from "@/components/pieces/series-nav";
-import { PieceCard, type PieceCardData } from "@/components/pieces/piece-card";
-import { ArticleCard } from "@/components/pieces/article-card";
-import { EditorialImage } from "@/components/pieces/editorial-image";
 import { LetterBlock } from "@/components/newsletter/letter-block";
-import { SectionHeading } from "@/components/layout/page-header";
-import { T, Localized } from "@/components/i18n/t";
-import { Num } from "@/components/i18n/values";
+import { T } from "@/components/i18n/t";
 import { extractHeadings } from "@/lib/markdown";
-import { KIND_META, piecePath } from "@/lib/nav";
+import { piecePath } from "@/lib/nav";
 import { absoluteUrl, siteConfig } from "@/lib/utils";
 import type { FullPiece } from "@/lib/pieces";
 
+import { ArticleHero } from "@/components/reader/article-hero";
+import { ArticleLeftSidebar } from "@/components/reader/article-left-sidebar";
+import { ArticleRightSidebar } from "@/components/reader/article-right-sidebar";
+import { EpisodeCarousel } from "@/components/reader/episode-carousel";
 import { ViewTracker } from "@/components/pieces/view-tracker";
 
 const ARTICLE_ID = "piece-body";
 
-/**
- * One reading page for all three kinds.
- *
- * Documentary pieces differ by surface, not by structure — the dark palette is
- * applied by `data-surface="archive"` on the page wrapper, and everything here
- * is written against the CSS variables, so nothing below needs a branch for it.
- */
 export function ArticleView({
   piece,
   related,
-  neighbours,
 }: {
   piece: FullPiece;
-  related: PieceCardData[];
-  neighbours?: { prev: Neighbour; next: Neighbour };
+  related: any[];
+  neighbours?: any;
 }) {
   const headings = extractHeadings(piece.bodyBn);
-  const showContents = headings.length >= 3;
-  const kindMeta = KIND_META[piece.kind];
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const scrollToContent = () => {
+    contentRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <>
       <ReadingProgress targetId={ARTICLE_ID} />
       <ViewTracker pieceId={piece.id} />
 
-      <article className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
-        {/* ─── Masthead ─────────────────────────────────────── */}
-        <header className="mx-auto max-w-measure-wide pt-10 sm:pt-14">
-          {piece.series ? (
-            <PieceEyebrow
-              label={
-                <>
-                  <span lang="bn" className="font-bengali tracking-normal">
-                    {piece.series.titleBn}
-                  </span>
-                  {piece.seriesOrder ? (
-                    <>
-                      {" · "}
-                      <Num
-                        value={piece.seriesOrder}
-                        className="tracking-normal"
-                      />
-                    </>
-                  ) : null}
-                </>
-              }
-              href={`/series/${piece.series.slug}`}
-            />
-          ) : (
-            <PieceEyebrow
-              label={
-                <Localized
-                  en={kindMeta.labelEn}
-                  bn={kindMeta.labelBn}
-                  bnClassName="font-bengali-sans tracking-normal"
-                />
-              }
-              href={kindMeta.path}
-            />
-          )}
+      <article className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
+        {/* 1. Cinematic Hero */}
+        <ArticleHero piece={piece} onScrollToContent={scrollToContent} />
 
-          <h1
-            className="font-bengali text-[2rem] font-medium leading-[1.35] text-content sm:text-[2.6rem]"
-            lang="bn"
-          >
-            {piece.titleBn}
-          </h1>
-
-          {piece.subtitleBn && (
-            <p
-              className="mt-3 font-bengali text-bengali-lg text-content-soft"
-              lang="bn"
-            >
-              {piece.subtitleBn}
-            </p>
-          )}
-
-          <PieceMeta
-            className="mt-5"
-            publishedAt={piece.publishedAt}
-            readingMinutes={piece.readingMinutes}
-            authors={piece.authors}
+        {/* 2. 12-Column Responsive Editorial Grid (Left Sidebar | Content | Right Sidebar) */}
+        <div ref={contentRef} className="mt-8 grid gap-8 lg:grid-cols-[1.8fr_4.4fr_1.8fr]">
+          {/* Left Sticky Sidebar: TOC, Series Progress, Share */}
+          <ArticleLeftSidebar
+            headings={headings}
+            seriesTitleBn={piece.series?.titleBn}
+            seriesSlug={piece.series?.slug}
+            currentEpisode={piece.seriesOrder || 6}
+            totalEpisodes={12}
+            slug={piece.slug}
+            kind={piece.kind}
+            titleBn={piece.titleBn}
           />
 
-          {/* ─── Toolbar ────────────────────────────────────── */}
-          <div data-print="hide" className="mt-6 flex flex-wrap items-center gap-2">
-            {piece.audioUrl && (
-              <NarrationButton
-                track={{
-                  id: piece.slug,
-                  src: piece.audioUrl,
-                  titleBn: piece.titleBn,
-                  href: piecePath(piece.kind, piece.slug),
-                  durationSec: piece.audioSec ?? undefined,
-                }}
-              />
+          {/* Center Column: Primary Article Body & Media */}
+          <div className="min-w-0">
+            {/* Video or Reel Embed if present */}
+            {(piece.videoUrl || piece.reelUrl) && (
+              <div className="mb-10">
+                {piece.videoUrl ? (
+                  <VideoEmbed url={piece.videoUrl} poster={piece.coverImage} />
+                ) : (
+                  <ReelEmbed url={piece.reelUrl!} poster={piece.coverImage} />
+                )}
+              </div>
             )}
-            <BookmarkButton
-              slug={piece.slug}
-              kind={piece.kind}
-              titleBn={piece.titleBn}
-              withLabel
-            />
-            <PrintButton />
-          </div>
-        </header>
 
-        {/* ─── Media ────────────────────────────────────────── */}
-        {(piece.videoUrl || piece.reelUrl) && (
-          <div className="mx-auto mt-10 max-w-measure-wide">
-            {piece.videoUrl ? (
-              <VideoEmbed url={piece.videoUrl} poster={piece.coverImage} />
-            ) : (
-              <ReelEmbed url={piece.reelUrl!} poster={piece.coverImage} />
+            {/* Standfirst / Excerpt */}
+            {piece.dekBn && (
+              <p
+                className="mb-8 border-l-2 border-accent/60 pl-5 font-bengali text-bengali-lg text-content-soft leading-relaxed"
+                lang="bn"
+              >
+                {piece.dekBn}
+              </p>
             )}
-            <T
-              as="p"
-              k={piece.videoUrl ? "piece.fullTextBelow" : "piece.reelExpanded"}
-              className="mt-3 text-center font-sans text-xs text-content-faint"
-              bnClassName="font-bengali-sans"
-            />
-          </div>
-        )}
 
-        {/* Cover, when there is no video to lead with. */}
-        {!piece.videoUrl && !piece.reelUrl && piece.coverImage && (
-          <figure className="mx-auto mt-10 max-w-measure-wide">
-            <EditorialImage
-              src={piece.coverImage}
-              alt={piece.titleBn}
-              width={piece.coverImageWidth}
-              height={piece.coverImageHeight}
-              priority
-              layout="auto"
-            />
-          </figure>
-        )}
-
-        {/* ─── Standfirst ───────────────────────────────────── */}
-        {piece.dekBn && (
-          <p
-            className="mx-auto mt-10 max-w-measure border-l-2 border-accent/40 pl-5 font-bengali text-bengali-lg text-content-soft"
-            lang="bn"
-          >
-            {piece.dekBn}
-          </p>
-        )}
-
-        {/* ─── Contents ─────────────────────────────────────── */}
-        {showContents && <ContentsNav headings={headings} />}
-
-        {/* ─── The piece ────────────────────────────────────── */}
-        <div id={ARTICLE_ID} className="mx-auto mt-10 max-w-measure">
-          <Prose body={piece.bodyBn} dropCap />
-        </div>
-
-        <QuoteCardPicker
-          containerId={ARTICLE_ID}
-          slug={piece.slug}
-          titleBn={piece.titleBn}
-        />
-
-        {/* ─── Apparatus ────────────────────────────────────── */}
-        <div className="mx-auto max-w-measure">
-          {piece.timeline.length > 0 && <Timeline events={piece.timeline} />}
-          {piece.sources.length > 0 && <SourceList sources={piece.sources} />}
-
-          {piece.tags.length > 0 && (
-            <div className="mt-12 border-t border-rule pt-6">
-              <T
-                k="piece.filedUnder"
-                className="label mb-3 block"
-                bnClassName="font-bengali-sans tracking-normal"
-              />
-              <TagList tags={piece.tags} />
+            {/* Main Article Body with Drop Caps */}
+            <div id={ARTICLE_ID} className="w-full">
+              <Prose body={piece.bodyBn} dropCap />
             </div>
-          )}
 
-          {/* Only visible on paper — a printed page has no address bar. */}
-          <p className="print-footer mt-8 border-t border-rule pt-4 text-xs text-content-faint">
-            {siteConfig.name} — {absoluteUrl(piecePath(piece.kind, piece.slug))}
-          </p>
+            <QuoteCardPicker
+              containerId={ARTICLE_ID}
+              slug={piece.slug}
+              titleBn={piece.titleBn}
+            />
+
+            {/* Timeline & Sources */}
+            <div className="mt-12 space-y-8">
+              {piece.timeline.length > 0 && <Timeline events={piece.timeline} />}
+              {piece.sources.length > 0 && <SourceList sources={piece.sources} />}
+
+              {piece.tags.length > 0 && (
+                <div className="border-t border-rule/60 pt-6">
+                  <T
+                    k="piece.filedUnder"
+                    className="label mb-3 block"
+                    bnClassName="font-bengali-sans tracking-normal"
+                  />
+                  <TagList tags={piece.tags} />
+                </div>
+              )}
+
+              <p className="print-footer mt-8 border-t border-rule/60 pt-4 text-xs text-content-faint">
+                {siteConfig.name} — {absoluteUrl(piecePath(piece.kind, piece.slug))}
+              </p>
+            </div>
+          </div>
+
+          {/* Right Sticky Sidebar: Episode Meta & Next Episode */}
+          <ArticleRightSidebar
+            piece={piece}
+            nextEpisode={
+              related[0]
+                ? {
+                    slug: related[0].slug,
+                    titleBn: related[0].titleBn,
+                    coverImage: related[0].coverImage,
+                  }
+                : undefined
+            }
+          />
         </div>
 
-        {/* ─── Series navigation ────────────────────────────── */}
-        {neighbours && (
-          <SeriesNav prev={neighbours.prev} next={neighbours.next} />
+        {/* 3. Continue The Journey: Netflix-style Episode Carousel */}
+        {related.length > 0 && (
+          <div className="mt-16">
+            <EpisodeCarousel episodes={related} currentSlug={piece.slug} />
+          </div>
         )}
 
-        {/* ─── Letter ───────────────────────────────────────── */}
+        {/* 4. Newsletter Letter Block */}
         <div className="mx-auto mt-16 max-w-measure">
           <LetterBlock source={`piece:${piece.slug}`} />
         </div>
-
-        {/* ─── Related ──────────────────────────────────────── */}
-        {related.length > 0 && (
-          <section data-print="hide" className="mt-20">
-            <SectionHeading labelEn="Keep reading" titleBn="এরপর পড়ুন" />
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {related.map((item) => (
-                <ArticleCard key={item.slug} piece={item} layout="stacked" showKind />
-              ))}
-            </div>
-          </section>
-        )}
       </article>
     </>
   );
