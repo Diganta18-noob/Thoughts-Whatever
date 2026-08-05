@@ -103,7 +103,7 @@ export function PieceCard({
         {piece.coverImage && (lead || archive) && (
           <div
             className={cn(
-              "mb-4 overflow-hidden rounded-sm border border-rule",
+              "mb-4 overflow-hidden rounded-sm border border-rule bg-surface-hover/30 flex items-center justify-center",
               lead ? "aspect-[16/9]" : "aspect-video",
             )}
           >
@@ -112,7 +112,7 @@ export function PieceCard({
               src={piece.coverImage}
               alt=""
               loading="lazy"
-              className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+              className="h-full w-full object-contain transition duration-500 group-hover:scale-[1.02]"
             />
           </div>
         )}
