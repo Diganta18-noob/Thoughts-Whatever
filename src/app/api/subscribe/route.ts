@@ -1,28 +1,20 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { subscribeSchema } from "@/lib/validation";
-
-/**
- * চিঠি signup.
- *
- * Two deliberate choices:
- *
- * 1. An already-subscribed address gets the same cheerful reply as a new one.
- *    Telling a stranger "this email is already on the list" turns the form into
- *    a way to test whether someone reads this site.
- * 2. A previously unsubscribed address that signs up again is reinstated rather
- *    than rejected — coming back is a normal thing readers do.
- *
- * Every reply carries a `code`. The browser picks the sentence to show from it,
- * because only the browser knows which language the interface is in; there is
- * one success code whatever the address's history, so the code leaks no more
- * than the message did. `messageBn` stays on the wire for anything reading this
- * endpoint without a UI.
- */
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const limiter = rateLimit(`subscribe:${ip}`, { windowMs: 60 * 1000, max: 10 });
+  if (!limiter.success) {
+    return NextResponse.json(
+      { ok: false, code: "rateLimited", messageBn: "অনেকবার চেষ্টা করা হয়েছে। একটু পরে আবার চেষ্টা করুন।" },
+      { status: 429 }
+    );
+  }
+
   let payload: unknown;
   try {
     payload = await request.json();
@@ -52,7 +44,6 @@ export async function POST(request: Request) {
         source: parsed.data.source ?? null,
       },
       update: {
-        // Signing up again after leaving puts them back on the list.
         unsubscribedAt: null,
         ...(parsed.data.nameBn ? { nameBn: parsed.data.nameBn } : {}),
       },
@@ -75,3 +66,4 @@ export async function POST(request: Request) {
     messageBn: "লেখা হয়ে গেল। মাসের চিঠি আপনার কাছে পৌঁছবে।",
   });
 }
+

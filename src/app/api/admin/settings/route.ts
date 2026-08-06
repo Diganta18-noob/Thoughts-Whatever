@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 import { requireAdmin, hashPassword, verifyPassword } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { loginSchema } from "@/lib/validation";
+import { z } from "zod";
+
+const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, "Current password is required"),
+  newPassword: z.string().min(8, "New password must be at least 8 characters long"),
+});
 
 export async function GET(req: Request) {
   const admin = await requireAdmin();
@@ -12,7 +19,6 @@ export async function GET(req: Request) {
   const exportData = searchParams.get("export");
 
   if (exportData === "true") {
-    // Export site data as JSON backup
     const [pieces, series, authors, tags, subscribers] = await Promise.all([
       prisma.piece.findMany({
         include: {
@@ -60,11 +66,17 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { action, currentPassword, newPassword, email, nameBn } = body;
+    const { action } = body;
 
     if (action === "changePassword") {
-      if (!currentPassword || !newPassword) {
-        return NextResponse.json({ error: "Please fill in all password fields." }, { status: 400 });
+      const parsed = changePasswordSchema.safeParse({
+        currentPassword: body.currentPassword,
+        newPassword: body.newPassword,
+      });
+
+      if (!parsed.success) {
+        const errorMsg = parsed.error.issues[0]?.message || "Invalid input";
+        return NextResponse.json({ error: errorMsg }, { status: 400 });
       }
 
       const user = await prisma.adminUser.findUnique({ where: { id: admin.id } });
@@ -72,12 +84,12 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
       }
 
-      const valid = await verifyPassword(currentPassword, user.passwordHash);
+      const valid = await verifyPassword(parsed.data.currentPassword, user.passwordHash);
       if (!valid) {
         return NextResponse.json({ error: "Current password is incorrect." }, { status: 400 });
       }
 
-      const newHash = await hashPassword(newPassword);
+      const newHash = await hashPassword(parsed.data.newPassword);
       await prisma.adminUser.update({
         where: { id: admin.id },
         data: { passwordHash: newHash },
@@ -87,20 +99,27 @@ export async function POST(req: Request) {
     }
 
     if (action === "addAdmin") {
-      if (!email || !newPassword) {
-        return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
+      const parsed = loginSchema.safeParse({
+        email: body.email,
+        password: body.newPassword,
+      });
+
+      if (!parsed.success) {
+        const errorMsg = parsed.error.issues[0]?.message || "Please provide a valid email and password (min 8 chars).";
+        return NextResponse.json({ error: errorMsg }, { status: 400 });
       }
 
+      const email = parsed.data.email.trim().toLowerCase();
       const existing = await prisma.adminUser.findUnique({ where: { email } });
       if (existing) {
         return NextResponse.json({ error: "This email address is already registered." }, { status: 400 });
       }
 
-      const passwordHash = await hashPassword(newPassword);
+      const passwordHash = await hashPassword(parsed.data.password);
       await prisma.adminUser.create({
         data: {
           email,
-          nameBn: nameBn || null,
+          nameBn: typeof body.nameBn === "string" ? body.nameBn.trim() : null,
           passwordHash,
         },
       });
@@ -114,3 +133,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+

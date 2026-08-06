@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { issueAuthCookies, hashPassword, verifyPassword } from "@/lib/auth";
 import { loginSchema } from "@/lib/validation";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 /**
  * A wrong password and an unknown email get the same reply and the same rough
@@ -11,11 +12,6 @@ import { loginSchema } from "@/lib/validation";
 
 export const runtime = "nodejs";
 
-/**
- * Hashed once, lazily, rather than pasted in as a literal: a hand-written
- * bcrypt string that is subtly malformed makes `compare` throw instead of
- * spending the time, which is the opposite of the point.
- */
 let dummyHash: Promise<string> | null = null;
 function throwawayHash() {
   dummyHash ??= hashPassword("no-account-with-this-address");
@@ -35,6 +31,20 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 2, delayMs = 300): P
 }
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const limiter = rateLimit(`login:${ip}`, { windowMs: 60 * 1000, max: 5 });
+  if (!limiter.success) {
+    return NextResponse.json(
+      { ok: false, error: "Too many login attempts. Please try again in 1 minute." },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": Math.ceil((limiter.reset - Date.now()) / 1000).toString(),
+        },
+      }
+    );
+  }
+
   let payload: unknown;
   try {
     payload = await request.json();
@@ -82,9 +92,10 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         ok: false,
-        error: err?.message || "Server error. Please try again later.",
+        error: "Server error. Please try again later.",
       },
       { status: 500 },
     );
   }
 }
+
