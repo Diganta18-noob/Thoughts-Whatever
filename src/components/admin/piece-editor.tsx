@@ -12,6 +12,9 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "@/components/providers/language-provider";
 import { ImageUpload } from "@/components/admin/image-upload";
 import { AudioTranscribe } from "@/components/admin/audio-transcribe";
+import { PieceSourcesEditor } from "./piece-editor/piece-sources-editor";
+import { PieceTimelineEditor } from "./piece-editor/piece-timeline-editor";
+
 
 /**
  * The editor.
@@ -595,74 +598,13 @@ export function PieceEditor({
                 {t("admin.editor.sourcesHint")}
               </p>
             )}
-
-            {form.sources.map((source, index) => (
-              <div key={index} className="border-t border-rule pt-4 first:border-0 first:pt-0">
-                <div className="flex items-start gap-2">
-                  <div className="flex-1 space-y-2">
-                    <input
-                      value={source.label}
-                      onChange={(e) => {
-                        const next = [...form.sources];
-                        next[index] = { ...source, label: e.target.value };
-                        set("sources", next);
-                      }}
-                      placeholder={t("admin.editor.sourcePlaceholder")}
-                      lang="bn"
-                      className={inputClass}
-                    />
-                    <input
-                      value={source.url}
-                      onChange={(e) => {
-                        const next = [...form.sources];
-                        next[index] = { ...source, url: e.target.value };
-                        set("sources", next);
-                      }}
-                      placeholder={t("admin.editor.sourceUrlPlaceholder")}
-                      className={monoInputClass}
-                    />
-                    <input
-                      value={source.note}
-                      onChange={(e) => {
-                        const next = [...form.sources];
-                        next[index] = { ...source, note: e.target.value };
-                        set("sources", next);
-                      }}
-                      placeholder={t("admin.editor.sourceNotePlaceholder")}
-                      lang="bn"
-                      className={inputClass}
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      set(
-                        "sources",
-                        form.sources.filter((_, i) => i !== index),
-                      )
-                    }
-                    className="mt-2 text-content-faint transition hover:text-accent"
-                    title={t("admin.editor.removeTooltip")}
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-
-            <button
-              type="button"
-              onClick={() =>
-                set("sources", [
-                  ...form.sources,
-                  { label: "", url: "", note: "" },
-                ])
-              }
-              className="inline-flex items-center gap-1.5 text-[0.875rem] text-accent transition hover:opacity-75"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              {t("admin.editor.addSource")}
-            </button>
+            <PieceSourcesEditor
+              sources={form.sources}
+              onChange={(next) => set("sources", next)}
+              monoInputClass={monoInputClass}
+              inputClass={inputClass}
+              t={t}
+            />
           </Panel>
 
           {/* ─── timeline ───────────────────────────────── */}
@@ -670,80 +612,15 @@ export function PieceEditor({
             <p className="text-xs text-content-faint">
               {t("admin.editor.timelineHint")}
             </p>
-
-            {form.timeline.map((event, index) => (
-              <div key={index} className="border-t border-rule pt-4 first:border-0 first:pt-0">
-                <div className="flex items-start gap-2">
-                  <div className="flex-1 space-y-2">
-                    <div className="grid gap-2 sm:grid-cols-[120px_minmax(0,1fr)]">
-                      <input
-                        value={event.year}
-                        onChange={(e) => {
-                          const next = [...form.timeline];
-                          next[index] = { ...event, year: e.target.value };
-                          set("timeline", next);
-                        }}
-                        placeholder={t("admin.editor.yearPlaceholder")}
-                        lang="bn"
-                        className={inputClass}
-                      />
-                      <input
-                        value={event.labelBn}
-                        onChange={(e) => {
-                          const next = [...form.timeline];
-                          next[index] = { ...event, labelBn: e.target.value };
-                          set("timeline", next);
-                        }}
-                        placeholder={t("admin.editor.eventPlaceholder")}
-                        lang="bn"
-                        className={inputClass}
-                      />
-                    </div>
-                    <textarea
-                      value={event.descBn}
-                      onChange={(e) => {
-                        const next = [...form.timeline];
-                        next[index] = { ...event, descBn: e.target.value };
-                        set("timeline", next);
-                      }}
-                      rows={2}
-                      placeholder={t("admin.editor.detailPlaceholder")}
-                      lang="bn"
-                      className={cn(inputClass, "resize-y")}
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      set(
-                        "timeline",
-                        form.timeline.filter((_, i) => i !== index),
-                      )
-                    }
-                    className="mt-2 text-content-faint transition hover:text-accent"
-                    title={t("admin.editor.removeTooltip")}
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-
-            <button
-              type="button"
-              onClick={() =>
-                set("timeline", [
-                  ...form.timeline,
-                  { year: "", labelBn: "", descBn: "" },
-                ])
-              }
-              className="inline-flex items-center gap-1.5 text-[0.875rem] text-accent transition hover:opacity-75"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              {t("admin.editor.addEvent")}
-            </button>
+            <PieceTimelineEditor
+              timeline={form.timeline}
+              onChange={(next) => set("timeline", next)}
+              inputClass={inputClass}
+              t={t}
+            />
           </Panel>
         </div>
+
 
         {/* ─── sidebar ──────────────────────────────────── */}
         <div className="space-y-6">
