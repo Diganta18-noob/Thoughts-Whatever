@@ -21,7 +21,9 @@ export type PieceCardData = {
   publishedAt: Date | string | null;
   authors?: { slug: string; nameBn: string }[];
   audioUrl?: string | null;
+  reelUrl?: string | null;
 };
+
 
 /**
  * The section name on a card. Both languages already live in `KIND_META`, so
