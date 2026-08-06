@@ -166,12 +166,12 @@ export function ArticleCard({
   return (
     <article
       className={cn(
-        "group/article-card flex flex-col h-full rounded-xl border border-rule/60 bg-surface-raised/30 p-5 transition-all duration-300 hover:border-rule hover:bg-surface-raised/60",
+        "group/article-card flex flex-col h-full rounded-xl border border-rule/50 bg-surface-raised/20 p-4 sm:p-5 transition-all duration-300 hover:border-rule hover:bg-surface-raised/50 shadow-sm hover:shadow-md",
         className
       )}
     >
       {piece.coverImage && (
-        <Link href={piecePath(piece.kind, piece.slug)} className="block mb-5">
+        <Link href={piecePath(piece.kind, piece.slug)} className="block mb-4 overflow-hidden rounded-lg">
           <PortraitCover
             src={piece.coverImage}
             alt={piece.titleBn}
@@ -179,9 +179,11 @@ export function ArticleCard({
             height={piece.coverImageHeight}
             priority={priority}
             size="md"
+            className="w-full"
           />
         </Link>
       )}
+
 
       <div className="flex flex-col flex-1">
         <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1">

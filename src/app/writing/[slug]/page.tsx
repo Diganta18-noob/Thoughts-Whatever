@@ -59,9 +59,12 @@ export default async function WritingPiecePage({
       authorSlugs: piece.authors.map((a) => a.slug),
       tagSlugs: piece.tags.map((t) => t.slug),
     }),
-    piece.seriesId
-      ? getSeriesNeighbours(piece.seriesId, piece.seriesOrder)
-      : Promise.resolve(undefined),
+    getSeriesNeighbours(
+      piece.seriesId,
+      piece.seriesOrder,
+      piece.series?.slug || piece.slug.replace(/-\d+$/, "")
+    ),
+
   ]);
 
   return (

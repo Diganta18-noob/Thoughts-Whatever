@@ -38,12 +38,22 @@ export function ArticleLeftSidebar({
               <a
                 key={h.id}
                 href={`#${h.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById(h.id);
+                  if (el) {
+                    const top = el.getBoundingClientRect().top + window.scrollY - 90;
+                    window.scrollTo({ top, behavior: "smooth" });
+                    window.history.replaceState(null, "", `#${h.id}`);
+                  }
+                }}
                 className="block text-content-soft transition hover:text-accent font-bengali line-clamp-1 py-0.5"
                 lang="bn"
               >
                 {h.text}
               </a>
             ))}
+
           </nav>
         </div>
       )}

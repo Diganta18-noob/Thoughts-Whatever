@@ -88,18 +88,28 @@ export const getPieceBySlug = cache(async (slug: string, kind?: PieceKind) => {
 
 export type FullPiece = NonNullable<Awaited<ReturnType<typeof getPieceBySlug>>>;
 
-/** The previous and next কিস্তি within a series, for in-article navigation. */
 export const getSeriesNeighbours = cache(
-  async (seriesId: string, order: number | null) => {
-    if (order === null) return { prev: null, next: null };
+  async (seriesId: string | null, order: number | null, slugPrefix?: string) => {
+    if (order === null && !slugPrefix) return { prev: null, next: null };
+
+    const seriesWhere: Prisma.PieceWhereInput = seriesId
+      ? { seriesId }
+      : slugPrefix
+      ? { slug: { startsWith: slugPrefix } }
+      : {};
+
+    if (Object.keys(seriesWhere).length === 0) return { prev: null, next: null };
+
+    const currentOrder = order ?? 1;
+
     const [prev, next] = await Promise.all([
       prisma.piece.findFirst({
-        where: { ...PUBLISHED, seriesId, seriesOrder: { lt: order } },
+        where: { ...PUBLISHED, ...seriesWhere, seriesOrder: { lt: currentOrder } },
         select: { slug: true, kind: true, titleBn: true, seriesOrder: true },
         orderBy: { seriesOrder: "desc" },
       }),
       prisma.piece.findFirst({
-        where: { ...PUBLISHED, seriesId, seriesOrder: { gt: order } },
+        where: { ...PUBLISHED, ...seriesWhere, seriesOrder: { gt: currentOrder } },
         select: { slug: true, kind: true, titleBn: true, seriesOrder: true },
         orderBy: { seriesOrder: "asc" },
       }),
@@ -107,6 +117,7 @@ export const getSeriesNeighbours = cache(
     return { prev, next };
   },
 );
+
 
 /**
  * Related reading.
@@ -249,8 +260,8 @@ export const getSeriesList = cache(async () =>
   }),
 );
 
-export const getSeriesBySlug = cache(async (slug: string) =>
-  prisma.series.findUnique({
+export const getSeriesBySlug = cache(async (slug: string) => {
+  const series = await prisma.series.findUnique({
     where: { slug },
     include: {
       pieces: {
@@ -259,8 +270,26 @@ export const getSeriesBySlug = cache(async (slug: string) =>
         orderBy: [{ seriesOrder: "asc" }, { publishedAt: "asc" }],
       },
     },
-  }),
-);
+  });
+
+  if (!series) return null;
+
+  // Fallback: If pieces array is empty, fetch pieces matching the series slug prefix
+  if (series.pieces.length === 0) {
+    const fallbackPieces = await prisma.piece.findMany({
+      where: {
+        ...PUBLISHED,
+        slug: { startsWith: slug },
+      },
+      select: cardSelect,
+      orderBy: [{ seriesOrder: "asc" }, { publishedAt: "asc" }],
+    });
+    return { ...series, pieces: fallbackPieces };
+  }
+
+  return series;
+});
+
 
 /** Slugs for generateStaticParams and the sitemap. */
 export const getAllPublishedSlugs = cache(async () =>

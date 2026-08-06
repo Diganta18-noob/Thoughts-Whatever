@@ -124,14 +124,14 @@ export function EditorialImage({
     <div
       ref={containerRef}
       className={cn(
-        "relative overflow-hidden rounded-md bg-surface-raised/30 flex items-center justify-center w-full shadow-sm transition-all duration-300 hover:shadow-md",
+        "relative overflow-hidden rounded-lg bg-transparent flex items-center justify-center w-full shadow-sm transition-all duration-300 hover:shadow-md",
         showBorder && "border border-rule",
         aspectRatioOverride,
         inView && "editorial-image-reveal",
         className
       )}
       style={{
-        aspectRatio: aspectRatioOverride ? undefined : (computedAspectRatio || (activeLayout === "card" ? "16/9" : "21/9")),
+        aspectRatio: aspectRatioOverride ? undefined : (computedAspectRatio || (activeLayout === "card" ? "3/4" : "16/9")),
       }}
     >
       {renderSkeleton}
@@ -151,5 +151,6 @@ export function EditorialImage({
       />
     </div>
   );
+
 }
 

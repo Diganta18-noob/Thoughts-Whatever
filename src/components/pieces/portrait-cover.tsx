@@ -64,7 +64,7 @@ export function PortraitCover({
         whileHover={{ scale: 1.025, y: -2 }}
         transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         className={cn(
-          "relative overflow-hidden rounded-xl sm:rounded-2xl border border-rule/80 bg-surface-raised/60 shadow-md transition-shadow duration-300 group-hover/portrait-cover:shadow-xl group-hover/portrait-cover:border-accent/40",
+          "relative overflow-hidden rounded-xl sm:rounded-2xl border border-rule/50 bg-transparent shadow-md transition-shadow duration-300 group-hover/portrait-cover:shadow-xl group-hover/portrait-cover:border-accent/40 w-full",
           sizeClasses[size],
           className
         )}
@@ -72,7 +72,7 @@ export function PortraitCover({
       >
         {/* Pulse Skeleton placeholder */}
         {!loaded && (
-          <div className="absolute inset-0 bg-surface-raised animate-pulse" />
+          <div className="absolute inset-0 bg-surface-raised/40 animate-pulse" />
         )}
 
         <Image
@@ -84,12 +84,13 @@ export function PortraitCover({
           unoptimized={src.startsWith("data:")}
           onLoad={() => setLoaded(true)}
           className={cn(
-            "w-full h-full object-contain transition-opacity duration-500",
+            "w-full h-full object-cover transition-opacity duration-500",
             loaded ? "opacity-100" : "opacity-0"
           )}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
       </motion.div>
+
     </div>
   );
 }

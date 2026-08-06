@@ -26,35 +26,52 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
 
         <div className="space-y-2.5 divide-y divide-rule/40">
           {piece.series && (
-            <div className="pt-2 flex justify-between gap-2">
+            <div className="pt-2 flex justify-between gap-2 items-center">
               <span className="text-content-faint">Series</span>
-              <span className="font-bengali text-content text-right" lang="bn">{piece.series.titleBn}</span>
+              <Link
+                href={`/series/${piece.series.slug}`}
+                className="font-bengali text-content text-right hover:text-accent transition-colors"
+                lang="bn"
+              >
+                {piece.series.titleBn}
+              </Link>
             </div>
           )}
 
           {piece.seriesOrder && (
-            <div className="pt-2 flex justify-between gap-2">
+            <div className="pt-2 flex justify-between gap-2 items-center">
               <span className="text-content-faint">Episode</span>
-              <span className="text-content">{piece.seriesOrder} / 12</span>
+              <span className="text-content font-mono">{piece.seriesOrder} / 12</span>
             </div>
           )}
 
-          <div className="pt-2 flex justify-between gap-2">
+          <div className="pt-2 flex justify-between gap-2 items-center">
             <span className="text-content-faint">Category</span>
-            <span className="text-accent uppercase">{isBn ? meta.labelBn : meta.labelEn}</span>
+            <Link
+              href={meta.path}
+              className="text-accent uppercase hover:underline transition-all"
+            >
+              {isBn ? meta.labelBn : meta.labelEn}
+            </Link>
           </div>
 
           {piece.publishedAt && (
-            <div className="pt-2 flex justify-between gap-2">
+            <div className="pt-2 flex justify-between gap-2 items-center">
               <span className="text-content-faint">Published</span>
-              <span className="text-content">{formatDate(piece.publishedAt, locale)}</span>
+              <span className="text-content font-sans">{formatDate(piece.publishedAt, locale)}</span>
             </div>
           )}
 
           {piece.authors && piece.authors.length > 0 && (
-            <div className="pt-2 flex justify-between gap-2">
+            <div className="pt-2 flex justify-between gap-2 items-center">
               <span className="text-content-faint">Author</span>
-              <span className="font-bengali text-content" lang="bn">{piece.authors[0].nameBn}</span>
+              <Link
+                href={`/authors/${piece.authors[0].slug}`}
+                className="font-bengali text-content hover:text-accent transition-colors"
+                lang="bn"
+              >
+                {piece.authors[0].nameBn}
+              </Link>
             </div>
           )}
         </div>
@@ -62,13 +79,14 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
         {piece.tags && piece.tags.length > 0 && (
           <div className="pt-3 border-t border-rule/50 flex flex-wrap gap-1.5">
             {piece.tags.map((tag) => (
-              <span
+              <Link
                 key={tag.slug}
-                className="rounded bg-surface-raised/80 px-2 py-0.5 text-[0.6875rem] text-content-soft font-bengali"
+                href={`/archive?tag=${tag.slug}`}
+                className="rounded bg-surface-raised/80 px-2 py-0.5 text-[0.6875rem] text-content-soft font-bengali hover:text-accent hover:bg-surface-raised transition-colors"
                 lang="bn"
               >
                 {tag.labelBn}
-              </span>
+              </Link>
             ))}
           </div>
         )}
@@ -81,46 +99,35 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
             Next Episode
           </h4>
 
-          <div className="flex gap-3 items-center">
-            {nextEpisode.coverImage && (
-              <div className="h-16 w-12 shrink-0 overflow-hidden rounded border border-rule/60 relative">
-                <Image
-                  src={nextEpisode.coverImage}
-                  alt={nextEpisode.titleBn}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            )}
-            <div className="min-w-0">
-              <h5 className="font-bengali text-sm text-content line-clamp-2" lang="bn">
-                {nextEpisode.titleBn}
-              </h5>
-            </div>
-          </div>
-
           <Link
-            href={`/documentary/${nextEpisode.slug}`}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-accent/10 text-accent px-3 py-1.5 text-xs transition hover:bg-accent/20 w-full justify-center"
+            href={`/${piece.kind.toLowerCase()}/${nextEpisode.slug}`}
+            className="group block space-y-3"
           >
-            <span>Next Episode</span>
-            <span>→</span>
+            <div className="flex gap-3 items-center">
+              {nextEpisode.coverImage && (
+                <div className="h-16 w-12 shrink-0 overflow-hidden rounded border border-rule/60 relative">
+                  <Image
+                    src={nextEpisode.coverImage}
+                    alt={nextEpisode.titleBn}
+                    fill
+                    className="object-cover transition-transform group-hover:scale-105"
+                  />
+                </div>
+              )}
+              <div className="min-w-0">
+                <h5 className="font-bengali text-sm text-content line-clamp-2 group-hover:text-accent transition-colors" lang="bn">
+                  {nextEpisode.titleBn}
+                </h5>
+              </div>
+            </div>
+
+            <div className="block w-full text-center rounded-md bg-surface-raised/60 py-2 text-xs text-content-soft font-mono uppercase tracking-wider group-hover:bg-accent group-hover:text-surface transition-colors">
+              Next Episode →
+            </div>
           </Link>
         </div>
       )}
-
-      {/* 3. Related Works */}
-      <div className="space-y-3">
-        <h4 className="label text-[0.6875rem] uppercase tracking-widest text-content-faint">
-          Related Literature Works
-        </h4>
-        <ul className="space-y-2 text-xs text-content-soft font-serif">
-          <li className="flex items-center gap-2"><span>📖</span><span>Ramayana (Valmiki)</span></li>
-          <li className="flex items-center gap-2"><span>📖</span><span>Paradise Lost (John Milton)</span></li>
-          <li className="flex items-center gap-2"><span>📖</span><span>The Iliad (Homer)</span></li>
-          <li className="flex items-center gap-2"><span>📖</span><span>Hamlet (Shakespeare)</span></li>
-        </ul>
-      </div>
     </aside>
   );
 }
+
