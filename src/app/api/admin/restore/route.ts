@@ -13,8 +13,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { backupId, scope } = body;
 
-    if (!backupId) {
-      return NextResponse.json({ error: "backupId is required" }, { status: 400 });
+    if (!backupId || typeof backupId !== "string" || !/^[a-zA-Z0-9_-]+$/.test(backupId)) {
+      return NextResponse.json({ error: "Invalid or malformed backupId format" }, { status: 400 });
     }
 
     const result = await restoreBackup(backupId, { scope });
@@ -23,3 +23,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: err.message || "Restoration failed" }, { status: 500 });
   }
 }
+

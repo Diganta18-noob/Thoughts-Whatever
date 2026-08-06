@@ -143,9 +143,20 @@ export async function verifyAndRefreshAccessToken(refreshTokenJwt: string) {
       include: { adminUser: true },
     });
 
-    if (!dbToken || dbToken.revoked || dbToken.expiresAt < new Date()) {
+    if (!dbToken || dbToken.expiresAt < new Date()) {
       return null;
     }
+
+    // Security: If an already-revoked token is presented, detect token theft and revoke all user tokens
+    if (dbToken.revoked) {
+      console.warn(`[SECURITY ALERT] Revoked refresh token reuse attempt for user ${dbToken.adminUserId}`);
+      await prisma.refreshToken.updateMany({
+        where: { adminUserId: dbToken.adminUserId },
+        data: { revoked: true },
+      });
+      return null;
+    }
+
 
     // Revoke current token (rotation) and create fresh token pair
     await prisma.refreshToken.update({

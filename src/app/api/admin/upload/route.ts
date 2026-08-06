@@ -21,12 +21,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!file.type.startsWith("image/")) {
+    if (!file.type.startsWith("image/") || file.type === "image/svg+xml" || file.name.endsWith(".svg")) {
       return NextResponse.json(
-        { ok: false, error: "File must be an image (JPEG, PNG, WebP, etc.)" },
+        { ok: false, error: "File must be a valid raster image (JPEG, PNG, WebP, etc.). SVG files are restricted." },
         { status: 400 }
       );
     }
+
 
     const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {

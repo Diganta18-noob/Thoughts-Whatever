@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import { guard, ok, fail, readBody, revalidatePiece } from "@/lib/admin-api";
+import { guard, ok, fail, readBody, revalidatePiece, isValidCuid } from "@/lib/admin-api";
 import { isSlugTaken, updatePiece } from "@/lib/admin-pieces";
 import { pieceInputSchema } from "@/lib/validation";
+
 
 export const runtime = "nodejs";
 
@@ -12,7 +13,12 @@ export async function PUT(
   const gate = await guard();
   if ("response" in gate) return gate.response;
 
+  if (!isValidCuid(params.id)) {
+    return fail("Invalid ID format.", 400);
+  }
+
   const body = await readBody(request, pieceInputSchema);
+
   if ("response" in body) return body.response;
 
   // Read the old slug and kind first: after the update they are gone, and both

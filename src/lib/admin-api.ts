@@ -32,12 +32,18 @@ export async function guard(): Promise<
   return { admin };
 }
 
+export function isValidCuid(id: string | null | undefined): boolean {
+  if (!id || typeof id !== "string") return false;
+  return /^c[a-z0-9]{24,}$/i.test(id);
+}
+
 export function badRequest(error: ZodError) {
   return NextResponse.json(
     { ok: false, fieldErrors: flattenIssues(error) },
     { status: 400 },
   );
 }
+
 
 export function fail(message: string, status = 400) {
   return NextResponse.json({ ok: false, error: message }, { status });

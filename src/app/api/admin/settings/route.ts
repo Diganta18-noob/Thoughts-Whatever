@@ -15,42 +15,6 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { searchParams } = new URL(req.url);
-  const exportData = searchParams.get("export");
-
-  if (exportData === "true") {
-    const [pieces, series, authors, tags, subscribers] = await Promise.all([
-      prisma.piece.findMany({
-        include: {
-          authors: { select: { slug: true, nameBn: true } },
-          tags: { select: { slug: true, labelBn: true } },
-          sources: true,
-          timeline: true,
-        },
-      }),
-      prisma.series.findMany(),
-      prisma.author.findMany(),
-      prisma.tag.findMany(),
-      prisma.subscriber.findMany(),
-    ]);
-
-    const backup = {
-      exportDate: new Date().toISOString(),
-      pieces,
-      series,
-      authors,
-      tags,
-      subscribersCount: subscribers.length,
-    };
-
-    return new NextResponse(JSON.stringify(backup, null, 2), {
-      headers: {
-        "Content-Type": "application/json",
-        "Content-Disposition": `attachment; filename="thoughts-whatever-backup-${new Date().toISOString().split("T")[0]}.json"`,
-      },
-    });
-  }
-
   const adminUsers = await prisma.adminUser.findMany({
     select: { id: true, email: true, nameBn: true, lastLoginAt: true, createdAt: true },
   });
@@ -67,6 +31,39 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { action } = body;
+
+    if (action === "exportData") {
+      const [pieces, series, authors, tags, subscribers] = await Promise.all([
+        prisma.piece.findMany({
+          include: {
+            authors: { select: { slug: true, nameBn: true } },
+            tags: { select: { slug: true, labelBn: true } },
+            sources: true,
+            timeline: true,
+          },
+        }),
+        prisma.series.findMany(),
+        prisma.author.findMany(),
+        prisma.tag.findMany(),
+        prisma.subscriber.findMany(),
+      ]);
+
+      const backup = {
+        exportDate: new Date().toISOString(),
+        pieces,
+        series,
+        authors,
+        tags,
+        subscribersCount: subscribers.length,
+      };
+
+      return new NextResponse(JSON.stringify(backup, null, 2), {
+        headers: {
+          "Content-Type": "application/json",
+          "Content-Disposition": `attachment; filename="thoughts-whatever-backup-${new Date().toISOString().split("T")[0]}.json"`,
+        },
+      });
+    }
 
     if (action === "changePassword") {
       const parsed = changePasswordSchema.safeParse({
@@ -90,13 +87,22 @@ export async function POST(req: Request) {
       }
 
       const newHash = await hashPassword(parsed.data.newPassword);
-      await prisma.adminUser.update({
-        where: { id: admin.id },
-        data: { passwordHash: newHash },
-      });
 
-      return NextResponse.json({ ok: true, message: "Password updated successfully." });
+      // Invalidate password AND revoke all active refresh token sessions
+      await prisma.$transaction([
+        prisma.adminUser.update({
+          where: { id: admin.id },
+          data: { passwordHash: newHash },
+        }),
+        prisma.refreshToken.updateMany({
+          where: { adminUserId: admin.id },
+          data: { revoked: true },
+        }),
+      ]);
+
+      return NextResponse.json({ ok: true, message: "Password updated successfully. Active sessions invalidated." });
     }
+
 
     if (action === "addAdmin") {
       const parsed = loginSchema.safeParse({
