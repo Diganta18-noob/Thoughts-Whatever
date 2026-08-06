@@ -70,13 +70,48 @@ export function extractHeadings(md: string): Heading[] {
   return headings;
 }
 
+/**
+ * Auto-formatter engine for Markdown content.
+ *
+ * Strips raw title prefixes like `### Title > "Quote"`, formats leading quotes into
+ * proper Markdown blockquotes (`> "Quote"`), normalizes single linebreaks into double-newline
+ * paragraph blocks, and cleans extra whitespace.
+ */
+export function formatMarkdownBody(md: string): string {
+  if (!md) return "";
+
+  let cleaned = md.trim();
+
+  // 1. Remove accidental raw leading heading prefixes like `### Title > "Quote"` or `### Title`
+  cleaned = cleaned.replace(/^\s*#{1,6}\s+[^>\n]+\s*>\s*/, '> ');
+  cleaned = cleaned.replace(/^\s*#{1,6}\s+[^>\n]+\n+/, '');
+
+  // 2. Convert unformatted leading quote lines (e.g. `"Quote"` or `“Quote”`) into blockquotes
+  cleaned = cleaned.replace(/^([“"'][^”"'\n]+[”"'])\s*$/gm, '> $1');
+
+  // 3. Normalize single newlines into double-newlines between paragraphs if missing
+  const blocks = cleaned.split(/\n\s*\n/);
+  const formattedBlocks = blocks.map((block) => {
+    const trimmedBlock = block.trim();
+    if (trimmedBlock.startsWith('>') || trimmedBlock.startsWith('-') || trimmedBlock.startsWith('#')) {
+      return trimmedBlock;
+    }
+    // If block contains single newlines inside plain text paragraph, preserve or clean
+    return trimmedBlock.replace(/(?<!\n)\n(?!\n)/g, '\n\n');
+  });
+
+  return formattedBlocks.join('\n\n').trim();
+}
+
 /** Everything the editor derives on save, in one place. */
 export function derivePieceMeta(body: string, excerpt?: string | null) {
+  const formattedBody = formatMarkdownBody(body);
   return {
-    excerptBn: excerpt?.trim() || deriveExcerpt(body),
-    readingMinutes: readingMinutes(body),
+    excerptBn: excerpt?.trim() || deriveExcerpt(formattedBody),
+    readingMinutes: readingMinutes(formattedBody),
   };
 }
+
 
 /**
  * Split off the opening paragraph so it can be rendered with a drop cap.

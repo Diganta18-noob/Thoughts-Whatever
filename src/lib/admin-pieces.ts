@@ -1,24 +1,8 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { derivePieceMeta } from "@/lib/markdown";
+import { derivePieceMeta, formatMarkdownBody } from "@/lib/markdown";
 import type { PieceInput } from "@/lib/validation";
 
-/**
- * Turning editor input into database rows.
- *
- * Create and update share this so the two paths cannot drift — a piece saved as
- * a draft and then published must end up identical to one published outright.
- */
-
-/**
- * Publishing with an empty date field means "now".
- *
- * The editor leaves the date input blank on a new piece, and the whole public
- * site filters on `publishedAt: { not: null }` — so without this, hitting
- * Publish would appear to work and the piece would never show up anywhere.
- * A date that was typed in is kept as typed, including a future one, which is
- * how scheduling works.
- */
 function resolvePublishedAt(input: PieceInput): Date | null {
   if (input.publishedAt) {
     const parsed = new Date(input.publishedAt);
@@ -28,7 +12,10 @@ function resolvePublishedAt(input: PieceInput): Date | null {
 }
 
 function scalarData(input: PieceInput) {
-  const derived = derivePieceMeta(input.bodyBn, input.excerptBn);
+
+
+  const formattedBody = formatMarkdownBody(input.bodyBn);
+  const derived = derivePieceMeta(formattedBody, input.excerptBn);
 
   return {
     kind: input.kind,
@@ -38,9 +25,10 @@ function scalarData(input: PieceInput) {
     titleEn: input.titleEn ?? null,
     subtitleBn: input.subtitleBn ?? null,
     dekBn: input.dekBn ?? null,
-    bodyBn: input.bodyBn,
+    bodyBn: formattedBody,
     excerptBn: derived.excerptBn,
     readingMinutes: derived.readingMinutes,
+
     coverImage: input.coverImage ?? null,
     reelUrl: input.reelUrl ?? null,
     videoUrl: input.videoUrl ?? null,

@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { bengaliSlug } from "@/lib/bengali";
+import { formatMarkdownBody } from "@/lib/markdown";
 import { z } from "zod";
+
 import { pieceKindSchema } from "@/lib/validation";
 
 const importRowSchema = z.object({
@@ -69,8 +71,9 @@ export async function POST(req: Request) {
           titleEn: row.titleEn?.trim() || null,
           subtitleBn: row.subtitleBn?.trim() || null,
           dekBn: row.dekBn?.trim() || null,
-          bodyBn: row.bodyBn.trim(),
+          bodyBn: formatMarkdownBody(row.bodyBn.trim()),
           reelUrl: row.reelUrl?.trim() || null,
+
           videoUrl: row.videoUrl?.trim() || null,
           coverImage: row.coverImage?.trim() || null,
           seriesId: seriesId || null,
