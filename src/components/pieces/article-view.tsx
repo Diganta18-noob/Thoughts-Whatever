@@ -20,17 +20,21 @@ import { ArticleLeftSidebar } from "@/components/reader/article-left-sidebar";
 import { ArticleRightSidebar } from "@/components/reader/article-right-sidebar";
 import { EpisodeCarousel } from "@/components/reader/episode-carousel";
 import { ViewTracker } from "@/components/pieces/view-tracker";
+import { SeriesNavigator } from "@/components/reader/series-navigator";
+
 
 const ARTICLE_ID = "piece-body";
 
 export function ArticleView({
   piece,
   related,
+  neighbours,
 }: {
   piece: FullPiece;
   related: any[];
-  neighbours?: any;
+  neighbours?: { prev?: any; next?: any };
 }) {
+
   const headings = extractHeadings(piece.bodyBn);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -95,10 +99,19 @@ export function ArticleView({
               titleBn={piece.titleBn}
             />
 
-            {/* Timeline & Sources */}
+            {/* Timeline, Sources & Series Navigation */}
             <div className="mt-12 space-y-8">
+              {piece.series && (
+                <SeriesNavigator
+                  series={piece.series}
+                  currentOrder={piece.seriesOrder}
+                  prev={neighbours?.prev || null}
+                  next={neighbours?.next || null}
+                />
+              )}
               {piece.timeline.length > 0 && <Timeline events={piece.timeline} />}
               {piece.sources.length > 0 && <SourceList sources={piece.sources} />}
+
 
               {piece.tags.length > 0 && (
                 <div className="border-t border-rule/60 pt-6">

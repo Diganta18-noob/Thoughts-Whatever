@@ -27,6 +27,9 @@ const baseComponents: Components = {
   h3: ({ node, children }) => (
     <h3 id={`section-${(node?.position?.start.line ?? 1) - 1}`}>{children}</h3>
   ),
+  h4: ({ node, children }) => (
+    <h4 id={`section-${(node?.position?.start.line ?? 1) - 1}`}>{children}</h4>
+  ),
 
   a: ({ href, children }) => {
     const external = !!href && /^https?:\/\//.test(href);
@@ -40,33 +43,52 @@ const baseComponents: Components = {
     );
   },
 
-  /**
-   * ```verse fenced blocks hold কবিতা. Line breaks in verse are authorial,
-   * so the block preserves them instead of letting the browser re-wrap.
-   */
+  blockquote: ({ children }) => (
+    <blockquote className="my-6 border-l-2 border-accent pl-5 font-bengali text-lg italic text-content-soft">
+      {children}
+    </blockquote>
+  ),
+
+  hr: () => (
+    <div className="my-8 flex items-center justify-center gap-2 text-content-faint">
+      <span className="h-[1px] w-12 bg-rule" />
+      <span className="font-serif text-sm">❖</span>
+      <span className="h-[1px] w-12 bg-rule" />
+    </div>
+  ),
+
   code: ({ className, children }) => {
     if (className?.includes("language-verse")) {
-      return <div className="verse">{String(children).replace(/\n$/, "")}</div>;
+      return <div className="verse font-bengali my-6 pl-4 border-l border-rule/60 text-base leading-relaxed text-content">{String(children).replace(/\n$/, "")}</div>;
+    }
+    if (className?.includes("language-callout")) {
+      return (
+        <div className="my-6 rounded-md border border-accent/30 bg-accent/5 p-4 text-content">
+          {String(children).replace(/\n$/, "")}
+        </div>
+      );
     }
     return <code className={className}>{children}</code>;
   },
 
-  // The verse renderer already emits its own block, so the surrounding <pre>
-  // would double-wrap it.
   pre: ({ children }) => <>{children}</>,
 
   img: ({ src, alt }) =>
     typeof src === "string" ? (
-      <figure>
-        {/* Editorial images are arbitrary remote URLs pasted by the author, so
-            next/image's host allowlist would reject most of them. A plain img
-            with lazy loading is the right trade here. */}
+      <figure className="my-6">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={alt ?? ""} loading="lazy" decoding="async" />
-        {alt && <figcaption>{alt}</figcaption>}
+        <img
+          src={src}
+          alt={alt ?? ""}
+          loading="lazy"
+          decoding="async"
+          className="rounded-md border border-rule/60 shadow-sm"
+        />
+        {alt && <figcaption className="mt-2 text-center text-xs text-content-faint">{alt}</figcaption>}
       </figure>
     ) : null,
 };
+
 
 /**
  * Same renderers, but the paragraph gets a drop cap grafted onto its first

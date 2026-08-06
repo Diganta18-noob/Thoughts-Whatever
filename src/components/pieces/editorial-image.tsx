@@ -27,9 +27,10 @@ export function EditorialImage({
   layout: requestedLayout = "auto",
   className,
   aspectRatioOverride,
-  showBorder = true,
+  showBorder = false,
   children,
 }: EditorialImageProps) {
+
   const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(
     width && height ? { width, height } : null
   );
@@ -68,20 +69,18 @@ export function EditorialImage({
       ? meta?.layout || "hero"
       : requestedLayout;
 
-  // Determine aspect ratio class or style
   const computedAspectRatio = dimensions
     ? `${dimensions.width} / ${dimensions.height}`
     : undefined;
 
-  // Render Skeleton while un-probed or loading
   const renderSkeleton = !loaded && (
     <div
-      className="absolute inset-0 bg-surface-raised/60 animate-pulse transition-opacity duration-300"
+      className="absolute inset-0 bg-surface-raised/40 animate-pulse transition-opacity duration-300"
       style={{ aspectRatio: computedAspectRatio }}
     />
   );
 
-  // 1. Split Layout (Portrait: image 35-40% width on left, text on right)
+  // 1. Split Layout (Portrait)
   if (activeLayout === "split" && children) {
     return (
       <div
@@ -94,7 +93,7 @@ export function EditorialImage({
       >
         <div
           className={cn(
-            "relative overflow-hidden rounded-sm bg-surface-raised/40 flex items-center justify-center mx-auto w-full max-w-sm md:max-w-none",
+            "relative overflow-hidden rounded-md bg-surface-raised/30 flex items-center justify-center mx-auto w-full max-w-sm md:max-w-none shadow-sm transition-shadow duration-300 hover:shadow-md",
             showBorder && "border border-rule"
           )}
           style={{ aspectRatio: computedAspectRatio || "3/4" }}
@@ -109,7 +108,7 @@ export function EditorialImage({
             unoptimized={src.startsWith("data:")}
             onLoad={() => setLoaded(true)}
             className={cn(
-              "w-full h-full object-contain transition-transform duration-700 hover:scale-[1.02]",
+              "w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]",
               loaded ? "opacity-100" : "opacity-0"
             )}
             sizes="(max-width: 768px) 100vw, 40vw"
@@ -120,19 +119,19 @@ export function EditorialImage({
     );
   }
 
-  // 2. Default Image Frame for Hero, Card, or Banner Layouts
+  // 2. Default Edge-to-Edge Image Frame
   return (
     <div
       ref={containerRef}
       className={cn(
-        "relative overflow-hidden rounded-sm bg-surface-raised/40 flex items-center justify-center w-full max-h-[28rem] sm:max-h-[32rem]",
+        "relative overflow-hidden rounded-md bg-surface-raised/30 flex items-center justify-center w-full shadow-sm transition-all duration-300 hover:shadow-md",
         showBorder && "border border-rule",
         aspectRatioOverride,
         inView && "editorial-image-reveal",
         className
       )}
       style={{
-        aspectRatio: aspectRatioOverride ? undefined : (computedAspectRatio || (activeLayout === "card" ? "1/1" : "16/9")),
+        aspectRatio: aspectRatioOverride ? undefined : (computedAspectRatio || (activeLayout === "card" ? "16/9" : "21/9")),
       }}
     >
       {renderSkeleton}
@@ -145,7 +144,7 @@ export function EditorialImage({
         unoptimized={src.startsWith("data:")}
         onLoad={() => setLoaded(true)}
         className={cn(
-          "w-full h-full object-contain transition-transform duration-700 hover:scale-[1.02]",
+          "w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]",
           loaded ? "opacity-100" : "opacity-0"
         )}
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
@@ -153,3 +152,4 @@ export function EditorialImage({
     </div>
   );
 }
+
