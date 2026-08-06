@@ -20,3 +20,9 @@ next-env.d.ts
 /context
 /Thumnail
 /Voice
+
+# Playwright Test Artifacts
+/test-results/
+/playwright-report/
+/e2e/.auth/
+

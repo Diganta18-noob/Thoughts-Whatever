@@ -79,6 +79,7 @@ export function SubscribeForm({
     return (
       <p
         lang={locale}
+        data-testid="subscribe-success-msg"
         className={cn(
           "flex items-center gap-2 text-[0.9375rem] text-accent",
           isBn ? "font-bengali" : "font-serif",
@@ -116,6 +117,7 @@ export function SubscribeForm({
           }}
           placeholder={t("letter.emailPlaceholder")}
           lang={locale}
+          data-testid="subscribe-email-input"
           className={cn(
             field,
             "min-w-0 flex-1 border-b border-rule bg-transparent py-2 text-content outline-none transition-colors placeholder:text-content-faint focus:border-accent",
@@ -125,6 +127,7 @@ export function SubscribeForm({
           type="submit"
           disabled={state === "sending"}
           lang={locale}
+          data-testid="subscribe-submit"
           className={cn(
             field,
             "shrink-0 border-b border-accent px-1 py-2 text-accent transition hover:opacity-75 disabled:opacity-50",
@@ -140,6 +143,7 @@ export function SubscribeForm({
       {state === "error" && (
         <p
           lang={locale}
+          data-testid="subscribe-error-msg"
           className={cn(
             "mt-2 text-xs text-accent",
             isBn ? "font-bengali" : "font-sans",
@@ -149,5 +153,6 @@ export function SubscribeForm({
         </p>
       )}
     </form>
+
   );
 }

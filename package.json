@@ -19,7 +19,10 @@
     "migrate:transliteration": "tsx scripts/migrate-transliteration.ts",
     "admin:hash": "tsx scripts/hash-password.ts",
     "db:check": "tsx scripts/check-db.ts",
-    "content:process": "tsx scripts/process-content.ts"
+    "content:process": "tsx scripts/process-content.ts",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:ci": "playwright test --reporter=github"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1104.0",
@@ -54,6 +57,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
+    "@playwright/test": "^1.62.1",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",
     "@types/archiver": "^8.0.0",
