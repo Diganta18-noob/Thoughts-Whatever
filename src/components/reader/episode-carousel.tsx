@@ -52,16 +52,17 @@ export function EpisodeCarousel({ episodes, currentSlug }: EpisodeCarouselProps)
               )}
             >
               {/* Episode Cover & Status Badge */}
-              <div className="relative mb-3 aspect-[9/16] w-full overflow-hidden rounded-lg border border-rule/60 bg-surface/40">
+              <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-lg border border-rule/40 bg-transparent">
                 {ep.coverImage && (
                   <Image
                     src={ep.coverImage}
                     alt={ep.titleBn}
                     fill
-                    className="object-contain"
+                    className="object-cover"
                     sizes="250px"
                   />
                 )}
+
 
                 {/* Status Indicator */}
                 <div className="absolute top-2 right-2 rounded-full bg-surface/90 px-2 py-0.5 text-[0.625rem] font-sans text-content-soft shadow">

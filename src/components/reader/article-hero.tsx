@@ -137,17 +137,17 @@ export function ArticleHero({ piece, onScrollToContent }: ArticleHeroProps) {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
-              className="relative overflow-hidden rounded-2xl border border-rule/80 bg-surface-raised/80 shadow-2xl w-full max-w-sm max-h-[32rem] sm:max-h-[36rem]"
-              style={{ aspectRatio: "9/16" }}
+              onClick={onScrollToContent}
+              className="relative cursor-pointer overflow-hidden rounded-2xl border border-rule/40 bg-transparent shadow-xl w-full max-w-sm max-h-[32rem] sm:max-h-[36rem] transition-transform duration-300 hover:scale-[1.02]"
+              style={{ aspectRatio: "3/4" }}
+              title="Click to read article"
             >
               <Image
                 src={piece.coverImage}
                 alt={piece.titleBn}
-                width={piece.coverImageWidth || 600}
-                height={piece.coverImageHeight || 1000}
+                fill
                 priority
-                unoptimized={piece.coverImage.startsWith("data:")}
-                className="w-full h-full object-contain"
+                className="object-cover"
                 sizes="(max-width: 768px) 100vw, 400px"
               />
             </motion.div>
