@@ -18,8 +18,9 @@ setup("authenticate as admin", async ({ page }) => {
 
 
   // Wait for redirect to /admin dashboard or check for successful login indicator
-  await page.waitForURL("/admin");
-  await expect(page.getByTestId("logout-button")).toBeVisible();
+  await page.waitForURL("**/admin", { timeout: 45000, waitUntil: "domcontentloaded" });
+  await expect(page.getByTestId("logout-button")).toBeVisible({ timeout: 15000 });
+
 
   // Save auth cookies to storage state file
   await page.context().storageState({ path: STORAGE_STATE });

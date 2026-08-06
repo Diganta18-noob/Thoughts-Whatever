@@ -165,7 +165,8 @@
   }
 
   .prose-bengali h2,
-  .prose-bengali h3 {
+  .prose-bengali h3,
+  .prose-bengali h4 {
     font-family: var(--font-bengali-serif), serif;
     font-weight: 600;
     line-height: 1.55;
@@ -179,10 +180,12 @@
     font-size: 1.32em;
   }
 
-  .prose-bengali h3 {
+  .prose-bengali h3,
+  .prose-bengali h4 {
     font-size: 1.12em;
     color: rgb(var(--content-soft));
   }
+
 
   .prose-bengali a {
     color: rgb(var(--accent));
