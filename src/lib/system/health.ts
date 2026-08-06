@@ -57,6 +57,9 @@ export async function checkHealth(): Promise<SystemHealthStatus> {
       backupPassed = hoursAgo <= 25;
       backupDetails = `Latest backup was ${hoursAgo.toFixed(1)} hours ago (${dirs[0]}).`;
     }
+  } else if (isServerless) {
+    backupPassed = true;
+    backupDetails = "Backups managed remotely via R2 Cloud Storage.";
   }
 
   // R2 Connectivity
