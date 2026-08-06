@@ -18,15 +18,14 @@ export interface ReelCTAProps {
 /** Helper to format and normalize Instagram Reel URLs */
 function getMobileReelUrl(reelUrl: string): string {
   if (!reelUrl) return "#";
-
-  // Normalize /reel/SHORTCODE/ to /reels/SHORTCODE/ for full browser & app compatibility
-  let normalized = reelUrl.trim();
-  if (normalized.includes("/reel/")) {
-    normalized = normalized.replace("/reel/", "/reels/");
+  const trimmed = reelUrl.trim();
+  // Ensure valid HTTPS protocol
+  if (!trimmed.startsWith("http://") && !trimmed.startsWith("https://")) {
+    return `https://${trimmed}`;
   }
-
-  return normalized;
+  return trimmed;
 }
+
 
 
 export function ReelCallToAction({
