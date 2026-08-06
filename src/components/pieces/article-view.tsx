@@ -60,8 +60,8 @@ export function ArticleView({
             headings={headings}
             seriesTitleBn={piece.series?.titleBn}
             seriesSlug={piece.series?.slug}
-            currentEpisode={piece.seriesOrder || 6}
-            totalEpisodes={12}
+            currentEpisode={piece.seriesOrder || 1}
+            totalEpisodes={piece.series?._count?.pieces || 6}
             slug={piece.slug}
             kind={piece.kind}
             titleBn={piece.titleBn}

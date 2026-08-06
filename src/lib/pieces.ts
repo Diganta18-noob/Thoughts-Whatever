@@ -69,7 +69,13 @@ export const getPieceBySlug = cache(async (slug: string, kind?: PieceKind) => {
     include: {
       authors: { select: { slug: true, nameBn: true, era: true } },
       tags: { select: { slug: true, labelBn: true, kind: true } },
-      series: { select: { slug: true, titleBn: true } },
+      series: {
+        select: {
+          slug: true,
+          titleBn: true,
+          _count: { select: { pieces: { where: PUBLISHED } } },
+        },
+      },
       sources: { orderBy: { order: "asc" } },
       timeline: { orderBy: { order: "asc" } },
     },

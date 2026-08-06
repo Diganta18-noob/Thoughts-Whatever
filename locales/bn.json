@@ -63,6 +63,7 @@
 
   "piece.about": "বিষয়:",
   "piece.hasNarration": "আবৃত্তি রয়েছে",
+  "piece.readers": "{count} জন পাঠ করেছেন",
   "piece.readingProgress": "পাঠের অগ্রগতি",
   "piece.contents": "সূচিপত্র",
   "piece.filedUnder": "বিভাগ",

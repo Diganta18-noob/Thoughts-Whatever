@@ -41,7 +41,7 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
           {piece.seriesOrder && (
             <div className="pt-2 flex justify-between gap-2 items-center">
               <span className="text-content-faint">Episode</span>
-              <span className="text-content font-mono">{piece.seriesOrder} / 12</span>
+              <span className="text-content font-mono">{piece.seriesOrder} / {piece.series?._count?.pieces || 6}</span>
             </div>
           )}
 

@@ -63,6 +63,7 @@
 
   "piece.about": "About:",
   "piece.hasNarration": "Has narration",
+  "piece.readers": "{count} readers",
   "piece.readingProgress": "Reading progress",
   "piece.contents": "Contents",
   "piece.filedUnder": "Filed under",

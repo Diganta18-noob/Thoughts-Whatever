@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { BookmarkButton } from "@/components/reader/bookmark-button";
 import { NarrationButton } from "@/components/audio/narration-button";
 import { toBanglaDate } from "@/lib/bengali";
-import { formatDate, formatReading } from "@/lib/i18n/format";
+import { formatDate, formatReading, formatNumber } from "@/lib/i18n/format";
 import { useLanguage } from "@/components/providers/language-provider";
 import { KIND_META, piecePath } from "@/lib/nav";
 import { ReelCallToAction } from "@/components/reader/reel-cta";
@@ -20,7 +20,7 @@ export interface ArticleHeroProps {
 }
 
 export function ArticleHero({ piece, onScrollToContent }: ArticleHeroProps) {
-  const { locale, isBn } = useLanguage();
+  const { locale, isBn, t } = useLanguage();
   const kindMeta = KIND_META[piece.kind];
   const banglaDate = piece.publishedAt ? toBanglaDate(piece.publishedAt) : null;
   const metaFace = isBn ? "font-bengali-sans" : "font-sans";
@@ -90,7 +90,7 @@ export function ArticleHero({ piece, onScrollToContent }: ArticleHeroProps) {
 
             <span className={cn(metaFace, "flex items-center gap-1.5")}>
               <span>👁</span>
-              <span>430 readers</span>
+              <span>{t("piece.readers", { count: formatNumber(piece.viewCount ?? 0, locale) })}</span>
             </span>
           </div>
 
