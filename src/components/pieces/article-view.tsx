@@ -18,6 +18,8 @@ import type { FullPiece } from "@/lib/pieces";
 import { ArticleHero } from "@/components/reader/article-hero";
 import { ArticleLeftSidebar } from "@/components/reader/article-left-sidebar";
 import { ArticleRightSidebar } from "@/components/reader/article-right-sidebar";
+import { ReelCallToAction } from "@/components/reader/reel-cta";
+
 import { EpisodeCarousel } from "@/components/reader/episode-carousel";
 import { ViewTracker } from "@/components/pieces/view-tracker";
 import { SeriesNavigator } from "@/components/reader/series-navigator";
@@ -67,16 +69,25 @@ export function ArticleView({
 
           {/* Center Column: Primary Article Body & Media */}
           <div className="min-w-0">
-            {/* Video or Reel Embed if present */}
-            {(piece.videoUrl || piece.reelUrl) && (
-              <div className="mb-10">
-                {piece.videoUrl ? (
-                  <VideoEmbed url={piece.videoUrl} poster={piece.coverImage} />
-                ) : (
-                  <ReelEmbed url={piece.reelUrl!} poster={piece.coverImage} />
-                )}
+            {/* Instagram Reel CTA Banner if reelUrl exists */}
+            {piece.reelUrl && (
+              <ReelCallToAction
+                reelUrl={piece.reelUrl}
+                pieceId={piece.id}
+                titleBn={piece.titleBn}
+                coverImage={piece.coverImage}
+                variant="banner"
+                placement="inline"
+              />
+            )}
+
+            {/* Video Embed if present */}
+            {piece.videoUrl && (
+              <div className="mb-8">
+                <VideoEmbed url={piece.videoUrl} poster={piece.coverImage} />
               </div>
             )}
+
 
             {/* Standfirst / Excerpt */}
             {piece.dekBn && (

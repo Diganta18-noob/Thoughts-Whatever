@@ -43,3 +43,12 @@ export function trackEvent(payload: EventPayload) {
     }).catch(() => {});
   }
 }
+
+export function trackReelClick(pieceId?: string, reelUrl?: string, placement?: string) {
+  trackEvent({
+    pieceId,
+    eventType: "reel_click",
+    metadata: { reelUrl, placement, timestamp: new Date().toISOString() },
+  });
+}
+

@@ -106,7 +106,13 @@ export function ArticleCard({
                   {t("piece.hasNarration")}
                 </span>
               )}
+              {piece.reelUrl && (
+                <span className="text-[0.6875rem] font-mono text-[#e6683c] font-medium">
+                  🎬 Reel
+                </span>
+              )}
             </div>
+
 
             <h2
               className={cn(
@@ -192,7 +198,13 @@ export function ArticleCard({
           <span className={cn(metaFace, "text-[0.6875rem] text-content-faint")} lang={locale}>
             {formatReading(piece.readingMinutes, locale)}
           </span>
+          {piece.reelUrl && (
+            <span className="text-[0.6875rem] font-mono text-[#e6683c] font-medium">
+              🎬 Reel
+            </span>
+          )}
         </div>
+
 
         <h3
           className="font-bengali font-medium text-lg leading-snug text-content transition-colors group-hover/article-card:text-accent"

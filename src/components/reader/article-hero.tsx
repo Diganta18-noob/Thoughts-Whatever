@@ -9,7 +9,9 @@ import { toBanglaDate } from "@/lib/bengali";
 import { formatDate, formatReading } from "@/lib/i18n/format";
 import { useLanguage } from "@/components/providers/language-provider";
 import { KIND_META, piecePath } from "@/lib/nav";
+import { ReelCallToAction } from "@/components/reader/reel-cta";
 import { cn } from "@/lib/utils";
+
 import type { FullPiece } from "@/lib/pieces";
 
 export interface ArticleHeroProps {
@@ -102,6 +104,16 @@ export function ArticleHero({ piece, onScrollToContent }: ArticleHeroProps) {
               <span>↓</span>
             </button>
 
+            {piece.reelUrl && (
+              <ReelCallToAction
+                reelUrl={piece.reelUrl}
+                pieceId={piece.id}
+                titleBn={piece.titleBn}
+                variant="button"
+                placement="hero"
+              />
+            )}
+
             {piece.audioUrl && (
               <NarrationButton
                 track={{
@@ -121,6 +133,7 @@ export function ArticleHero({ piece, onScrollToContent }: ArticleHeroProps) {
               withLabel
             />
           </div>
+
         </div>
 
         {/* Right Column: Portrait Cover Artwork Frame with Ambient Glow */}

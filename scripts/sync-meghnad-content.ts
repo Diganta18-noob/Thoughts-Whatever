@@ -131,16 +131,19 @@ async function main() {
       slug: "মেঘনাদবধ-কাব্য-1",
       bodyBn: meghnad1Body,
       dekBn: "ঘরের শত্রু বিভীষণ — এক চিরন্তন প্রবাদ আর তার আড়ালের ইতিহাস। মাইকেল মধুসূদন কেন বেছে নিলেন রাবণ-পুত্রকে?",
+      reelUrl: "https://www.instagram.com/reel/C-123456789/",
     },
     {
       slug: "মেঘনাদবধ-কাব্য-2",
       bodyBn: meghnad2Body,
       dekBn: "কে বলে হত্যাকাণ্ড পাপ? যুদ্ধে হত্যা করা বীরত্ব আর নিহত হওয়া মানেই কি পরাজয়? বিপরীত মুখ থেকে রামায়ণের পুনঃপাঠ।",
+      reelUrl: "https://www.instagram.com/reel/C-123456790/",
     },
     {
       slug: "মেঘনাদবধ-কাব্য-3",
       bodyBn: meghnad3Body,
       dekBn: "মহাভারত শুরু হয় যুদ্ধ দিয়ে, কিন্তু এই কাব্যের শুরু মৃত্যুর অপেক্ষায়। নিকুম্ভিলার যজ্ঞক্ষেত্র ও বিজিতদের ইতিহাস।",
+      reelUrl: "https://www.instagram.com/reel/C-123456791/",
     },
     {
       slug: "মেঘনাদবধ-কাব্য-4",
@@ -151,11 +154,13 @@ async function main() {
       slug: "মেঘনাদবধ-কাব্য-5",
       bodyBn: meghnad5Body,
       dekBn: "বিভীষণ বিশ্বাসঘাতকতা করেছিল নাকি অন্যায়ের বিরোধিতা? নিকুম্ভিলার যজ্ঞ মণ্ডপ থেকে লঙ্কার পতন পর্যন্ত এক মানসিক অন্তর্দ্বন্দ্বের বিশ্লেষণ।",
+      reelUrl: "https://www.instagram.com/reel/C-123456792/",
     },
     {
       slug: "মেঘনাদবধ-কাব্য-6",
       bodyBn: meghnad6Body,
       dekBn: "মহাকাব্যের শেষ, প্রশ্নের সূচনা। মাইকেল আমাদের বললেন অন্য দৃষ্টিভঙ্গি দিয়ে নতুন করে ভাবতে।",
+      reelUrl: "https://www.instagram.com/reel/C-123456793/",
     },
   ];
 
@@ -165,10 +170,12 @@ async function main() {
       data: {
         bodyBn: item.bodyBn,
         dekBn: item.dekBn,
+        reelUrl: item.reelUrl || null,
       },
     });
-    console.log("Updated Meghnad episode:", updated.slug);
+    console.log("Updated Meghnad episode:", updated.slug, "Reel:", updated.reelUrl);
   }
+
 }
 
 main()
