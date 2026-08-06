@@ -10,11 +10,11 @@ import { readingMinutes } from "@/lib/bengali";
 export function stripMarkdown(md: string): string {
   if (!md) return "";
   return md
-    .replace(/^---[\s\S]*?---/m, "") // front matter, if any sneaks in
+    .replace(/^---[\s\S]*?---/m, "")
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/`([^`]*)`/g, "$1")
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // images
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1") // links → their text
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
     .replace(/^\s{0,3}#{1,6}\s+/gm, "")
     .replace(/^\s{0,3}>\s?/gm, "")
     .replace(/[*_~]{1,3}([^*_~]+)[*_~]{1,3}/g, "$1")
@@ -28,8 +28,6 @@ export function stripMarkdown(md: string): string {
 
 /**
  * First ~180 characters of real prose, cut at a word boundary.
- * Bengali has no inter-word hyphenation to fall back on, so cutting
- * mid-word looks like a rendering bug rather than an ellipsis.
  */
 export function deriveExcerpt(md: string, limit = 180): string {
   const text = stripMarkdown(md);
@@ -41,11 +39,6 @@ export function deriveExcerpt(md: string, limit = 180): string {
 
 export type Heading = { id: string; text: string; level: number };
 
-/**
- * Headings for the in-page contents list on long essays.
- * Ids are index-based rather than slugified from Bengali text, so that two
- * sections with the same title still get distinct anchors.
- */
 export function extractHeadings(md: string): Heading[] {
   const headings: Heading[] = [];
   const lines = md.split("\n");
@@ -70,40 +63,26 @@ export function extractHeadings(md: string): Heading[] {
   return headings;
 }
 
-/**
- * Auto-formatter engine for Markdown content.
- *
- * Strips raw title prefixes like `### Title > "Quote"`, formats leading quotes into
- * proper Markdown blockquotes (`> "Quote"`), normalizes single linebreaks into double-newline
- * paragraph blocks, and cleans extra whitespace.
- */
 export function formatMarkdownBody(md: string): string {
   if (!md) return "";
 
   let cleaned = md.trim();
-
-  // 1. Remove accidental raw leading heading prefixes like `### Title > "Quote"` or `### Title`
   cleaned = cleaned.replace(/^\s*#{1,6}\s+[^>\n]+\s*>\s*/, '> ');
   cleaned = cleaned.replace(/^\s*#{1,6}\s+[^>\n]+\n+/, '');
-
-  // 2. Convert unformatted leading quote lines (e.g. `"Quote"` or `“Quote”`) into blockquotes
   cleaned = cleaned.replace(/^([“"'][^”"'\n]+[”"'])\s*$/gm, '> $1');
 
-  // 3. Normalize single newlines into double-newlines between paragraphs if missing
   const blocks = cleaned.split(/\n\s*\n/);
   const formattedBlocks = blocks.map((block) => {
     const trimmedBlock = block.trim();
     if (trimmedBlock.startsWith('>') || trimmedBlock.startsWith('-') || trimmedBlock.startsWith('#')) {
       return trimmedBlock;
     }
-    // If block contains single newlines inside plain text paragraph, preserve or clean
     return trimmedBlock.replace(/(?<!\n)\n(?!\n)/g, '\n\n');
   });
 
   return formattedBlocks.join('\n\n').trim();
 }
 
-/** Everything the editor derives on save, in one place. */
 export function derivePieceMeta(body: string, excerpt?: string | null) {
   const formattedBody = formatMarkdownBody(body);
   return {
@@ -112,14 +91,6 @@ export function derivePieceMeta(body: string, excerpt?: string | null) {
   };
 }
 
-
-/**
- * Split off the opening paragraph so it can be rendered with a drop cap.
- *
- * Only a plain paragraph qualifies. If the piece opens with a heading, an
- * image, a blockquote, or verse, there is nothing to cap and the whole body
- * is returned untouched — a drop cap on a pull-quote looks like a mistake.
- */
 export function splitLeadParagraph(md: string): {
   lead: string | null;
   rest: string;
@@ -147,26 +118,11 @@ export function splitLeadParagraph(md: string): {
   };
 }
 
-/**
- * Peel the first *grapheme cluster* off a string.
- *
- * This is why the drop cap is a component and not CSS. `::first-letter` works
- * on Latin because one letter is one code point. In Bengali the first visual
- * unit of "ক্ষুধা" is the conjunct ক্ষ — three code points (ক + halant + ষ) —
- * and of "কী" is ক + ী. CSS will happily take just ক and leave the halant and
- * the matra stranded at normal size, which renders as a typographic error.
- *
- * Intl.Segmenter with granularity "grapheme" gets this right. Node 18+ and
- * every current browser support it; the fallback is simply no drop cap, which
- * is a cosmetic loss rather than a broken page.
- */
 export function firstGrapheme(text: string): { head: string; tail: string } | null {
   if (!text) return null;
 
   if (typeof Intl !== "undefined" && "Segmenter" in Intl) {
     const segmenter = new Intl.Segmenter("bn", { granularity: "grapheme" });
-    // Segments is iterable, so this pulls just the first cluster without
-    // walking the whole string.
     const [first] = segmenter.segment(text);
     if (!first) return null;
     return { head: first.segment, tail: text.slice(first.segment.length) };
@@ -175,3 +131,60 @@ export function firstGrapheme(text: string): { head: string; tail: string } | nu
   return null;
 }
 
+function graphemeCount(text: string): number {
+  if (typeof Intl !== "undefined" && "Segmenter" in Intl) {
+    const segmenter = new Intl.Segmenter("bn", { granularity: "grapheme" });
+    return [...segmenter.segment(text)].length;
+  }
+  return text.length;
+}
+
+export type PullQuote = {
+  text: string;
+  slug: string;
+  titleBn: string;
+  kind: string;
+};
+
+const MAX_QUOTE = 240;
+
+export function extractPullQuotes(
+  pieces: Array<{ slug: string; titleBn: string; kind: string; bodyBn: string }>,
+): PullQuote[] {
+  const quotes: PullQuote[] = [];
+
+  for (const piece of pieces) {
+    const lines = piece.bodyBn.split("\n");
+    let inFence = false;
+    const quoteLines: string[] = [];
+    let collecting = false;
+
+    for (const line of lines) {
+      if (/^\s*```/.test(line)) {
+        inFence = !inFence;
+        continue;
+      }
+      if (inFence) continue;
+
+      if (/^\s{0,3}>/.test(line)) {
+        collecting = true;
+        quoteLines.push(line.replace(/^\s{0,3}>\s?/, ""));
+      } else if (collecting) {
+        break;
+      }
+    }
+
+    if (!collecting) continue;
+    const text = stripMarkdown(quoteLines.join(" ")).trim();
+    if (!text || graphemeCount(text) > MAX_QUOTE) continue;
+
+    quotes.push({
+      text,
+      slug: piece.slug,
+      titleBn: piece.titleBn,
+      kind: piece.kind,
+    });
+  }
+
+  return quotes;
+}

@@ -54,11 +54,7 @@ export default async function DocumentaryPiecePage({
       authorSlugs: piece.authors.map((a) => a.slug),
       tagSlugs: piece.tags.map((t) => t.slug),
     }),
-    getSeriesNeighbours(
-      piece.seriesId,
-      piece.seriesOrder,
-      piece.series?.slug || piece.slug.replace(/-\d+$/, "")
-    ),
+    piece.seriesId ? getSeriesNeighbours(piece.seriesId, piece.seriesOrder) : Promise.resolve({ prev: null, next: null }),
 
   ]);
 

@@ -1,16 +1,5 @@
 import type { Config } from "tailwindcss";
 
-/**
- * Two visual systems live in this file.
- *
- *   journal.*  — the literary-magazine surface used across most of the site.
- *                Cream paper, warm ink, deep vermilion rules.
- *   archive.*  — the dark, cinematic surface scoped to /documentary.
- *
- * Reading themes (cream / sepia / night) are driven by CSS variables in
- * globals.css and toggled by a `data-theme` attribute on <html>, so that a
- * reader's choice survives navigation without a flash of the wrong colour.
- */
 const config: Config = {
   darkMode: ["class"],
   content: [
@@ -50,27 +39,37 @@ const config: Config = {
         "content-faint": "rgb(var(--content-faint) / <alpha-value>)",
         rule: "rgb(var(--rule) / <alpha-value>)",
         accent: "rgb(var(--accent) / <alpha-value>)",
+        gold: "rgb(var(--gold) / <alpha-value>)",
       },
       fontFamily: {
-        // Bengali content — real weights only, never faux-bold.
         bengali: ["var(--font-bengali-serif)", "SolaimanLipi", "Kalpurush", "Vrinda", "serif"],
         "bengali-sans": ["var(--font-bengali-sans)", "SolaimanLipi", "Kalpurush", "sans-serif"],
-        // Bengali display / wordmark.
         display: ["var(--font-bengali-display)", "var(--font-bengali-serif)", "serif"],
-        // Latin — the interface is in English.
         serif: ["var(--font-latin-serif)", "Georgia", "serif"],
         sans: ["var(--font-latin-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       fontSize: {
-        // Bengali needs more vertical room than Latin at the same size.
         "bengali-sm": ["0.9375rem", { lineHeight: "1.85" }],
         "bengali-base": ["1.0625rem", { lineHeight: "1.9" }],
         "bengali-lg": ["1.1875rem", { lineHeight: "1.95" }],
         "bengali-xl": ["1.3125rem", { lineHeight: "1.9" }],
+
+        "step-0": ["var(--step-0)", { lineHeight: "1.5" }],
+        "step-1": ["var(--step-1)", { lineHeight: "1.65" }],
+        "step-2": ["var(--step-2)", { lineHeight: "1.75" }],
+        "step-3": ["var(--step-3)", { lineHeight: "1.5" }],
+        "step-4": ["var(--step-4)", { lineHeight: "1.4" }],
+        "step-5": ["var(--step-5)", { lineHeight: "1.32" }],
+        "step-6": ["var(--step-6)", { lineHeight: "1.24" }],
+        "step-7": ["var(--step-7)", { lineHeight: "1.18" }],
+      },
+      spacing: {
+        section: "var(--section-y)",
+        "section-lg": "var(--section-y-lg)",
       },
       maxWidth: {
-        measure: "38rem", // ~62 Bengali characters — comfortable reading measure
+        measure: "38rem",
         "measure-wide": "46rem",
       },
       letterSpacing: {

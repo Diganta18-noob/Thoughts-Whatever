@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { absoluteUrl, siteConfig } from "@/lib/utils";
+import { absoluteCoverUrl, absoluteImageUrl } from "@/lib/images";
 import { deriveExcerpt } from "@/lib/markdown";
 import { piecePath, KIND_META, type PieceKindKey } from "@/lib/nav";
 
@@ -21,14 +22,13 @@ type SeoPiece = {
   tags?: { labelBn: string }[];
 };
 
-/**
- * Metadata for a piece.
- *
- * The title stays in Bengali. An English translation in the <title> would rank
- * for searches the site cannot satisfy and would look wrong in the tab of
- * exactly the reader it is for. `titleEn`, where set, goes in the OG
- * description instead — useful to diaspora readers scanning a share card.
- */
+function shareImage(piece: SeoPiece): string | null {
+  return (
+    absoluteImageUrl(piece.ogImage) ??
+    absoluteCoverUrl("piece", piece.slug, piece.coverImage)
+  );
+}
+
 export function pieceMetadata(piece: SeoPiece): Metadata {
   const url = absoluteUrl(piecePath(piece.kind, piece.slug));
   const description =
@@ -37,7 +37,7 @@ export function pieceMetadata(piece: SeoPiece): Metadata {
     piece.excerptBn ||
     deriveExcerpt(piece.bodyBn, 160);
 
-  const image = piece.ogImage || piece.coverImage;
+  const image = shareImage(piece);
 
   return {
     title: piece.titleBn,
@@ -64,13 +64,6 @@ export function pieceMetadata(piece: SeoPiece): Metadata {
   };
 }
 
-/**
- * Article JSON-LD.
- *
- * `inLanguage: "bn"` matters more here than usual — without it, search engines
- * frequently mis-detect literary Bengali and surface the page to the wrong
- * audience.
- */
 export function articleJsonLd(piece: SeoPiece) {
   const url = absoluteUrl(piecePath(piece.kind, piece.slug));
 
@@ -82,7 +75,7 @@ export function articleJsonLd(piece: SeoPiece) {
     description:
       piece.seoDescription || piece.dekBn || piece.excerptBn || undefined,
     inLanguage: "bn",
-    image: piece.ogImage || piece.coverImage || undefined,
+    image: shareImage(piece) ?? undefined,
     datePublished: piece.publishedAt?.toISOString(),
     dateModified: (piece.updatedAt ?? piece.publishedAt)?.toISOString(),
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
@@ -113,13 +106,101 @@ export function breadcrumbJsonLd(
   };
 }
 
-/** Inline a JSON-LD block. Kept in one place so the escaping is consistent. */
+export function websiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteConfig.name,
+    alternateName: siteConfig.nameEn,
+    url: siteConfig.url,
+    description: siteConfig.tagline,
+    inLanguage: "bn",
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: absoluteUrl("/archive?q={search_term_string}"),
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+export function seriesJsonLd(series: {
+  slug: string;
+  titleBn: string;
+  descriptionBn?: string | null;
+  coverImage?: string | null;
+  pieces: {
+    slug: string;
+    kind: PieceKindKey;
+    titleBn: string;
+    seriesOrder?: number | null;
+    publishedAt: Date | null;
+  }[];
+}) {
+  const url = absoluteUrl(`/series/${series.slug}`);
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "CreativeWorkSeries",
+    name: series.titleBn,
+    description: series.descriptionBn || undefined,
+    url,
+    inLanguage: "bn",
+    image: absoluteCoverUrl("series", series.slug, series.coverImage) ?? undefined,
+    numberOfEpisodes: series.pieces.length,
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+    hasPart: {
+      "@type": "ItemList",
+      itemListOrder: "https://schema.org/ItemListOrderAscending",
+      numberOfItems: series.pieces.length,
+      itemListElement: series.pieces.map((piece, i) => ({
+        "@type": "ListItem",
+        position: piece.seriesOrder ?? i + 1,
+        item: {
+          "@type": "Article",
+          name: piece.titleBn,
+          url: absoluteUrl(piecePath(piece.kind, piece.slug)),
+          inLanguage: "bn",
+          datePublished: piece.publishedAt?.toISOString(),
+        },
+      })),
+    },
+  };
+}
+
+export function itemListJsonLd(
+  pieces: { slug: string; kind: PieceKindKey; titleBn: string }[],
+  listName: string,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: listName,
+    numberOfItems: pieces.length,
+    itemListElement: pieces.map((piece, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: piece.titleBn,
+      url: absoluteUrl(piecePath(piece.kind, piece.slug)),
+    })),
+  };
+}
+
 export function JsonLd({ data }: { data: unknown }) {
   return (
     <script
       type="application/ld+json"
-      // The payload is our own database content, and the replace guards the
-      // one sequence that could break out of a <script> block.
       dangerouslySetInnerHTML={{
         __html: JSON.stringify(data).replace(/</g, "\\u003c"),
       }}

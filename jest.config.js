@@ -18,9 +18,10 @@ const customJestConfig = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   testMatch: [
-    '**/__tests__/**/*.test.[jt]s?(x)',
-    '**/?(*.)+(spec|test).[jt]s?(x)',
+    '**/src/**/__tests__/**/*.test.[jt]s?(x)',
+    '**/src/**/?(*.)+(spec|test).[jt]s?(x)',
   ],
+  testPathIgnorePatterns: ['/node_modules/', '/.next/', '<rootDir>/e2e/'],
   collectCoverageFrom: [
     'src/lib/transliterate.ts',
     'src/lib/prisma.ts',

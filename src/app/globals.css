@@ -2,22 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Lenis smooth scroll rules */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
 /* ══════════════════════════════════════════════════════════════
    Reading themes
-   Set as `data-theme` on <html> by ThemeScript before paint, so a
-   reader who chose night mode never sees a flash of cream paper.
-   Values are "R G B" triplets so Tailwind's /alpha syntax works.
    ══════════════════════════════════════════════════════════════ */
 
 :root,
 [data-theme="cream"] {
-  --surface: 247 245 241;
-  --surface-raised: 252 251 248;
-  --content: 34 34 34;
-  --content-soft: 95 95 95;
-  --content-faint: 140 135 125;
-  --rule: 225 220 210;
-  --accent: 182 94 46;
+  --surface: 253 251 245;
+  --surface-raised: 255 255 255;
+  --content: 31 27 22;
+  --content-soft: 74 66 56;
+  --content-faint: 138 127 110;
+  --rule: 222 213 194;
+  --accent: 140 47 31;
+  --gold: 138 106 47;
 }
 
 [data-theme="sepia"] {
@@ -27,28 +39,52 @@
   --content-soft: 86 70 51;
   --content-faint: 145 126 99;
   --rule: 216 200 172;
-  --accent: 182 94 46;
+  --accent: 143 68 32;
+  --gold: 138 100 40;
 }
 
 [data-theme="night"] {
-  --surface: 15 15 16;
+  --surface: 13 13 14;
   --surface-raised: 22 22 24;
-  --content: 243 241 236;
-  --content-soft: 180 180 180;
-  --content-faint: 120 120 120;
-  --rule: 40 40 44;
-  --accent: 208 106 47;
+  --content: 232 230 225;
+  --content-soft: 165 162 155;
+  --content-faint: 107 104 98;
+  --rule: 43 43 47;
+  --accent: 224 112 60;
+  --gold: 198 161 91;
 }
 
-/* Unified Surface: data-surface="archive" follows reader theme seamlessly */
 [data-surface="archive"] {
-  --surface-raised: var(--surface-raised);
+  --surface: 10 10 11;
+  --surface-raised: 19 19 21;
+  --content: 232 230 225;
+  --content-soft: 165 162 155;
+  --content-faint: 107 104 98;
+  --rule: 35 35 38;
+  --accent: 193 68 14;
+  --gold: 198 161 91;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Fluid display scale & Section rhythm
+   ══════════════════════════════════════════════════════════════ */
+
+:root {
+  --step-0: clamp(0.8125rem, 0.804rem + 0.045vw, 0.875rem);
+  --step-1: clamp(0.9375rem, 0.929rem + 0.045vw, 1rem);
+  --step-2: clamp(1.0625rem, 1.045rem + 0.089vw, 1.1875rem);
+  --step-3: clamp(1.25rem, 1.214rem + 0.179vw, 1.5rem);
+  --step-4: clamp(1.5rem, 1.429rem + 0.357vw, 2rem);
+  --step-5: clamp(1.875rem, 1.732rem + 0.714vw, 2.875rem);
+  --step-6: clamp(2.25rem, 1.929rem + 1.607vw, 4.5rem);
+  --step-7: clamp(2.5rem, 1.571rem + 4.643vw, 9rem);
+
+  --section-y: clamp(3.5rem, 2.714rem + 3.929vw, 9rem);
+  --section-y-lg: clamp(5rem, 3.571rem + 7.143vw, 15rem);
 }
 
 /* ══════════════════════════════════════════════════════════════
    Reader-adjustable typography
-   The reading-settings panel writes these three variables. Defaults
-   here are the ones tuned for Bengali, not inherited from Latin.
    ══════════════════════════════════════════════════════════════ */
 
 :root {
@@ -89,7 +125,6 @@
     transition: background-color 0.25s ease, color 0.25s ease;
   }
 
-  /* ─── Editorial Image Animations ─────────────────── */
   @keyframes editorial-reveal {
     from {
       opacity: 0;
@@ -105,11 +140,6 @@
     animation: editorial-reveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
-  /* The single most important rule in this file.
-     Browsers fake bold and italic by smearing and shearing the glyph when a
-     real weight is missing. On Latin that looks cheap; on Bengali it destroys
-     conjuncts — যুক্তাক্ষর turn into unreadable blobs. Real weights are
-     loaded via next/font, so synthesis is never needed. */
   :lang(bn),
   .font-bengali,
   .font-bengali-sans,
@@ -118,10 +148,6 @@
     -webkit-font-synthesis: none;
   }
 
-  /* Bengali carries more vertical detail than Latin — ascenders, matras above
-     the মাত্রা line, and descenders below — so it needs more leading and no
-     tracking at all. Letter-spacing visually detaches vowel signs from their
-     consonants. */
   :lang(bn) {
     line-height: 1.9;
     letter-spacing: 0;
@@ -141,7 +167,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   Prose — the reading surface itself
+   Prose
    ══════════════════════════════════════════════════════════════ */
 
 @layer components {
@@ -186,13 +212,10 @@
     color: rgb(var(--content-soft));
   }
 
-
   .prose-bengali a {
     color: rgb(var(--accent));
     text-decoration: underline;
     text-decoration-thickness: 1px;
-    /* Bengali descends below the baseline more often than Latin; a tight
-       underline collides with ৃ, ু, and য-ফলা. */
     text-underline-offset: 0.28em;
   }
 
@@ -204,8 +227,6 @@
     font-size: 1.04em;
   }
 
-  /* Poetry. Bengali verse must not be re-wrapped by the browser — a line
-     break in কবিতা is authorial, not typographic. */
   .prose-bengali .verse,
   .prose-bengali pre.verse {
     white-space: pre-wrap;
@@ -234,7 +255,7 @@
   }
 
   .prose-bengali ol {
-    list-style: bengali; /* ১. ২. ৩. natively, where supported */
+    list-style: bengali;
   }
 
   .prose-bengali li + li {
@@ -265,9 +286,6 @@
     margin-block-start: 0.7em;
   }
 
-  /* Drop cap. Applied by the DropCap component, which splits off the first
-     grapheme cluster with Intl.Segmenter rather than using ::first-letter —
-     CSS would slice a Bengali conjunct in half and leave the matra stranded. */
   .dropcap {
     float: inline-start;
     font-family: var(--font-bengali-serif), serif;
@@ -279,7 +297,6 @@
     font-weight: 500;
   }
 
-  /* ─── Small caps label, used for English UI chrome ─── */
   .label {
     font-family: var(--font-mono), monospace;
     font-size: 0.6875rem;
@@ -304,12 +321,7 @@
   }
 }
 
-/* ══════════════════════════════════════════════════════════════
-   Print / PDF
-   Bengali readers save and circulate essays as PDFs constantly.
-   This is twenty lines of CSS that gets disproportionate use.
-   ══════════════════════════════════════════════════════════════ */
-
+/* Print / PDF */
 @media print {
   @page {
     margin: 20mm 18mm;
@@ -347,7 +359,6 @@
     break-inside: avoid;
   }
 
-  /* Print the destination of links — a PDF has no hover. */
   .prose-bengali a::after {
     content: " (" attr(href) ")";
     font-size: 0.75em;

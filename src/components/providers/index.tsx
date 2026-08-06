@@ -5,16 +5,18 @@ import { LanguageProvider } from "./language-provider";
 import { ReadingProvider } from "./reading-provider";
 import { AudioProvider } from "./audio-provider";
 import { BookmarksProvider } from "./bookmarks-provider";
-import { LenisProvider } from "./lenis-provider";
+import { ProgressProvider } from "./progress-provider";
 import { MiniPlayer } from "@/components/audio/mini-player";
+import { SmoothScroll } from "@/components/motion/smooth-scroll";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
     <LanguageProvider>
       <ReadingProvider>
         <BookmarksProvider>
-          <AudioProvider>
-            <LenisProvider>
+          <ProgressProvider>
+            <AudioProvider>
+              <SmoothScroll />
               {children}
               <MiniPlayer />
               <Toaster
@@ -30,8 +32,8 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
                   },
                 }}
               />
-            </LenisProvider>
-          </AudioProvider>
+            </AudioProvider>
+          </ProgressProvider>
         </BookmarksProvider>
       </ReadingProvider>
     </LanguageProvider>

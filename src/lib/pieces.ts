@@ -1,26 +1,20 @@
 import { cache } from "react";
 import type { Prisma, PieceKind } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-
-/**
- * Every read the public site does goes through this file.
- *
- * Two rules hold everywhere below:
- *   1. `status: "PUBLISHED"` and a non-null `publishedAt` are always both
- *      required. A piece scheduled for next week has status PUBLISHED the
- *      moment the editor sets it, so status alone would leak drafts-in-waiting.
- *   2. `bodyBn` is never selected on list queries. It is the largest column in
- *      the table and an index page that pulls twenty full essays to render
- *      twenty two-line excerpts is the single easiest way to make this site
- *      slow.
- */
+import { coverSrc } from "@/lib/images";
 
 export const PUBLISHED: Prisma.PieceWhereInput = {
   status: "PUBLISHED",
   publishedAt: { not: null },
 };
 
-/** The exact shape `PieceCard` and `PieceRow` need — no more. */
+function withCover<T extends { slug: string; coverImage: string | null }>(
+  row: T,
+  owner: "piece" | "series" = "piece",
+): T {
+  return { ...row, coverImage: coverSrc(owner, row.slug, row.coverImage) };
+}
+
 export const cardSelect = {
   slug: true,
   kind: true,
@@ -28,16 +22,12 @@ export const cardSelect = {
   dekBn: true,
   excerptBn: true,
   coverImage: true,
-  coverImageWidth: true,
-  coverImageHeight: true,
   readingMinutes: true,
   publishedAt: true,
   audioUrl: true,
-  reelUrl: true,
   seriesOrder: true,
   authors: { select: { slug: true, nameBn: true } },
 } satisfies Prisma.PieceSelect;
-
 
 export type CardPiece = Prisma.PieceGetPayload<{ select: typeof cardSelect }>;
 
@@ -46,33 +36,32 @@ const byNewest: Prisma.PieceOrderByWithRelationInput[] = [
   { createdAt: "desc" },
 ];
 
-// ─── Lists ──────────────────────────────────────────────────
-
 export const getRecentPieces = cache(
-  async (opts: { kind?: PieceKind; take?: number; skip?: number } = {}) =>
-    prisma.piece.findMany({
+  async (opts: { kind?: PieceKind; take?: number; skip?: number } = {}) => {
+    const rows = await prisma.piece.findMany({
       where: { ...PUBLISHED, ...(opts.kind ? { kind: opts.kind } : {}) },
       select: cardSelect,
       orderBy: byNewest,
       take: opts.take ?? 12,
       skip: opts.skip ?? 0,
-    }),
+    });
+    return rows.map((row) => withCover(row));
+  },
 );
 
 export const countPieces = cache(async (kind?: PieceKind) =>
   prisma.piece.count({ where: { ...PUBLISHED, ...(kind ? { kind } : {}) } }),
 );
 
-export const getFeaturedPieces = cache(async (take = 3) =>
-  prisma.piece.findMany({
+export const getFeaturedPieces = cache(async (take = 3) => {
+  const rows = await prisma.piece.findMany({
     where: { ...PUBLISHED, featured: true },
     select: cardSelect,
     orderBy: byNewest,
     take,
-  }),
-);
-
-// ─── One piece ──────────────────────────────────────────────
+  });
+  return rows.map((row) => withCover(row));
+});
 
 export const getPieceBySlug = cache(async (slug: string, kind?: PieceKind) => {
   const piece = await prisma.piece.findFirst({
@@ -85,33 +74,22 @@ export const getPieceBySlug = cache(async (slug: string, kind?: PieceKind) => {
       timeline: { orderBy: { order: "asc" } },
     },
   });
-  return piece;
+  return piece && withCover(piece);
 });
 
 export type FullPiece = NonNullable<Awaited<ReturnType<typeof getPieceBySlug>>>;
 
 export const getSeriesNeighbours = cache(
-  async (seriesId: string | null, order: number | null, slugPrefix?: string) => {
-    if (order === null && !slugPrefix) return { prev: null, next: null };
-
-    const seriesWhere: Prisma.PieceWhereInput = seriesId
-      ? { seriesId }
-      : slugPrefix
-      ? { slug: { startsWith: slugPrefix } }
-      : {};
-
-    if (Object.keys(seriesWhere).length === 0) return { prev: null, next: null };
-
-    const currentOrder = order ?? 1;
-
+  async (seriesId: string, order: number | null) => {
+    if (order === null) return { prev: null, next: null };
     const [prev, next] = await Promise.all([
       prisma.piece.findFirst({
-        where: { ...PUBLISHED, ...seriesWhere, seriesOrder: { lt: currentOrder } },
+        where: { ...PUBLISHED, seriesId, seriesOrder: { lt: order } },
         select: { slug: true, kind: true, titleBn: true, seriesOrder: true },
         orderBy: { seriesOrder: "desc" },
       }),
       prisma.piece.findFirst({
-        where: { ...PUBLISHED, ...seriesWhere, seriesOrder: { gt: currentOrder } },
+        where: { ...PUBLISHED, seriesId, seriesOrder: { gt: order } },
         select: { slug: true, kind: true, titleBn: true, seriesOrder: true },
         orderBy: { seriesOrder: "asc" },
       }),
@@ -120,14 +98,6 @@ export const getSeriesNeighbours = cache(
   },
 );
 
-
-/**
- * Related reading.
- *
- * Shared author first, shared tag second. Both are cheap relational filters —
- * there is no embedding model here, and for a corpus this size a hand-built
- * rule beats a similarity score a reader cannot predict.
- */
 export const getRelatedPieces = cache(
   async (piece: {
     slug: string;
@@ -145,16 +115,15 @@ export const getRelatedPieces = cache(
     }
     if (!or.length) return getRecentPieces({ take });
 
-    return prisma.piece.findMany({
+    const rows = await prisma.piece.findMany({
       where: { ...PUBLISHED, slug: { not: piece.slug }, OR: or },
       select: cardSelect,
       orderBy: byNewest,
       take,
     });
+    return rows.map((row) => withCover(row));
   },
 );
-
-// ─── Archive filtering ──────────────────────────────────────
 
 export const getArchivePieces = cache(
   async (filters: {
@@ -179,12 +148,13 @@ export const getArchivePieces = cache(
       };
     }
 
-    return prisma.piece.findMany({
+    const rows = await prisma.piece.findMany({
       where,
       select: cardSelect,
       orderBy: byNewest,
       take: 200,
     });
+    return rows.map((row) => withCover(row));
   },
 );
 
@@ -196,8 +166,6 @@ export const getFilterFacets = cache(async () => {
         slug: true,
         labelBn: true,
         kind: true,
-        // Filtered relation count — without the `where` this would include
-        // drafts, and a tag reading "৯" that lists five pieces looks broken.
         _count: { select: { pieces: { where: PUBLISHED } } },
       },
       orderBy: { labelBn: "asc" },
@@ -237,19 +205,33 @@ export const getFilterFacets = cache(async () => {
   };
 });
 
-// ─── Hubs ───────────────────────────────────────────────────
-
-export const getAuthorBySlug = cache(async (slug: string) =>
-  prisma.author.findUnique({
+export const getAuthorBySlug = cache(async (slug: string) => {
+  const author = await prisma.author.findUnique({
     where: { slug },
     include: {
       pieces: { where: PUBLISHED, select: cardSelect, orderBy: byNewest },
     },
-  }),
-);
+  });
+  return (
+    author && { ...author, pieces: author.pieces.map((row) => withCover(row)) }
+  );
+});
 
-export const getSeriesList = cache(async () =>
-  prisma.series.findMany({
+function withSeriesCovers<
+  T extends {
+    slug: string;
+    coverImage: string | null;
+    pieces: { slug: string; coverImage: string | null }[];
+  },
+>(series: T): T {
+  return {
+    ...withCover(series, "series"),
+    pieces: series.pieces.map((row) => withCover(row)),
+  };
+}
+
+export const getSeriesList = cache(async () => {
+  const rows = await prisma.series.findMany({
     where: { pieces: { some: PUBLISHED } },
     include: {
       pieces: {
@@ -259,8 +241,36 @@ export const getSeriesList = cache(async () =>
       },
     },
     orderBy: { updatedAt: "desc" },
-  }),
-);
+  });
+  return rows.map(withSeriesCovers);
+});
+
+export const getFeaturedSeries = cache(async (take = 3) => {
+  const rows = await prisma.series.findMany({
+    where: { pieces: { some: PUBLISHED } },
+    include: {
+      pieces: {
+        where: PUBLISHED,
+        select: cardSelect,
+        orderBy: [{ seriesOrder: "asc" }, { publishedAt: "asc" }],
+      },
+    },
+    take: take * 3,
+  });
+
+  const sorted = rows
+    .map(withSeriesCovers)
+    .sort((a, b) => {
+      const aLatest = a.pieces[a.pieces.length - 1]?.publishedAt;
+      const bLatest = b.pieces[b.pieces.length - 1]?.publishedAt;
+      if (!aLatest) return 1;
+      if (!bLatest) return -1;
+      return new Date(bLatest).getTime() - new Date(aLatest).getTime();
+    })
+    .slice(0, take);
+
+  return sorted;
+});
 
 export const getSeriesBySlug = cache(async (slug: string) => {
   const series = await prisma.series.findUnique({
@@ -273,27 +283,9 @@ export const getSeriesBySlug = cache(async (slug: string) => {
       },
     },
   });
-
-  if (!series) return null;
-
-  // Fallback: If pieces array is empty, fetch pieces matching the series slug prefix
-  if (series.pieces.length === 0) {
-    const fallbackPieces = await prisma.piece.findMany({
-      where: {
-        ...PUBLISHED,
-        slug: { startsWith: slug },
-      },
-      select: cardSelect,
-      orderBy: [{ seriesOrder: "asc" }, { publishedAt: "asc" }],
-    });
-    return { ...series, pieces: fallbackPieces };
-  }
-
-  return series;
+  return series && withSeriesCovers(series);
 });
 
-
-/** Slugs for generateStaticParams and the sitemap. */
 export const getAllPublishedSlugs = cache(async () =>
   prisma.piece.findMany({
     where: PUBLISHED,
@@ -301,3 +293,51 @@ export const getAllPublishedSlugs = cache(async () =>
     orderBy: byNewest,
   }),
 );
+
+export const getKindCounts = cache(async () => {
+  const rows = await prisma.piece.groupBy({
+    by: ["kind"],
+    where: PUBLISHED,
+    _count: { _all: true },
+  });
+
+  const counts = {} as Record<PieceKind, number>;
+  for (const row of rows) counts[row.kind] = row._count._all;
+  return counts;
+});
+
+export const getPullQuoteCandidates = cache(async (take = 8) =>
+  prisma.piece.findMany({
+    where: PUBLISHED,
+    select: { slug: true, titleBn: true, kind: true, bodyBn: true },
+    orderBy: byNewest,
+    take,
+  }),
+);
+
+export const getPublishingTimeline = cache(async () => {
+  const pieces = await prisma.piece.findMany({
+    where: PUBLISHED,
+    select: { publishedAt: true },
+    orderBy: { publishedAt: "desc" },
+  });
+
+  const groups = new Map<string, { year: number; month: number; count: number }>();
+
+  for (const piece of pieces) {
+    if (!piece.publishedAt) continue;
+    const d = new Date(piece.publishedAt);
+    const year = d.getUTCFullYear();
+    const month = d.getUTCMonth() + 1;
+    const key = `${year}-${month}`;
+
+    const existing = groups.get(key);
+    if (existing) {
+      existing.count += 1;
+    } else {
+      groups.set(key, { year, month, count: 1 });
+    }
+  }
+
+  return Array.from(groups.values());
+});
