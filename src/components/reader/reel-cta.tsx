@@ -15,11 +15,19 @@ export interface ReelCTAProps {
   className?: string;
 }
 
-/** Helper to format mobile deep link if applicable */
+/** Helper to format and normalize Instagram Reel URLs */
 function getMobileReelUrl(reelUrl: string): string {
   if (!reelUrl) return "#";
-  return reelUrl;
+
+  // Normalize /reel/SHORTCODE/ to /reels/SHORTCODE/ for full browser & app compatibility
+  let normalized = reelUrl.trim();
+  if (normalized.includes("/reel/")) {
+    normalized = normalized.replace("/reel/", "/reels/");
+  }
+
+  return normalized;
 }
+
 
 export function ReelCallToAction({
   reelUrl,
