@@ -34,17 +34,17 @@ export function initProductionScheduler() {
     { timezone },
   );
 
-  // 2. Fallback Retry Schedule: 01:30 AM IST
+  // 2. Fallback Retry Schedule: 02:00 AM IST
   cron.schedule(
-    "30 1 * * *",
+    "0 2 * * *",
     async () => {
       if (isPipelineRunning()) return;
 
-      writeLog("automation", "INFO", "⏰ 1:30 AM Fallback Retry Triggered");
+      writeLog("automation", "INFO", "⏰ 2:00 AM Fallback Retry Triggered");
       try {
         await runMasterPipeline();
       } catch (err) {
-        writeLog("automation", "ERROR", "1:30 AM Fallback Pipeline execution failed:", err);
+        writeLog("automation", "ERROR", "2:00 AM Fallback Pipeline execution failed:", err);
       }
     },
     { timezone },
