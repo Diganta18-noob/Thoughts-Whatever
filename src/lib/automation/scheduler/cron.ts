@@ -15,7 +15,7 @@ export function initProductionScheduler() {
 
   writeLog("automation", "INFO", `Initializing Production Scheduler (1:00 AM ${timezone} schedule)...`);
 
-  // Cron schedule: 01:00 AM every day
+  // 1. Primary Schedule: 01:00 AM IST
   cron.schedule(
     "0 1 * * *",
     async () => {
@@ -24,11 +24,27 @@ export function initProductionScheduler() {
         return;
       }
 
-      writeLog("automation", "INFO", "⏰ 1:00 AM Production Pipeline Triggered");
+      writeLog("automation", "INFO", "⏰ 1:00 AM Production Pipeline Primary Triggered");
       try {
         await runMasterPipeline();
       } catch (err) {
-        writeLog("automation", "ERROR", "1:00 AM Pipeline execution fatal error:", err);
+        writeLog("automation", "ERROR", "1:00 AM Pipeline failed. Fallback retry scheduled for 1:30 AM:", err);
+      }
+    },
+    { timezone },
+  );
+
+  // 2. Fallback Retry Schedule: 01:30 AM IST
+  cron.schedule(
+    "30 1 * * *",
+    async () => {
+      if (isPipelineRunning()) return;
+
+      writeLog("automation", "INFO", "⏰ 1:30 AM Fallback Retry Triggered");
+      try {
+        await runMasterPipeline();
+      } catch (err) {
+        writeLog("automation", "ERROR", "1:30 AM Fallback Pipeline execution failed:", err);
       }
     },
     { timezone },

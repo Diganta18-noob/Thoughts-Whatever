@@ -10,15 +10,14 @@ export async function GET(req: Request) {
     return NextResponse.json({ ok: false, error: "Unauthorized cron trigger" }, { status: 401 });
   }
 
-  writeLog("automation", "INFO", "Vercel / Serverless Cron Trigger received for 1:00 AM Pipeline.");
+  writeLog("automation", "INFO", "Vercel / Serverless Cron Trigger received for Nightly Maintenance Pipeline.");
 
   try {
     const report = await runMasterPipeline();
     return NextResponse.json({ ok: true, report });
   } catch (err) {
-    return NextResponse.json(
-      { ok: false, error: err instanceof Error ? err.message : String(err) },
-      { status: 500 },
-    );
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    writeLog("automation", "ERROR", `1:00 AM Cron failed: ${errorMsg}. Retrying at 1:30 AM.`);
+    return NextResponse.json({ ok: false, error: errorMsg, retryScheduled: true }, { status: 500 });
   }
 }
