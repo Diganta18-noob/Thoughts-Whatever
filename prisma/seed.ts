@@ -113,6 +113,7 @@ type SeedPiece = {
   dekBn?: string;
   bodyBn: string;
   excerptBn?: string;
+  coverImage?: string | null;
   reelUrl?: string;
   videoUrl?: string;
   audioUrl?: string;
