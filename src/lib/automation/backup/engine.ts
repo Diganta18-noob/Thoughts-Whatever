@@ -98,6 +98,9 @@ export async function backupDatabase(): Promise<BackupArtifactInfo> {
     const dateStr = new Date().toISOString().split("T")[0];
     const filename = `backup-db-${dateStr}.json.gz`;
     const localDir = getBackupsDir();
+    if (!fs.existsSync(localDir)) {
+      fs.mkdirSync(localDir, { recursive: true });
+    }
     const filePath = path.join(localDir, filename);
 
     // Export primary tables to structured JSON
@@ -147,6 +150,9 @@ export async function backupUploads(): Promise<BackupArtifactInfo> {
     const dateStr = new Date().toISOString().split("T")[0];
     const filename = `backup-uploads-${dateStr}.json.gz`;
     const localDir = getBackupsDir();
+    if (!fs.existsSync(localDir)) {
+      fs.mkdirSync(localDir, { recursive: true });
+    }
     const filePath = path.join(localDir, filename);
 
     // Collect public images and uploads metadata
@@ -188,6 +194,9 @@ export async function backupStorage(): Promise<BackupArtifactInfo> {
     const dateStr = new Date().toISOString().split("T")[0];
     const filename = `backup-storage-${dateStr}.json.gz`;
     const localDir = getBackupsDir();
+    if (!fs.existsSync(localDir)) {
+      fs.mkdirSync(localDir, { recursive: true });
+    }
     const filePath = path.join(localDir, filename);
 
     const contentDir = path.join(process.cwd(), "Content");
