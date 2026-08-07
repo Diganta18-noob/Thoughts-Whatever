@@ -512,6 +512,40 @@ const PIECES: SeedPiece[] = [
   },
 
   {
+    kind: "DOCUMENTARY",
+    slug: "রক্তকরবী",
+    titleBn: "রক্তকরবী",
+    titleEn: "Rakta Karabi — Red Oleanders",
+    subtitleBn: "ক্ষমতার কাঠামোর বিরুদ্ধে এক চিরন্তন প্রতিবাদ",
+    dekBn:
+      "যক্ষপুরী কেবল কোনো রাজ্য নয়, এটি একটি ব্যবস্থার প্রতীক—যেখানে মানুষ রক্তমাংসের পরিচয় হারিয়ে কেবল উৎপাদনের পরিসংখ্যানে পরিণত হয়।",
+    excerptBn:
+      "রবীন্দ্রনাথ কোনো নির্দিষ্ট শাসকের বিরুদ্ধে লেখেননি; তিনি লিখেছিলেন যে-কোনো ক্ষমতার কাঠামোর বিরুদ্ধে, যেখানে মানুষ কেবল উৎপাদনের যন্ত্রে পরিণত হয়।",
+    featured: true,
+    reelUrl: "https://www.instagram.com/reel/DbDwCbkgfYw/",
+    publishedAt: new Date("2026-07-21T06:30:00.000Z"),
+    seoDescription:
+      "রবীন্দ্রনাথ ঠাকুরের 'রক্তকরবী' নাটকের গভীর পাঠ ও বিশ্লেষণ — ক্ষমতার কাঠামো, নন্দিনী ও যক্ষপুরীর রূপক।",
+    authorSlugs: ["রবীন্দ্রনাথ-ঠাকুর"],
+    tagLabels: ["উপন্যাস", "বিদ্রোহ", "ঔপনিবেশিক কাল"],
+    bodyBn: `> “Power without love is reckless and abusive.” — Martin Luther King Jr.
+
+Every generation believes its struggles are unique. Power changes its face, but rarely its character. That's why Rabindranath Tagore's *Rakta Karabi* still feels unsettling. It is not merely a play; it's an investigation into power. Yaksha Town is not just a kingdom, it is a system, a place where productivity matters more than people, where wealth grows while humanity quietly disappears, where individuals slowly become numbers.
+
+Then comes Nandini; she brings no army, no ideology, no throne to claim. She brings something far more dangerous: the courage to ask — **What is all this wealth for if it costs our humanity?**
+
+---
+
+এই কারণেই *রক্তকরবী* আজও প্রাসঙ্গিক। কারণ রবীন্দ্রনাথ কোনো নির্দিষ্ট শাসকের বিরুদ্ধে লেখেননি; তিনি লিখেছিলেন যে-কোনো ক্ষমতার কাঠামোর বিরুদ্ধে, যেখানে মানুষ কেবল উৎপাদনের যন্ত্রে পরিণত হয়। মানুষকে ভোটের সংখ্যা, শ্রমের পরিসংখ্যান কিংবা পরিচয়ের খাঁচায় বন্দী করে দেখা হয়।
+
+আজ আমরা উন্নয়নের কথা বলি, অর্থনীতির কথা বলি—এ সবই প্রয়োজন। Yet a haunting question remains from Tagore:
+
+> **Does progress belong to us, or do we now belong to progress?**
+
+এই প্রশ্ন কোনো একটি Government-এর প্রতি নয়, অথবা কোনো রাজনৈতিক দলের প্রতিও নয়। এটি প্রতিটি যুগের প্রশ্ন। কারণ যে সমাজ প্রশ্ন করতে সাহস হারায়, সেখানে স্বাধীনতার ভাষা ক্ষীণ হয়ে যায়। যে সমাজে মানুষের পরিচয় অন্য কোনো পরিচয়ের মধ্যে সীমাবদ্ধ হয়ে পড়ে, সেখানে *রক্তকরবী* নতুন করে পড়তে হয়।`,
+  },
+
+  {
     kind: "RACHANA",
     status: "DRAFT",
     slug: "শেষের-কবিতা-খসড়া",
