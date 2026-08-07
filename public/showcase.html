@@ -1,0 +1,3006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thoughts Whatever — Design Case Study</title>
+  <meta name="description" content="A premium Bengali literature platform. Design overview, case study, and product showcase.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       DESIGN TOKENS
+       ═══════════════════════════════════════════════════════════ */
+    :root {
+      /* Colors */
+      --bg: #0A0908;
+      --bg-elevated: #111110;
+      --bg-card: #161514;
+      --bg-card-hover: #1c1b19;
+      --paper: #F7F3ED;
+      --paper-dim: #E8E2D8;
+      --gold: #D4AF37;
+      --gold-dim: #B89830;
+      --rust: #B63A2B;
+      --rust-dim: #9A3124;
+      --bronze: #8C6239;
+      --white: #F9F7F4;
+      --grey: #8B8B8B;
+      --grey-dim: #5a5a5a;
+      --grey-dark: #2a2927;
+      --border: rgba(212, 175, 55, 0.08);
+      --border-light: rgba(249, 247, 244, 0.06);
+      --glass: rgba(22, 21, 20, 0.72);
+      --glass-border: rgba(212, 175, 55, 0.12);
+
+      /* Typography Scale */
+      --text-xs: 0.6875rem;     /* 11px */
+      --text-sm: 0.8125rem;     /* 13px */
+      --text-base: 0.9375rem;   /* 15px */
+      --text-md: 1.0625rem;     /* 17px */
+      --text-lg: 1.25rem;       /* 20px */
+      --text-xl: 1.5rem;        /* 24px */
+      --text-2xl: 2rem;         /* 32px */
+      --text-3xl: 2.75rem;      /* 44px */
+      --text-4xl: 3.5rem;       /* 56px */
+      --text-5xl: 4.5rem;       /* 72px */
+      --text-6xl: 6rem;         /* 96px */
+      --text-hero: 8rem;        /* 128px */
+
+      /* Spacing */
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+      --space-20: 5rem;
+      --space-24: 6rem;
+      --space-32: 8rem;
+      --space-40: 10rem;
+      --space-48: 12rem;
+
+      /* Radius */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-2xl: 32px;
+      --radius-full: 9999px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.3);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
+      --shadow-xl: 0 16px 48px rgba(0,0,0,0.5);
+      --shadow-glow: 0 0 60px rgba(212, 175, 55, 0.06);
+
+      /* Transitions */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --duration-fast: 200ms;
+      --duration-base: 400ms;
+      --duration-slow: 700ms;
+      --duration-slower: 1000ms;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESET & BASE
+       ═══════════════════════════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      font-family: 'Inter', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--paper);
+      line-height: 1.7;
+      font-size: var(--text-base);
+      overflow-x: hidden;
+    }
+
+    /* Noise Texture Overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Scroll Progress Bar */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--rust));
+      z-index: 10000;
+      transition: width 50ms linear;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       TYPOGRAPHY
+       ═══════════════════════════════════════════════════════════ */
+    .font-display { font-family: 'Playfair Display', serif; }
+    .font-serif { font-family: 'Cormorant Garamond', serif; }
+    .font-bengali { font-family: 'Noto Serif Bengali', serif; }
+    .font-sans { font-family: 'Inter', 'IBM Plex Sans', sans-serif; }
+    .font-mono { font-family: 'IBM Plex Mono', monospace; }
+
+    /* ═══════════════════════════════════════════════════════════
+       LAYOUT
+       ═══════════════════════════════════════════════════════════ */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--space-12);
+    }
+
+    .container-wide {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 var(--space-12);
+    }
+
+    .section {
+      padding: var(--space-40) 0;
+      position: relative;
+    }
+
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), var(--gold-dim), var(--border), transparent);
+      opacity: 0.5;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       ANIMATIONS
+       ═══════════════════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity var(--duration-slow) var(--ease-out),
+                  transform var(--duration-slow) var(--ease-out);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 100ms; }
+    .reveal-delay-2 { transition-delay: 200ms; }
+    .reveal-delay-3 { transition-delay: 300ms; }
+    .reveal-delay-4 { transition-delay: 400ms; }
+    .reveal-delay-5 { transition-delay: 500ms; }
+    .reveal-delay-6 { transition-delay: 600ms; }
+    .reveal-delay-7 { transition-delay: 700ms; }
+    .reveal-delay-8 { transition-delay: 800ms; }
+
+    .fade-in {
+      opacity: 0;
+      transition: opacity var(--duration-slower) var(--ease-out);
+    }
+    .fade-in.visible { opacity: 1; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.05); }
+      50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.12); }
+    }
+
+    @keyframes rotate-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes text-reveal {
+      from { clip-path: inset(0 100% 0 0); }
+      to { clip-path: inset(0 0 0 0); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HEADER — CASE STUDY TITLE
+       ═══════════════════════════════════════════════════════════ */
+    .cs-header {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cs-header::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(ellipse, rgba(212, 175, 55, 0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cs-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: linear-gradient(to top, var(--bg), transparent);
+      pointer-events: none;
+    }
+
+    .cs-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: var(--space-8);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .cs-eyebrow::before,
+    .cs-eyebrow::after {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.4;
+    }
+
+    .cs-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, var(--text-hero));
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: var(--space-8);
+      max-width: 900px;
+    }
+
+    .cs-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .cs-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: var(--text-xl);
+      font-weight: 300;
+      color: var(--grey);
+      max-width: 600px;
+      line-height: 1.6;
+      margin-bottom: var(--space-12);
+    }
+
+    .cs-meta {
+      display: flex;
+      gap: var(--space-10);
+      align-items: center;
+      margin-top: var(--space-6);
+    }
+
+    .cs-meta-item {
+      text-align: center;
+    }
+
+    .cs-meta-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--grey-dim);
+      display: block;
+      margin-bottom: var(--space-1);
+    }
+
+    .cs-meta-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: var(--text-lg);
+      color: var(--paper);
+      font-weight: 500;
+    }
+
+    .cs-meta-divider {
+      width: 1px;
+      height: 32px;
+      background: var(--grey-dark);
+    }
+
+    .cs-scroll-hint {
+      position: absolute;
+      bottom: 48px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-3);
+      color: var(--grey-dim);
+      font-size: var(--text-xs);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-family: 'IBM Plex Mono', monospace;
+      animation: float 3s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    .cs-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    }
+
+    /* NAV PREVIEW */
+    .nav-preview {
+      display: flex;
+      gap: var(--space-8);
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: var(--space-12);
+    }
+
+    .nav-item {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: var(--text-sm);
+      color: var(--grey);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-light);
+      transition: all var(--duration-fast) var(--ease-out);
+      cursor: default;
+    }
+
+    .nav-item:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(212, 175, 55, 0.05);
+    }
+
+    .nav-item.active {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(212, 175, 55, 0.08);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SECTION 1: THREE-PANEL HERO
+       ═══════════════════════════════════════════════════════════ */
+    .hero-panels {
+      display: grid;
+      grid-template-columns: 280px 1fr 280px;
+      gap: var(--space-8);
+      align-items: start;
+      min-height: 80vh;
+    }
+
+    /* Left Panel — Overview */
+    .panel-left {
+      position: sticky;
+      top: var(--space-12);
+    }
+
+    .panel-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: var(--space-8);
+    }
+
+    .panel-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-2xl);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: var(--space-6);
+    }
+
+    .panel-desc {
+      font-size: var(--text-sm);
+      color: var(--grey);
+      line-height: 1.8;
+      margin-bottom: var(--space-10);
+    }
+
+    .philosophy-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--grey-dim);
+      margin-bottom: var(--space-6);
+    }
+
+    .philosophy-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .philosophy-list li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: var(--text-sm);
+      color: var(--paper-dim);
+      font-weight: 300;
+    }
+
+    .philosophy-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-sm);
+      flex-shrink: 0;
+    }
+
+    /* Center Panel — Hero Mockup */
+    .panel-center {
+      position: relative;
+    }
+
+    .mockup-frame {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow-xl), var(--shadow-glow);
+      position: relative;
+      animation: pulse-glow 6s ease-in-out infinite;
+    }
+
+    .mockup-browser-bar {
+      display: flex;
+      align-items: center;
+      padding: var(--space-4) var(--space-5);
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+      gap: var(--space-3);
+    }
+
+    .browser-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--grey-dark);
+    }
+
+    .browser-dot.red { background: #ff5f57; }
+    .browser-dot.yellow { background: #febc2e; }
+    .browser-dot.green { background: #28c840; }
+
+    .browser-url {
+      flex: 1;
+      margin-left: var(--space-4);
+      height: 28px;
+      background: var(--bg);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-4);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      color: var(--grey-dim);
+    }
+
+    .browser-url .lock {
+      color: var(--green, #28c840);
+      margin-right: var(--space-2);
+    }
+
+    .mockup-content {
+      position: relative;
+    }
+
+    /* The page mockup rendered as a miniature UI */
+    .page-mockup {
+      padding: 0;
+      background: var(--paper);
+      min-height: 500px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-mockup-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-4) var(--space-6);
+      background: rgba(247, 243, 237, 0.95);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .pm-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-sm);
+      color: var(--bg);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .pm-logo-badge {
+      background: var(--bg);
+      color: var(--paper);
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 700;
+    }
+
+    .pm-nav-links {
+      display: flex;
+      gap: var(--space-5);
+      font-size: 10px;
+      color: var(--grey);
+      font-family: 'IBM Plex Sans', sans-serif;
+      letter-spacing: 0.05em;
+    }
+
+    .pm-nav-links span.active-link { color: var(--rust); }
+
+    .pm-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      padding: var(--space-6);
+    }
+
+    .pm-hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .pm-breadcrumb {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 8px;
+      color: var(--rust);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: var(--space-2);
+    }
+
+    .pm-title {
+      font-family: 'Noto Serif Bengali', serif;
+      font-size: 22px;
+      color: var(--bg);
+      line-height: 1.3;
+      margin-bottom: var(--space-3);
+    }
+
+    .pm-meta-row {
+      display: flex;
+      gap: var(--space-3);
+      font-size: 8px;
+      color: var(--grey);
+      font-family: 'IBM Plex Sans', sans-serif;
+      margin-bottom: var(--space-4);
+      align-items: center;
+    }
+
+    .pm-meta-row span { display: flex; align-items: center; gap: 3px; }
+
+    .pm-buttons {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .pm-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 9px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 500;
+      border: none;
+      cursor: default;
+    }
+
+    .pm-btn-primary {
+      background: var(--rust);
+      color: white;
+    }
+
+    .pm-btn-secondary {
+      background: linear-gradient(135deg, #e040a0, #8040d0);
+      color: white;
+    }
+
+    .pm-btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(0,0,0,0.15);
+      color: var(--bg);
+    }
+
+    .pm-hero-img {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: #1a1a1a;
+      aspect-ratio: 3/4;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pm-hero-img-inner {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(145deg, #2a1a0a, #0a0908, #1a0a08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+      text-align: center;
+    }
+
+    .pm-img-title {
+      font-family: 'Noto Serif Bengali', serif;
+      color: var(--gold);
+      font-size: 20px;
+      line-height: 1.2;
+      margin-bottom: var(--space-2);
+    }
+
+    .pm-img-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--paper-dim);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+    }
+
+    .pm-img-badge {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.6);
+      color: var(--gold);
+      font-size: 7px;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      font-family: 'IBM Plex Mono', monospace;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+    }
+
+    .pm-bottom-bar {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: var(--space-4);
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .pm-series-progress {
+      padding: var(--space-3);
+      background: rgba(0,0,0,0.02);
+      border-radius: var(--radius-md);
+    }
+
+    .pm-sp-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 7px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: var(--space-1);
+    }
+
+    .pm-sp-title {
+      font-family: 'Noto Serif Bengali', serif;
+      font-size: 10px;
+      color: var(--bg);
+      margin-bottom: 4px;
+    }
+
+    .pm-sp-bar {
+      width: 100%;
+      height: 3px;
+      background: rgba(0,0,0,0.08);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .pm-sp-fill {
+      width: 16%;
+      height: 100%;
+      background: var(--rust);
+      border-radius: 2px;
+    }
+
+    .pm-reel-card {
+      background: linear-gradient(135deg, rgba(182, 58, 43, 0.05), rgba(212, 175, 55, 0.03));
+      border: 1px solid rgba(182, 58, 43, 0.12);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .pm-reel-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #fd1d1d, #833ab4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .pm-reel-text {
+      font-size: 8px;
+      color: var(--bg);
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .pm-about {
+      padding: var(--space-3);
+      background: rgba(0,0,0,0.02);
+      border-radius: var(--radius-md);
+    }
+
+    .pm-about-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 7px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: var(--space-2);
+    }
+
+    .pm-about-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 8px;
+      color: var(--bg);
+      font-family: 'IBM Plex Sans', sans-serif;
+      margin-bottom: 3px;
+    }
+
+    .pm-about-row span:first-child { color: var(--grey); }
+
+    /* Right Panel — Highlights */
+    .panel-right {
+      position: sticky;
+      top: var(--space-12);
+    }
+
+    .highlights-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .highlight-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      transition: all var(--duration-fast) var(--ease-out);
+      cursor: default;
+    }
+
+    .highlight-item:hover {
+      background: var(--bg-card);
+      border-color: var(--border);
+    }
+
+    .highlight-check {
+      width: 18px;
+      height: 18px;
+      border-radius: var(--radius-sm);
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .highlight-text {
+      font-size: var(--text-sm);
+      color: var(--paper-dim);
+      font-weight: 300;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SECTION 2: READING LAYOUT
+       ═══════════════════════════════════════════════════════════ */
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-20);
+    }
+
+    .section-number {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      letter-spacing: 0.3em;
+      color: var(--gold-dim);
+      display: block;
+      margin-bottom: var(--space-4);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: var(--space-6);
+    }
+
+    .section-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: var(--text-lg);
+      color: var(--grey);
+      max-width: 560px;
+      margin: 0 auto;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    .reading-layout-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr 240px;
+      gap: var(--space-6);
+      align-items: start;
+    }
+
+    /* Sticky Sidebar Mock */
+    .reading-sidebar {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: var(--space-6);
+      position: sticky;
+      top: var(--space-12);
+    }
+
+    .sidebar-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: var(--space-6);
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .toc-item {
+      font-size: var(--text-sm);
+      color: var(--grey);
+      padding: var(--space-2) var(--space-3);
+      border-left: 2px solid transparent;
+      transition: all var(--duration-fast) var(--ease-out);
+      cursor: default;
+    }
+
+    .toc-item:hover {
+      color: var(--paper);
+      border-left-color: var(--gold-dim);
+    }
+
+    .toc-item.active {
+      color: var(--gold);
+      border-left-color: var(--gold);
+      background: rgba(212, 175, 55, 0.04);
+    }
+
+    /* Article Body Mock */
+    .reading-article {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: var(--space-12) var(--space-10);
+      position: relative;
+    }
+
+    /* Reading progress mock */
+    .reading-progress-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 65%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--rust));
+      border-radius: 0 2px 2px 0;
+    }
+
+    .article-drop-cap {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-5xl);
+      float: left;
+      line-height: 0.8;
+      margin-right: var(--space-3);
+      margin-top: var(--space-2);
+      color: var(--gold);
+    }
+
+    .article-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: var(--text-md);
+      color: var(--paper-dim);
+      line-height: 2;
+      margin-bottom: var(--space-8);
+    }
+
+    .article-text-bengali {
+      font-family: 'Noto Serif Bengali', serif;
+      font-size: var(--text-base);
+      color: var(--paper-dim);
+      line-height: 2.2;
+      margin-bottom: var(--space-8);
+    }
+
+    .pull-quote {
+      margin: var(--space-10) 0;
+      padding: var(--space-8);
+      border-left: 3px solid var(--gold);
+      background: rgba(212, 175, 55, 0.03);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+
+    .pull-quote p {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-xl);
+      font-style: italic;
+      color: var(--paper);
+      line-height: 1.6;
+    }
+
+    .pull-quote cite {
+      display: block;
+      margin-top: var(--space-3);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-style: normal;
+      font-size: var(--text-sm);
+      color: var(--gold-dim);
+    }
+
+    /* Right info panel */
+    .reading-info {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: var(--space-6);
+      position: sticky;
+      top: var(--space-12);
+    }
+
+    .info-block {
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-block:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey-dim);
+      margin-bottom: var(--space-3);
+    }
+
+    .info-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: var(--text-lg);
+      color: var(--paper);
+    }
+
+    .episode-nav-mini {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .ep-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: var(--grey);
+      font-family: 'IBM Plex Mono', monospace;
+      transition: all var(--duration-fast) var(--ease-out);
+      cursor: default;
+    }
+
+    .ep-dot.active {
+      background: var(--gold);
+      color: var(--bg);
+      border-color: var(--gold);
+    }
+
+    .ep-dot:hover:not(.active) {
+      border-color: var(--gold-dim);
+      color: var(--gold);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SECTION 3: EPISODE CARDS
+       ═══════════════════════════════════════════════════════════ */
+    .episode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+
+    .episode-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: all var(--duration-base) var(--ease-out);
+      cursor: default;
+      position: relative;
+    }
+
+    .episode-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--glass-border);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+    }
+
+    .episode-card:hover .card-thumb-overlay {
+      opacity: 1;
+    }
+
+    .card-thumb {
+      aspect-ratio: 16/10;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-thumb-bg {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .card-thumb-bg .thumb-text {
+      font-family: 'Noto Serif Bengali', serif;
+      font-size: var(--text-lg);
+      color: var(--paper-dim);
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 9, 8, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity var(--duration-fast) var(--ease-out);
+    }
+
+    .card-thumb-overlay span {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: var(--text-sm);
+      color: var(--white);
+      padding: var(--space-2) var(--space-5);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: var(--radius-full);
+    }
+
+    .card-ep-number {
+      position: absolute;
+      top: var(--space-3);
+      left: var(--space-3);
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      color: var(--gold);
+      letter-spacing: 0.1em;
+    }
+
+    .card-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 0 2px 0 0;
+    }
+
+    .card-body {
+      padding: var(--space-5) var(--space-6);
+    }
+
+    .card-title {
+      font-family: 'Noto Serif Bengali', serif;
+      font-size: var(--text-md);
+      color: var(--paper);
+      margin-bottom: var(--space-2);
+      line-height: 1.4;
+    }
+
+    .card-subtitle {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: var(--text-sm);
+      color: var(--grey);
+      margin-bottom: var(--space-4);
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      color: var(--grey-dim);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SECTION 4: DESIGN SYSTEM
+       ═══════════════════════════════════════════════════════════ */
+    .ds-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-8);
+    }
+
+    .ds-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      padding: var(--space-8);
+      transition: all var(--duration-base) var(--ease-out);
+    }
+
+    .ds-card:hover {
+      border-color: var(--glass-border);
+    }
+
+    .ds-card-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: var(--space-8);
+    }
+
+    /* Color Palette */
+    .color-swatches {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    .color-swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .swatch-circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      position: relative;
+    }
+
+    .swatch-circle::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .swatch-name {
+      font-size: var(--text-xs);
+      color: var(--paper-dim);
+      font-weight: 500;
+    }
+
+    .swatch-hex {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--grey-dim);
+    }
+
+    /* Typography showcase */
+    .type-samples {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+
+    .type-sample {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .type-sample:last-child { border-bottom: none; }
+
+    .type-meta {
+      flex-shrink: 0;
+      width: 100px;
+    }
+
+    .type-font-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--gold-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .type-font-weight {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--grey-dim);
+    }
+
+    /* Spacing system */
+    .spacing-demo {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .spacing-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .spacing-bar {
+      height: 8px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dim));
+      border-radius: 4px;
+      opacity: 0.6;
+    }
+
+    .spacing-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--grey);
+      white-space: nowrap;
+      min-width: 60px;
+    }
+
+    .spacing-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--grey-dim);
+      min-width: 40px;
+    }
+
+    /* Component showcase */
+    .component-row {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-6);
+    }
+
+    .comp-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--grey-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-3);
+    }
+
+    .demo-btn {
+      padding: var(--space-2) var(--space-5);
+      border-radius: var(--radius-full);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: var(--text-sm);
+      border: none;
+      cursor: default;
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+
+    .demo-btn-primary {
+      background: var(--rust);
+      color: white;
+    }
+
+    .demo-btn-primary:hover { background: var(--rust-dim); }
+
+    .demo-btn-gold {
+      background: var(--gold);
+      color: var(--bg);
+    }
+
+    .demo-btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      color: var(--paper);
+    }
+
+    .demo-btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .demo-radius-row {
+      display: flex;
+      gap: var(--space-4);
+      align-items: end;
+    }
+
+    .demo-radius {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .demo-radius-box {
+      width: 48px;
+      height: 48px;
+      background: var(--bg);
+      border: 1px solid var(--gold-dim);
+    }
+
+    .demo-radius span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      color: var(--grey-dim);
+    }
+
+    /* Shadow showcase */
+    .shadow-row {
+      display: flex;
+      gap: var(--space-6);
+    }
+
+    .shadow-box {
+      width: 80px;
+      height: 80px;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-1);
+    }
+
+    .shadow-box span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      color: var(--grey-dim);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SECTION 5: TECHNOLOGY
+       ═══════════════════════════════════════════════════════════ */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+
+    .tech-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      padding: var(--space-8);
+      text-align: center;
+      transition: all var(--duration-base) var(--ease-out);
+      cursor: default;
+    }
+
+    .tech-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--glass-border);
+      box-shadow: var(--shadow-md);
+    }
+
+    .tech-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto var(--space-5);
+      border-radius: var(--radius-lg);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xl);
+    }
+
+    .tech-name {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: var(--text-base);
+      color: var(--paper);
+      font-weight: 500;
+      margin-bottom: var(--space-2);
+    }
+
+    .tech-desc {
+      font-size: var(--text-sm);
+      color: var(--grey);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SECTION 6: PERFORMANCE
+       ═══════════════════════════════════════════════════════════ */
+    .perf-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--space-8);
+    }
+
+    .perf-card {
+      text-align: center;
+      padding: var(--space-6);
+    }
+
+    .perf-circle {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto var(--space-6);
+      position: relative;
+    }
+
+    .perf-circle svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .perf-circle .circle-bg {
+      fill: none;
+      stroke: var(--grey-dark);
+      stroke-width: 3;
+    }
+
+    .perf-circle .circle-fill {
+      fill: none;
+      stroke-width: 3;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 2s var(--ease-out);
+    }
+
+    .perf-value {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-3xl);
+      color: var(--white);
+    }
+
+    .perf-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SECTION 7: DESIGN PRINCIPLES
+       ═══════════════════════════════════════════════════════════ */
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+    }
+
+    .principle-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      padding: var(--space-8) var(--space-6);
+      text-align: center;
+      transition: all var(--duration-base) var(--ease-out);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .principle-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity var(--duration-base) var(--ease-out);
+    }
+
+    .principle-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--glass-border);
+    }
+
+    .principle-card:hover::before {
+      opacity: 1;
+    }
+
+    .principle-number {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-4xl);
+      color: var(--grey-dark);
+      font-weight: 400;
+      line-height: 1;
+      margin-bottom: var(--space-5);
+    }
+
+    .principle-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto var(--space-5);
+      border-radius: 50%;
+      background: rgba(212, 175, 55, 0.06);
+      border: 1px solid rgba(212, 175, 55, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-lg);
+    }
+
+    .principle-title {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-md);
+      color: var(--paper);
+      margin-bottom: var(--space-3);
+      font-weight: 500;
+    }
+
+    .principle-desc {
+      font-size: var(--text-sm);
+      color: var(--grey);
+      line-height: 1.7;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MOTION SYSTEM
+       ═══════════════════════════════════════════════════════════ */
+    .motion-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-12);
+    }
+
+    .motion-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: var(--space-6);
+      text-align: center;
+    }
+
+    .motion-preview {
+      height: 60px;
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .motion-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .motion-card:nth-child(1) .motion-dot {
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .motion-card:nth-child(2) .motion-dot {
+      animation: shimmer-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes shimmer-dot {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .motion-card:nth-child(3) .motion-dot {
+      width: 40px;
+      border-radius: 6px;
+      height: 12px;
+      animation: slide-motion 2s ease-in-out infinite;
+    }
+
+    @keyframes slide-motion {
+      0%, 100% { transform: translateX(-20px); }
+      50% { transform: translateX(20px); }
+    }
+
+    .motion-card:nth-child(4) .motion-dot {
+      animation: rotate-slow 4s linear infinite;
+      border-radius: 4px;
+      width: 16px;
+      height: 16px;
+    }
+
+    .motion-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      color: var(--paper-dim);
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-1);
+    }
+
+    .motion-easing {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--grey-dim);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════ */
+    .cs-footer {
+      text-align: center;
+      padding: var(--space-32) 0 var(--space-16);
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-3xl);
+      color: var(--white);
+      font-weight: 400;
+      margin-bottom: var(--space-4);
+    }
+
+    .footer-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: var(--text-lg);
+      color: var(--grey);
+      font-weight: 300;
+      margin-bottom: var(--space-10);
+    }
+
+    .footer-link {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: var(--text-sm);
+      color: var(--gold);
+      text-decoration: none;
+      padding: var(--space-3) var(--space-6);
+      border: 1px solid var(--gold);
+      border-radius: var(--radius-full);
+      transition: all var(--duration-fast) var(--ease-out);
+      display: inline-block;
+    }
+
+    .footer-link:hover {
+      background: var(--gold);
+      color: var(--bg);
+    }
+
+    .footer-credits {
+      margin-top: var(--space-16);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      color: var(--grey-dim);
+      letter-spacing: 0.1em;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESPONSIVE HINTS
+       ═══════════════════════════════════════════════════════════ */
+    .responsive-section {
+      margin-top: var(--space-16);
+    }
+
+    .responsive-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+      align-items: end;
+    }
+
+    .device-frame {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .device-label {
+      text-align: center;
+      margin-bottom: var(--space-4);
+    }
+
+    .device-label-text {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--text-xs);
+      color: var(--grey);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .device-label-size {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--grey-dim);
+    }
+
+    .device-screen {
+      padding: var(--space-4);
+      background: var(--paper);
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .device-bar {
+      height: 6px;
+      background: rgba(0,0,0,0.08);
+      border-radius: 3px;
+    }
+
+    .device-bar.short { width: 40%; }
+    .device-bar.medium { width: 70%; }
+    .device-bar.long { width: 100%; }
+
+    .device-block {
+      height: 40px;
+      background: rgba(0,0,0,0.04);
+      border-radius: var(--radius-sm);
+    }
+
+    /* Desktop frame */
+    .device-desktop .device-screen { min-height: 260px; }
+    
+    /* Tablet frame */
+    .device-tablet {
+      max-width: 280px;
+      margin: 0 auto;
+    }
+    .device-tablet .device-screen { min-height: 220px; }
+
+    /* Mobile frame */
+    .device-mobile {
+      max-width: 180px;
+      margin: 0 auto;
+    }
+    .device-mobile .device-screen { min-height: 280px; }
+
+    /* Grid overlay section */
+    .grid-overlay-demo {
+      position: relative;
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      padding: var(--space-8);
+      height: 300px;
+      overflow: hidden;
+    }
+
+    .grid-columns {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--space-4);
+      height: 100%;
+    }
+
+    .grid-col {
+      background: rgba(212, 175, 55, 0.04);
+      border: 1px solid rgba(212, 175, 55, 0.08);
+      border-radius: var(--radius-sm);
+      position: relative;
+    }
+
+    .grid-col-label {
+      position: absolute;
+      bottom: var(--space-3);
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      color: var(--grey-dim);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       UTILITY
+       ═══════════════════════════════════════════════════════════ */
+    .text-gold { color: var(--gold); }
+    .text-rust { color: var(--rust); }
+    .text-grey { color: var(--grey); }
+    .text-dim { color: var(--grey-dim); }
+    .mb-2 { margin-bottom: var(--space-2); }
+    .mb-4 { margin-bottom: var(--space-4); }
+    .mb-8 { margin-bottom: var(--space-8); }
+    .mb-12 { margin-bottom: var(--space-12); }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Scroll Progress -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HEADER — CASE STUDY OPENING
+       ═══════════════════════════════════════════════════════════ -->
+  <header class="cs-header">
+    <div class="cs-eyebrow reveal">Design Case Study</div>
+
+    <h1 class="cs-title reveal reveal-delay-1">
+      Thoughts<br><em>Whatever</em>
+    </h1>
+
+    <p class="cs-subtitle reveal reveal-delay-2">
+      Close Reading, Documentary & Bengali Literature — 
+      A premium digital reading experience designed for slow, 
+      intentional engagement with literary criticism and storytelling.
+    </p>
+
+    <div class="nav-preview reveal reveal-delay-3">
+      <span class="nav-item">Writing</span>
+      <span class="nav-item">Blog</span>
+      <span class="nav-item active">Documentary</span>
+      <span class="nav-item">Archive</span>
+      <span class="nav-item">Search</span>
+      <span class="nav-item">ভাষা</span>
+    </div>
+
+    <div class="cs-meta reveal reveal-delay-4">
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Platform</span>
+        <span class="cs-meta-value">Web</span>
+      </div>
+      <div class="cs-meta-divider"></div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Year</span>
+        <span class="cs-meta-value">2026</span>
+      </div>
+      <div class="cs-meta-divider"></div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Role</span>
+        <span class="cs-meta-value">Design & Development</span>
+      </div>
+      <div class="cs-meta-divider"></div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Focus</span>
+        <span class="cs-meta-value">Editorial Reading</span>
+      </div>
+    </div>
+
+    <div class="cs-scroll-hint">
+      <span>Scroll to explore</span>
+      <div class="cs-scroll-line"></div>
+    </div>
+  </header>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 1: THREE-PANEL OVERVIEW
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="section" id="overview">
+    <div class="container-wide">
+      <div class="section-header reveal">
+        <span class="section-number">01</span>
+        <h2 class="section-title">Product Overview</h2>
+        <p class="section-desc">
+          A museum-like digital experience for Bengali literary criticism — 
+          where every word is given the space it deserves.
+        </p>
+      </div>
+
+      <div class="hero-panels">
+        <!-- LEFT PANEL -->
+        <div class="panel-left reveal reveal-delay-1">
+          <div class="panel-title">Overview</div>
+          <h3 class="panel-heading">A Premium Digital Reading Experience</h3>
+          <p class="panel-desc">
+            Designed with the philosophy of slow reading — 
+            where editorial craft meets museum aesthetics.
+            Every typographic choice, every whitespace decision, 
+            every interaction is intentional.
+          </p>
+
+          <div class="philosophy-tag">Design Philosophy</div>
+          <ul class="philosophy-list">
+            <li>
+              <div class="philosophy-icon">📖</div>
+              <span>Slow Reading</span>
+            </li>
+            <li>
+              <div class="philosophy-icon">✦</div>
+              <span>Editorial Typography</span>
+            </li>
+            <li>
+              <div class="philosophy-icon">♿</div>
+              <span>Accessibility First</span>
+            </li>
+            <li>
+              <div class="philosophy-icon">⚡</div>
+              <span>Performance Optimized</span>
+            </li>
+            <li>
+              <div class="philosophy-icon">🎨</div>
+              <span>Museum Experience</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- CENTER PANEL — HERO MOCKUP -->
+        <div class="panel-center reveal reveal-delay-2">
+          <div class="mockup-frame">
+            <div class="mockup-browser-bar">
+              <div class="browser-dot red"></div>
+              <div class="browser-dot yellow"></div>
+              <div class="browser-dot green"></div>
+              <div class="browser-url">
+                <span class="lock">🔒</span>
+                thoughts-whatever.vercel.app/documentary/মেঘনাদবধ-কাব্য-1
+              </div>
+            </div>
+            <div class="mockup-content">
+              <div class="page-mockup">
+                <!-- Nav -->
+                <div class="page-mockup-nav">
+                  <div class="pm-logo">
+                    <div class="pm-logo-badge">t.w</div>
+                    thoughts.whatever
+                  </div>
+                  <div class="pm-nav-links">
+                    <span>Writing</span>
+                    <span>Blog</span>
+                    <span class="active-link">Documentary</span>
+                    <span>Archive</span>
+                    <span>🔍</span>
+                  </div>
+                </div>
+
+                <!-- Hero Split -->
+                <div class="pm-hero">
+                  <div class="pm-hero-text">
+                    <div class="pm-breadcrumb">Documentary &nbsp;·&nbsp; মেঘনাদবধ কাব্য · পর্ব 1</div>
+                    <div class="pm-title">মেঘনাদবধ কাব্য 1</div>
+                    <div class="pm-meta-row">
+                      <span>📅 6 August 2026</span>
+                      <span>⏱ 1 min read</span>
+                      <span>👁 25 readers</span>
+                    </div>
+                    <div class="pm-buttons">
+                      <div class="pm-btn pm-btn-primary">Continue Reading ↓</div>
+                      <div class="pm-btn pm-btn-secondary">🎬 রিল দেখুন</div>
+                      <div class="pm-btn pm-btn-ghost">🔖 পরে পড়ব</div>
+                    </div>
+                  </div>
+                  <div class="pm-hero-img">
+                    <div class="pm-hero-img-inner">
+                      <div class="pm-img-title">মেঘনাদবধ<br>কাব্য</div>
+                      <div class="pm-img-subtitle">MEGHNAD-BADH KABYA</div>
+                    </div>
+                    <div class="pm-img-badge">EP 1 / 6</div>
+                  </div>
+                </div>
+
+                <!-- Bottom Bar -->
+                <div class="pm-bottom-bar">
+                  <div class="pm-series-progress">
+                    <div class="pm-sp-label">Series Progress</div>
+                    <div class="pm-sp-title">মেঘনাদবধ কাব্য</div>
+                    <div style="font-size:8px;color:#8B8B8B;margin-bottom:4px;font-family:'IBM Plex Sans',sans-serif;">Episode 1 / 6</div>
+                    <div class="pm-sp-bar"><div class="pm-sp-fill"></div></div>
+                  </div>
+                  <div class="pm-reel-card">
+                    <div class="pm-reel-icon">📷</div>
+                    <div class="pm-reel-text">
+                      <div style="font-weight:600;margin-bottom:2px;font-size:9px;">Instagram Reel</div>
+                      <div style="color:#8B8B8B;font-size:8px;">মেঘনাদবধ কাব্য 1 — Watch Reel →</div>
+                    </div>
+                  </div>
+                  <div class="pm-about">
+                    <div class="pm-about-label">About This Episode</div>
+                    <div class="pm-about-row"><span>Series</span><span>মেঘনাদবধ কাব্য</span></div>
+                    <div class="pm-about-row"><span>Episode</span><span>1 / 6</span></div>
+                    <div class="pm-about-row"><span>Category</span><span>Documentary</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT PANEL — HIGHLIGHTS -->
+        <div class="panel-right reveal reveal-delay-3">
+          <div class="panel-title">Key Highlights</div>
+          <ul class="highlights-list">
+            <li class="highlight-item"><div class="highlight-check">✓</div><span class="highlight-text">Cinematic Hero Section</span></li>
+            <li class="highlight-item"><div class="highlight-check">✓</div><span class="highlight-text">Editorial Reading Layout</span></li>
+            <li class="highlight-item"><div class="highlight-check">✓</div><span class="highlight-text">Bengali Typography System</span></li>
+            <li class="highlight-item"><div class="highlight-check">✓</div><span class="highlight-text">Sticky Table of Contents</span></li>
+            <li class="highlight-item"><div class="highlight-check">✓</div><span class="highlight-text">Episode Navigation</span></li>
+            <li class="highlight-item"><div class="highlight-check">✓</div><span class="highlight-text">Reading Progress Indicator</span></li>
+            <li class="highlight-item"><div class="highlight-check">✓</div><span class="highlight-text">Watch Reel Integration</span></li>
+            <li class="highlight-item"><div class="highlight-check">✓</div><span class="highlight-text">Bookmark & Read Later</span></li>
+            <li class="highlight-item"><div class="highlight-check">✓</div><span class="highlight-text">Social Sharing</span></li>
+            <li class="highlight-item"><div class="highlight-check">✓</div><span class="highlight-text">Listen to Article</span></li>
+            <li class="highlight-item"><div class="highlight-check">✓</div><span class="highlight-text">Print-Ready Layout</span></li>
+            <li class="highlight-item"><div class="highlight-check">✓</div><span class="highlight-text">Newsletter Subscription</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 2: READING LAYOUT
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="section" id="reading">
+    <div class="container-wide">
+      <div class="section-header reveal">
+        <span class="section-number">02</span>
+        <h2 class="section-title">Reading Experience</h2>
+        <p class="section-desc">
+          A three-column editorial layout with sticky navigation, 
+          reading progress, pull quotes, and drop caps — 
+          crafted for deep, immersive reading.
+        </p>
+      </div>
+
+      <div class="reading-layout-grid">
+        <!-- Sidebar TOC -->
+        <div class="reading-sidebar reveal">
+          <div class="sidebar-label">Table of Contents</div>
+          <ul class="toc-list">
+            <li class="toc-item active">ভূমিকা</li>
+            <li class="toc-item">ঘরের শত্রু বিভীষণ</li>
+            <li class="toc-item">রামায়ণের বিপরীত কণ্ঠস্বর</li>
+            <li class="toc-item">বীর না খলনায়ক?</li>
+            <li class="toc-item">মাইকেলের পুনর্নির্মাণ</li>
+            <li class="toc-item">উপসংহার</li>
+          </ul>
+          <div style="margin-top:var(--space-8);">
+            <div class="sidebar-label">Reading</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--grey);">
+              65% complete
+            </div>
+            <div class="pm-sp-bar" style="margin-top:var(--space-2);">
+              <div class="pm-sp-fill" style="width:65%;background:var(--gold);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Article Body -->
+        <div class="reading-article reveal reveal-delay-1">
+          <div class="reading-progress-bar"></div>
+          
+          <p class="article-text">
+            <span class="article-drop-cap font-display">ম</span>
+            <span class="article-text-bengali">
+              াইকেল মধুসুদন দত্তের মেঘনাদবধ কাব্য বাংলা সাহিত্যের এক অমর সৃষ্টি। এই মহাকাব্যে তিনি রামায়ণের প্রচলিত আখ্যানকে সম্পূর্ণ উল্টে দিয়েছেন — রাবণ ও মেঘনাদকে বীর হিসেবে এবং রাম ও লক্ষ্মণকে ছলনাকারী হিসেবে চিত্রিত করেছেন।
+            </span>
+          </p>
+
+          <div class="pull-quote">
+            <p>"হা রাবণ, ভূপতিকুলে শ্রেষ্ঠ তুমি, বীরেন্দ্র তুমি!"</p>
+            <cite>— মাইকেল মধুসুদন দত্ত, মেঘনাদবধ কাব্য</cite>
+          </div>
+
+          <p class="article-text-bengali">
+            এই কাব্যের প্রথম সর্গে আমরা দেখি কীভাবে রাবণ তাঁর পুত্রের বীরত্ব ও ত্যাগের কথা স্মরণ করেন। মেঘনাদ — ইন্দ্রজিৎ — যিনি স্বয়ং ইন্দ্রকে পরাজিত করেছিলেন, তাঁর মৃত্যু কীভাবে সম্ভব হলো, সেই প্রশ্নই এই মহাকাব্যের কেন্দ্রীয় জিজ্ঞাসা।
+          </p>
+
+          <div style="display:flex;gap:var(--space-4);flex-wrap:wrap;margin-top:var(--space-8);">
+            <div class="demo-btn demo-btn-ghost" style="font-size:var(--text-xs);">← পূর্ববর্তী পর্ব</div>
+            <div class="demo-btn demo-btn-primary" style="font-size:var(--text-xs);">পরবর্তী পর্ব →</div>
+          </div>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="reading-info reveal reveal-delay-2">
+          <div class="info-block">
+            <div class="info-label">Episode</div>
+            <div class="info-value">1 / 6</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">Reading Time</div>
+            <div class="info-value">12 min</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">Series</div>
+            <div class="info-value font-bengali">মেঘনাদবধ কাব্য</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">Navigate Episodes</div>
+            <div class="episode-nav-mini">
+              <div class="ep-dot active">1</div>
+              <div class="ep-dot">2</div>
+              <div class="ep-dot">3</div>
+              <div class="ep-dot">4</div>
+              <div class="ep-dot">5</div>
+              <div class="ep-dot">6</div>
+            </div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">Actions</div>
+            <div style="display:flex;flex-direction:column;gap:var(--space-2);">
+              <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--grey);">🔖 Bookmark</div>
+              <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--grey);">🔗 Share</div>
+              <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--grey);">🎧 Listen</div>
+              <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--grey);">🖨 Print</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 3: EPISODE CARDS
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="section" id="episodes">
+    <div class="container-wide">
+      <div class="section-header reveal">
+        <span class="section-number">03</span>
+        <h2 class="section-title">Episode Cards</h2>
+        <p class="section-desc">
+          Premium card components with progressive disclosure, 
+          reading progress indicators, and cinematic thumbnails.
+        </p>
+      </div>
+
+      <div class="episode-grid">
+        <div class="episode-card reveal reveal-delay-1">
+          <div class="card-thumb">
+            <div class="card-thumb-bg" style="background:linear-gradient(135deg, #1a0f06, #2a1a0a, #0a0908);">
+              <span class="thumb-text">ভূমিকা</span>
+            </div>
+            <div class="card-ep-number">EP 01</div>
+            <div class="card-progress" style="width:100%;"></div>
+            <div class="card-thumb-overlay"><span>Read →</span></div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">মেঘনাদবধ কাব্য ১</div>
+            <div class="card-subtitle">ঘরের শত্রু বিভীষণ — রামায়ণের বিপরীত কণ্ঠস্বর</div>
+            <div class="card-footer">
+              <span>12 min read</span>
+              <span style="color:var(--gold);">✓ Complete</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="episode-card reveal reveal-delay-2">
+          <div class="card-thumb">
+            <div class="card-thumb-bg" style="background:linear-gradient(135deg, #0a0f1a, #0a1a2a, #080a0a);">
+              <span class="thumb-text">যুদ্ধ</span>
+            </div>
+            <div class="card-ep-number">EP 02</div>
+            <div class="card-progress" style="width:45%;"></div>
+            <div class="card-thumb-overlay"><span>Continue →</span></div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">মেঘনাদবধ কাব্য ২</div>
+            <div class="card-subtitle">ইন্দ্রজিতের মহাবীরত্ব — যুদ্ধক্ষেত্রের বর্ণনা</div>
+            <div class="card-footer">
+              <span>15 min read</span>
+              <span style="color:var(--rust);">45% read</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="episode-card reveal reveal-delay-3">
+          <div class="card-thumb">
+            <div class="card-thumb-bg" style="background:linear-gradient(135deg, #1a0a0a, #2a0a0f, #0a0808);">
+              <span class="thumb-text">বিলাপ</span>
+            </div>
+            <div class="card-ep-number">EP 03</div>
+            <div class="card-thumb-overlay"><span>Start →</span></div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">মেঘনাদবধ কাব্য ৩</div>
+            <div class="card-subtitle">প্রমীলার বিলাপ — প্রেম ও যুদ্ধের দ্বন্দ্ব</div>
+            <div class="card-footer">
+              <span>10 min read</span>
+              <span>Not started</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="episode-card reveal reveal-delay-4">
+          <div class="card-thumb">
+            <div class="card-thumb-bg" style="background:linear-gradient(135deg, #0f0a1a, #1a0a2a, #080808);">
+              <span class="thumb-text">ছলনা</span>
+            </div>
+            <div class="card-ep-number">EP 04</div>
+            <div class="card-thumb-overlay"><span>Start →</span></div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">মেঘনাদবধ কাব্য ৪</div>
+            <div class="card-subtitle">লক্ষ্মণের নিকুম্ভিলা যাত্রা — ধর্ম না অধর্ম</div>
+            <div class="card-footer">
+              <span>14 min read</span>
+              <span>Not started</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="episode-card reveal reveal-delay-5">
+          <div class="card-thumb">
+            <div class="card-thumb-bg" style="background:linear-gradient(135deg, #0a1a0f, #0a2a1a, #080a08);">
+              <span class="thumb-text">পতন</span>
+            </div>
+            <div class="card-ep-number">EP 05</div>
+            <div class="card-thumb-overlay"><span>Start →</span></div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">মেঘনাদবধ কাব্য ৫</div>
+            <div class="card-subtitle">মেঘনাদের পতন — ন্যায়ের পরাজয়</div>
+            <div class="card-footer">
+              <span>18 min read</span>
+              <span>Not started</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="episode-card reveal reveal-delay-6">
+          <div class="card-thumb">
+            <div class="card-thumb-bg" style="background:linear-gradient(135deg, #1a1a0a, #2a2a0a, #0a0a08);">
+              <span class="thumb-text">উপসংহার</span>
+            </div>
+            <div class="card-ep-number">EP 06</div>
+            <div class="card-thumb-overlay"><span>Start →</span></div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">মেঘনাদবধ কাব্য ৬</div>
+            <div class="card-subtitle">চিতানলে চিরবিদায় — মহাকাব্যের সমাপ্তি</div>
+            <div class="card-footer">
+              <span>16 min read</span>
+              <span>Not started</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 4: DESIGN SYSTEM
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="section" id="design-system">
+    <div class="container-wide">
+      <div class="section-header reveal">
+        <span class="section-number">04</span>
+        <h2 class="section-title">Design System</h2>
+        <p class="section-desc">
+          A comprehensive design system built around editorial principles — 
+          color, typography, spacing, and components working in harmony.
+        </p>
+      </div>
+
+      <div class="ds-grid">
+        <!-- Color Palette -->
+        <div class="ds-card reveal">
+          <div class="ds-card-title">Color Palette</div>
+          <div class="color-swatches">
+            <div class="color-swatch">
+              <div class="swatch-circle" style="background:#0A0908;"></div>
+              <span class="swatch-name">Background</span>
+              <span class="swatch-hex">#0A0908</span>
+            </div>
+            <div class="color-swatch">
+              <div class="swatch-circle" style="background:#F7F3ED;"></div>
+              <span class="swatch-name">Paper</span>
+              <span class="swatch-hex">#F7F3ED</span>
+            </div>
+            <div class="color-swatch">
+              <div class="swatch-circle" style="background:#D4AF37;"></div>
+              <span class="swatch-name">Gold</span>
+              <span class="swatch-hex">#D4AF37</span>
+            </div>
+            <div class="color-swatch">
+              <div class="swatch-circle" style="background:#B63A2B;"></div>
+              <span class="swatch-name">Rust Red</span>
+              <span class="swatch-hex">#B63A2B</span>
+            </div>
+            <div class="color-swatch">
+              <div class="swatch-circle" style="background:#8C6239;"></div>
+              <span class="swatch-name">Bronze</span>
+              <span class="swatch-hex">#8C6239</span>
+            </div>
+            <div class="color-swatch">
+              <div class="swatch-circle" style="background:#F9F7F4;"></div>
+              <span class="swatch-name">White</span>
+              <span class="swatch-hex">#F9F7F4</span>
+            </div>
+            <div class="color-swatch">
+              <div class="swatch-circle" style="background:#8B8B8B;"></div>
+              <span class="swatch-name">Grey</span>
+              <span class="swatch-hex">#8B8B8B</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typography -->
+        <div class="ds-card reveal reveal-delay-1">
+          <div class="ds-card-title">Typography</div>
+          <div class="type-samples">
+            <div class="type-sample">
+              <div class="type-meta">
+                <div class="type-font-name">Playfair</div>
+                <div class="type-font-weight">Display</div>
+              </div>
+              <div style="font-family:'Playfair Display',serif;font-size:var(--text-2xl);color:var(--white);font-weight:400;">
+                Thoughts Whatever
+              </div>
+            </div>
+            <div class="type-sample">
+              <div class="type-meta">
+                <div class="type-font-name">Cormorant</div>
+                <div class="type-font-weight">Body</div>
+              </div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:var(--text-xl);color:var(--paper-dim);font-weight:400;">
+                Literary criticism & editorial
+              </div>
+            </div>
+            <div class="type-sample">
+              <div class="type-meta">
+                <div class="type-font-name">Noto Serif</div>
+                <div class="type-font-weight">Bengali</div>
+              </div>
+              <div style="font-family:'Noto Serif Bengali',serif;font-size:var(--text-xl);color:var(--paper-dim);">
+                মেঘনাদবধ কাব্য
+              </div>
+            </div>
+            <div class="type-sample">
+              <div class="type-meta">
+                <div class="type-font-name">Inter</div>
+                <div class="type-font-weight">UI / Meta</div>
+              </div>
+              <div style="font-family:'Inter',sans-serif;font-size:var(--text-base);color:var(--grey);">
+                Interface elements and metadata
+              </div>
+            </div>
+            <div class="type-sample">
+              <div class="type-meta">
+                <div class="type-font-name">IBM Plex</div>
+                <div class="type-font-weight">Mono</div>
+              </div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:var(--text-sm);color:var(--grey-dim);letter-spacing:0.05em;">
+                LABELS · CAPTIONS · CODE
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacing System -->
+        <div class="ds-card reveal reveal-delay-2">
+          <div class="ds-card-title">Spacing System</div>
+          <div class="spacing-demo">
+            <div class="spacing-row">
+              <span class="spacing-label">space-1</span>
+              <div class="spacing-bar" style="width:4px;"></div>
+              <span class="spacing-value">4px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">space-2</span>
+              <div class="spacing-bar" style="width:8px;"></div>
+              <span class="spacing-value">8px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">space-4</span>
+              <div class="spacing-bar" style="width:16px;"></div>
+              <span class="spacing-value">16px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">space-8</span>
+              <div class="spacing-bar" style="width:32px;"></div>
+              <span class="spacing-value">32px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">space-12</span>
+              <div class="spacing-bar" style="width:48px;"></div>
+              <span class="spacing-value">48px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">space-16</span>
+              <div class="spacing-bar" style="width:64px;"></div>
+              <span class="spacing-value">64px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">space-24</span>
+              <div class="spacing-bar" style="width:96px;"></div>
+              <span class="spacing-value">96px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">space-32</span>
+              <div class="spacing-bar" style="width:128px;"></div>
+              <span class="spacing-value">128px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">space-40</span>
+              <div class="spacing-bar" style="width:160px;"></div>
+              <span class="spacing-value">160px</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Components -->
+        <div class="ds-card reveal reveal-delay-3">
+          <div class="ds-card-title">Components</div>
+          
+          <div class="comp-label">Buttons</div>
+          <div class="component-row">
+            <div class="demo-btn demo-btn-primary">Continue Reading</div>
+            <div class="demo-btn demo-btn-gold">Watch Reel</div>
+            <div class="demo-btn demo-btn-ghost">Bookmark</div>
+          </div>
+
+          <div class="comp-label" style="margin-top:var(--space-6);">Border Radius</div>
+          <div class="demo-radius-row">
+            <div class="demo-radius">
+              <div class="demo-radius-box" style="border-radius:var(--radius-sm);"></div>
+              <span>6px</span>
+            </div>
+            <div class="demo-radius">
+              <div class="demo-radius-box" style="border-radius:var(--radius-md);"></div>
+              <span>10px</span>
+            </div>
+            <div class="demo-radius">
+              <div class="demo-radius-box" style="border-radius:var(--radius-lg);"></div>
+              <span>16px</span>
+            </div>
+            <div class="demo-radius">
+              <div class="demo-radius-box" style="border-radius:var(--radius-xl);"></div>
+              <span>24px</span>
+            </div>
+            <div class="demo-radius">
+              <div class="demo-radius-box" style="border-radius:var(--radius-full);"></div>
+              <span>Full</span>
+            </div>
+          </div>
+
+          <div class="comp-label" style="margin-top:var(--space-8);">Shadows</div>
+          <div class="shadow-row">
+            <div class="shadow-box" style="box-shadow:var(--shadow-sm);"><span>SM</span></div>
+            <div class="shadow-box" style="box-shadow:var(--shadow-md);"><span>MD</span></div>
+            <div class="shadow-box" style="box-shadow:var(--shadow-lg);"><span>LG</span></div>
+            <div class="shadow-box" style="box-shadow:var(--shadow-xl);"><span>XL</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid System -->
+      <div style="margin-top:var(--space-12);">
+        <div class="ds-card reveal">
+          <div class="ds-card-title">12-Column Grid System — Max Width 1440px</div>
+          <div class="grid-overlay-demo">
+            <div class="grid-columns">
+              <div class="grid-col"><span class="grid-col-label">1</span></div>
+              <div class="grid-col"><span class="grid-col-label">2</span></div>
+              <div class="grid-col"><span class="grid-col-label">3</span></div>
+              <div class="grid-col"><span class="grid-col-label">4</span></div>
+              <div class="grid-col"><span class="grid-col-label">5</span></div>
+              <div class="grid-col"><span class="grid-col-label">6</span></div>
+              <div class="grid-col"><span class="grid-col-label">7</span></div>
+              <div class="grid-col"><span class="grid-col-label">8</span></div>
+              <div class="grid-col"><span class="grid-col-label">9</span></div>
+              <div class="grid-col"><span class="grid-col-label">10</span></div>
+              <div class="grid-col"><span class="grid-col-label">11</span></div>
+              <div class="grid-col"><span class="grid-col-label">12</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 5: TECHNOLOGY
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="section" id="technology">
+    <div class="container-wide">
+      <div class="section-header reveal">
+        <span class="section-number">05</span>
+        <h2 class="section-title">Technology</h2>
+        <p class="section-desc">
+          Built on a modern, performant stack — every technology choice 
+          serves the reading experience.
+        </p>
+      </div>
+
+      <div class="tech-grid">
+        <div class="tech-card reveal reveal-delay-1">
+          <div class="tech-icon">▲</div>
+          <div class="tech-name">Next.js 14</div>
+          <div class="tech-desc">App Router with SSR, ISR, and edge-optimized rendering for instant page loads.</div>
+        </div>
+        <div class="tech-card reveal reveal-delay-2">
+          <div class="tech-icon">TS</div>
+          <div class="tech-name">TypeScript</div>
+          <div class="tech-desc">End-to-end type safety across API routes, components, and data models.</div>
+        </div>
+        <div class="tech-card reveal reveal-delay-3">
+          <div class="tech-icon">🎨</div>
+          <div class="tech-name">Tailwind CSS</div>
+          <div class="tech-desc">Utility-first styling with custom design tokens and responsive breakpoints.</div>
+        </div>
+        <div class="tech-card reveal reveal-delay-4">
+          <div class="tech-icon">🍃</div>
+          <div class="tech-name">MongoDB</div>
+          <div class="tech-desc">Flexible document database with Prisma ORM for type-safe data access.</div>
+        </div>
+        <div class="tech-card reveal reveal-delay-5">
+          <div class="tech-icon">☁️</div>
+          <div class="tech-name">Cloudinary</div>
+          <div class="tech-desc">Optimized image delivery with automatic format conversion and responsive sizing.</div>
+        </div>
+        <div class="tech-card reveal reveal-delay-6">
+          <div class="tech-icon">✨</div>
+          <div class="tech-name">Framer Motion</div>
+          <div class="tech-desc">Premium micro-animations, page transitions, and scroll-driven interactions.</div>
+        </div>
+        <div class="tech-card reveal reveal-delay-7">
+          <div class="tech-icon">▲</div>
+          <div class="tech-name">Vercel</div>
+          <div class="tech-desc">Edge deployment with global CDN, analytics, and automatic preview environments.</div>
+        </div>
+        <div class="tech-card reveal reveal-delay-8">
+          <div class="tech-icon">🤖</div>
+          <div class="tech-name">AI / Automation</div>
+          <div class="tech-desc">Groq & OpenAI integration for content processing, transliteration, and search.</div>
+        </div>
+        <div class="tech-card reveal reveal-delay-8">
+          <div class="tech-icon">🔍</div>
+          <div class="tech-name">SEO</div>
+          <div class="tech-desc">Structured data, dynamic OG images, sitemaps, and Bengali language optimization.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 6: PERFORMANCE
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="section" id="performance">
+    <div class="container-wide">
+      <div class="section-header reveal">
+        <span class="section-number">06</span>
+        <h2 class="section-title">Performance</h2>
+        <p class="section-desc">
+          Lighthouse scores that prove premium design 
+          and blazing performance are not mutually exclusive.
+        </p>
+      </div>
+
+      <div class="perf-grid">
+        <div class="perf-card reveal reveal-delay-1">
+          <div class="perf-circle" data-value="98" data-color="#28c840">
+            <svg viewBox="0 0 120 120">
+              <circle class="circle-bg" cx="60" cy="60" r="54"/>
+              <circle class="circle-fill" cx="60" cy="60" r="54"
+                stroke="#28c840"
+                stroke-dasharray="339.29"
+                stroke-dashoffset="339.29"/>
+            </svg>
+            <div class="perf-value">98</div>
+          </div>
+          <div class="perf-label">Performance</div>
+        </div>
+
+        <div class="perf-card reveal reveal-delay-2">
+          <div class="perf-circle" data-value="100" data-color="#28c840">
+            <svg viewBox="0 0 120 120">
+              <circle class="circle-bg" cx="60" cy="60" r="54"/>
+              <circle class="circle-fill" cx="60" cy="60" r="54"
+                stroke="#28c840"
+                stroke-dasharray="339.29"
+                stroke-dashoffset="339.29"/>
+            </svg>
+            <div class="perf-value">100</div>
+          </div>
+          <div class="perf-label">Accessibility</div>
+        </div>
+
+        <div class="perf-card reveal reveal-delay-3">
+          <div class="perf-circle" data-value="100" data-color="#28c840">
+            <svg viewBox="0 0 120 120">
+              <circle class="circle-bg" cx="60" cy="60" r="54"/>
+              <circle class="circle-fill" cx="60" cy="60" r="54"
+                stroke="#28c840"
+                stroke-dasharray="339.29"
+                stroke-dashoffset="339.29"/>
+            </svg>
+            <div class="perf-value">100</div>
+          </div>
+          <div class="perf-label">SEO</div>
+        </div>
+
+        <div class="perf-card reveal reveal-delay-4">
+          <div class="perf-circle" data-value="100" data-color="#28c840">
+            <svg viewBox="0 0 120 120">
+              <circle class="circle-bg" cx="60" cy="60" r="54"/>
+              <circle class="circle-fill" cx="60" cy="60" r="54"
+                stroke="#28c840"
+                stroke-dasharray="339.29"
+                stroke-dashoffset="339.29"/>
+            </svg>
+            <div class="perf-value">100</div>
+          </div>
+          <div class="perf-label">Best Practices</div>
+        </div>
+
+        <div class="perf-card reveal reveal-delay-5">
+          <div class="perf-circle" data-value="100" data-color="#28c840">
+            <svg viewBox="0 0 120 120">
+              <circle class="circle-bg" cx="60" cy="60" r="54"/>
+              <circle class="circle-fill" cx="60" cy="60" r="54"
+                stroke="#28c840"
+                stroke-dasharray="339.29"
+                stroke-dashoffset="339.29"/>
+            </svg>
+            <div class="perf-value" style="font-size:var(--text-xl);">CWV</div>
+          </div>
+          <div class="perf-label">Core Web Vitals</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 7: DESIGN PRINCIPLES
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="section" id="principles">
+    <div class="container-wide">
+      <div class="section-header reveal">
+        <span class="section-number">07</span>
+        <h2 class="section-title">Design Principles</h2>
+        <p class="section-desc">
+          Eight guiding principles that shape every design decision — 
+          from typography to transitions.
+        </p>
+      </div>
+
+      <div class="principles-grid">
+        <div class="principle-card reveal reveal-delay-1">
+          <div class="principle-number">01</div>
+          <div class="principle-icon">📐</div>
+          <div class="principle-title">Editorial Layout</div>
+          <div class="principle-desc">Magazine-quality grid systems with generous margins and intentional whitespace.</div>
+        </div>
+        <div class="principle-card reveal reveal-delay-2">
+          <div class="principle-number">02</div>
+          <div class="principle-icon">🏛</div>
+          <div class="principle-title">Museum Feel</div>
+          <div class="principle-desc">Each piece is given gallery-like presentation with breathing room and reverence.</div>
+        </div>
+        <div class="principle-card reveal reveal-delay-3">
+          <div class="principle-number">03</div>
+          <div class="principle-icon">📖</div>
+          <div class="principle-title">Long-form Reading</div>
+          <div class="principle-desc">Optimized for sustained reading with perfect line height, measure, and rhythm.</div>
+        </div>
+        <div class="principle-card reveal reveal-delay-4">
+          <div class="principle-number">04</div>
+          <div class="principle-icon">🔇</div>
+          <div class="principle-title">Minimal Distraction</div>
+          <div class="principle-desc">Interface elements recede when reading begins. Content always takes center stage.</div>
+        </div>
+        <div class="principle-card reveal reveal-delay-5">
+          <div class="principle-number">05</div>
+          <div class="principle-icon">✨</div>
+          <div class="principle-title">Premium Motion</div>
+          <div class="principle-desc">Carefully choreographed animations that enhance without overwhelming the experience.</div>
+        </div>
+        <div class="principle-card reveal reveal-delay-6">
+          <div class="principle-number">06</div>
+          <div class="principle-icon">♿</div>
+          <div class="principle-title">Accessibility First</div>
+          <div class="principle-desc">WCAG 2.1 AA compliant with screen reader support, keyboard navigation, and reduced motion.</div>
+        </div>
+        <div class="principle-card reveal reveal-delay-7">
+          <div class="principle-number">07</div>
+          <div class="principle-icon">Aa</div>
+          <div class="principle-title">Typography First</div>
+          <div class="principle-desc">Five carefully curated typefaces working in harmony across Bengali and English text.</div>
+        </div>
+        <div class="principle-card reveal reveal-delay-8">
+          <div class="principle-number">08</div>
+          <div class="principle-icon">📝</div>
+          <div class="principle-title">Content First</div>
+          <div class="principle-desc">Design serves the literature. Every visual choice supports and elevates the writing.</div>
+        </div>
+      </div>
+
+      <!-- Motion System -->
+      <div class="motion-grid reveal">
+        <div class="motion-card">
+          <div class="motion-preview"><div class="motion-dot"></div></div>
+          <div class="motion-name">Float</div>
+          <div class="motion-easing">ease-in-out · 3s</div>
+        </div>
+        <div class="motion-card">
+          <div class="motion-preview"><div class="motion-dot"></div></div>
+          <div class="motion-name">Pulse</div>
+          <div class="motion-easing">ease-in-out · 2s</div>
+        </div>
+        <div class="motion-card">
+          <div class="motion-preview"><div class="motion-dot"></div></div>
+          <div class="motion-name">Slide</div>
+          <div class="motion-easing">cubic-bezier · 700ms</div>
+        </div>
+        <div class="motion-card">
+          <div class="motion-preview"><div class="motion-dot"></div></div>
+          <div class="motion-name">Rotate</div>
+          <div class="motion-easing">linear · 4s</div>
+        </div>
+      </div>
+
+      <!-- Responsive Behavior -->
+      <div class="responsive-section reveal" style="margin-top:var(--space-16);">
+        <div style="text-align:center;margin-bottom:var(--space-10);">
+          <div class="ds-card-title" style="margin-bottom:var(--space-3);">Responsive Behavior</div>
+          <div style="font-size:var(--text-sm);color:var(--grey);">Fluid layouts that adapt gracefully across all viewports</div>
+        </div>
+        <div class="responsive-grid">
+          <div>
+            <div class="device-label">
+              <div class="device-label-text">Desktop</div>
+              <div class="device-label-size">1440px</div>
+            </div>
+            <div class="device-frame device-desktop">
+              <div style="padding:6px 10px;background:var(--bg-elevated);border-bottom:1px solid var(--border);display:flex;gap:4px;">
+                <div style="width:6px;height:6px;border-radius:50%;background:#ff5f57;"></div>
+                <div style="width:6px;height:6px;border-radius:50%;background:#febc2e;"></div>
+                <div style="width:6px;height:6px;border-radius:50%;background:#28c840;"></div>
+              </div>
+              <div class="device-screen">
+                <div class="device-bar short"></div>
+                <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:6px;flex:1;">
+                  <div class="device-block"></div>
+                  <div class="device-block" style="height:auto;"></div>
+                  <div class="device-block"></div>
+                </div>
+                <div class="device-bar long"></div>
+                <div class="device-bar medium"></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="device-label">
+              <div class="device-label-text">Tablet</div>
+              <div class="device-label-size">768px</div>
+            </div>
+            <div class="device-frame device-tablet">
+              <div style="padding:6px 10px;background:var(--bg-elevated);border-bottom:1px solid var(--border);display:flex;justify-content:center;">
+                <div style="width:40px;height:4px;border-radius:2px;background:var(--grey-dark);"></div>
+              </div>
+              <div class="device-screen">
+                <div class="device-bar short"></div>
+                <div style="display:grid;grid-template-columns:1fr 2fr;gap:6px;flex:1;">
+                  <div class="device-block"></div>
+                  <div class="device-block" style="height:auto;"></div>
+                </div>
+                <div class="device-bar long"></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="device-label">
+              <div class="device-label-text">Mobile</div>
+              <div class="device-label-size">375px</div>
+            </div>
+            <div class="device-frame device-mobile">
+              <div style="padding:6px 10px;background:var(--bg-elevated);border-bottom:1px solid var(--border);display:flex;justify-content:center;">
+                <div style="width:30px;height:4px;border-radius:2px;background:var(--grey-dark);"></div>
+              </div>
+              <div class="device-screen">
+                <div class="device-bar medium"></div>
+                <div class="device-block" style="height:60px;"></div>
+                <div class="device-bar long"></div>
+                <div class="device-bar long"></div>
+                <div class="device-bar medium"></div>
+                <div class="device-block" style="height:40px;"></div>
+                <div class="device-bar short"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════ -->
+  <footer class="cs-footer">
+    <div class="container">
+      <div class="footer-logo reveal">Thoughts Whatever</div>
+      <div class="footer-tagline reveal reveal-delay-1">
+        Bengali Literature, Close Reading, and Documentary
+      </div>
+      <a href="https://thoughts-whatever.vercel.app" target="_blank" class="footer-link reveal reveal-delay-2">
+        Visit Live Site →
+      </a>
+      <div class="footer-credits reveal reveal-delay-3">
+        Design Case Study · 2026
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SCRIPTS
+       ═══════════════════════════════════════════════════════════ -->
+  <script>
+    // ─── Scroll Progress ───
+    const scrollProgress = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      scrollProgress.style.width = scrollPercent + '%';
+    });
+
+    // ─── Reveal on Scroll ───
+    const revealElements = document.querySelectorAll('.reveal, .fade-in');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -60px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // ─── Performance Circles Animation ───
+    const perfCircles = document.querySelectorAll('.perf-circle');
+    const perfObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const circle = entry.target;
+          const value = parseInt(circle.dataset.value) || 100;
+          const fillCircle = circle.querySelector('.circle-fill');
+          const circumference = 339.29;
+          const offset = circumference - (value / 100) * circumference;
+          
+          setTimeout(() => {
+            fillCircle.style.strokeDashoffset = offset;
+          }, 300);
+          
+          perfObserver.unobserve(circle);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    perfCircles.forEach(circle => perfObserver.observe(circle));
+
+    // ─── Smooth scroll for anchors ───
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

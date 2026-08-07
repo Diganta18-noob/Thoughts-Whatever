@@ -139,11 +139,18 @@ export function ArticleHero({ piece, onScrollToContent }: ArticleHeroProps) {
         {/* Right Column: Portrait Cover Artwork Frame with Ambient Glow */}
         {piece.coverImage && (
           <div className="relative flex items-center justify-center">
-            {/* Ambient Warm Glow Backdrop */}
-            <div
-              className="absolute -inset-4 rounded-3xl bg-cover bg-center blur-3xl opacity-30 pointer-events-none"
-              style={{ backgroundImage: `url(${piece.coverImage})` }}
-            />
+            {/* Ambient Warm Glow Backdrop (Optimized Next.js Image) */}
+            <div className="absolute -inset-4 rounded-3xl overflow-hidden blur-3xl opacity-30 pointer-events-none">
+              <Image
+                src={piece.coverImage}
+                alt=""
+                fill
+                sizes="100px"
+                quality={10}
+                className="object-cover"
+                aria-hidden="true"
+              />
+            </div>
 
             {/* Main Portrait Frame */}
             <motion.div
@@ -160,6 +167,8 @@ export function ArticleHero({ piece, onScrollToContent }: ArticleHeroProps) {
                 alt={piece.titleBn}
                 fill
                 priority
+                fetchPriority="high"
+                decoding="async"
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 400px"
               />
