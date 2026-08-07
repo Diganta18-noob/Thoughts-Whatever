@@ -9,6 +9,9 @@ import { useLanguage } from "@/components/providers/language-provider";
 import { cn } from "@/lib/utils";
 import type { PieceCardData } from "@/components/pieces/piece-card";
 
+import { CoverImageFrame } from "@/components/media/cover-image-frame";
+import { useCardHover } from "@/lib/hooks/use-card-hover";
+
 export interface EpisodeCarouselProps {
   episodes: PieceCardData[];
   currentSlug: string;
@@ -16,6 +19,7 @@ export interface EpisodeCarouselProps {
 
 export function EpisodeCarousel({ episodes, currentSlug }: EpisodeCarouselProps) {
   const { locale } = useLanguage();
+  const { cardMotionProps } = useCardHover({ cardRise: -4 });
 
   if (!episodes || episodes.length === 0) return null;
 
@@ -40,8 +44,7 @@ export function EpisodeCarousel({ episodes, currentSlug }: EpisodeCarouselProps)
           return (
             <motion.div
               key={ep.slug}
-              whileHover={{ y: isLocked ? 0 : -4, scale: isLocked ? 1 : 1.02 }}
-              transition={{ duration: 0.25 }}
+              {...(isLocked ? {} : cardMotionProps)}
               className={cn(
                 "snap-start shrink-0 w-64 rounded-xl border p-4 transition-all duration-300 flex flex-col justify-between",
                 isCurrent
@@ -52,16 +55,19 @@ export function EpisodeCarousel({ episodes, currentSlug }: EpisodeCarouselProps)
               )}
             >
               {/* Episode Cover & Status Badge */}
-              <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-lg border border-rule/40 bg-transparent">
-                {ep.coverImage && (
-                  <Image
-                    src={ep.coverImage}
-                    alt={ep.titleBn}
-                    fill
-                    className="object-cover"
+              {ep.coverImage && (
+                <div className="relative mb-3">
+                  <CoverImageFrame
+                    owner="piece"
+                    slug={ep.slug}
+                    coverImage={ep.coverImage}
+                    aspect="aspect-[3/4]"
+                    rounded="rounded-lg"
                     sizes="250px"
+                    overlay={!isLocked}
                   />
-                )}
+                </div>
+              )}
 
 
                 {/* Status Indicator */}
@@ -74,7 +80,6 @@ export function EpisodeCarousel({ episodes, currentSlug }: EpisodeCarouselProps)
                     <span>Ep {i + 1}</span>
                   )}
                 </div>
-              </div>
 
               {/* Title & Info */}
               <div>

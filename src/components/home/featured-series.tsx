@@ -26,6 +26,10 @@ type SeriesWithPieces = {
   }>;
 };
 
+import { motion } from "framer-motion";
+import { CoverImageFrame } from "@/components/media/cover-image-frame";
+import { useCardHover } from "@/lib/hooks/use-card-hover";
+
 function SeriesCard({
   series,
   locale,
@@ -37,6 +41,7 @@ function SeriesCard({
 }) {
   const { t } = useLanguage();
   const { seriesProgress } = useProgress();
+  const { cardMotionProps } = useCardHover();
 
   const slugs = series.pieces.map((p) => p.slug);
   const progress = seriesProgress(slugs);
@@ -52,18 +57,18 @@ function SeriesCard({
   const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-widest";
 
   return (
-    <article className="group relative">
+    <motion.article className="group relative" {...cardMotionProps}>
       <Link href={`/series/${series.slug}`} className="block">
         {series.coverImage && (
-          <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-surface-raised">
-            <CoverImage
-              owner="series"
-              slug={series.slug}
-              coverImage={series.coverImage}
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="transition-transform duration-500 group-hover:scale-[1.02]"
-            />
-          </div>
+          <CoverImageFrame
+            owner="series"
+            slug={series.slug}
+            coverImage={series.coverImage}
+            aspect="aspect-[3/4]"
+            rounded="rounded-sm"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            overlay
+          />
         )}
 
         <div className="mt-4">
@@ -123,7 +128,7 @@ function SeriesCard({
           </Magnetic>
         </div>
       )}
-    </article>
+    </motion.article>
   );
 }
 

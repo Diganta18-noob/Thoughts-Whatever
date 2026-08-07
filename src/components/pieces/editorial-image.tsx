@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { analyzeImage, probeImageDimensions, type EditorialLayout } from "@/lib/image-meta";
+import { hover } from "@/components/motion/motion-tokens";
 
 export interface EditorialImageProps {
   src: string;
@@ -80,6 +82,8 @@ export function EditorialImage({
     />
   );
 
+  const prefersReduced = useReducedMotion();
+
   // 1. Split Layout (Portrait)
   if (activeLayout === "split" && children) {
     return (
@@ -93,26 +97,34 @@ export function EditorialImage({
       >
         <div
           className={cn(
-            "relative overflow-hidden rounded-md bg-surface-raised/30 flex items-center justify-center mx-auto w-full max-w-sm md:max-w-none shadow-sm transition-shadow duration-300 hover:shadow-md",
+            "relative overflow-hidden rounded-md bg-surface-raised/30 flex items-center justify-center mx-auto w-full max-w-sm md:max-w-none shadow-sm transition-shadow duration-500 hover:shadow-xl",
             showBorder && "border border-rule"
           )}
           style={{ aspectRatio: computedAspectRatio || "3/4" }}
         >
           {renderSkeleton}
-          <Image
-            src={src}
-            alt={alt}
-            width={dimensions?.width || 800}
-            height={dimensions?.height || 1066}
-            priority={priority}
-            unoptimized={src.startsWith("data:")}
-            onLoad={() => setLoaded(true)}
-            className={cn(
-              "w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]",
-              loaded ? "opacity-100" : "opacity-0"
-            )}
-            sizes="(max-width: 768px) 100vw, 40vw"
-          />
+          <motion.div
+            className="w-full h-full will-change-transform"
+            whileHover={{
+              scale: prefersReduced ? 1 : hover.scale,
+              transition: { duration: hover.duration, ease: hover.ease },
+            }}
+          >
+            <Image
+              src={src}
+              alt={alt}
+              width={dimensions?.width || 800}
+              height={dimensions?.height || 1066}
+              priority={priority}
+              unoptimized={src.startsWith("data:")}
+              onLoad={() => setLoaded(true)}
+              className={cn(
+                "w-full h-full object-cover",
+                loaded ? "opacity-100" : "opacity-0"
+              )}
+              sizes="(max-width: 768px) 100vw, 40vw"
+            />
+          </motion.div>
         </div>
         <div className="min-w-0">{children}</div>
       </div>
@@ -124,7 +136,7 @@ export function EditorialImage({
     <div
       ref={containerRef}
       className={cn(
-        "relative overflow-hidden rounded-lg bg-transparent flex items-center justify-center w-full shadow-sm transition-all duration-300 hover:shadow-md",
+        "relative overflow-hidden rounded-lg bg-transparent flex items-center justify-center w-full shadow-sm transition-all duration-500 hover:shadow-xl",
         showBorder && "border border-rule",
         aspectRatioOverride,
         inView && "editorial-image-reveal",
@@ -135,20 +147,28 @@ export function EditorialImage({
       }}
     >
       {renderSkeleton}
-      <Image
-        src={src}
-        alt={alt}
-        width={dimensions?.width || 1200}
-        height={dimensions?.height || 675}
-        priority={priority}
-        unoptimized={src.startsWith("data:")}
-        onLoad={() => setLoaded(true)}
-        className={cn(
-          "w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]",
-          loaded ? "opacity-100" : "opacity-0"
-        )}
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
-      />
+      <motion.div
+        className="w-full h-full will-change-transform"
+        whileHover={{
+          scale: prefersReduced ? 1 : hover.scale,
+          transition: { duration: hover.duration, ease: hover.ease },
+        }}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          width={dimensions?.width || 1200}
+          height={dimensions?.height || 675}
+          priority={priority}
+          unoptimized={src.startsWith("data:")}
+          onLoad={() => setLoaded(true)}
+          className={cn(
+            "w-full h-full object-cover",
+            loaded ? "opacity-100" : "opacity-0"
+          )}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
+        />
+      </motion.div>
     </div>
   );
 

@@ -8,6 +8,10 @@ import { formatReading, formatDate } from "@/lib/i18n/format";
 import { piecePath } from "@/lib/nav";
 import type { CardPiece } from "@/lib/pieces";
 
+import { motion } from "framer-motion";
+import { CoverImageFrame } from "@/components/media/cover-image-frame";
+import { useCardHover } from "@/lib/hooks/use-card-hover";
+
 function EditorialCard({
   piece,
   layout,
@@ -18,34 +22,35 @@ function EditorialCard({
   const { locale, isBn } = useLanguage();
   const href = piecePath(piece.kind, piece.slug);
   const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-widest";
+  const { cardMotionProps } = useCardHover();
+
+  const aspect =
+    layout === "large"
+      ? "aspect-[4/5]"
+      : layout === "wide"
+      ? "aspect-[16/9]"
+      : "aspect-[3/4]";
+
+  const sizes =
+    layout === "large"
+      ? "(max-width: 768px) 100vw, 50vw"
+      : layout === "wide"
+      ? "(max-width: 768px) 100vw, 66vw"
+      : "(max-width: 640px) 50vw, 33vw";
 
   return (
-    <article className="group">
+    <motion.article className="group" {...cardMotionProps}>
       <Link href={href} className="block">
         {piece.coverImage && (
-          <div
-            className={`relative overflow-hidden rounded-sm bg-surface-raised ${
-              layout === "large"
-                ? "aspect-[4/5]"
-                : layout === "wide"
-                  ? "aspect-[16/9]"
-                  : "aspect-[3/4]"
-            }`}
-          >
-            <CoverImage
-              owner="piece"
-              slug={piece.slug}
-              coverImage={piece.coverImage}
-              sizes={
-                layout === "large"
-                  ? "(max-width: 768px) 100vw, 50vw"
-                  : layout === "wide"
-                    ? "(max-width: 768px) 100vw, 66vw"
-                    : "(max-width: 640px) 50vw, 33vw"
-              }
-              className="transition-transform duration-500 group-hover:scale-[1.02]"
-            />
-          </div>
+          <CoverImageFrame
+            owner="piece"
+            slug={piece.slug}
+            coverImage={piece.coverImage}
+            aspect={aspect}
+            rounded="rounded-sm"
+            sizes={sizes}
+            overlay
+          />
         )}
 
         <div className={layout === "large" ? "mt-6" : "mt-4"}>
@@ -87,7 +92,7 @@ function EditorialCard({
           )}
         </div>
       </Link>
-    </article>
+    </motion.article>
   );
 }
 

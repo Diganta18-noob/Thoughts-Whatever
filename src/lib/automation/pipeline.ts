@@ -146,7 +146,8 @@ export async function runMasterPipeline(): Promise<PipelineReport> {
 
   // Step 13: Performance Audit
   await executeStep(13, "Performance Audit", async () => {
-    return await auditPerformance();
+    const perf = await auditPerformance();
+    return { ...perf } as Record<string, unknown>;
   });
 
   // Step 14: Generate Analytics & Security Report

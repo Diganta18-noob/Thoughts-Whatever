@@ -7,6 +7,8 @@ import { useLanguage } from "@/components/providers/language-provider";
 import { KIND_META } from "@/lib/nav";
 import type { FullPiece } from "@/lib/pieces";
 
+import { CoverImageFrame } from "@/components/media/cover-image-frame";
+
 export interface ArticleRightSidebarProps {
   piece: FullPiece;
   nextEpisode?: { slug: string; titleBn: string; coverImage?: string | null };
@@ -105,12 +107,15 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
           >
             <div className="flex gap-3 items-center">
               {nextEpisode.coverImage && (
-                <div className="h-16 w-12 shrink-0 overflow-hidden rounded border border-rule/60 relative">
-                  <Image
-                    src={nextEpisode.coverImage}
-                    alt={nextEpisode.titleBn}
-                    fill
-                    className="object-cover transition-transform group-hover:scale-105"
+                <div className="h-16 w-12 shrink-0">
+                  <CoverImageFrame
+                    owner="piece"
+                    slug={nextEpisode.slug}
+                    coverImage={nextEpisode.coverImage}
+                    aspect="aspect-[3/4]"
+                    rounded="rounded"
+                    scale={1.05}
+                    sizes="48px"
                   />
                 </div>
               )}

@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { AutomationDashboard } from "@/components/admin/automation-dashboard";
 
@@ -112,10 +114,11 @@ export default function SystemHealthPage() {
     <div className="p-6 space-y-8 max-w-7xl mx-auto">
       <AutomationDashboard />
 
-      <div>
-        <h1 className="text-2xl font-bold font-serif text-journal-ink">System Health & Diagnostics</h1>
-        <p className="text-sm text-journal-inkSoft">Server diagnostics, storage utilization, and database backup control.</p>
-      </div>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold font-serif text-journal-ink">System Health & Diagnostics</h1>
+          <p className="text-sm text-journal-inkSoft">Server diagnostics, storage utilization, and database backup control.</p>
+        </div>
 
         <div className="flex items-center gap-3">
           <button

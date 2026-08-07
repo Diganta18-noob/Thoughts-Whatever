@@ -81,6 +81,9 @@ function CardDate({ publishedAt }: { publishedAt: Date | string }) {
  * in a serif at a readable size does more to make someone click than a
  * thumbnail does, and most pieces here are writing, not images.
  */
+import { motion } from "framer-motion";
+import { useCardHover } from "@/lib/hooks/use-card-hover";
+
 export function PieceCard({
   piece,
   variant = "journal",
@@ -96,9 +99,11 @@ export function PieceCard({
   const archive = variant === "archive";
   const summary = piece.dekBn || piece.excerptBn;
   const metaFace = isBn ? "font-bengali-sans" : "font-sans";
+  const { cardMotionProps } = useCardHover();
 
   return (
-    <article
+    <motion.article
+      {...cardMotionProps}
       className={cn(
         "group",
         archive && "border border-archive-panelEdge bg-archive-panel/60 p-5",
@@ -177,7 +182,7 @@ export function PieceCard({
           ))}
         </p>
       )}
-    </article>
+    </motion.article>
   );
 }
 
