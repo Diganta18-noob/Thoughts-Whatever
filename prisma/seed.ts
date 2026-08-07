@@ -15,10 +15,17 @@
  * something is wrong with the PUBLISHED filter.
  */
 
+import fs from "fs";
+import path from "path";
 import { PrismaClient, type PieceKind, type TagKind } from "@prisma/client";
 import { bengaliSlug, readingMinutes } from "../src/lib/bengali";
 
 const prisma = new PrismaClient();
+
+const raktaKarabiCoverPath = path.join(process.cwd(), "Content", "Thumnail", "Solo", "রক্তকরবী.PNG");
+const raktaKarabiCoverImage = fs.existsSync(raktaKarabiCoverPath)
+  ? `data:image/png;base64,${fs.readFileSync(raktaKarabiCoverPath).toString("base64")}`
+  : null;
 
 // ─── Authors ────────────────────────────────────────────────
 // The literary figure a piece is *about*, not who typed it.
@@ -522,6 +529,7 @@ const PIECES: SeedPiece[] = [
     excerptBn:
       "রবীন্দ্রনাথ কোনো নির্দিষ্ট শাসকের বিরুদ্ধে লেখেননি; তিনি লিখেছিলেন যে-কোনো ক্ষমতার কাঠামোর বিরুদ্ধে, যেখানে মানুষ কেবল উৎপাদনের যন্ত্রে পরিণত হয়।",
     featured: true,
+    coverImage: raktaKarabiCoverImage,
     reelUrl: "https://www.instagram.com/reel/DbDwCbkgfYw/",
     publishedAt: new Date("2026-07-21T06:30:00.000Z"),
     seoDescription:
