@@ -1,0 +1,3 @@
+[2026-08-07T18:37:32.417Z] [INFO] Database backup created successfully (2045720 bytes) {"filename":"backup-db-2026-08-07.json.gz","r2Url":"https://thoughts-whatever-backups.r2.cloudflarestorage.com/database/backup-db-2026-08-07.json.gz"}
+[2026-08-07T18:37:33.063Z] [INFO] Uploads backup metadata recorded (0 files) {"filename":"backup-uploads-2026-08-07.json.gz","r2Url":"https://thoughts-whatever-backups.r2.cloudflarestorage.com/uploads/backup-uploads-2026-08-07.json.gz"}
+[2026-08-07T18:37:33.974Z] [INFO] Storage backup created successfully (14 files archived) {"filename":"backup-storage-2026-08-07.json.gz","r2Url":"https://thoughts-whatever-backups.r2.cloudflarestorage.com/storage/backup-storage-2026-08-07.json.gz"}

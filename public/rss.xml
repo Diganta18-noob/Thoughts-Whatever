@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Thoughts Whatever</title>
+    <link>http://localhost:3000</link>
+    <description>বাংলা সাহিত্য, পাঠ ও তথ্যচিত্র</description>
+    <language>bn</language>
+    <item>
+      <title><![CDATA[মেঘনাদবধ কাব্য 6]]></title>
+      <link>http://localhost:3000/documentary/%E0%A6%AE%E0%A7%87%E0%A6%98%E0%A6%A8%E0%A6%BE%E0%A6%A6%E0%A6%AC%E0%A6%A7-%E0%A6%95%E0%A6%BE%E0%A6%AC%E0%A7%8D%E0%A6%AF-6</link>
+      <guid>http://localhost:3000/documentary/%E0%A6%AE%E0%A7%87%E0%A6%98%E0%A6%A8%E0%A6%BE%E0%A6%A6%E0%A6%AC%E0%A6%A7-%E0%A6%95%E0%A6%BE%E0%A6%AC%E0%A7%8D%E0%A6%AF-6</guid>
+      <pubDate>Wed, 05 Aug 2026 20:01:57 GMT</pubDate>
+      <description><![CDATA[মাইকেল আমাদের বললেন অন্য দৃষ্টিভঙ্গি দিয়ে নতুন করে ভাববে।]]></description>
+    </item>
+    <item>
+      <title><![CDATA[মেঘনাদবধ কাব্য 5]]></title>
+      <link>http://localhost:3000/documentary/%E0%A6%AE%E0%A7%87%E0%A6%98%E0%A6%A8%E0%A6%BE%E0%A6%A6%E0%A6%AC%E0%A6%A7-%E0%A6%95%E0%A6%BE%E0%A6%AC%E0%A7%8D%E0%A6%AF-5</link>
+      <guid>http://localhost:3000/documentary/%E0%A6%AE%E0%A7%87%E0%A6%98%E0%A6%A8%E0%A6%BE%E0%A6%A6%E0%A6%AC%E0%A6%A7-%E0%A6%95%E0%A6%BE%E0%A6%AC%E0%A7%8D%E0%A6%AF-5</guid>
+      <pubDate>Wed, 05 Aug 2026 20:01:29 GMT</pubDate>
+      <description><![CDATA[মেঘনাদবধ কাব্য একটি মহাকাব্যিক রচনা, যা রাবিন্দ্রনাথ ঠাকুরের সাহিত্যিক প্রতিভার এক উজ্জ্বল উদাহরণ।]]></description>
+    </item>
+    <item>
+      <title><![CDATA[মেঘনাদবধ কাব্য 4]]></title>
+      <link>http://localhost:3000/documentary/%E0%A6%AE%E0%A7%87%E0%A6%98%E0%A6%A8%E0%A6%BE%E0%A6%A6%E0%A6%AC%E0%A6%A7-%E0%A6%95%E0%A6%BE%E0%A6%AC%E0%A7%8D%E0%A6%AF-4</link>
+      <guid>http://localhost:3000/documentary/%E0%A6%AE%E0%A7%87%E0%A6%98%E0%A6%A8%E0%A6%BE%E0%A6%A6%E0%A6%AC%E0%A6%A7-%E0%A6%95%E0%A6%BE%E0%A6%AC%E0%A7%8D%E0%A6%AF-4</guid>
+      <pubDate>Wed, 05 Aug 2026 20:00:55 GMT</pubDate>
+      <description><![CDATA[মানুষের একটি অপরাধ কি তার সমস্ত পরিচয় কে মুছে দিতে পারে? এবং এই হল সাহিত্য এর শক্তি।]]></description>
+    </item>
+    <item>
+      <title><![CDATA[মেঘনাদবধ কাব্য 3]]></title>
+      <link>http://localhost:3000/documentary/%E0%A6%AE%E0%A7%87%E0%A6%98%E0%A6%A8%E0%A6%BE%E0%A6%A6%E0%A6%AC%E0%A6%A7-%E0%A6%95%E0%A6%BE%E0%A6%AC%E0%A7%8D%E0%A6%AF-3</link>
+      <guid>http://localhost:3000/documentary/%E0%A6%AE%E0%A7%87%E0%A6%98%E0%A6%A8%E0%A6%BE%E0%A6%A6%E0%A6%AC%E0%A6%A7-%E0%A6%95%E0%A6%BE%E0%A6%AC%E0%A7%8D%E0%A6%AF-3</guid>
+      <pubDate>Wed, 05 Aug 2026 20:00:28 GMT</pubDate>
+      <description><![CDATA[মহাভারত শুরু হয় যুদ্ধ দিয়ে কিন্তু এই কাব্যের শুরু 'একটি মৃত্যুর অপেক্ষার দিয়ে।']]></description>
+    </item>
+    <item>
+      <title><![CDATA[মেঘনাদবধ কাব্য 2]]></title>
+      <link>http://localhost:3000/documentary/%E0%A6%AE%E0%A7%87%E0%A6%98%E0%A6%A8%E0%A6%BE%E0%A6%A6%E0%A6%AC%E0%A6%A7-%E0%A6%95%E0%A6%BE%E0%A6%AC%E0%A7%8D%E0%A6%AF-2</link>
+      <guid>http://localhost:3000/documentary/%E0%A6%AE%E0%A7%87%E0%A6%98%E0%A6%A8%E0%A6%BE%E0%A6%A6%E0%A6%AC%E0%A6%A7-%E0%A6%95%E0%A6%BE%E0%A6%AC%E0%A7%8D%E0%A6%AF-2</guid>
+      <pubDate>Wed, 05 Aug 2026 19:59:58 GMT</pubDate>
+      <description><![CDATA[মধুসূদন দত্ত তার কাব্যে বিপরীত মুখ থেকে রামায়ণকে দেখাতে চেয়েছিলেন।]]></description>
+    </item>
+    <item>
+      <title><![CDATA[মেঘনাদবধ কাব্য 1]]></title>
+      <link>http://localhost:3000/documentary/%E0%A6%AE%E0%A7%87%E0%A6%98%E0%A6%A8%E0%A6%BE%E0%A6%A6%E0%A6%AC%E0%A6%A7-%E0%A6%95%E0%A6%BE%E0%A6%AC%E0%A7%8D%E0%A6%AF-1</link>
+      <guid>http://localhost:3000/documentary/%E0%A6%AE%E0%A7%87%E0%A6%98%E0%A6%A8%E0%A6%BE%E0%A6%A6%E0%A6%AC%E0%A6%A7-%E0%A6%95%E0%A6%BE%E0%A6%AC%E0%A7%8D%E0%A6%AF-1</guid>
+      <pubDate>Wed, 05 Aug 2026 18:45:16 GMT</pubDate>
+      <description><![CDATA[বাল্মিকী রামায়ণ অনুসারে রাম ন্যায়, তাই তার দলে থাকায় বিভীষণ হিরোর তকমা পেল।]]></description>
+    </item>
+    <item>
+      <title><![CDATA[রিল থেকে রচনা: এই পাতাটা কেন]]></title>
+      <link>http://localhost:3000/blog/%E0%A6%B0%E0%A6%BF%E0%A6%B2-%E0%A6%A5%E0%A7%87%E0%A6%95%E0%A7%87-%E0%A6%B0%E0%A6%9A%E0%A6%A8%E0%A6%BE-%E0%A6%8F%E0%A6%87-%E0%A6%AA%E0%A6%BE%E0%A6%A4%E0%A6%BE%E0%A6%9F%E0%A6%BE-%E0%A6%95%E0%A7%87%E0%A6%A8</link>
+      <guid>http://localhost:3000/blog/%E0%A6%B0%E0%A6%BF%E0%A6%B2-%E0%A6%A5%E0%A7%87%E0%A6%95%E0%A7%87-%E0%A6%B0%E0%A6%9A%E0%A6%A8%E0%A6%BE-%E0%A6%8F%E0%A6%87-%E0%A6%AA%E0%A6%BE%E0%A6%A4%E0%A6%BE%E0%A6%9F%E0%A6%BE-%E0%A6%95%E0%A7%87%E0%A6%A8</guid>
+      <pubDate>Thu, 16 Jul 2026 06:30:00 GMT</pubDate>
+      <description><![CDATA[একটা রিল হলো ট্রেলার। লেখাটা হলো কাজ। এতদিন ট্রেলারটাই কেবল ছিল, মূল জিনিসটা ছিল না — এই সাইটটা সেই ফাঁকটা ভরাট করার জন্য।]]></description>
+    </item>
+    <item>
+      <title><![CDATA[রবীন্দ্রনাথকে নতুন করে পড়ার একটা পদ্ধতি]]></title>
+      <link>http://localhost:3000/blog/%E0%A6%B0%E0%A6%AC%E0%A7%80%E0%A6%A8%E0%A7%8D%E0%A6%A6%E0%A7%8D%E0%A6%B0%E0%A6%A8%E0%A6%BE%E0%A6%A5%E0%A6%95%E0%A7%87-%E0%A6%A8%E0%A6%A4%E0%A7%81%E0%A6%A8-%E0%A6%95%E0%A6%B0%E0%A7%87-%E0%A6%AA%E0%A6%A1%E0%A6%BC%E0%A6%BE</link>
+      <guid>http://localhost:3000/blog/%E0%A6%B0%E0%A6%AC%E0%A7%80%E0%A6%A8%E0%A7%8D%E0%A6%A6%E0%A7%8D%E0%A6%B0%E0%A6%A8%E0%A6%BE%E0%A6%A5%E0%A6%95%E0%A7%87-%E0%A6%A8%E0%A6%A4%E0%A7%81%E0%A6%A8-%E0%A6%95%E0%A6%B0%E0%A7%87-%E0%A6%AA%E0%A6%A1%E0%A6%BC%E0%A6%BE</guid>
+      <pubDate>Thu, 02 Jul 2026 06:30:00 GMT</pubDate>
+      <description><![CDATA[সমস্যাটা রবীন্দ্রনাথের নয়, আমাদের প্রথম পরিচয়ের। পরীক্ষার খাতায় যাঁর সঙ্গে দেখা হয়েছিল, তাঁকে পাঠক হিসেবে আবার আবিষ্কার করতে একটা পদ্ধতি লাগে।]]></description>
+    </item>
+    <item>
+      <title><![CDATA[পদ্মানদীর মাঝি: নদীর কাছে মানুষ কত ছোট]]></title>
+      <link>http://localhost:3000/writing/%E0%A6%AA%E0%A6%A6%E0%A7%8D%E0%A6%AE%E0%A6%BE%E0%A6%A8%E0%A6%A6%E0%A7%80%E0%A6%B0-%E0%A6%AE%E0%A6%BE%E0%A6%9D%E0%A6%BF-%E0%A6%A8%E0%A6%A6%E0%A7%80%E0%A6%B0-%E0%A6%95%E0%A6%BE%E0%A6%9B%E0%A7%87</link>
+      <guid>http://localhost:3000/writing/%E0%A6%AA%E0%A6%A6%E0%A7%8D%E0%A6%AE%E0%A6%BE%E0%A6%A8%E0%A6%A6%E0%A7%80%E0%A6%B0-%E0%A6%AE%E0%A6%BE%E0%A6%9D%E0%A6%BF-%E0%A6%A8%E0%A6%A6%E0%A7%80%E0%A6%B0-%E0%A6%95%E0%A6%BE%E0%A6%9B%E0%A7%87</guid>
+      <pubDate>Thu, 25 Jun 2026 06:30:00 GMT</pubDate>
+      <description><![CDATA[মানিক তাঁর চরিত্রদের ভালোবাসেন না, ঘৃণাও করেন না। তিনি তাদের দেখেন — এবং সেই না-ভালোবাসাটাই ‘পদ্মানদীর মাঝি’-কে আজও অস্বস্তিকরভাবে সত্যি রাখে।]]></description>
+    </item>
+    <item>
+      <title><![CDATA[বিদ্রোহী: বাইশ বছর বয়সে লেখা একটা চিৎকার]]></title>
+      <link>http://localhost:3000/writing/%E0%A6%AC%E0%A6%BF%E0%A6%A6%E0%A7%8D%E0%A6%B0%E0%A7%8B%E0%A6%B9%E0%A7%80-%E0%A6%AC%E0%A6%BE%E0%A6%87%E0%A6%B6-%E0%A6%AC%E0%A6%9B%E0%A6%B0%E0%A7%87%E0%A6%B0-%E0%A6%9A%E0%A6%BF%E0%A7%8E%E0%A6%95%E0%A6%BE%E0%A6%B0</link>
+      <guid>http://localhost:3000/writing/%E0%A6%AC%E0%A6%BF%E0%A6%A6%E0%A7%8D%E0%A6%B0%E0%A7%8B%E0%A6%B9%E0%A7%80-%E0%A6%AC%E0%A6%BE%E0%A6%87%E0%A6%B6-%E0%A6%AC%E0%A6%9B%E0%A6%B0%E0%A7%87%E0%A6%B0-%E0%A6%9A%E0%A6%BF%E0%A7%8E%E0%A6%95%E0%A6%BE%E0%A6%B0</guid>
+      <pubDate>Thu, 11 Jun 2026 06:30:00 GMT</pubDate>
+      <description><![CDATA[‘বিদ্রোহী’ পড়তে গিয়ে হাঁপ ধরে যায় — এবং সেটাই ডিজাইন। কবিতাটা পাঠককে দম নিতে দেয় না, কারণ দম নেওয়ার সময় মানুষ ভাবে, আর ভাবলে গতি কমে।]]></description>
+    </item>
+    <item>
+      <title><![CDATA[যিনি পত্রিকা বানিয়ে একটা প্রজন্ম বানালেন]]></title>
+      <link>http://localhost:3000/writing/%E0%A6%AC%E0%A7%81%E0%A6%A6%E0%A7%8D%E0%A6%A7%E0%A6%A6%E0%A7%87%E0%A6%AC-%E0%A6%AC%E0%A6%B8%E0%A7%81-%E0%A6%95%E0%A6%AC%E0%A6%BF%E0%A6%A4%E0%A6%BE-%E0%A6%AA%E0%A6%A4%E0%A7%8D%E0%A6%B0%E0%A6%BF%E0%A6%95%E0%A6%BE</link>
+      <guid>http://localhost:3000/writing/%E0%A6%AC%E0%A7%81%E0%A6%A6%E0%A7%8D%E0%A6%A7%E0%A6%A6%E0%A7%87%E0%A6%AC-%E0%A6%AC%E0%A6%B8%E0%A7%81-%E0%A6%95%E0%A6%AC%E0%A6%BF%E0%A6%A4%E0%A6%BE-%E0%A6%AA%E0%A6%A4%E0%A7%8D%E0%A6%B0%E0%A6%BF%E0%A6%95%E0%A6%BE</guid>
+      <pubDate>Thu, 28 May 2026 06:30:00 GMT</pubDate>
+      <description><![CDATA[একটা সাহিত্য আন্দোলনের জন্য কবি লাগে, কিন্তু তার আগে লাগে একটা জায়গা যেখানে ছাপা যায়। বুদ্ধদেব বসু সেই জায়গাটা বানিয়েছিলেন।]]></description>
+    </item>
+    <item>
+      <title><![CDATA[বনলতা সেন: দু-দণ্ড শান্তির মানে কী]]></title>
+      <link>http://localhost:3000/writing/%E0%A6%AC%E0%A6%A8%E0%A6%B2%E0%A6%A4%E0%A6%BE-%E0%A6%B8%E0%A7%87%E0%A6%A8-%E0%A6%A6%E0%A7%81%E0%A6%A6%E0%A6%A3%E0%A7%8D%E0%A6%A1-%E0%A6%B6%E0%A6%BE%E0%A6%A8%E0%A7%8D%E0%A6%A4%E0%A6%BF</link>
+      <guid>http://localhost:3000/writing/%E0%A6%AC%E0%A6%A8%E0%A6%B2%E0%A6%A4%E0%A6%BE-%E0%A6%B8%E0%A7%87%E0%A6%A8-%E0%A6%A6%E0%A7%81%E0%A6%A6%E0%A6%A3%E0%A7%8D%E0%A6%A1-%E0%A6%B6%E0%A6%BE%E0%A6%A8%E0%A7%8D%E0%A6%A4%E0%A6%BF</guid>
+      <pubDate>Thu, 14 May 2026 06:30:00 GMT</pubDate>
+      <description><![CDATA[‘বনলতা সেন’ প্রেমের কবিতা নয়, ক্লান্তির কবিতা। হাজার বছর হাঁটার পর যে বিশ্রামটুকু, তার নাম বনলতা সেন।]]></description>
+    </item>
+  </channel>
+</rss>
