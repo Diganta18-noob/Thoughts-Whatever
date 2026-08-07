@@ -2,8 +2,9 @@ import fs from "fs";
 import path from "path";
 import checkDiskSpace from "check-disk-space";
 import { S3Client, ListObjectsV2Command } from "@aws-sdk/client-s3";
+import { getBackupsDir } from "./backup/storage";
 
-const BACKUPS_DIR = path.join(process.cwd(), "backups");
+const BACKUPS_DIR = getBackupsDir();
 
 export interface SystemHealthStatus {
   status: "HEALTHY" | "DEGRADED" | "CRITICAL";
@@ -57,9 +58,13 @@ export async function checkHealth(): Promise<SystemHealthStatus> {
       backupPassed = hoursAgo <= 25;
       backupDetails = `Latest backup was ${hoursAgo.toFixed(1)} hours ago (${dirs[0]}).`;
     }
-  } else if (isServerless) {
+  }
+
+  if (isServerless) {
     backupPassed = true;
     backupDetails = "Backups managed remotely via R2 Cloud Storage.";
+    countPassed = true;
+    countDetails = "Backups managed remotely via R2 Cloud Storage.";
   }
 
   // R2 Connectivity

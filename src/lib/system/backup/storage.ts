@@ -1,8 +1,22 @@
 import fs from "fs";
 import path from "path";
-import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { Readable } from "stream";
+import { pipeline } from "stream/promises";
+import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { BackupManifest } from "./types";
 
-const BACKUPS_DIR = path.join(process.cwd(), "backups");
+export function getBackupsDir(): string {
+  if (process.env.BACKUPS_PATH) {
+    return process.env.BACKUPS_PATH;
+  }
+  const isServerless = !!process.env.VERCEL || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+  if (isServerless) {
+    return path.join("/tmp", "backups");
+  }
+  return path.join(process.cwd(), "backups");
+}
+
+const BACKUPS_DIR = getBackupsDir();
 
 function getR2Client(): S3Client | null {
   const accountId = process.env.R2_ACCOUNT_ID;
@@ -89,4 +103,104 @@ export async function cleanupLocalAndR2Backups(retentionDays = 30): Promise<{ lo
   }
 
   return { localCleaned, r2Cleaned };
+}
+
+export async function listR2Backups(): Promise<BackupManifest[]> {
+  const r2 = getR2Client();
+  const bucketName = process.env.R2_BACKUP_BUCKET_NAME;
+
+  if (!r2 || !bucketName) {
+    return [];
+  }
+
+  try {
+    const listResp = await r2.send(
+      new ListObjectsV2Command({
+        Bucket: bucketName,
+      })
+    );
+
+    const objects = listResp.Contents || [];
+    const manifestKeys = objects
+      .map((obj) => obj.Key)
+      .filter((key): key is string => !!key && key.endsWith("/manifest.json"));
+
+    const manifests: BackupManifest[] = [];
+
+    await Promise.all(
+      manifestKeys.map(async (key) => {
+        try {
+          const getResp = await r2.send(
+            new GetObjectCommand({
+              Bucket: bucketName,
+              Key: key,
+            })
+          );
+          if (getResp.Body) {
+            const dataStr = await getResp.Body.transformToString();
+            const manifest = JSON.parse(dataStr);
+            manifests.push(manifest);
+          }
+        } catch (err) {
+          console.error(`Failed to fetch manifest from R2 key ${key}:`, err);
+        }
+      })
+    );
+
+    return manifests;
+  } catch (err) {
+    console.error("Failed to list R2 backups:", err);
+    return [];
+  }
+}
+
+export async function downloadBackupFromR2(backupId: string, localDestDir: string): Promise<boolean> {
+  const r2 = getR2Client();
+  const bucketName = process.env.R2_BACKUP_BUCKET_NAME;
+
+  if (!r2 || !bucketName) {
+    console.warn("Cloudflare R2 is not configured. Cannot download backup.");
+    return false;
+  }
+
+  try {
+    const listResp = await r2.send(
+      new ListObjectsV2Command({
+        Bucket: bucketName,
+        Prefix: `${backupId}/`,
+      })
+    );
+
+    const objects = listResp.Contents || [];
+    if (objects.length === 0) {
+      console.warn(`No objects found in R2 with prefix ${backupId}/`);
+      return false;
+    }
+
+    if (!fs.existsSync(localDestDir)) {
+      fs.mkdirSync(localDestDir, { recursive: true });
+    }
+
+    for (const obj of objects) {
+      if (!obj.Key) continue;
+      const fileName = path.basename(obj.Key);
+      const localFilePath = path.join(localDestDir, fileName);
+
+      const getResp = await r2.send(
+        new GetObjectCommand({
+          Bucket: bucketName,
+          Key: obj.Key,
+        })
+      );
+
+      if (getResp.Body) {
+        const writeStream = fs.createWriteStream(localFilePath);
+        await pipeline(getResp.Body as Readable, writeStream);
+      }
+    }
+    return true;
+  } catch (err) {
+    console.error(`Failed to download backup ${backupId} from R2:`, err);
+    return false;
+  }
 }

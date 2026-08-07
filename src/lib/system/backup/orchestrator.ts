@@ -3,12 +3,12 @@ import path from "path";
 import { backupDatabase } from "./database";
 import { backupMedia } from "./media";
 import { backupContent } from "./content";
-import { uploadFileToR2, cleanupLocalAndR2Backups } from "./storage";
+import { uploadFileToR2, cleanupLocalAndR2Backups, getBackupsDir } from "./storage";
 import { computeFileHash, verifyChecksums } from "./verify";
 import { BackupManifest, BackupResult } from "./types";
 import { MaintenanceReport } from "../maintenance/types";
 
-const BACKUPS_ROOT = path.join(process.cwd(), "backups");
+const BACKUPS_ROOT = getBackupsDir();
 
 export async function createBackup(
   type: "full" | "database" | "media" | "content" = "full",

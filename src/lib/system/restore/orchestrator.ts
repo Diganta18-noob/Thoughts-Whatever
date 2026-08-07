@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { prisma } from "@/lib/prisma";
 import { v2 as cloudinary } from "cloudinary";
+import { getBackupsDir, downloadBackupFromR2 } from "../backup/storage";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -9,14 +10,17 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const BACKUPS_ROOT = path.join(process.cwd(), "backups");
+const BACKUPS_ROOT = getBackupsDir();
 
 export async function restoreBackup(backupId: string, options: { scope?: "full" | "database" | "media" | "content" } = {}) {
   const scope = options.scope || "full";
   const backupDir = path.join(BACKUPS_ROOT, backupId);
 
   if (!fs.existsSync(backupDir)) {
-    throw new Error(`Backup folder ${backupId} not found locally.`);
+    const downloaded = await downloadBackupFromR2(backupId, backupDir);
+    if (!downloaded) {
+      throw new Error(`Backup folder ${backupId} not found locally and failed to download from R2.`);
+    }
   }
 
   const manifestPath = path.join(backupDir, "manifest.json");
