@@ -379,8 +379,13 @@ export function PieceEditor({
       setDirty(false);
       setForm((prev) => ({ ...prev, status }));
       setNotice(
-        status === "PUBLISHED" ? t("admin.editor.published") : t("admin.editor.saved"),
+        status === "PUBLISHED"
+          ? t("admin.editor.published")
+          : status === "ARCHIVED"
+          ? "আর্কাইভ করা হয়েছে এবং সাইট থেকে সরানো হয়েছে।"
+          : t("admin.editor.saved"),
       );
+
 
       if (isNew && data.id) {
         router.replace(`/admin/pieces/${data.id}`);
@@ -451,24 +456,20 @@ export function PieceEditor({
 
           <button
             type="button"
-            onClick={() => void save("DRAFT")}
-            disabled={busy}
-            className="rounded-sm border border-rule px-3 py-2 text-[0.9375rem] text-content-soft transition hover:text-content disabled:opacity-50"
-          >
-            {t("admin.editor.saveDraft2")}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => void save("PUBLISHED")}
+            onClick={() => void save()}
             disabled={busy}
             className="inline-flex items-center gap-2 rounded-sm bg-accent px-4 py-2 text-[0.9375rem] text-surface transition hover:opacity-90 disabled:opacity-50"
           >
             {busy && <Loader2 className="h-4 w-4 animate-spin" />}
-            {form.status === "PUBLISHED" ? t("admin.editor.update") : t("admin.editor.publishBtn")}
+            {form.status === "PUBLISHED"
+              ? t("admin.editor.update")
+              : form.status === "ARCHIVED"
+              ? "Save Archived"
+              : t("admin.editor.publishBtn")}
           </button>
         </div>
       </div>
+
 
       {notice && (
         <p
