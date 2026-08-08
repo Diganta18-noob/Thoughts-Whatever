@@ -86,16 +86,13 @@ export async function middleware(request: NextRequest) {
   if (!tokenToVerify) {
     if (isAdminApiRoute) {
       return NextResponse.json(
-        { ok: false, error: "unauthorized", code: 401 },
-        { status: 401 }
+        { ok: false, error: "not_found", code: 404 },
+        { status: 404 }
       );
     }
 
-    const loginUrl = new URL("/admin/login", request.url);
-    if (isSafeInternalPath(pathname)) {
-      loginUrl.searchParams.set("from", pathname);
-    }
-    return NextResponse.redirect(loginUrl);
+    // Stealth Mode: Rewrite unauthenticated dashboard requests to 404 page
+    return NextResponse.rewrite(new URL("/not-found", request.url));
   }
 
   const secret = process.env.AUTH_SECRET || "";
@@ -104,16 +101,13 @@ export async function middleware(request: NextRequest) {
   if (!isValid) {
     if (isAdminApiRoute) {
       return NextResponse.json(
-        { ok: false, error: "unauthorized", code: 401 },
-        { status: 401 }
+        { ok: false, error: "not_found", code: 404 },
+        { status: 404 }
       );
     }
 
-    const loginUrl = new URL("/admin/login", request.url);
-    if (isSafeInternalPath(pathname)) {
-      loginUrl.searchParams.set("from", pathname);
-    }
-    return NextResponse.redirect(loginUrl);
+    // Stealth Mode: Rewrite invalid auth attempts to standard 404
+    return NextResponse.rewrite(new URL("/not-found", request.url));
   }
 
   return NextResponse.next();
