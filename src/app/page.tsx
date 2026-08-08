@@ -37,15 +37,8 @@ export default async function HomePage() {
   const leadSeries = series[0];
   const leadSlugs = new Set(leadSeries?.pieces.map((p) => p.slug) ?? []);
 
-  // 1. The newest piece is selected for the single New Upload / Latest section
-  const latestPiece = recentPieces[0] ?? null;
-
-  // 2. Exclude the latest piece and series pieces from secondary lists to prevent duplication
-  const excludedSlugs = new Set([...leadSlugs, ...(latestPiece ? [latestPiece.slug] : [])]);
-
-  const latestEpisodes = recentPieces.filter((p) => !excludedSlugs.has(p.slug)).slice(0, 3);
-  const featuredWriting = featuredPieces.filter((p) => !excludedSlugs.has(p.slug)).slice(0, 5);
-
+  const latestEpisodes = recentPieces.filter((p) => !leadSlugs.has(p.slug)).slice(0, 4);
+  const featuredWriting = featuredPieces.filter((p) => !leadSlugs.has(p.slug)).slice(0, 5);
 
   const quotes = extractPullQuotes(quoteCandidates);
   const quote = quotes[0] ?? null;
@@ -74,9 +67,8 @@ export default async function HomePage() {
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {series.length > 0 && <FeaturedSeries series={series} />}
-        {latestPiece && <LatestEpisodes latestPiece={latestPiece} secondaryPieces={latestEpisodes} />}
+        {latestEpisodes.length > 0 && <LatestEpisodes pieces={latestEpisodes} />}
         {featuredWriting.length > 0 && <FeaturedWriting pieces={featuredWriting} />}
-
         <Categories kinds={kinds} forms={formTags} />
         <Timeline entries={timeline} />
         <ArchiveTeaser years={facets.years} />
