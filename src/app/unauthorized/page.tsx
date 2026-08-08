@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ShieldAlert } from "lucide-react";
-import { T } from "@/components/i18n/t";
 
 export const metadata: Metadata = {
   title: "Access Restricted — Thoughts Whatever",
@@ -20,26 +19,26 @@ export default function UnauthorizedPage() {
           401 · ACCESS RESTRICTED
         </span>
 
-        <h1 className="mt-4 font-bengali text-2xl sm:text-3xl font-medium leading-tight text-content" lang="bn">
-          অনুমতি প্রয়োজন
+        <h1 className="mt-4 font-serif text-2xl sm:text-3xl font-medium leading-tight text-content">
+          Permission Required
         </h1>
 
-        <p className="mt-4 font-bengali text-base leading-relaxed text-content-soft" lang="bn">
-          এই অংশটি দেখতে বা কোনো পরিবর্তন করতে প্রয়োজনীয় প্রশাসনিক অনুমতি নেই। অনুগ্রহ করে লগইন করুন বা মূল পাতায় ফিরে যান।
+        <p className="mt-4 font-serif text-base leading-relaxed text-content-soft">
+          You do not have the administrative permissions required to view or modify this area. Please log in with an authorized account or return home.
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link
             href="/admin/login"
-            className="rounded-sm bg-accent px-5 py-2.5 font-bengali text-sm font-medium text-surface transition hover:opacity-90"
+            className="rounded-sm bg-accent px-5 py-2.5 font-sans text-sm font-medium text-surface transition hover:opacity-90"
           >
-            লগইন করুন
+            Sign In
           </Link>
           <Link
             href="/"
-            className="rounded-sm border border-rule px-5 py-2.5 font-bengali text-sm font-medium text-content-soft transition hover:border-accent/40 hover:text-content"
+            className="rounded-sm border border-rule px-5 py-2.5 font-sans text-sm font-medium text-content-soft transition hover:border-accent/40 hover:text-content"
           >
-            মূল পাতায় ফিরুন
+            Return Home
           </Link>
         </div>
       </div>
