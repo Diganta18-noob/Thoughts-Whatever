@@ -1,16 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
+import { isSafeInternalPath } from "@/middleware";
 import { LoginForm } from "./login-form";
 import { LoginChrome } from "./login-chrome";
-
-/**
- * Deliberately outside the (dashboard) route group.
- *
- * If the auth gate lived in `admin/layout.tsx` it would also wrap this page,
- * and a logged-out visitor would be redirected to the login page by the login
- * page — forever.
- */
 
 export const metadata: Metadata = {
   title: "Sign in",
@@ -20,19 +13,22 @@ export const metadata: Metadata = {
 export default async function AdminLoginPage({
   searchParams,
 }: {
-  searchParams: { next?: string };
+  searchParams: { next?: string; from?: string };
 }) {
   const admin = await requireAdmin();
-  const next =
-    searchParams.next?.startsWith("/admin") ? searchParams.next : "/admin";
+  
+  const rawTarget = searchParams.from || searchParams.next;
+  const destination = isSafeInternalPath(rawTarget) && rawTarget?.startsWith("/admin")
+    ? rawTarget
+    : "/admin";
 
-  if (admin) redirect(next);
+  if (admin) redirect(destination);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface px-4">
       <div className="w-full max-w-sm">
         <LoginChrome />
-        <LoginForm next={next} />
+        <LoginForm next={destination} />
       </div>
     </div>
   );

@@ -5,6 +5,20 @@ const ACCESS_COOKIE_NAME = "tw_access";
 const REFRESH_COOKIE_NAME = "tw_refresh";
 const LEGACY_COOKIE_NAME = "tw_session";
 
+/**
+ * Validate that redirect paths are strictly relative internal paths to prevent
+ * Open Redirect vulnerabilities.
+ */
+export function isSafeInternalPath(path: string | null | undefined): boolean {
+  if (!path || typeof path !== "string") return false;
+  if (!path.startsWith("/")) return false;
+  // Disallow protocol-relative URLs like "//evil.com"
+  if (path.startsWith("//")) return false;
+  // Disallow control characters
+  if (/[\r\n\t]/.test(path)) return false;
+  return true;
+}
+
 async function verifyJwtHs256(token: string, secretStr: string): Promise<boolean> {
   try {
     const parts = token.split(".");
@@ -20,7 +34,6 @@ async function verifyJwtHs256(token: string, secretStr: string): Promise<boolean
       ["verify"]
     );
 
-    // Convert URL-safe base64 to standard base64
     const base64 = signatureB64.replace(/-/g, "+").replace(/_/g, "/");
     const padLen = (4 - (base64.length % 4)) % 4;
     const padded = base64 + "=".repeat(padLen);
@@ -36,7 +49,6 @@ async function verifyJwtHs256(token: string, secretStr: string): Promise<boolean
 
     if (!isValid) return false;
 
-    // Check expiration
     const payloadJson = atob(payloadB64.replace(/-/g, "+").replace(/_/g, "/"));
     const payload = JSON.parse(payloadJson);
     if (payload.exp && Date.now() >= payload.exp * 1000) {
@@ -73,10 +85,16 @@ export async function middleware(request: NextRequest) {
 
   if (!tokenToVerify) {
     if (isAdminApiRoute) {
-      return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { ok: false, error: "unauthorized", code: 401 },
+        { status: 401 }
+      );
     }
+
     const loginUrl = new URL("/admin/login", request.url);
-    loginUrl.searchParams.set("from", pathname);
+    if (isSafeInternalPath(pathname)) {
+      loginUrl.searchParams.set("from", pathname);
+    }
     return NextResponse.redirect(loginUrl);
   }
 
@@ -85,9 +103,16 @@ export async function middleware(request: NextRequest) {
 
   if (!isValid) {
     if (isAdminApiRoute) {
-      return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { ok: false, error: "unauthorized", code: 401 },
+        { status: 401 }
+      );
     }
+
     const loginUrl = new URL("/admin/login", request.url);
+    if (isSafeInternalPath(pathname)) {
+      loginUrl.searchParams.set("from", pathname);
+    }
     return NextResponse.redirect(loginUrl);
   }
 
@@ -97,4 +122,3 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: ["/admin/:path*", "/api/admin/:path*"],
 };
-
