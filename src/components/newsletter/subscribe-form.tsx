@@ -5,6 +5,8 @@ import { Loader2, Check } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
 import type { TranslationKey } from "@/lib/i18n/en";
 import { cn } from "@/lib/utils";
+import { posthog } from "@/lib/posthog-client";
+
 
 type State = "idle" | "sending" | "done" | "error";
 
@@ -48,9 +50,11 @@ export function SubscribeForm({
     useState<TranslationKey>("letter.msg.failed");
 
   async function onSubmit(e: React.FormEvent) {
+
     e.preventDefault();
     if (state === "sending") return;
 
+    posthog.capture("newsletter_started", { source });
     setState("sending");
     try {
       const res = await fetch("/api/subscribe", {
@@ -64,16 +68,20 @@ export function SubscribeForm({
 
       setMessageKey(key);
       if (res.ok && data.ok) {
+        posthog.capture("newsletter_subscribed", { source });
         setState("done");
         setEmail("");
       } else {
+        posthog.capture("newsletter_failed", { source, code: data.code });
         setState("error");
       }
     } catch {
+      posthog.capture("newsletter_failed", { source, code: "network_error" });
       setState("error");
       setMessageKey("letter.msg.network");
     }
   }
+
 
   if (state === "done") {
     return (

@@ -14,6 +14,8 @@ import {
 
 export type { SearchDoc } from "@/components/search/use-search";
 
+import { posthog } from "@/lib/posthog-client";
+
 export function SearchDialog() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -57,6 +59,24 @@ export function SearchDialog() {
   }, [open]);
 
   const results = useMemo(() => matchDocs(indexes, query), [indexes, query]);
+
+  // Debounced PostHog search event
+  useEffect(() => {
+    const q = query.trim();
+    if (q.length < MIN_QUERY) return;
+
+    const timer = setTimeout(() => {
+      posthog.capture("search_performed", {
+        query: q,
+        result_count: results.length,
+        language: document.documentElement.lang || "en",
+      });
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [query, results.length]);
+
+
 
   return (
     <>

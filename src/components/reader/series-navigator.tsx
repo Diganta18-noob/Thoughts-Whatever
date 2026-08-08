@@ -5,6 +5,8 @@ import { ChevronLeft, ChevronRight, Layers } from "lucide-react";
 import { piecePath, type PieceKindKey } from "@/lib/nav";
 import { useLanguage } from "@/components/providers/language-provider";
 import { toBengaliNumber } from "@/lib/bengali";
+import { posthog } from "@/lib/posthog-client";
+
 
 export type SeriesNeighbour = {
   slug: string;
@@ -54,6 +56,14 @@ export function SeriesNavigator({
         {prev ? (
           <Link
             href={piecePath(prev.kind, prev.slug)}
+            onClick={() => {
+              posthog.capture("previous_episode_clicked", {
+                series_slug: series.slug,
+                from_episode_order: currentOrder,
+                to_slug: prev.slug,
+                to_order: prev.seriesOrder,
+              });
+            }}
             className="group flex flex-col gap-1 rounded-md border border-rule/50 bg-surface/60 p-4 transition-all hover:border-accent hover:shadow-sm"
           >
             <span className="flex items-center gap-1 font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint group-hover:text-accent">
@@ -71,6 +81,14 @@ export function SeriesNavigator({
         {next ? (
           <Link
             href={piecePath(next.kind, next.slug)}
+            onClick={() => {
+              posthog.capture("next_episode_clicked", {
+                series_slug: series.slug,
+                from_episode_order: currentOrder,
+                to_slug: next.slug,
+                to_order: next.seriesOrder,
+              });
+            }}
             className="group flex flex-col gap-1 rounded-md border border-rule/50 bg-surface/60 p-4 text-right transition-all hover:border-accent hover:shadow-sm sm:col-start-2"
           >
             <span className="flex items-center justify-end gap-1 font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint group-hover:text-accent">
@@ -82,6 +100,7 @@ export function SeriesNavigator({
             </span>
           </Link>
         ) : null}
+
       </div>
     </nav>
   );

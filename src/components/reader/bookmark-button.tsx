@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 import { useBookmarks } from "@/components/providers/bookmarks-provider";
 import { cn } from "@/lib/utils";
 
+import { posthog } from "@/lib/posthog-client";
+
 export function BookmarkButton({
   slug,
   kind,
@@ -25,8 +27,14 @@ export function BookmarkButton({
       data-print="hide"
       onClick={() => {
         const nowSaved = toggle({ slug, kind, titleBn });
+        posthog.capture("bookmark_clicked", {
+          slug,
+          content_type: kind,
+          action: nowSaved ? "add" : "remove",
+        });
         toast(nowSaved ? "পরে পড়ার তালিকায় যোগ হল" : "তালিকা থেকে সরানো হল");
       }}
+
       aria-pressed={saved}
       title={saved ? "পরে পড়ব — সংরক্ষিত" : "পরে পড়ব"}
       className={cn(

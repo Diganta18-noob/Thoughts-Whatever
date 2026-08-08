@@ -6,8 +6,9 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "@/components/providers/language-provider";
 import type { TranslationKey } from "@/lib/i18n/en";
 
-const ITEMS: { href: string; key: TranslationKey }[] = [
+const ITEMS: { href: string; key: TranslationKey; labelFallback?: string }[] = [
   { href: "/admin", key: "admin.nav.dashboard" },
+  { href: "/admin/analytics", key: "admin.nav.analytics" as any, labelFallback: "Analytics" },
   { href: "/admin/pieces", key: "admin.nav.pieces" },
   { href: "/admin/series", key: "admin.nav.series" },
   { href: "/admin/taxonomy", key: "admin.nav.taxonomy" },
@@ -17,6 +18,7 @@ const ITEMS: { href: string; key: TranslationKey }[] = [
   { href: "/admin/system", key: "admin.nav.system" },
   { href: "/admin/settings", key: "admin.nav.settings" },
 ];
+
 
 export function AdminNav() {
   const rawPathname = usePathname();
@@ -42,10 +44,11 @@ export function AdminNav() {
                 : "text-content-soft hover:text-content",
             )}
           >
-            {t(item.key)}
+            {item.labelFallback || t(item.key)}
           </Link>
         );
       })}
     </nav>
   );
 }
+

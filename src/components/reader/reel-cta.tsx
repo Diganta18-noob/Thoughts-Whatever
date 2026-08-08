@@ -28,6 +28,8 @@ function getMobileReelUrl(reelUrl: string): string {
 
 
 
+import { posthog } from "@/lib/posthog-client";
+
 export function ReelCallToAction({
   reelUrl,
   pieceId,
@@ -41,7 +43,14 @@ export function ReelCallToAction({
 
   const handleClick = () => {
     trackReelClick(pieceId, reelUrl, placement);
+    posthog.capture("reel_clicked", {
+      piece_id: pieceId,
+      reel_url: reelUrl,
+      placement,
+      variant,
+    });
   };
+
 
   const finalUrl = getMobileReelUrl(reelUrl);
 

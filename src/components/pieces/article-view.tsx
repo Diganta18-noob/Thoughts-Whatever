@@ -47,7 +47,20 @@ export function ArticleView({
   return (
     <>
       <ReadingProgress targetId={ARTICLE_ID} />
-      <ViewTracker pieceId={piece.id} />
+      <ViewTracker
+        pieceId={piece.id}
+        pieceProps={{
+          slug: piece.slug,
+          kind: piece.kind,
+          titleBn: piece.titleBn,
+          seriesId: piece.seriesId,
+          seriesName: piece.series?.titleBn,
+          seriesOrder: piece.seriesOrder,
+          readingMinutes: piece.readingMinutes,
+          publishedAt: piece.publishedAt,
+        }}
+      />
+
 
       <article className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
         {/* 1. Cinematic Hero */}

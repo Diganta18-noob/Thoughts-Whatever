@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { LogOut, Loader2 } from "lucide-react";
 import { useTranslation } from "@/components/providers/language-provider";
 
+import { posthog } from "@/lib/posthog-client";
+
 export function LogoutButton() {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -15,10 +17,12 @@ export function LogoutButton() {
       type="button"
       onClick={async () => {
         setBusy(true);
+        posthog.reset();
         await fetch("/api/admin/logout", { method: "POST" });
         router.refresh();
         router.replace("/admin/login");
       }}
+
       disabled={busy}
       data-testid="logout-button"
       className="inline-flex items-center gap-1.5 font-sans text-sm text-content-soft transition hover:text-accent disabled:opacity-50"

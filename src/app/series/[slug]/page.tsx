@@ -40,6 +40,8 @@ export async function generateMetadata({
   };
 }
 
+import { SeriesTracker } from "@/components/analytics/series-tracker";
+
 export default async function SeriesPage({
   params,
 }: {
@@ -56,6 +58,12 @@ export default async function SeriesPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+      <SeriesTracker
+        seriesId={series.id}
+        seriesName={series.titleBn}
+        totalEpisodes={series.pieces.length}
+      />
+
       {/* Series Hero Section */}
       <div className="my-8 rounded-xl border border-rule/80 bg-surface-raised/40 p-6 sm:p-10 shadow-sm backdrop-blur">
         <div className="grid gap-8 md:grid-cols-[1.5fr_2.5fr] md:items-center">

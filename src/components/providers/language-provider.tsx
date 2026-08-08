@@ -18,7 +18,10 @@ import {
   type TranslationParams,
 } from "@/lib/i18n/types";
 
+import { posthog } from "@/lib/posthog-client";
+
 const DICTIONARIES: Record<Locale, Dictionary> = { en, bn };
+
 
 /**
  * Fills `{placeholders}`. Anything the caller did not supply is left as-is
@@ -62,8 +65,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     setReady(true);
   }, []);
 
+
   const setLocale = useCallback((next: Locale) => {
-    setLocaleState(next);
+    setLocaleState((prev) => {
+      posthog.capture("language_changed", {
+        from_language: prev,
+        to_language: next,
+      });
+      return next;
+    });
     document.documentElement.lang = next;
     try {
       localStorage.setItem(LOCALE_KEY, next);
@@ -75,6 +85,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const toggle = useCallback(() => {
     setLocaleState((prev) => {
       const next: Locale = prev === "en" ? "bn" : "en";
+      posthog.capture("language_changed", {
+        from_language: prev,
+        to_language: next,
+      });
       document.documentElement.lang = next;
       try {
         localStorage.setItem(LOCALE_KEY, next);
@@ -84,6 +98,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       return next;
     });
   }, []);
+
 
   const t = useCallback(
     (key: TranslationKey, params?: TranslationParams) => {
