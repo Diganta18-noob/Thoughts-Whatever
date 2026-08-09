@@ -3,7 +3,7 @@
  */
 
 import cron from "node-cron";
-import { runMasterPipeline, isPipelineRunning } from "../pipeline";
+import { runMasterPipeline, isPipelineRunning, getLastPipelineReport } from "../pipeline";
 import { writeLog } from "../notifications/logger";
 
 let isSchedulerInitialized = false;
@@ -40,7 +40,17 @@ export function initProductionScheduler() {
     async () => {
       if (isPipelineRunning()) return;
 
-      writeLog("automation", "INFO", "⏰ 2:00 AM Fallback Retry Triggered");
+      const lastReport = getLastPipelineReport();
+      if (lastReport) {
+        const reportDate = new Date(lastReport.timestamp).toISOString().slice(0, 10);
+        const todayDate = new Date().toISOString().slice(0, 10);
+        if (reportDate === todayDate && lastReport.overallStatus === "SUCCESS") {
+          writeLog("automation", "INFO", "⏰ 2:00 AM Fallback check: 1:00 AM pipeline already succeeded. Skipping execution.");
+          return;
+        }
+      }
+
+      writeLog("automation", "INFO", "⏰ 2:00 AM Fallback Retry Triggered (1:00 AM pipeline did not complete successfully)");
       try {
         await runMasterPipeline();
       } catch (err) {

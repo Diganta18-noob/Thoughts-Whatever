@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { runMasterPipeline } from "@/lib/automation/pipeline";
+import { runMasterPipeline, getLastPipelineReport } from "@/lib/automation/pipeline";
 import { writeLog } from "@/lib/automation/notifications/logger";
 
 export async function GET(req: Request) {
@@ -10,14 +10,29 @@ export async function GET(req: Request) {
     return NextResponse.json({ ok: false, error: "Unauthorized cron trigger" }, { status: 401 });
   }
 
-  writeLog("automation", "INFO", "Vercel / Serverless Cron Trigger received for Nightly Maintenance Pipeline.");
+  const { searchParams } = new URL(req.url);
+  const isRetryTrigger = searchParams.get("retry") === "true";
+
+  // Check if today's 1:00 AM pipeline already ran successfully
+  const lastReport = getLastPipelineReport();
+  if (lastReport) {
+    const reportDate = new Date(lastReport.timestamp).toISOString().slice(0, 10);
+    const todayDate = new Date().toISOString().slice(0, 10);
+    if (reportDate === todayDate && lastReport.overallStatus === "SUCCESS") {
+      writeLog("automation", "INFO", `Cron trigger received (${isRetryTrigger ? "2:00 AM Retry" : "1:00 AM"}), but pipeline already succeeded today (${todayDate}). Skipping duplicate run.`);
+      return NextResponse.json({ ok: true, message: "Pipeline already succeeded today. Duplicate run skipped.", skipped: true });
+    }
+  }
+
+  writeLog("automation", "INFO", `Vercel / Serverless Cron Trigger received (${isRetryTrigger ? "2:00 AM Fallback Retry" : "1:00 AM Primary"}).`);
 
   try {
     const report = await runMasterPipeline();
     return NextResponse.json({ ok: true, report });
   } catch (err) {
     const errorMsg = err instanceof Error ? err.message : String(err);
-    writeLog("automation", "ERROR", `1:00 AM Cron failed: ${errorMsg}. Retrying at 1:30 AM.`);
-    return NextResponse.json({ ok: false, error: errorMsg, retryScheduled: true }, { status: 500 });
+    writeLog("automation", "ERROR", `Cron pipeline failed: ${errorMsg}.`);
+    return NextResponse.json({ ok: false, error: errorMsg }, { status: 500 });
   }
 }
+
