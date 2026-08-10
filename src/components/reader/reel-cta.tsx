@@ -128,6 +128,7 @@ export function ReelCallToAction({
               src={coverImage}
               alt={titleBn || "Reel Preview"}
               fill
+              sizes="(max-width: 768px) 100vw, 400px"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-black/40 transition-opacity group-hover:bg-black/30 flex items-center justify-center">
