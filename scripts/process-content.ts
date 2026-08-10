@@ -218,10 +218,9 @@ async function main() {
 
       const readingMins = readingMinutes(formattedBody);
 
-      // Determine PieceKind
-      let kind: PieceKind = PieceKind.RACHANA;
-      if (epAiMeta.category.toLowerCase().includes("doc")) kind = PieceKind.DOCUMENTARY;
-      else if (epAiMeta.category.toLowerCase().includes("blog")) kind = PieceKind.BLOG;
+      // Determine PieceKind (default to DOCUMENTARY so all pieces render with cinematic hero & sidebar widgets)
+      let kind: PieceKind = PieceKind.DOCUMENTARY;
+      if (epAiMeta.category.toLowerCase().includes("blog")) kind = PieceKind.BLOG;
 
       // Handle tags upsert
       const tagIds: string[] = [];
@@ -414,7 +413,7 @@ async function main() {
       if (existingPiece) {
         await prisma.piece.update({
           where: { id: existingPiece.id },
-          data: pieceData,
+          data: { ...pieceData, kind: PieceKind.DOCUMENTARY },
         });
         console.log(`  🔄 Updated Solo Article: "${titleBn}"`);
       } else {
@@ -422,7 +421,7 @@ async function main() {
           data: {
             ...pieceData,
             slug,
-            kind: PieceKind.RACHANA,
+            kind: PieceKind.DOCUMENTARY,
             status: "PUBLISHED",
           },
         });

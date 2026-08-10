@@ -40,7 +40,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const piece = await getPieceBySlug(decodeSlug(params.slug), "RACHANA");
+  const piece = await getPieceBySlug(decodeSlug(params.slug));
   if (!piece) return { title: "পাওয়া গেল না" };
   return pieceMetadata(piece);
 }
@@ -50,7 +50,7 @@ export default async function WritingPiecePage({
 }: {
   params: { slug: string };
 }) {
-  const piece = await getPieceBySlug(decodeSlug(params.slug), "RACHANA");
+  const piece = await getPieceBySlug(decodeSlug(params.slug));
   if (!piece) notFound();
 
   const [related, neighbours] = await Promise.all([
