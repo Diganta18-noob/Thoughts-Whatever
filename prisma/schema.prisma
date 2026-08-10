@@ -1,16 +1,12 @@
-// ─── Thoughts Whatever — Prisma Schema ─────────────────────────
+// ─── Thoughts Whatever — Prisma Schema (MongoDB Atlas) ─────────
 // Bengali literary + documentary publication.
-//
-// The central idea of the data model: a reel and its full written piece are
-// the SAME record. The reel is the trailer, `bodyBn` is the work. Nothing on
-// Instagram is the source of truth — this table is.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
@@ -38,28 +34,26 @@ enum TagKind {
 // ─── Content ────────────────────────────────────────────────
 
 model Piece {
-  id     String      @id @default(cuid())
+  id     String      @id @default(auto()) @map("_id") @db.ObjectId
   kind   PieceKind
   status PieceStatus @default(DRAFT)
   slug   String      @unique
 
-  // Bengali is the content language; English titles are optional and used
-  // only for SEO and for diaspora readers scanning the archive.
   titleBn    String
   titleEn    String?
   subtitleBn String?
-  dekBn      String? @db.Text // standfirst / intro line under the title
-  bodyBn     String  @db.Text // markdown
-  excerptBn  String? @db.Text // auto-derived on save if left empty
+  dekBn      String?
+  bodyBn     String // markdown
+  excerptBn  String? // auto-derived on save if left empty
 
   // Media
-  coverImage      String?
-  coverImageWidth Int?
+  coverImage       String?
+  coverImageWidth  Int?
   coverImageHeight Int?
-  reelUrl         String? // https://www.instagram.com/reel/XXXX/
-  videoUrl   String? // YouTube / Vimeo, for documentary pieces
-  audioUrl   String? // আবৃত্তি — reuse of the reel voiceover
-  audioSec   Int? // narration length, for the mini-player
+  reelUrl          String? // https://www.instagram.com/reel/XXXX/
+  videoUrl         String? // YouTube / Vimeo, for documentary pieces
+  audioUrl         String? // আবৃত্তি — reuse of the reel voiceover
+  audioSec         Int? // narration length, for the mini-player
 
   // Reading
   readingMinutes Int     @default(1)
@@ -75,13 +69,18 @@ model Piece {
   updatedAt   DateTime  @updatedAt
 
   // Relations
-  authors     Author[]        @relation("PieceAuthors")
-  tags        Tag[]           @relation("PieceTags")
+  authorIds String[] @db.ObjectId
+  authors   Author[] @relation(fields: [authorIds], references: [id])
+
+  tagIds String[] @db.ObjectId
+  tags   Tag[]    @relation(fields: [tagIds], references: [id])
+
   series      Series?         @relation(fields: [seriesId], references: [id], onDelete: SetNull)
-  seriesId    String?
+  seriesId    String?         @db.ObjectId
   seriesOrder Int?
-  sources     Source[]
-  timeline    TimelineEvent[]
+
+  sources         Source[]
+  timeline        TimelineEvent[]
   analyticsEvents AnalyticsEvent[]
 
   @@index([kind, status, publishedAt])
@@ -92,13 +91,13 @@ model Piece {
 // ─── Analytics ──────────────────────────────────────────────
 
 model AnalyticsEvent {
-  id        String   @id @default(cuid())
-  pieceId   String?
-  eventType String   // "view" | "scroll_25" | "scroll_50" | "scroll_75" | "scroll_100" | "instagram_click" | "reel_click"
-  sessionId String   // anonymous browser session
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  pieceId   String?  @db.ObjectId
+  eventType String // "view" | "scroll_25" | "scroll_50" | "scroll_75" | "scroll_100" | "instagram_click" | "reel_click"
+  sessionId String // anonymous browser session
   referrer  String?
   userAgent String?
-  metadata  Json?    // { scrollDepth: 75, readingTimeSec: 120 }
+  metadata  Json? // { scrollDepth: 75, readingTimeSec: 120 }
   createdAt DateTime @default(now())
 
   piece Piece? @relation(fields: [pieceId], references: [id], onDelete: SetNull)
@@ -109,31 +108,31 @@ model AnalyticsEvent {
 }
 
 /// A literary figure the work is *about* — রবীন্দ্রনাথ, নজরুল, জীবনানন্দ.
-/// These generate /authors/[slug] hub pages automatically from tagging,
-/// which is both the best SEO surface and the best binge-reading surface.
 model Author {
-  id       String  @id @default(cuid())
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
   slug     String  @unique
   nameBn   String
   nameEn   String?
   era      String? // "১৮৬১–১৯৪১"
-  bioBn    String? @db.Text
+  bioBn    String?
   portrait String?
 
-  pieces Piece[] @relation("PieceAuthors")
+  pieceIds String[] @db.ObjectId
+  pieces   Piece[]  @relation(fields: [pieceIds], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Tag {
-  id      String  @id @default(cuid())
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
   slug    String  @unique
   labelBn String
   labelEn String?
   kind    TagKind @default(TOPIC)
 
-  pieces Piece[] @relation("PieceTags")
+  pieceIds String[] @db.ObjectId
+  pieces   Piece[]  @relation(fields: [pieceIds], references: [id])
 
   createdAt DateTime @default(now())
 
@@ -142,11 +141,11 @@ model Tag {
 
 /// ধারাবাহিক — a multi-part run meant to be read in order.
 model Series {
-  id         String  @id @default(cuid())
-  slug       String  @unique
-  titleBn    String
-  titleEn    String?
-  descBn           String? @db.Text
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug             String   @unique
+  titleBn          String
+  titleEn          String?
+  descBn           String?
   coverImage       String?
   coverImageWidth  Int?
   coverImageHeight Int?
@@ -157,27 +156,26 @@ model Series {
   updatedAt DateTime @updatedAt
 }
 
-/// তথ্যসূত্র — citations on documentary pieces. This is the thing that
-/// separates a researched documentary from an aesthetic quote page.
+/// তথ্যসূত্র — citations on documentary pieces.
 model Source {
-  id      String  @id @default(cuid())
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
   piece   Piece   @relation(fields: [pieceId], references: [id], onDelete: Cascade)
-  pieceId String
+  pieceId String  @db.ObjectId
   label   String // "সুনীল গঙ্গোপাধ্যায়, 'পূর্ব-পশ্চিম', আনন্দ পাবলিশার্স, ১৯৮৯"
   url     String?
-  note    String? @db.Text
+  note    String?
   order   Int     @default(0)
 
   @@index([pieceId, order])
 }
 
 model TimelineEvent {
-  id      String  @id @default(cuid())
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
   piece   Piece   @relation(fields: [pieceId], references: [id], onDelete: Cascade)
-  pieceId String
+  pieceId String  @db.ObjectId
   year    String // kept as text so "১৯৪৭" or "১৯৪৩–৪৪" both work
   labelBn String
-  descBn  String? @db.Text
+  descBn  String?
   order   Int     @default(0)
 
   @@index([pieceId, order])
@@ -187,15 +185,15 @@ model TimelineEvent {
 
 /// চিঠি — the newsletter list.
 model Subscriber {
-  id                String    @id @default(cuid())
-  email             String    @unique
-  nameBn            String?
-  confirmed         Boolean   @default(false)
-  unsubscribeToken  String    @unique @default(cuid())
-  source            String? // where they signed up from
-  createdAt         DateTime  @default(now())
-  confirmedAt       DateTime?
-  unsubscribedAt    DateTime?
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  email            String    @unique
+  nameBn           String?
+  confirmed        Boolean   @default(false)
+  unsubscribeToken String    @unique @default(cuid())
+  source           String? // where they signed up from
+  createdAt        DateTime  @default(now())
+  confirmedAt      DateTime?
+  unsubscribedAt   DateTime?
 
   @@index([confirmed])
 }
@@ -203,7 +201,7 @@ model Subscriber {
 // ─── Admin ──────────────────────────────────────────────────
 
 model AdminUser {
-  id            String         @id @default(cuid())
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
   email         String         @unique
   passwordHash  String
   nameBn        String?
@@ -213,9 +211,9 @@ model AdminUser {
 }
 
 model RefreshToken {
-  id          String    @id @default(cuid())
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   token       String    @unique
-  adminUserId String
+  adminUserId String    @db.ObjectId
   adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
   expiresAt   DateTime
   createdAt   DateTime  @default(now())
@@ -227,4 +225,3 @@ model RefreshToken {
   @@index([adminUserId])
   @@index([token, revoked])
 }
-
