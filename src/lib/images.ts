@@ -21,8 +21,7 @@ export function coverSrc(
   if (!value) {
     return `/api/cover/${owner}/${encodeURIComponent(slug)}`;
   }
-  if (!value.startsWith("data:")) return value;
-  return `/api/cover/${owner}/${encodeURIComponent(slug)}?v=${fingerprint(value)}`;
+  return value;
 }
 
 function absolutize(src: string): string {
