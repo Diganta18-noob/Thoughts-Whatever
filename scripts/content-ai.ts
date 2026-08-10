@@ -70,6 +70,21 @@ export interface SocialCaptions {
  * Preserves the original Bengali writing word-for-word, improving spacing, punctuation,
  * paragraphing, blockquotes, citations, emphasis, headings, and pull quotes.
  */
+export function cleanMarkdownBody(text: string, title?: string): string {
+  let cleaned = text.trim();
+
+  // Strip code block backticks ```markdown ... ``` or ``` ... ```
+  cleaned = cleaned.replace(/^```[a-z]*\n?/gi, "").replace(/\n?```$/gi, "").trim();
+
+  // Remove redundant H1 or H2 title at top of body (e.g. ## Title)
+  cleaned = cleaned.replace(/^#{1,3}\s+[^\n]+\n+/, "").trim();
+
+  // Remove double fence leftovers
+  cleaned = cleaned.replace(/^```[a-z]*\n?/gi, "").replace(/\n?```$/gi, "").trim();
+
+  return cleaned.trim();
+}
+
 export async function formatArticleBody(rawContent: string, title: string): Promise<string> {
   const prompt = `You are an expert Bengali literature editor and visual layout designer for 'Thoughts Whatever'.
 
@@ -78,12 +93,9 @@ Your task is to transform raw Bengali article text into premium, publishing-read
 STRICT RULES:
 1. ALWAYS preserve the exact original Bengali writing and language. Do NOT rewrite, paraphrase, translate, or remove sentences unless fixing clear typos/spacing issues.
 2. Fix Bengali spacing, punctuation, quotes (e.g. replacing 'l' or 'L' used mistakenly as dandi '।', fixing missing spaces after punctuation).
-3. Format into clear, readable paragraphs with appropriate blank lines.
-4. Use Markdown headings (## and ###) for logical section breaks where natural.
-5. Use Markdown blockquotes (> ...) for quotes or literary excerpts.
-6. Highlight key pull quotes or memorable lines using emphasis (**bold** or > blockquote).
-7. Ensure poetic lines or literary stanzas are preserved with line breaks.
-8. Output ONLY the raw Markdown body (do not wrap in top-level title H1, as title is handled separately).
+3. Format into clear, readable paragraphs with appropriate blank lines (\n\n).
+4. Use Markdown blockquotes (> ...) for pull quotes or literary quotes.
+5. Do NOT include top-level Markdown headers (do NOT add ## Title or # Title) and do NOT wrap output in markdown code fences (\`\`\`markdown). Output raw markdown directly.
 
 Raw Article Title: ${title}
 Raw Article Text:
@@ -99,18 +111,20 @@ ${rawContent}
     });
 
     const result = response.choices[0]?.message?.content?.trim();
-    if (result) return result;
+    if (result) return cleanMarkdownBody(result, title);
   } catch (err) {
     console.error("AI formatting error, falling back to clean raw text:", err);
   }
 
   // Fallback cleanup if AI fails
-  return rawContent
-    .replace(/\s*l\s*/g, "। ")
-    .replace(/\s*L\s*/g, "। ")
-    .replace(/।([^\s])/g, "। $1")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
+  return cleanMarkdownBody(
+    rawContent
+      .replace(/\s*l\s*/g, "। ")
+      .replace(/\s*L\s*/g, "। ")
+      .replace(/।([^\s])/g, "। $1")
+      .replace(/\n{3,}/g, "\n\n"),
+    title,
+  );
 }
 
 /**

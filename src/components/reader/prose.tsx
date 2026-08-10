@@ -130,9 +130,15 @@ export function Prose({
   dropCap?: boolean;
   className?: string;
 }) {
+  // Strip code fences ```markdown ... ``` or stray leading ## headers if present
+  let cleanBody = body.trim();
+  cleanBody = cleanBody.replace(/^```[a-z]*\n?/gi, "").replace(/\n?```$/gi, "").trim();
+  cleanBody = cleanBody.replace(/^#{1,3}\s+[^\n]+\n+/, "").trim();
+  cleanBody = cleanBody.replace(/^```[a-z]*\n?/gi, "").replace(/\n?```$/gi, "").trim();
+
   const { lead, rest } = dropCap
-    ? splitLeadParagraph(body)
-    : { lead: null, rest: body };
+    ? splitLeadParagraph(cleanBody)
+    : { lead: null, rest: cleanBody };
 
   return (
     <div className={cn("prose-bengali", className)} lang="bn">
