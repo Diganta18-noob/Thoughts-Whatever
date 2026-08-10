@@ -46,7 +46,7 @@ export async function runHealthCheck(): Promise<HealthCheckResult> {
   let dbConnected = false;
 
   try {
-    await prisma.$queryRaw`SELECT 1`;
+    await prisma.piece.findFirst({ select: { id: true } });
     dbConnected = true;
   } catch (err) {
     issues.push(`Database connectivity failure: ${err instanceof Error ? err.message : String(err)}`);

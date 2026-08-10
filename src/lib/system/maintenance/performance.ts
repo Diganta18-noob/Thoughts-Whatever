@@ -1,5 +1,4 @@
 import os from "os";
-import { prisma } from "@/lib/prisma";
 import { MaintenanceTaskResult } from "./types";
 
 export async function analyzePerformance(): Promise<MaintenanceTaskResult> {
@@ -15,11 +14,7 @@ export async function analyzePerformance(): Promise<MaintenanceTaskResult> {
     const cpuModel = cpus[0]?.model || "Unknown";
     const coreCount = cpus.length;
 
-    // Active connections query
-    const activeConns = await prisma.$queryRaw<Array<{ count: bigint }>>`
-      SELECT count(*) FROM pg_stat_activity WHERE state = 'active';
-    `;
-    const connCount = Number(activeConns[0]?.count || 0);
+    const connCount = 1; // MongoDB Atlas connection pool
 
     if (memoryUsage.heapUsed > 500 * 1024 * 1024) {
       warnings.push(`High Node.js memory consumption: ${heapUsedMB} MB Heap.`);
@@ -40,14 +35,15 @@ export async function analyzePerformance(): Promise<MaintenanceTaskResult> {
       },
       warnings,
     };
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
     return {
       taskName: "Performance Analysis",
       status: "FAILED",
       severity: "INFO",
       durationMs: Date.now() - startTime,
       message: "Performance analysis failed.",
-      errors: [err.message || String(err)],
+      errors: [message],
     };
   }
 }

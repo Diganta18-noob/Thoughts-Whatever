@@ -16,10 +16,6 @@ import {
 } from "./content-ai";
 import { saveSocialCaptions, runQualityCheck, printOutputSummary } from "./content-output";
 
-dotenv.config();
-
-const prisma = new PrismaClient();
-
 // Configure Cloudinary if available
 const rawCloudName = process.env.CLOUDINARY_CLOUD_NAME;
 const cloudName = rawCloudName ? rawCloudName.replace(/\./g, "-") : undefined;
