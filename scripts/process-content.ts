@@ -379,8 +379,8 @@ async function main() {
       const readingMins = readingMinutes(formattedBody);
 
       let tagIds: string[] = [];
-      if (epAiMeta.tags && epAiMeta.tags.length > 0) {
-        for (const tName of epAiMeta.tags) {
+      if (epAiMeta.bengaliTags && epAiMeta.bengaliTags.length > 0) {
+        for (const tName of epAiMeta.bengaliTags) {
           const tSlug = bengaliSlug(tName);
           const tag = await prisma.tag.upsert({
             where: { slug: tSlug },
