@@ -87,8 +87,9 @@ async function main() {
     fs.mkdirSync(docsOutputDir, { recursive: true });
   }
 
-  // Filter to specific series if provided as CLI argument
-  const targetSeries = process.argv[2] || null;
+  // Filter to specific series if provided as CLI argument (ignoring flags starting with --)
+  const arg = process.argv.slice(2).find((a) => !a.startsWith("--"));
+  const targetSeries = arg || null;
 
   const seriesFolders = fs
     .readdirSync(contextBaseDir, { withFileTypes: true })
@@ -218,7 +219,11 @@ async function main() {
   console.log("\n🎉 ALL DOCUMENTATION GENERATED SUCCESSFULLY!\n");
 }
 
-main().catch((e) => {
-  console.error("❌ Fatal error:", e);
-  process.exit(1);
-});
+export { main as generateDocs };
+
+if (require.main === module) {
+  main().catch((e) => {
+    console.error("❌ Fatal error:", e);
+    process.exit(1);
+  });
+}

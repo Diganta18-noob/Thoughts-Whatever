@@ -79,6 +79,7 @@ const REMOTE_PATTERNS: { exact?: string; suffix?: string }[] = [
   { suffix: ".fbcdn.net" },
   { exact: "i.ytimg.com" },
   { exact: "images.unsplash.com" },
+  { exact: "res.cloudinary.com" },
 ];
 
 export function isOptimizable(src: string): boolean {

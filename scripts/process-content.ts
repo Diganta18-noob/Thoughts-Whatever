@@ -16,9 +16,10 @@ import {
 } from "./content-ai";
 import { saveSocialCaptions, runQualityCheck, printOutputSummary } from "./content-output";
 
+import sharp from "sharp";
+
 // Configure Cloudinary if available
-const rawCloudName = process.env.CLOUDINARY_CLOUD_NAME;
-const cloudName = rawCloudName ? rawCloudName.replace(/\./g, "-") : undefined;
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
 const apiKey = process.env.CLOUDINARY_API_KEY;
 const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
@@ -31,28 +32,40 @@ if (cloudName && apiKey && apiSecret) {
 }
 
 /**
- * Upload image to Cloudinary or convert to base64 Data URI as fallback.
+ * Compress image using sharp (1600px width max WebP) then upload to Cloudinary CDN.
+ * Fallback to lightweight WebP Data URI if Cloudinary is unavailable.
  */
 async function uploadImage(imagePath: string, folderName = "thoughts-whatever"): Promise<string | null> {
   if (!fs.existsSync(imagePath)) return null;
 
-  if (cloudName && apiKey && apiSecret) {
-    try {
-      console.log(`  📤 Uploading thumbnail to Cloudinary: ${path.basename(imagePath)}...`);
-      const result = await cloudinary.uploader.upload(imagePath, {
-        folder: folderName,
-        transformation: [{ width: 2400, crop: "limit" }, { quality: "auto:good" }, { fetch_format: "auto" }],
-      });
-      return result.secure_url;
-    } catch (err) {
-      console.warn("  ⚠️ Cloudinary upload failed, using Data URI fallback:", err);
-    }
-  }
+  try {
+    const rawBuffer = fs.readFileSync(imagePath);
+    // Compress to optimized WebP buffer first
+    const optimizedBuffer = await sharp(rawBuffer)
+      .resize({ width: 1600, withoutEnlargement: true })
+      .webp({ quality: 82 })
+      .toBuffer();
 
-  // Fallback to Data URI
-  const buffer = fs.readFileSync(imagePath);
-  const ext = path.extname(imagePath).replace(".", "") || "jpeg";
-  return `data:image/${ext};base64,${buffer.toString("base64")}`;
+    const dataUri = `data:image/webp;base64,${optimizedBuffer.toString("base64")}`;
+
+    if (cloudName && apiKey && apiSecret) {
+      try {
+        console.log(`  📤 Uploading optimized WebP thumbnail to Cloudinary: ${path.basename(imagePath)}...`);
+        const result = await cloudinary.uploader.upload(dataUri, {
+          folder: folderName,
+          transformation: [{ width: 1600, crop: "limit" }, { quality: "auto:good" }, { fetch_format: "auto" }],
+        });
+        return result.secure_url;
+      } catch (err) {
+        console.warn("  ⚠️ Cloudinary upload failed, using optimized WebP Data URI fallback:", err);
+      }
+    }
+
+    return dataUri;
+  } catch (err) {
+    console.error("  ❌ Failed processing image with sharp:", err);
+    return null;
+  }
 }
 
 /**
@@ -434,8 +447,12 @@ async function main() {
   await prisma.$disconnect();
 }
 
-main().catch(async (e) => {
-  console.error("❌ Fatal processing error:", e);
-  await prisma.$disconnect();
-  process.exit(1);
-});
+export { main as processContent };
+
+if (require.main === module) {
+  main().catch(async (e) => {
+    console.error("❌ Fatal processing error:", e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
+}

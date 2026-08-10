@@ -20,6 +20,7 @@
     "admin:hash": "tsx scripts/hash-password.ts",
     "db:check": "tsx scripts/check-db.ts",
     "content:process": "tsx scripts/process-content.ts",
+    "publish": "tsx scripts/publish.ts",
     "docs:generate": "tsx scripts/generate-series-docs.ts",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
