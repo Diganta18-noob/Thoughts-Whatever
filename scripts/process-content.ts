@@ -353,6 +353,84 @@ async function main() {
     });
   }
 
+  // Process Solo Standalone Articles
+  const soloBaseDir = path.join(process.cwd(), "Content", "solo");
+  const soloThumbnailDir = path.join(process.cwd(), "Content", "Thumnail", "Solo");
+
+  if (fs.existsSync(soloBaseDir)) {
+    const soloFiles = fs
+      .readdirSync(soloBaseDir)
+      .filter((file) => (file.endsWith(".txt") || file.endsWith(".md")) && !file.endsWith(".social.md"));
+
+    for (const file of soloFiles) {
+      const filePath = path.join(soloBaseDir, file);
+      const titleBn = path.basename(file, path.extname(file));
+      const slug = bengaliSlug(titleBn);
+
+      console.log(`\n📄 Processing Solo Article: "${file}" -> Title: "${titleBn}" (slug: ${slug})`);
+
+      const rawContent = fs.readFileSync(filePath, "utf-8");
+      const formattedBody = await formatArticleBody(titleBn, rawContent);
+      const epAiMeta = await generateEpisodeMetadata(titleBn, rawContent);
+
+      const coverPath = findThumbnail(soloThumbnailDir, titleBn);
+      const coverImageUrl = coverPath ? await uploadImage(coverPath, "piece-covers") : null;
+
+      const readingMins = readingMinutes(formattedBody);
+
+      let tagIds: string[] = [];
+      if (epAiMeta.tags && epAiMeta.tags.length > 0) {
+        for (const tName of epAiMeta.tags) {
+          const tSlug = bengaliSlug(tName);
+          const tag = await prisma.tag.upsert({
+            where: { slug: tSlug },
+            update: { labelBn: tName },
+            create: { slug: tSlug, labelBn: tName, kind: TagKind.TOPIC },
+          });
+          tagIds.push(tag.id);
+        }
+      }
+
+      // Check for Tagore author
+      const tagoreAuthor = await prisma.author.findFirst({ where: { slug: "রবীন্দ্রনাথ-ঠাকুর" } });
+
+      const existingPiece = await prisma.piece.findUnique({ where: { slug } });
+
+      const pieceData = {
+        titleBn,
+        titleEn: epAiMeta.titleEn,
+        bodyBn: formattedBody,
+        excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
+        coverImage: coverImageUrl,
+        readingMinutes: readingMins,
+        featured: true,
+        seoDescription: epAiMeta.seoDescription,
+        ogImage: coverImageUrl,
+        publishedAt: new Date(),
+        tags: { connect: tagIds.map((id) => ({ id })) },
+        authors: tagoreAuthor ? { connect: [{ id: tagoreAuthor.id }] } : undefined,
+      };
+
+      if (existingPiece) {
+        await prisma.piece.update({
+          where: { id: existingPiece.id },
+          data: pieceData,
+        });
+        console.log(`  🔄 Updated Solo Article: "${titleBn}"`);
+      } else {
+        await prisma.piece.create({
+          data: {
+            ...pieceData,
+            slug,
+            kind: PieceKind.RACHANA,
+            status: "PUBLISHED",
+          },
+        });
+        console.log(`  ✨ Created Solo Article: "${titleBn}"`);
+      }
+    }
+  }
+
   console.log("\n🎉 ALL CONTENT PROCESSED SUCCESSFULLY!");
   await prisma.$disconnect();
 }
