@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { PUBLISHED } from "@/lib/pieces";
 import { normalizeMime } from "@/lib/images";
 
 const DATA_URI = /^data:([a-z0-9.+-]+\/[a-z0-9.+-]+);base64,(.*)$/is;
@@ -9,10 +8,20 @@ const MISS = {
   headers: { "Cache-Control": "public, max-age=60" },
 } as const;
 
-async function findCover(owner: string, slug: string) {
+function decodeSlug(raw: string) {
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
+async function findCover(owner: string, rawSlug: string) {
+  const slug = decodeSlug(rawSlug);
+
   if (owner === "piece") {
     const piece = await prisma.piece.findFirst({
-      where: { slug, ...PUBLISHED },
+      where: { slug },
       select: { coverImage: true },
     });
     return piece?.coverImage ?? null;
@@ -20,10 +29,11 @@ async function findCover(owner: string, slug: string) {
 
   if (owner === "series") {
     const series = await prisma.series.findFirst({
-      where: { slug, pieces: { some: PUBLISHED } },
-      select: { coverImage: true },
+      where: { slug },
+      select: { coverImage: true, pieces: { select: { coverImage: true }, take: 1 } },
     });
-    return series?.coverImage ?? null;
+    if (!series) return null;
+    return series.coverImage || series.pieces[0]?.coverImage || null;
   }
 
   return null;

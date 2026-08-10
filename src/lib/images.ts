@@ -18,7 +18,9 @@ export function coverSrc(
   coverImage?: string | null,
 ): string | null {
   const value = coverImage?.trim();
-  if (!value) return null;
+  if (!value) {
+    return `/api/cover/${owner}/${encodeURIComponent(slug)}`;
+  }
   if (!value.startsWith("data:")) return value;
   return `/api/cover/${owner}/${encodeURIComponent(slug)}?v=${fingerprint(value)}`;
 }

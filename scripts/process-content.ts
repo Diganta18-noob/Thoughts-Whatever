@@ -152,6 +152,7 @@ async function main() {
 
       // Find series cover thumbnail if available
       const seriesCoverPath = findThumbnail(thumbnailSeriesDir, cleanSeriesTitle) ||
+        findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} 1`) ||
         findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} cover`);
       const seriesCoverUrl = seriesCoverPath ? await uploadImage(seriesCoverPath, "series-covers") : null;
 
@@ -167,6 +168,21 @@ async function main() {
       console.log(`  ✅ Series Created: ID ${series.id} (slug: ${series.slug})`);
     } else {
       console.log(`  ℹ️ Found existing Series: ID ${series.id} (slug: ${series.slug})`);
+      if (!series.coverImage) {
+        const seriesCoverPath = findThumbnail(thumbnailSeriesDir, cleanSeriesTitle) ||
+          findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} 1`) ||
+          findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} cover`);
+        if (seriesCoverPath) {
+          const seriesCoverUrl = await uploadImage(seriesCoverPath, "series-covers");
+          if (seriesCoverUrl) {
+            series = await prisma.series.update({
+              where: { id: series.id },
+              data: { coverImage: seriesCoverUrl },
+            });
+            console.log(`  🖼️ Updated Series cover image for ${series.titleBn}`);
+          }
+        }
+      }
     }
 
     // Sort episode files numerically by number in filename
