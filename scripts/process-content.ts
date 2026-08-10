@@ -371,7 +371,7 @@ async function main() {
 
       const rawContent = fs.readFileSync(filePath, "utf-8");
       const formattedBody = await formatArticleBody(titleBn, rawContent);
-      const epAiMeta = await generateEpisodeMetadata(titleBn, rawContent);
+      const epAiMeta = await generateEpisodeMetadata(titleBn, titleBn, formattedBody, 1);
 
       const coverPath = findThumbnail(soloThumbnailDir, titleBn);
       const coverImageUrl = coverPath ? await uploadImage(coverPath, "piece-covers") : null;
