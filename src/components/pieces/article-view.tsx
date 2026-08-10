@@ -66,8 +66,8 @@ export function ArticleView({
         {/* 1. Cinematic Hero */}
         <ArticleHero piece={piece} onScrollToContent={scrollToContent} />
 
-        {/* 2. 12-Column Responsive Editorial Grid (Left Sidebar | Content | Right Sidebar) */}
-        <div ref={contentRef} className="mt-8 grid gap-8 lg:grid-cols-[1.8fr_4.4fr_1.8fr]">
+        {/* 2. Responsive Editorial Grid (Left Sidebar | 760px Reading Column | Right Sidebar) */}
+        <div ref={contentRef} className="mt-10 grid gap-10 lg:grid-cols-[200px_minmax(0,760px)_240px] xl:grid-cols-[220px_760px_260px] justify-center">
           {/* Left Sticky Sidebar: TOC, Series Progress, Share */}
           <ArticleLeftSidebar
             headings={headings}
@@ -80,8 +80,8 @@ export function ArticleView({
             titleBn={piece.titleBn}
           />
 
-          {/* Center Column: Primary Article Body & Media */}
-          <div className="min-w-0">
+          {/* Center Column: Primary Editorial Article Body & Media */}
+          <div className="min-w-0 max-w-[760px] mx-auto w-full">
             {/* Instagram Reel CTA Banner if reelUrl exists */}
             {piece.reelUrl && (
               <ReelCallToAction

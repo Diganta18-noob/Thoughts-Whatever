@@ -19,20 +19,20 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
   const meta = KIND_META[piece.kind];
 
   return (
-    <aside className="sticky top-24 space-y-8 pl-4 hidden lg:block">
+    <aside className="sticky top-28 space-y-6 pl-2 hidden lg:block">
       {/* 1. About This Episode Card */}
-      <div className="rounded-xl border border-rule/60 bg-surface-raised/30 p-5 space-y-4 text-xs">
-        <h4 className="label text-[0.6875rem] uppercase tracking-widest text-content-faint">
+      <div className="rounded-md border border-rule/40 bg-surface-raised/20 p-4 space-y-3 text-xs">
+        <h4 className="label text-[0.625rem] uppercase tracking-widest text-content-faint">
           About This Episode
         </h4>
 
-        <div className="space-y-2.5 divide-y divide-rule/40">
+        <div className="space-y-2 divide-y divide-rule/30">
           {piece.series && (
             <div className="pt-2 flex justify-between gap-2 items-center">
               <span className="text-content-faint">Series</span>
               <Link
                 href={`/series/${piece.series.slug}`}
-                className="font-bengali text-content text-right hover:text-accent transition-colors"
+                className="font-bengali text-content text-right hover:text-accent transition-colors truncate max-w-[140px]"
                 lang="bn"
               >
                 {piece.series.titleBn}
@@ -51,7 +51,7 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
             <span className="text-content-faint">Category</span>
             <Link
               href={meta.path}
-              className="text-accent uppercase hover:underline transition-all"
+              className="text-accent uppercase font-medium hover:underline transition-all"
             >
               {isBn ? meta.labelBn : meta.labelEn}
             </Link>
@@ -79,12 +79,12 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
         </div>
 
         {piece.tags && piece.tags.length > 0 && (
-          <div className="pt-3 border-t border-rule/50 flex flex-wrap gap-1.5">
+          <div className="pt-2.5 border-t border-rule/40 flex flex-wrap gap-1">
             {piece.tags.map((tag) => (
               <Link
                 key={tag.slug}
                 href={`/archive?tag=${tag.slug}`}
-                className="rounded bg-surface-raised/80 px-2 py-0.5 text-[0.6875rem] text-content-soft font-bengali hover:text-accent hover:bg-surface-raised transition-colors"
+                className="rounded bg-surface-raised/60 px-2 py-0.5 text-[0.65rem] text-content-soft font-bengali hover:text-accent hover:bg-surface-raised transition-colors"
                 lang="bn"
               >
                 {tag.labelBn}
@@ -96,18 +96,18 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
 
       {/* 2. Next Episode Card */}
       {nextEpisode && (
-        <div className="rounded-xl border border-rule/60 bg-surface-raised/30 p-5 space-y-3">
-          <h4 className="label text-[0.6875rem] uppercase tracking-widest text-content-faint">
+        <div className="rounded-md border border-rule/40 bg-surface-raised/20 p-4 space-y-2.5">
+          <h4 className="label text-[0.625rem] uppercase tracking-widest text-content-faint">
             Next Episode
           </h4>
 
           <Link
             href={`/${piece.kind.toLowerCase()}/${nextEpisode.slug}`}
-            className="group block space-y-3"
+            className="group block space-y-2.5"
           >
             <div className="flex gap-3 items-center">
               {nextEpisode.coverImage && (
-                <div className="h-16 w-12 shrink-0">
+                <div className="h-14 w-11 shrink-0 overflow-hidden rounded border border-rule/40 shadow-xs">
                   <CoverImageFrame
                     owner="piece"
                     slug={nextEpisode.slug}
@@ -115,19 +115,21 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
                     aspect="aspect-[3/4]"
                     rounded="rounded"
                     scale={1.05}
-                    sizes="48px"
+                    sizes="44px"
                   />
                 </div>
               )}
-              <div className="min-w-0">
-                <h5 className="font-bengali text-sm text-content line-clamp-2 group-hover:text-accent transition-colors" lang="bn">
+
+              <div className="min-w-0 flex-1">
+                <span className="font-bengali text-xs font-medium text-content group-hover:text-accent transition-colors line-clamp-2" lang="bn">
                   {nextEpisode.titleBn}
-                </h5>
+                </span>
               </div>
             </div>
 
-            <div className="block w-full text-center rounded-md bg-surface-raised/60 py-2 text-xs text-content-soft font-mono uppercase tracking-wider group-hover:bg-accent group-hover:text-surface transition-colors">
-              Next Episode →
+            <div className="inline-flex items-center gap-1 text-[0.725rem] font-sans text-content-faint group-hover:text-accent transition-colors">
+              <span>NEXT EPISODE</span>
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
             </div>
           </Link>
         </div>
@@ -135,4 +137,3 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
     </aside>
   );
 }
-

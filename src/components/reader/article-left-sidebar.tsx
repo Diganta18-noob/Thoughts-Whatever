@@ -58,31 +58,32 @@ export function ArticleLeftSidebar({
         </div>
       )}
 
-      {/* 2. Series Progress Card */}
+      {/* 2. Series Progress Editorial Widget */}
       {seriesTitleBn && (
-        <div className="rounded-xl border border-rule/60 bg-surface-raised/30 p-4 space-y-3">
-          <h4 className="label text-[0.6875rem] uppercase tracking-widest text-content-faint">
+        <div className="rounded-md border border-rule/40 bg-surface-raised/20 p-4 space-y-2.5">
+          <h4 className="label text-[0.625rem] uppercase tracking-widest text-content-faint">
             Series Progress
           </h4>
-          <div className="font-bengali text-xs text-content" lang="bn">
+          <div className="font-bengali text-xs font-medium text-content" lang="bn">
             {seriesTitleBn}
           </div>
-          <div className="text-xs text-content-soft font-sans">
-            Episode {currentEpisode} / {totalEpisodes}
+          <div className="text-[0.75rem] text-content-soft font-sans flex justify-between items-center">
+            <span>Episode</span>
+            <span className="font-mono text-content">{currentEpisode} / {totalEpisodes}</span>
           </div>
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-rule/50">
+          <div className="h-1 w-full overflow-hidden rounded-full bg-rule/40">
             <div
-              className="h-full bg-accent transition-all duration-500"
+              className="h-full bg-accent/90 transition-all duration-500"
               style={{ width: `${(currentEpisode / totalEpisodes) * 100}%` }}
             />
           </div>
           {seriesSlug && (
             <Link
               href={`/series/${seriesSlug}`}
-              className="inline-flex items-center gap-1 text-xs text-accent hover:opacity-80 transition pt-1"
+              className="group inline-flex items-center gap-1 text-[0.75rem] text-accent hover:opacity-85 transition pt-1"
             >
               <span>View Series</span>
-              <span>→</span>
+              <span className="group-hover:translate-x-0.5 transition-transform">→</span>
             </Link>
           )}
         </div>
