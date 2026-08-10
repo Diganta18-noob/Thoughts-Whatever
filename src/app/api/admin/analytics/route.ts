@@ -18,6 +18,7 @@ export async function GET(req: Request) {
   const period = (searchParams.get("period") as Period) || "30d";
 
   try {
+    // Parallelized server-side execution of all 4 aggregated analytics sections
     const [overview, dailyTrend, topArticles, seriesAnalytics] = await Promise.all([
       getOverviewStats(period),
       getDailyTrend(period === "7d" ? 7 : 30),
@@ -25,14 +26,26 @@ export async function GET(req: Request) {
       getSeriesAnalytics(),
     ]);
 
-    return NextResponse.json({
-      overview,
-      dailyTrend,
-      topArticles,
-      seriesAnalytics,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        overview,
+        dailyTrend,
+        topArticles,
+        seriesAnalytics,
+      },
+      {
+        headers: {
+          // Micro-cache dashboard response for 10 seconds to eliminate redundant serverless calls
+          "Cache-Control": "private, max-age=10, stale-while-revalidate=30",
+        },
+      }
+    );
   } catch (error) {
-    console.error("Failed to fetch analytics:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    console.error("Failed to fetch consolidated admin dashboard analytics:", error);
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
