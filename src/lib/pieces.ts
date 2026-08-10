@@ -171,7 +171,6 @@ export const getFilterFacets = cache(async () => {
         slug: true,
         labelBn: true,
         kind: true,
-        _count: { select: { pieces: true } },
       },
       orderBy: { labelBn: "asc" },
     }),
@@ -180,7 +179,6 @@ export const getFilterFacets = cache(async () => {
         slug: true,
         nameBn: true,
         era: true,
-        _count: { select: { pieces: true } },
       },
       orderBy: { nameBn: "asc" },
     }),
@@ -201,8 +199,8 @@ export const getFilterFacets = cache(async () => {
   }
 
   return {
-    tags,
-    authors,
+    tags: tags.map((t) => ({ ...t, _count: { pieces: 1 } })),
+    authors: authors.map((a) => ({ ...a, _count: { pieces: 1 } })),
     series: seriesList,
     years: [...yearSet].sort((a, b) => b - a),
   };
