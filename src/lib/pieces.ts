@@ -167,27 +167,24 @@ export const getArchivePieces = cache(
 export const getFilterFacets = cache(async () => {
   const [tags, authors, seriesList, years] = await Promise.all([
     prisma.tag.findMany({
-      where: { pieces: { some: PUBLISHED } },
       select: {
         slug: true,
         labelBn: true,
         kind: true,
-        _count: { select: { pieces: { where: PUBLISHED } } },
+        _count: { select: { pieces: true } },
       },
       orderBy: { labelBn: "asc" },
     }),
     prisma.author.findMany({
-      where: { pieces: { some: PUBLISHED } },
       select: {
         slug: true,
         nameBn: true,
         era: true,
-        _count: { select: { pieces: { where: PUBLISHED } } },
+        _count: { select: { pieces: true } },
       },
       orderBy: { nameBn: "asc" },
     }),
     prisma.series.findMany({
-      where: { pieces: { some: PUBLISHED } },
       select: { slug: true, titleBn: true },
       orderBy: { titleBn: "asc" },
     }),
