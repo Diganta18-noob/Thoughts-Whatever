@@ -1,8 +1,11 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import fs from "fs";
 import path from "path";
-import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
-import { PrismaClient, PieceKind, TagKind } from "@prisma/client";
+import { PieceKind, TagKind } from "@prisma/client";
+import { prisma } from "../src/lib/prisma";
 import { bengaliSlug, readingMinutes } from "../src/lib/bengali";
 import { deriveExcerpt, extractHeadings } from "../src/lib/markdown";
 import {
