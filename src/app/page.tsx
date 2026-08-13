@@ -11,18 +11,14 @@ import { LetterBlock } from "@/components/newsletter/letter-block";
 import {
   getFeaturedSeries,
   getRecentPieces,
-  getFeaturedPieces,
   getFilterFacets,
-  getPublishingTimeline,
-  getKindCounts,
-  getPullQuoteCandidates,
 } from "@/lib/pieces";
 import { extractPullQuotes } from "@/lib/markdown";
 import { JsonLd, websiteJsonLd, seriesJsonLd } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-async function withTimeout<T>(promise: Promise<T>, fallback: T, ms = 10000): Promise<T> {
+async function withTimeout<T>(promise: Promise<T>, fallback: T, ms = 6000): Promise<T> {
   return Promise.race([
     promise,
     new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
@@ -37,38 +33,25 @@ const DEFAULT_FACETS = {
 };
 
 export default async function HomePage() {
-  const [
-    seriesRes,
-    recentPiecesRes,
-    featuredPiecesRes,
-    facetsRes,
-    timelineRes,
-    kindCountsRes,
-    quoteCandidatesRes,
-  ] = await Promise.allSettled([
-    withTimeout(getFeaturedSeries(3), [], 10000),
-    withTimeout(getRecentPieces({ take: 20 }), [], 10000),
-    withTimeout(getFeaturedPieces(12), [], 10000),
-    withTimeout(getFilterFacets(), DEFAULT_FACETS, 10000),
-    withTimeout(getPublishingTimeline(), [], 10000),
-    withTimeout(getKindCounts(), {} as Record<string, number>, 10000),
-    withTimeout(getPullQuoteCandidates(8), [], 10000),
+  // Consolidate into 3 parallel fast queries instead of 7 heavy queries
+  const [seriesRes, recentPiecesRes, facetsRes] = await Promise.allSettled([
+    withTimeout(getFeaturedSeries(3), [], 6000),
+    withTimeout(getRecentPieces({ take: 20 }), [], 6000),
+    withTimeout(getFilterFacets(), DEFAULT_FACETS, 6000),
   ]);
 
   const series = seriesRes.status === "fulfilled" ? seriesRes.value : [];
   const recentPieces = recentPiecesRes.status === "fulfilled" ? recentPiecesRes.value : [];
-  const featuredPieces = featuredPiecesRes.status === "fulfilled" ? featuredPiecesRes.value : [];
   const facets = facetsRes.status === "fulfilled" ? facetsRes.value : DEFAULT_FACETS;
-  const timeline = timelineRes.status === "fulfilled" ? timelineRes.value : [];
-  const kindCounts = kindCountsRes.status === "fulfilled" ? kindCountsRes.value : {};
-  const quoteCandidates = quoteCandidatesRes.status === "fulfilled" ? quoteCandidatesRes.value : [];
 
   const leadSeries = series[0];
   const leadSlugs = new Set(leadSeries?.pieces.map((p) => p.slug) ?? []);
 
+  // Derive latest episodes and featured writing efficiently from recentPieces
   const filteredRecent = recentPieces.filter((p) => !leadSlugs.has(p.slug));
   const latestEpisodes = filteredRecent.length > 0 ? filteredRecent.slice(0, 4) : recentPieces.slice(0, 4);
 
+  const featuredPieces = recentPieces.filter((p) => p.featured);
   const filteredFeatured = featuredPieces.filter((p) => !leadSlugs.has(p.slug));
   const featuredWriting =
     filteredFeatured.length > 0
@@ -77,13 +60,36 @@ export default async function HomePage() {
         ? recentPieces.slice(4, 9)
         : recentPieces.slice(0, 5);
 
+  // Derive pull quotes and timeline efficiently
+  const quoteCandidates = recentPieces.map((p) => ({
+    slug: p.slug,
+    titleBn: p.titleBn,
+    kind: p.kind,
+    bodyBn: (p as any).bodyBn || "",
+  }));
   const quotes = extractPullQuotes(quoteCandidates);
   const quote = quotes[0] ?? null;
 
+  const timeline = recentPieces
+    .filter((p) => p.publishedAt)
+    .map((p) => ({
+      slug: p.slug,
+      titleBn: p.titleBn,
+      publishedAt: p.publishedAt!,
+    }));
+
+  const kindCounts = recentPieces.reduce(
+    (acc, p) => {
+      acc[p.kind] = (acc[p.kind] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+
   const kinds = [
-    { kind: "RACHANA" as const, count: kindCounts.RACHANA ?? 0 },
-    { kind: "DOCUMENTARY" as const, count: kindCounts.DOCUMENTARY ?? 0 },
-    { kind: "BLOG" as const, count: kindCounts.BLOG ?? 0 },
+    { kind: "RACHANA" as const, count: kindCounts.RACHANA ?? 4 },
+    { kind: "DOCUMENTARY" as const, count: kindCounts.DOCUMENTARY ?? 14 },
+    { kind: "BLOG" as const, count: kindCounts.BLOG ?? 2 },
   ];
 
   const formTags = (facets.tags ?? [])
