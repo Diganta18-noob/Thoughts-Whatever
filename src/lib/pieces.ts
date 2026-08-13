@@ -190,6 +190,7 @@ export const getFilterFacets = cache(async () => {
       where: PUBLISHED,
       select: { publishedAt: true },
       orderBy: { publishedAt: "desc" },
+      take: 100,
     }),
   ]);
 

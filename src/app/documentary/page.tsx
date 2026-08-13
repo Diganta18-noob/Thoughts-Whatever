@@ -5,7 +5,6 @@ import { T } from "@/components/i18n/t";
 import { getRecentPieces, countPieces } from "@/lib/pieces";
 import { Count } from "@/components/i18n/values";
 
-export const dynamic = "force-dynamic";
 export const revalidate = 300;
 
 export const metadata: Metadata = {

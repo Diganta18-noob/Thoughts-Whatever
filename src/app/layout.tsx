@@ -1,5 +1,3 @@
-export const revalidate = 0;
-
 import type { Metadata, Viewport } from "next";
 import {
   Noto_Serif_Bengali,

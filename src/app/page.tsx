@@ -1,4 +1,3 @@
-
 import { Hero } from "@/components/home/hero";
 import { FeaturedSeries } from "@/components/home/featured-series";
 import { LatestEpisodes } from "@/components/home/latest-episodes";
@@ -23,25 +22,46 @@ import { JsonLd, websiteJsonLd, seriesJsonLd } from "@/lib/seo";
 
 export const revalidate = 300;
 
-
-async function withTimeout<T>(promise: Promise<T>, fallback: T, ms = 3500): Promise<T> {
+async function withTimeout<T>(promise: Promise<T>, fallback: T, ms = 4000): Promise<T> {
   return Promise.race([
     promise,
     new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
   ]).catch(() => fallback);
 }
 
+const DEFAULT_FACETS = {
+  tags: [] as Array<{ slug: string; labelBn: string; kind: string; _count: { pieces: number } }>,
+  authors: [] as Array<{ slug: string; nameBn: string; era: string | null; _count: { pieces: number } }>,
+  series: [] as Array<{ slug: string; titleBn: string }>,
+  years: [] as number[],
+};
+
 export default async function HomePage() {
-  const [series, recentPieces, featuredPieces, facets, timeline, kindCounts, quoteCandidates] =
-    await Promise.all([
-      getFeaturedSeries(3),
-      getRecentPieces({ take: 20 }),
-      getFeaturedPieces(12),
-      getFilterFacets(),
-      getPublishingTimeline(),
-      getKindCounts(),
-      getPullQuoteCandidates(8),
-    ]);
+  const [
+    seriesRes,
+    recentPiecesRes,
+    featuredPiecesRes,
+    facetsRes,
+    timelineRes,
+    kindCountsRes,
+    quoteCandidatesRes,
+  ] = await Promise.allSettled([
+    withTimeout(getFeaturedSeries(3), [], 4000),
+    withTimeout(getRecentPieces({ take: 20 }), [], 4000),
+    withTimeout(getFeaturedPieces(12), [], 4000),
+    withTimeout(getFilterFacets(), DEFAULT_FACETS, 4000),
+    withTimeout(getPublishingTimeline(), [], 4000),
+    withTimeout(getKindCounts(), {} as Record<string, number>, 4000),
+    withTimeout(getPullQuoteCandidates(8), [], 4000),
+  ]);
+
+  const series = seriesRes.status === "fulfilled" ? seriesRes.value : [];
+  const recentPieces = recentPiecesRes.status === "fulfilled" ? recentPiecesRes.value : [];
+  const featuredPieces = featuredPiecesRes.status === "fulfilled" ? featuredPiecesRes.value : [];
+  const facets = facetsRes.status === "fulfilled" ? facetsRes.value : DEFAULT_FACETS;
+  const timeline = timelineRes.status === "fulfilled" ? timelineRes.value : [];
+  const kindCounts = kindCountsRes.status === "fulfilled" ? kindCountsRes.value : {};
+  const quoteCandidates = quoteCandidatesRes.status === "fulfilled" ? quoteCandidatesRes.value : [];
 
   const leadSeries = series[0];
   const leadSlugs = new Set(leadSeries?.pieces.map((p) => p.slug) ?? []);
@@ -57,11 +77,12 @@ export default async function HomePage() {
     { kind: "DOCUMENTARY" as const, count: kindCounts.DOCUMENTARY ?? 0 },
     { kind: "BLOG" as const, count: kindCounts.BLOG ?? 0 },
   ];
-  const formTags = facets.tags
+
+  const formTags = (facets.tags ?? [])
     .filter((t) => t.kind === "FORM")
     .map((t) => ({ slug: t.slug, labelBn: t.labelBn, count: t._count.pieces }));
 
-  const authors = facets.authors.map((a) => ({
+  const authors = (facets.authors ?? []).map((a) => ({
     slug: a.slug,
     nameBn: a.nameBn,
     count: a._count.pieces,
@@ -79,12 +100,12 @@ export default async function HomePage() {
         {latestEpisodes.length > 0 && <LatestEpisodes pieces={latestEpisodes} />}
         {featuredWriting.length > 0 && <FeaturedWriting pieces={featuredWriting} />}
         <Categories kinds={kinds} forms={formTags} />
-        <Timeline entries={timeline} />
-        <ArchiveTeaser years={facets.years} />
+        {timeline.length > 0 && <Timeline entries={timeline} />}
+        <ArchiveTeaser years={facets.years ?? []} />
         {authors.length > 0 && <Authors authors={authors} />}
       </div>
 
-      <Quote quote={quote} />
+      {quote && <Quote quote={quote} />}
 
       <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
         <section className="border-t border-rule pt-14">
