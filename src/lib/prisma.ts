@@ -1,17 +1,36 @@
 import { PrismaClient } from "@prisma/client";
 
-const isBuildPhase =
-  process.env.NEXT_PHASE === "phase-production-build" ||
-  process.env.IS_BUILDING === "true" ||
-  Boolean(process.env.NEXT_PHASE && process.env.NEXT_PHASE.includes("build"));
-
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-function createBuildMockPrisma(): PrismaClient {
-  return new Proxy({} as PrismaClient, {
-    get(_target, prop: string) {
+const realPrisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
+  });
+
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = realPrisma;
+}
+
+function createDynamicPrisma(): PrismaClient {
+  return new Proxy(realPrisma, {
+    get(target, prop: string) {
+      // Evaluate phase dynamically at query execution time
+      const phase = process.env.NEXT_PHASE;
+      const isBuild = phase === "phase-production-build";
+
+      // If at runtime (serverless server, dev, or production request), use real Prisma
+      if (!isBuild) {
+        const val = (target as any)[prop];
+        if (typeof val === "function") {
+          return val.bind(target);
+        }
+        return val;
+      }
+
+      // Build-phase static collection mock
       if (prop === "$connect" || prop === "$disconnect") {
         return async () => {};
       }
@@ -32,16 +51,4 @@ function createBuildMockPrisma(): PrismaClient {
   });
 }
 
-const realPrisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
-  });
-
-export const prisma: PrismaClient = isBuildPhase
-  ? createBuildMockPrisma()
-  : realPrisma;
-
-if (process.env.NODE_ENV !== "production" && !isBuildPhase) {
-  globalForPrisma.prisma = prisma;
-}
+export const prisma: PrismaClient = createDynamicPrisma();
