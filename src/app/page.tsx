@@ -18,7 +18,7 @@ import {
 import { extractPullQuotes } from "@/lib/markdown";
 import { JsonLd, websiteJsonLd, seriesJsonLd } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 const DEFAULT_FACETS = {
   tags: [] as Array<{ slug: string; labelBn: string; kind: string; _count: { pieces: number } }>,
