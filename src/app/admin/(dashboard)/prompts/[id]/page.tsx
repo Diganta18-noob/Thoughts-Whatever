@@ -7,12 +7,20 @@ export const metadata = {
   title: "Edit Prompt | Admin",
 };
 
-export default async function PromptDetailPage({ params }: { params: { id: string } }) {
+type PageProps = {
+  params: Promise<{ id: string }> | { id: string };
+};
+
+export default async function PromptDetailPage(props: PageProps) {
   const admin = await requireAdmin();
   if (!admin) redirect("/admin/login");
 
+  const rawParams = await props?.params;
+  const id = rawParams?.id;
+  if (!id) notFound();
+
   const prompt = await prisma.promptLog.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
 
   if (!prompt) notFound();

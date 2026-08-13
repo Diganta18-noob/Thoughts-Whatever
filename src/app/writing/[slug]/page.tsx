@@ -40,22 +40,22 @@ export async function generateStaticParams() {
   }
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
-  const piece = await getPieceBySlug(decodeSlug(params.slug));
+type RouteProps = {
+  params: Promise<{ slug: string }> | { slug: string };
+};
+
+export async function generateMetadata(props: RouteProps): Promise<Metadata> {
+  const params = await props?.params;
+  const rawSlug = params?.slug || "";
+  const piece = await getPieceBySlug(decodeSlug(rawSlug));
   if (!piece) return { title: "পাওয়া গেল না" };
   return pieceMetadata(piece);
 }
 
-export default async function WritingPiecePage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const piece = await getPieceBySlug(decodeSlug(params.slug));
+export default async function WritingPiecePage(props: RouteProps) {
+  const params = await props?.params;
+  const rawSlug = params?.slug || "";
+  const piece = await getPieceBySlug(decodeSlug(rawSlug));
   if (!piece) notFound();
 
   const [related, neighbours] = await Promise.all([

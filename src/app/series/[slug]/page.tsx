@@ -30,12 +30,14 @@ export async function generateStaticParams() {
   }
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
-  const series = await getSeriesBySlug(decodeSlug(params.slug));
+type RouteProps = {
+  params: Promise<{ slug: string }> | { slug: string };
+};
+
+export async function generateMetadata(props: RouteProps): Promise<Metadata> {
+  const params = await props?.params;
+  const rawSlug = params?.slug || "";
+  const series = await getSeriesBySlug(decodeSlug(rawSlug));
   if (!series) return { title: "পাওয়া গেল না" };
   return {
     title: `${series.titleBn} — সিরিজ`,
@@ -46,12 +48,10 @@ export async function generateMetadata({
 
 import { SeriesTracker } from "@/components/analytics/series-tracker";
 
-export default async function SeriesPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const series = await getSeriesBySlug(decodeSlug(params.slug));
+export default async function SeriesPage(props: RouteProps) {
+  const params = await props?.params;
+  const rawSlug = params?.slug || "";
+  const series = await getSeriesBySlug(decodeSlug(rawSlug));
   if (!series) notFound();
 
   const totalReadingMinutes = series.pieces.reduce(

@@ -8,14 +8,18 @@ import { getEditorOptions } from "../editor-data";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditPiecePage({
-  params,
-}: {
-  params: { id: string };
-}) {
+type PageProps = {
+  params: Promise<{ id: string }> | { id: string };
+};
+
+export default async function EditPiecePage(props: PageProps) {
+  const rawParams = await props?.params;
+  const id = rawParams?.id;
+  if (!id) notFound();
+
   const [piece, options] = await Promise.all([
     prisma.piece.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         authors: { select: { id: true } },
         tags: { select: { id: true } },

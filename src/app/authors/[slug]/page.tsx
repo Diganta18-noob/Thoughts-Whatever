@@ -34,12 +34,14 @@ export async function generateStaticParams() {
   }
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
-  const author = await getAuthorBySlug(decodeSlug(params.slug));
+type RouteProps = {
+  params: Promise<{ slug: string }> | { slug: string };
+};
+
+export async function generateMetadata(props: RouteProps): Promise<Metadata> {
+  const params = await props?.params;
+  const rawSlug = params?.slug || "";
+  const author = await getAuthorBySlug(decodeSlug(rawSlug));
   if (!author) return { title: "পাওয়া গেল না" };
 
   const description =
@@ -67,12 +69,10 @@ export async function generateMetadata({
  * unusually likely to want the other four — so this page exists purely to hand
  * them over.
  */
-export default async function AuthorPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const author = await getAuthorBySlug(decodeSlug(params.slug));
+export default async function AuthorPage(props: RouteProps) {
+  const params = await props?.params;
+  const rawSlug = params?.slug || "";
+  const author = await getAuthorBySlug(decodeSlug(rawSlug));
   if (!author) notFound();
 
   return (
