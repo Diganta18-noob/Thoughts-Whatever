@@ -22,7 +22,7 @@ import { JsonLd, websiteJsonLd, seriesJsonLd } from "@/lib/seo";
 
 export const revalidate = 300;
 
-async function withTimeout<T>(promise: Promise<T>, fallback: T, ms = 4000): Promise<T> {
+async function withTimeout<T>(promise: Promise<T>, fallback: T, ms = 10000): Promise<T> {
   return Promise.race([
     promise,
     new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
@@ -46,13 +46,13 @@ export default async function HomePage() {
     kindCountsRes,
     quoteCandidatesRes,
   ] = await Promise.allSettled([
-    withTimeout(getFeaturedSeries(3), [], 4000),
-    withTimeout(getRecentPieces({ take: 20 }), [], 4000),
-    withTimeout(getFeaturedPieces(12), [], 4000),
-    withTimeout(getFilterFacets(), DEFAULT_FACETS, 4000),
-    withTimeout(getPublishingTimeline(), [], 4000),
-    withTimeout(getKindCounts(), {} as Record<string, number>, 4000),
-    withTimeout(getPullQuoteCandidates(8), [], 4000),
+    withTimeout(getFeaturedSeries(3), [], 10000),
+    withTimeout(getRecentPieces({ take: 20 }), [], 10000),
+    withTimeout(getFeaturedPieces(12), [], 10000),
+    withTimeout(getFilterFacets(), DEFAULT_FACETS, 10000),
+    withTimeout(getPublishingTimeline(), [], 10000),
+    withTimeout(getKindCounts(), {} as Record<string, number>, 10000),
+    withTimeout(getPullQuoteCandidates(8), [], 10000),
   ]);
 
   const series = seriesRes.status === "fulfilled" ? seriesRes.value : [];
@@ -66,8 +66,16 @@ export default async function HomePage() {
   const leadSeries = series[0];
   const leadSlugs = new Set(leadSeries?.pieces.map((p) => p.slug) ?? []);
 
-  const latestEpisodes = recentPieces.filter((p) => !leadSlugs.has(p.slug)).slice(0, 4);
-  const featuredWriting = featuredPieces.filter((p) => !leadSlugs.has(p.slug)).slice(0, 5);
+  const filteredRecent = recentPieces.filter((p) => !leadSlugs.has(p.slug));
+  const latestEpisodes = filteredRecent.length > 0 ? filteredRecent.slice(0, 4) : recentPieces.slice(0, 4);
+
+  const filteredFeatured = featuredPieces.filter((p) => !leadSlugs.has(p.slug));
+  const featuredWriting =
+    filteredFeatured.length > 0
+      ? filteredFeatured.slice(0, 5)
+      : recentPieces.slice(4, 9).length > 0
+        ? recentPieces.slice(4, 9)
+        : recentPieces.slice(0, 5);
 
   const quotes = extractPullQuotes(quoteCandidates);
   const quote = quotes[0] ?? null;
