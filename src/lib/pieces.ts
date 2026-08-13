@@ -230,7 +230,6 @@ function withSeriesCovers<
 
 export const getSeriesList = cache(async () => {
   const rows = await prisma.series.findMany({
-    where: { pieces: { some: PUBLISHED } },
     include: {
       pieces: {
         where: PUBLISHED,
@@ -240,12 +239,11 @@ export const getSeriesList = cache(async () => {
     },
     orderBy: { updatedAt: "desc" },
   });
-  return rows.map(withSeriesCovers);
+  return rows.filter((s) => s.pieces.length > 0).map(withSeriesCovers);
 });
 
 export const getFeaturedSeries = cache(async (take = 3) => {
   const rows = await prisma.series.findMany({
-    where: { pieces: { some: PUBLISHED } },
     include: {
       pieces: {
         where: PUBLISHED,
@@ -257,6 +255,7 @@ export const getFeaturedSeries = cache(async (take = 3) => {
   });
 
   const sorted = rows
+    .filter((s) => s.pieces.length > 0)
     .map(withSeriesCovers)
     .sort((a, b) => {
       const aLatest = a.pieces[a.pieces.length - 1]?.publishedAt;
@@ -264,10 +263,9 @@ export const getFeaturedSeries = cache(async (take = 3) => {
       if (!aLatest) return 1;
       if (!bLatest) return -1;
       return new Date(bLatest).getTime() - new Date(aLatest).getTime();
-    })
-    .slice(0, take);
+    });
 
-  return sorted;
+  return sorted.slice(0, take);
 });
 
 export const getSeriesBySlug = cache(async (slug: string) => {
