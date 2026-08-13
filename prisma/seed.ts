@@ -17,6 +17,7 @@
 
 import fs from "fs";
 import path from "path";
+import bcrypt from "bcryptjs";
 import { PrismaClient, type PieceKind, type TagKind } from "@prisma/client";
 import { bengaliSlug, readingMinutes } from "../src/lib/bengali";
 
@@ -655,8 +656,22 @@ async function main() {
   const published = PIECES.filter((p) => p.status !== "DRAFT").length;
   console.log(`  pieces   ${PIECES.length} (${published} published, ${PIECES.length - published} draft)`);
 
-  console.log("\n✓ done. Create your admin account next:");
-  console.log('  npm run admin:hash -- you@example.com "your password" "আপনার নাম"');
+  const passwordHash = await bcrypt.hash("Indu@arun", 12);
+  await prisma.adminUser.upsert({
+    where: { email: "admin@thoughts.whatever.com" },
+    create: {
+      email: "admin@thoughts.whatever.com",
+      passwordHash,
+      nameBn: "অ্যাডমিন",
+    },
+    update: {
+      passwordHash,
+      nameBn: "অ্যাডমিন",
+    },
+  });
+  console.log("  admin    admin@thoughts.whatever.com (ready)");
+
+  console.log("\n✓ done.");
 }
 
 main()

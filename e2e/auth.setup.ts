@@ -9,8 +9,8 @@ setup("authenticate as admin", async ({ page }) => {
   const emailInput = page.getByTestId("email-input");
   await emailInput.waitFor({ state: "visible", timeout: 15000 });
 
-  const email = process.env.TEST_ADMIN_EMAIL || "admin@example.com";
-  const password = process.env.TEST_ADMIN_PASSWORD || "password123";
+  const email = process.env.TEST_ADMIN_EMAIL || "admin@thoughts.whatever.com";
+  const password = process.env.TEST_ADMIN_PASSWORD || "Indu@arun";
 
   await emailInput.fill(email);
   await page.getByTestId("password-input").fill(password);
