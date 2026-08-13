@@ -1,6 +1,5 @@
+import { AdminProviders } from "@/components/providers/admin-providers";
 import { QuickAddPromptModal } from "@/components/admin/prompts/quick-add-modal";
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -23,6 +22,7 @@ export default async function AdminLayout({
   if (!admin) redirect("/admin/login");
 
   return (
+    <AdminProviders>
     <div className="min-h-screen bg-surface">
       <header className="sticky top-0 z-30 border-b border-rule bg-surface/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3 sm:px-6">
@@ -39,5 +39,6 @@ export default async function AdminLayout({
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">{children}</div>
       <QuickAddPromptModal />
     </div>
+    </AdminProviders>
   );
 }

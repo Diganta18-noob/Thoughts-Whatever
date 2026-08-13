@@ -102,6 +102,7 @@ model AnalyticsEvent {
 
   piece Piece? @relation(fields: [pieceId], references: [id], onDelete: SetNull)
 
+  @@index([eventType, createdAt])
   @@index([pieceId, eventType, createdAt])
   @@index([sessionId, createdAt])
   @@index([createdAt])

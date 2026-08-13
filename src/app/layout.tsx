@@ -43,14 +43,14 @@ const bengaliSans = Hind_Siliguri({
 const bengaliDisplay = Galada({
   subsets: ["bengali", "latin"],
   weight: "400",
-  display: "swap",
+  display: "optional",
   variable: "--font-bengali-display",
 });
 
 // Latin serif for the English chrome — carries the journal feel.
 const latinSerif = Fraunces({
   subsets: ["latin"],
-  display: "swap",
+  display: "optional",
   variable: "--font-latin-serif",
   axes: ["SOFT", "WONK", "opsz"],
 });
@@ -64,7 +64,7 @@ const latinSans = Inter({
 // Archive labels on documentary pages.
 const mono = JetBrains_Mono({
   subsets: ["latin"],
-  display: "swap",
+  display: "optional",
   variable: "--font-mono",
 });
 

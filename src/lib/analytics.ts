@@ -53,6 +53,7 @@ export async function getDailyTrend(days: number = 30) {
       createdAt: true,
       sessionId: true,
     },
+    take: 10000,
   });
 
   const dailyMap: Record<string, { date: string; views: number; visitors: Set<string> }> = {};

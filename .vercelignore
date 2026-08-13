@@ -1,0 +1,14 @@
+Content/
+Voice/
+Thumbnail/
+backups/
+logs/
+docs/
+scripts/
+e2e/
+test-results/
+playwright-report/
+*.md
+!README.md
+context/
+automation/

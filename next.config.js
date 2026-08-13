@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   compress: true,
-  staticPageGenerationTimeout: 180,
+  staticPageGenerationTimeout: 60,
+  poweredByHeader: false,
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -9,7 +10,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "framer-motion", "date-fns"],
+    optimizePackageImports: ["lucide-react", "framer-motion", "date-fns", "@aws-sdk/client-s3", "cloudinary", "archiver"],
     serverComponentsExternalPackages: ["archiver"],
   },
   images: {

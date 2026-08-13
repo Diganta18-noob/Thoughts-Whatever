@@ -37,7 +37,7 @@ export async function GET(req: Request) {
       {
         headers: {
           // Micro-cache dashboard response for 10 seconds to eliminate redundant serverless calls
-          "Cache-Control": "private, max-age=10, stale-while-revalidate=30",
+          "Cache-Control": "private, max-age=60, stale-while-revalidate=120",
         },
       }
     );

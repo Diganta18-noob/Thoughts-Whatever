@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -15,7 +16,7 @@ function secret(): string {
   const value = process.env.AUTH_SECRET;
   if (!value || value.length < 16) {
     throw new Error(
-      "AUTH_SECRET is missing or too short. Set it in .env — see .env.example.",
+      "AUTH_SECRET is missing or too short. Set it in .env - see .env.example.",
     );
   }
   return value;
@@ -157,7 +158,6 @@ export async function verifyAndRefreshAccessToken(refreshTokenJwt: string) {
       return null;
     }
 
-
     // Revoke current token (rotation) and create fresh token pair
     await prisma.refreshToken.update({
       where: { id: dbToken.id },
@@ -229,7 +229,7 @@ export function readSession(): { sub: string; email: string } | null {
   return null;
 }
 
-export async function requireAdmin() {
+export const requireAdmin = cache(async function requireAdmin() {
   const session = readSession();
   if (!session) return null;
   try {
@@ -242,7 +242,7 @@ export async function requireAdmin() {
     console.error("requireAdmin error:", err);
     return null;
   }
-}
+});
 
 export {
   LEGACY_COOKIE_NAME as COOKIE_NAME,

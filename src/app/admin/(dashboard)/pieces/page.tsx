@@ -51,7 +51,7 @@ export default async function AdminPiecesPage({
         _count: { select: { sources: true } },
       },
       orderBy: [{ updatedAt: "desc" }],
-      take: 200,
+      take: 50,
     }),
     prisma.piece.count({ where }),
   ]);
