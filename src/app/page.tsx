@@ -1,4 +1,5 @@
 import { Hero } from "@/components/home/hero";
+import { FeaturedSeriesHero } from "@/components/home/featured-series-hero";
 import { FeaturedSeries } from "@/components/home/featured-series";
 import { LatestEpisodes } from "@/components/home/latest-episodes";
 import { FeaturedWriting } from "@/components/home/featured-writing";
@@ -33,7 +34,6 @@ const DEFAULT_FACETS = {
 };
 
 export default async function HomePage() {
-  // Consolidate into 3 parallel fast queries instead of 7 heavy queries
   const [seriesRes, recentPiecesRes, facetsRes] = await Promise.allSettled([
     withTimeout(getFeaturedSeries(3), [], 6000),
     withTimeout(getRecentPieces({ take: 20 }), [], 6000),
@@ -47,7 +47,10 @@ export default async function HomePage() {
   const leadSeries = series[0];
   const leadSlugs = new Set(leadSeries?.pieces.map((p) => p.slug) ?? []);
 
-  // Derive latest episodes and featured writing efficiently from recentPieces
+  // Primary hero content glimpse (latest uploaded piece)
+  const primaryGlimpsePiece = recentPieces[0] ?? null;
+
+  // Latest episodes & featured writing
   const filteredRecent = recentPieces.filter((p) => !leadSlugs.has(p.slug));
   const latestEpisodes = filteredRecent.length > 0 ? filteredRecent.slice(0, 4) : recentPieces.slice(0, 4);
 
@@ -60,7 +63,6 @@ export default async function HomePage() {
         ? recentPieces.slice(4, 9)
         : recentPieces.slice(0, 5);
 
-  // Derive pull quotes and timeline efficiently
   const quoteCandidates = recentPieces.map((p) => ({
     slug: p.slug,
     titleBn: p.titleBn,
@@ -109,7 +111,19 @@ export default async function HomePage() {
 
       <Hero />
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 space-y-16">
+        {/* Content Glimpse Hero Card for Recent Upload */}
+        {primaryGlimpsePiece && (
+          <section className="pt-4">
+            <FeaturedSeriesHero
+              piece={primaryGlimpsePiece}
+              totalEpisodesInSeries={6}
+              currentEpisodeNumber={6}
+              seriesTitleBn={primaryGlimpsePiece.seriesOrder ? "মেঘনাদবধ কাব্য" : undefined}
+            />
+          </section>
+        )}
+
         {series.length > 0 && <FeaturedSeries series={series} />}
         {latestEpisodes.length > 0 && <LatestEpisodes pieces={latestEpisodes} />}
         {featuredWriting.length > 0 && <FeaturedWriting pieces={featuredWriting} />}
