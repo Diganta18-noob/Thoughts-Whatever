@@ -2,6 +2,7 @@ import { requireAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { PromptsDashboard } from "@/components/admin/prompts/prompts-dashboard";
 
+export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Prompt Library | Admin",
 };

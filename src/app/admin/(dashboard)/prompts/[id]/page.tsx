@@ -3,6 +3,7 @@ import { redirect, notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { PromptForm } from "@/components/admin/prompts/prompt-form";
 
+export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Edit Prompt | Admin",
 };

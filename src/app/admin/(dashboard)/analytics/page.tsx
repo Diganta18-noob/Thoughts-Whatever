@@ -3,6 +3,7 @@ import { ExternalLink, BarChart3, Users, Eye, Bookmark, Share2 } from "lucide-re
 import { getOverviewStats, getTopArticles, getSeriesAnalytics } from "@/lib/analytics";
 import { StatsCard } from "@/components/admin/stats-card";
 
+export const dynamic = "force-dynamic";
 export const metadata = { title: "PostHog & Product Analytics — Admin" };
 
 export default async function AdminPostHogAnalyticsPage() {
