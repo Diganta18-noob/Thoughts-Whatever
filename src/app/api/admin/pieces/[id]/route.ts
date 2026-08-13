@@ -1,3 +1,4 @@
+import { auditPieceAction } from "@/lib/audit";
 import { prisma } from "@/lib/prisma";
 import { guard, ok, fail, readBody, revalidatePiece, isValidCuid } from "@/lib/admin-api";
 import { isSlugTaken, updatePiece } from "@/lib/admin-pieces";

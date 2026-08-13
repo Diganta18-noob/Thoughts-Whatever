@@ -225,3 +225,28 @@ model RefreshToken {
   @@index([adminUserId])
   @@index([token, revoked])
 }
+
+
+model AuditLog {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  adminId    String   @db.ObjectId
+  adminEmail String
+  adminName  String?
+  action     String
+  entityType String?
+  entityId   String?  @db.ObjectId
+  entitySlug String?
+  summary    String
+  changes    Json?
+  metadata   Json?
+  ipAddress  String?
+  userAgent  String?
+  severity   String   @default("info")
+  createdAt  DateTime @default(now())
+
+  @@index([adminId, createdAt])
+  @@index([action, createdAt])
+  @@index([entityType, entityId])
+  @@index([severity, createdAt])
+  @@index([createdAt])
+}

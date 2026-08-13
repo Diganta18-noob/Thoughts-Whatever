@@ -1,3 +1,4 @@
+import { auditSystemAction } from "@/lib/audit";
 import { NextResponse } from "next/server";
 import { runMasterPipeline, isPipelineRunning, getLastPipelineReport } from "@/lib/automation/pipeline";
 import { runHealthCheck, auditSecurity } from "@/lib/automation/monitoring/engine";

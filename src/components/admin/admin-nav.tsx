@@ -16,6 +16,7 @@ const ITEMS: { href: string; key: TranslationKey; labelFallback?: string }[] = [
   { href: "/admin/import", key: "admin.nav.import" },
   { href: "/admin/transliteration", key: "admin.nav.transliteration" },
   { href: "/admin/system", key: "admin.nav.system" },
+  { href: "/admin/audit-log", key: "admin.nav.auditLog" as any, labelFallback: "Audit Log" },
   { href: "/admin/settings", key: "admin.nav.settings" },
 ];
 

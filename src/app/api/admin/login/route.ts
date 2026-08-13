@@ -1,3 +1,4 @@
+import { auditAuthAction } from "@/lib/audit";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { issueAuthCookies, hashPassword, verifyPassword } from "@/lib/auth";
@@ -83,6 +84,7 @@ export async function POST(request: Request) {
 
 
     await issueAuthCookies(admin.id, admin.email, { userAgent, ipAddress });
+    await auditAuthAction("login", { adminId: admin.id, adminEmail: admin.email });
 
     await prisma.adminUser.update({
       where: { id: admin.id },
