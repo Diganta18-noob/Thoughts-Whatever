@@ -34,7 +34,7 @@ export async function GET() {
       tags: { select: { labelBn: true } },
       authors: { select: { nameBn: true } },
     },
-    orderBy: [{ publishedAt: "desc" }],
+    orderBy: { createdAt: "desc" },
   });
 
   const docs = pieces.map((piece) => {

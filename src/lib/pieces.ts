@@ -35,7 +35,7 @@ const byNewest: Prisma.PieceOrderByWithRelationInput = { createdAt: "desc" };
 export const getRecentPieces = cache(
   async (opts: { kind?: PieceKind; take?: number; skip?: number } = {}) => {
     const rows = await prisma.piece.findMany({
-      where: opts.kind ? { kind: opts.kind } : {},
+      where: { ...PUBLISHED, ...(opts.kind ? { kind: opts.kind } : {}) },
       select: cardSelect,
       take: opts.take ?? 12,
       skip: opts.skip ?? 0,
