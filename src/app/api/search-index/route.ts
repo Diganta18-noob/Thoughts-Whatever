@@ -17,7 +17,6 @@ import { deriveExcerpt } from "@/lib/markdown";
  */
 
 export const dynamic = "force-dynamic";
-export const revalidate = 300;
 
 export async function GET() {
   const pieces = await prisma.piece.findMany({
