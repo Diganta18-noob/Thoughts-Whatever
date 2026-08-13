@@ -25,12 +25,12 @@ export const cardSelect = {
   publishedAt: true,
   audioUrl: true,
   seriesOrder: true,
-  authors: true,
+  authors: { select: { slug: true, nameBn: true } },
 } satisfies Prisma.PieceSelect;
 
 export type CardPiece = Prisma.PieceGetPayload<{ select: typeof cardSelect }>;
 
-const byNewest: Prisma.PieceOrderByWithRelationInput = { publishedAt: "desc" };
+const byNewest: Prisma.PieceOrderByWithRelationInput = { createdAt: "desc" };
 
 export const getRecentPieces = cache(
   async (opts: { kind?: PieceKind; take?: number; skip?: number } = {}) => {
