@@ -17,12 +17,8 @@ if (process.env.NODE_ENV !== "production") {
 function createDynamicPrisma(): PrismaClient {
   return new Proxy(realPrisma, {
     get(target, prop: string) {
-      // Evaluate phase dynamically at query execution time
-      const phase = process.env.NEXT_PHASE;
-      const isBuild = phase === "phase-production-build";
-
-      // If at runtime (serverless server, dev, or production request), use real Prisma
-      if (!isBuild) {
+      // If DATABASE_URL is present, always use real Prisma client
+      if (process.env.DATABASE_URL) {
         const val = (target as any)[prop];
         if (typeof val === "function") {
           return val.bind(target);
@@ -30,23 +26,26 @@ function createDynamicPrisma(): PrismaClient {
         return val;
       }
 
-      // Build-phase static collection mock
+      // Mock Prisma only if DATABASE_URL is completely missing
       if (prop === "$connect" || prop === "$disconnect") {
         return async () => {};
       }
       if (prop.startsWith("$")) {
         return async () => [];
       }
-      return new Proxy({}, {
-        get(_modelTarget, method: string) {
-          return async () => {
-            if (method.includes("count")) return 0;
-            if (method.includes("findUnique") || method.includes("findFirst")) return null;
-            if (method.includes("groupBy") || method.includes("aggregate")) return [];
-            return [];
-          };
+      return new Proxy(
+        {},
+        {
+          get(_modelTarget, method: string) {
+            return async () => {
+              if (method.includes("count")) return 0;
+              if (method.includes("findUnique") || method.includes("findFirst")) return null;
+              if (method.includes("groupBy") || method.includes("aggregate")) return [];
+              return [];
+            };
+          },
         },
-      });
+      );
     },
   });
 }
