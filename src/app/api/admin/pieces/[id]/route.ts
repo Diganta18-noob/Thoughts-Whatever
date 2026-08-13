@@ -1,20 +1,28 @@
 import { auditPieceAction } from "@/lib/audit";
 import { prisma } from "@/lib/prisma";
-import { guard, ok, fail, readBody, revalidatePiece, isValidCuid } from "@/lib/admin-api";
+import { guard, ok, fail, readBody, revalidatePiece } from "@/lib/admin-api";
 import { isSlugTaken, updatePiece } from "@/lib/admin-pieces";
 import { pieceInputSchema } from "@/lib/validation";
 
-
 export const runtime = "nodejs";
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
+type RouteProps = {
+  params: Promise<{ id: string }> | { id: string };
+};
+
+export async function PUT(request: Request, props: RouteProps) {
   const gate = await guard();
   if ("response" in gate) return gate.response;
 
-  if (!params?.id) {
+  const rawParams = await props?.params;
+  let id = rawParams?.id;
+  if (!id) {
+    const url = new URL(request.url);
+    const parts = url.pathname.split("?")[0].split("/");
+    id = parts[parts.length - 1];
+  }
+
+  if (!id) {
     return fail("Invalid ID format.", 400);
   }
 
@@ -26,13 +34,13 @@ export async function PUT(
   // old URLs need their caches cleared or a renamed piece stays live at two
   // addresses until the next revalidation window.
   const before = await prisma.piece.findUnique({
-    where: { id: params.id },
+    where: { id },
     select: { slug: true, kind: true },
   });
   if (!before) return fail("Piece not found.", 404);
 
   try {
-    const piece = await updatePiece(params.id, body.data);
+    const piece = await updatePiece(id, body.data);
     revalidatePiece({
       kind: piece.kind,
       slug: piece.slug,
@@ -49,20 +57,27 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  _request: Request,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(request: Request, props: RouteProps) {
   const gate = await guard();
   if ("response" in gate) return gate.response;
 
+  const rawParams = await props?.params;
+  let id = rawParams?.id;
+  if (!id) {
+    const url = new URL(request.url);
+    const parts = url.pathname.split("?")[0].split("/");
+    id = parts[parts.length - 1];
+  }
+
+  if (!id) return fail("Invalid ID format.", 400);
+
   const piece = await prisma.piece.findUnique({
-    where: { id: params.id },
+    where: { id },
     select: { slug: true, kind: true },
   });
   if (!piece) return fail("Piece not found.", 404);
 
-  await prisma.piece.delete({ where: { id: params.id } });
+  await prisma.piece.delete({ where: { id } });
   revalidatePiece({ kind: piece.kind, slug: piece.slug });
 
   return ok();
