@@ -25,7 +25,7 @@ export const cardSelect = {
   publishedAt: true,
   audioUrl: true,
   seriesOrder: true,
-  authors: { select: { slug: true, nameBn: true } },
+  authors: true,
 } satisfies Prisma.PieceSelect;
 
 export type CardPiece = Prisma.PieceGetPayload<{ select: typeof cardSelect }>;
