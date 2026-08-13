@@ -10,7 +10,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "framer-motion", "date-fns", "@aws-sdk/client-s3", "cloudinary", "archiver"],
+    optimizePackageImports: ["lucide-react", "framer-motion", "date-fns", "@aws-sdk/client-s3", "cloudinary"],
     serverComponentsExternalPackages: ["archiver"],
   },
   images: {
