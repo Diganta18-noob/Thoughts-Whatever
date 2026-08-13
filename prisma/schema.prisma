@@ -84,6 +84,7 @@ model Piece {
   analyticsEvents AnalyticsEvent[]
 
   @@index([kind, status, publishedAt])
+  @@index([status, publishedAt])
   @@index([status, featured])
   @@index([seriesId, seriesOrder])
 }

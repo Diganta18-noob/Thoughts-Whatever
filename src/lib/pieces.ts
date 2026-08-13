@@ -5,7 +5,6 @@ import { coverSrc } from "@/lib/images";
 
 export const PUBLISHED: Prisma.PieceWhereInput = {
   status: "PUBLISHED",
-  publishedAt: { not: null },
 };
 
 function withCover<T extends { slug: string; coverImage: string | null }>(
