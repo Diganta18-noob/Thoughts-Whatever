@@ -37,6 +37,10 @@ const nextConfig = {
         source: "/:path*",
         headers: [
           {
+            key: "CDN-Cache-Control",
+            value: "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+          },
+          {
             key: "X-DNS-Prefetch-Control",
             value: "on",
           },

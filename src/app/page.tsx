@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Hero } from "@/components/home/hero";
 import { FeaturedSeriesHero } from "@/components/home/featured-series-hero";
 import { FeaturedSeries } from "@/components/home/featured-series";
@@ -10,6 +11,11 @@ import { Authors } from "@/components/home/authors";
 import { Quote } from "@/components/home/quote";
 import { LetterBlock } from "@/components/newsletter/letter-block";
 import {
+  HeroCardSkeleton,
+  SeriesGridSkeleton,
+  EpisodesSkeleton,
+} from "@/components/home/section-skeletons";
+import {
   getFeaturedSeries,
   getRecentPieces,
   getFilterFacets,
@@ -20,6 +26,16 @@ import { JsonLd, websiteJsonLd, seriesJsonLd } from "@/lib/seo";
 
 export const revalidate = 300;
 
+async function withTimeout<T>(promise: Promise<T>, fallback: T, ms = 2500): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
+  ]).catch((err) => {
+    console.error("HomePage query timeout/error:", err);
+    return fallback;
+  });
+}
+
 const DEFAULT_FACETS = {
   tags: [] as Array<{ slug: string; labelBn: string; kind: string; _count: { pieces: number } }>,
   authors: [] as Array<{ slug: string; nameBn: string; era: string | null; _count: { pieces: number } }>,
@@ -28,27 +44,15 @@ const DEFAULT_FACETS = {
 };
 
 export default async function HomePage() {
-  let series: any[] = [];
-  let recentPieces: CardPiece[] = [];
-  let facets = DEFAULT_FACETS;
+  const [recentRes, seriesRes, facetsRes] = await Promise.allSettled([
+    withTimeout(getRecentPieces({ take: 20 }), [], 2500),
+    withTimeout(getFeaturedSeries(3), [], 2500),
+    withTimeout(getFilterFacets(), DEFAULT_FACETS, 2500),
+  ]);
 
-  try {
-    recentPieces = await getRecentPieces({ take: 20 });
-  } catch (err) {
-    console.error("HomePage: Failed to fetch recentPieces:", err);
-  }
-
-  try {
-    series = await getFeaturedSeries(3);
-  } catch (err) {
-    console.error("HomePage: Failed to fetch featuredSeries:", err);
-  }
-
-  try {
-    facets = await getFilterFacets();
-  } catch (err) {
-    console.error("HomePage: Failed to fetch facets:", err);
-  }
+  const recentPieces: CardPiece[] = recentRes.status === "fulfilled" ? recentRes.value : [];
+  const series: any[] = seriesRes.status === "fulfilled" ? seriesRes.value : [];
+  const facets = facetsRes.status === "fulfilled" ? facetsRes.value : DEFAULT_FACETS;
 
   const leadSeries = series[0];
   const leadSlugs = new Set(leadSeries?.pieces.map((p) => p.slug) ?? []);
@@ -121,17 +125,29 @@ export default async function HomePage() {
         {/* Content Glimpse Hero Card for Recent Upload */}
         {primaryGlimpsePiece && (
           <section className="pt-4">
-            <FeaturedSeriesHero
-              piece={primaryGlimpsePiece}
-              totalEpisodesInSeries={6}
-              currentEpisodeNumber={6}
-              seriesTitleBn={primaryGlimpsePiece.seriesOrder ? "মেঘনাদবধ কাব্য" : undefined}
-            />
+            <Suspense fallback={<HeroCardSkeleton />}>
+              <FeaturedSeriesHero
+                piece={primaryGlimpsePiece}
+                totalEpisodesInSeries={6}
+                currentEpisodeNumber={6}
+                seriesTitleBn={primaryGlimpsePiece.seriesOrder ? "মেঘনাদবধ কাব্য" : undefined}
+              />
+            </Suspense>
           </section>
         )}
 
-        {series.length > 0 && <FeaturedSeries series={series} />}
-        {latestEpisodes.length > 0 && <LatestEpisodes pieces={latestEpisodes} />}
+        {series.length > 0 && (
+          <Suspense fallback={<SeriesGridSkeleton />}>
+            <FeaturedSeries series={series} />
+          </Suspense>
+        )}
+
+        {latestEpisodes.length > 0 && (
+          <Suspense fallback={<EpisodesSkeleton />}>
+            <LatestEpisodes pieces={latestEpisodes} />
+          </Suspense>
+        )}
+
         {featuredWriting.length > 0 && <FeaturedWriting pieces={featuredWriting} />}
         <Categories kinds={kinds} forms={formTags} />
         {timeline.length > 0 && <Timeline entries={timeline} />}
