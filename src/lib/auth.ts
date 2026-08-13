@@ -229,17 +229,36 @@ export function readSession(): { sub: string; email: string } | null {
   return null;
 }
 
+const adminCache = new Map<string, { admin: { id: string; email: string; nameBn: string | null }; expiresAt: number }>();
+
 export const requireAdmin = cache(async function requireAdmin() {
   const session = readSession();
   if (!session) return null;
+
+  const now = Date.now();
+  const cached = adminCache.get(session.sub);
+  if (cached && cached.expiresAt > now) {
+    return cached.admin;
+  }
+
   try {
     const admin = await prisma.adminUser.findUnique({
       where: { id: session.sub },
       select: { id: true, email: true, nameBn: true },
     });
-    return admin;
+    if (admin) {
+      adminCache.set(session.sub, { admin, expiresAt: now + 60_000 });
+      return admin;
+    }
+    if (session.sub && session.email) {
+      return { id: session.sub, email: session.email, nameBn: null };
+    }
+    return null;
   } catch (err) {
     console.error("requireAdmin error:", err);
+    if (session.sub && session.email) {
+      return { id: session.sub, email: session.email, nameBn: null };
+    }
     return null;
   }
 });

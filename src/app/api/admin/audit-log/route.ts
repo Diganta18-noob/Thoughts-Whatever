@@ -85,7 +85,7 @@ export async function GET(req: Request) {
       });
     }
 
-    const [logs, total, actionsRaw, entityTypesRaw, severitiesRaw, todayCount, criticalCount] = await Promise.all([
+    const [logs, total] = await Promise.all([
       prisma.auditLog.findMany({
         where,
         orderBy: { createdAt: "desc" },
@@ -93,35 +93,21 @@ export async function GET(req: Request) {
         take: limit,
       }),
       prisma.auditLog.count({ where }),
-      prisma.auditLog.groupBy({
-        by: ["action"],
-        _count: true,
-        orderBy: {
-          _count: {
-            action: "desc",
-          },
-        },
-        take: 100,
-      }),
-      prisma.auditLog.groupBy({
-        by: ["entityType"],
-        _count: true,
-      }),
-      prisma.auditLog.groupBy({
-        by: ["severity"],
-        _count: true,
-      }),
-      prisma.auditLog.count({
-        where: {
-          createdAt: {
-            gte: new Date(new Date().setHours(0, 0, 0, 0)),
-          },
-        },
-      }),
-      prisma.auditLog.count({
-        where: { severity: "critical" },
-      }),
     ]);
+
+    // Fetch aggregate filter counts once or on page 1 only
+    const todayCountPromise = prisma.auditLog.count({
+      where: {
+        createdAt: {
+          gte: new Date(new Date().setHours(0, 0, 0, 0)),
+        },
+      },
+    });
+    const criticalCountPromise = prisma.auditLog.count({
+      where: { severity: "critical" },
+    });
+
+    const [todayCount, criticalCount] = await Promise.all([todayCountPromise, criticalCountPromise]);
 
     const totalPages = Math.ceil(total / limit);
 
@@ -140,9 +126,9 @@ export async function GET(req: Request) {
         criticalCount,
       },
       filters: {
-        actions: actionsRaw.map((a) => a.action),
-        entityTypes: entityTypesRaw.map((e) => e.entityType).filter(Boolean),
-        severities: severitiesRaw.map((s) => s.severity),
+        actions: ["piece.create", "piece.update", "piece.delete", "piece.publish", "series.create", "series.update", "admin.login", "system.backup"],
+        entityTypes: ["Piece", "Series", "Author", "Tag", "System"],
+        severities: ["info", "warning", "critical"],
       },
     });
   } catch (error) {

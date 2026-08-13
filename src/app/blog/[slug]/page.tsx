@@ -23,10 +23,13 @@ function decodeSlug(raw: string) {
 export async function generateStaticParams() {
   try {
     const timeout = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("Timeout")), 5000)
+      setTimeout(() => reject(new Error("Timeout")), 4000)
     );
     const slugs = (await Promise.race([getAllPublishedSlugs(), timeout])) as Awaited<ReturnType<typeof getAllPublishedSlugs>>;
-    return slugs.filter((p) => p.kind === "BLOG").map((p) => ({ slug: p.slug }));
+    return slugs
+      .filter((p) => p.kind === "BLOG")
+      .slice(0, 10)
+      .map((p) => ({ slug: p.slug }));
   } catch {
     return [];
   }

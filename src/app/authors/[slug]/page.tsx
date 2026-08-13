@@ -21,7 +21,13 @@ function decodeSlug(raw: string) {
 
 export async function generateStaticParams() {
   try {
-    const authors = await prisma.author.findMany({ select: { slug: true } });
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("Timeout")), 4000)
+    );
+    const authors = (await Promise.race([
+      prisma.author.findMany({ select: { slug: true }, take: 10 }),
+      timeout,
+    ])) as { slug: string }[];
     return authors.map((a) => ({ slug: a.slug }));
   } catch {
     return [];

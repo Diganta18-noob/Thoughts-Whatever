@@ -2,6 +2,7 @@
 const nextConfig = {
   compress: true,
   poweredByHeader: false,
+  swcMinify: true,
   staticPageGenerationTimeout: 180,
   typescript: {
     ignoreBuildErrors: true,
