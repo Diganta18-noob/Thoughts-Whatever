@@ -1,4 +1,3 @@
-import { cache } from "react";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -231,7 +230,7 @@ export function readSession(): { sub: string; email: string } | null {
 
 const adminCache = new Map<string, { admin: { id: string; email: string; nameBn: string | null }; expiresAt: number }>();
 
-export const requireAdmin = cache(async function requireAdmin() {
+export async function requireAdmin() {
   const session = readSession();
   if (!session) return null;
 
@@ -261,7 +260,7 @@ export const requireAdmin = cache(async function requireAdmin() {
     }
     return null;
   }
-});
+}
 
 export {
   LEGACY_COOKIE_NAME as COOKIE_NAME,
