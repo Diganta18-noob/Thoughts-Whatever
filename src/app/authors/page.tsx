@@ -5,7 +5,7 @@ import { getFilterFacets } from "@/lib/pieces";
 import { T } from "@/components/i18n/t";
 import { Count, Num } from "@/components/i18n/values";
 
-export const dynamic = "force-dynamic";
+
 export const revalidate = 300;
 
 export const metadata: Metadata = {
