@@ -34,7 +34,7 @@ export async function guard(): Promise<
 
 export function isValidCuid(id: string | null | undefined): boolean {
   if (!id || typeof id !== "string") return false;
-  return /^c[a-z0-9]{24,}$/i.test(id);
+  return /^[0-9a-fA-F]{24}$/.test(id) || /^c[a-z0-9]{24,}$/i.test(id);
 }
 
 export function badRequest(error: ZodError) {
