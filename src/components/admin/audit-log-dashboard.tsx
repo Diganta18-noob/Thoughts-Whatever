@@ -182,7 +182,7 @@ export function AuditLogDashboard() {
     if (action.includes("update") || action.includes("reorder")) return "bg-amber-500/10 text-amber-400 border-amber-500/20";
     if (action.includes("delete") || action.includes("archive")) return "bg-rose-500/10 text-rose-400 border-rose-500/20";
     if (action.includes("login")) return "bg-purple-500/10 text-purple-400 border-purple-500/20";
-    return "bg-surface-elevated text-content-soft border-rule";
+    return "bg-surface-raised text-content-soft border-rule";
   };
 
   return (
@@ -268,7 +268,7 @@ export function AuditLogDashboard() {
               placeholder="Search summary, slug, email..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-sm border border-rule bg-surface-elevated pl-9 pr-3 py-1.5 font-sans text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
+              className="w-full rounded-sm border border-rule bg-surface-raised pl-9 pr-3 py-1.5 font-sans text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
             />
           </div>
 
@@ -280,7 +280,7 @@ export function AuditLogDashboard() {
                 setActionFilter(e.target.value);
                 setPage(1);
               }}
-              className="w-full rounded-sm border border-rule bg-surface-elevated px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
+              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             >
               <option value="">All Actions</option>
 
@@ -300,7 +300,7 @@ export function AuditLogDashboard() {
                 setEntityFilter(e.target.value);
                 setPage(1);
               }}
-              className="w-full rounded-sm border border-rule bg-surface-elevated px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
+              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             >
               <option value="">All Entities</option>
               {availableFilters.entityTypes.map((ent) => (
@@ -319,7 +319,7 @@ export function AuditLogDashboard() {
                 setSeverityFilter(e.target.value);
                 setPage(1);
               }}
-              className="w-full rounded-sm border border-rule bg-surface-elevated px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
+              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             >
               <option value="">All Severities</option>
               <option value="info">Info</option>
@@ -351,14 +351,14 @@ export function AuditLogDashboard() {
             type="date"
             value={dateFrom}
             onChange={(e) => setDateFrom(e.target.value)}
-            className="rounded-sm border border-rule bg-surface-elevated px-2.5 py-1 font-sans text-xs text-content"
+            className="rounded-sm border border-rule bg-surface-raised px-2.5 py-1 font-sans text-xs text-content"
           />
           <span className="text-xs text-content-soft">to</span>
           <input
             type="date"
             value={dateTo}
             onChange={(e) => setDateTo(e.target.value)}
-            className="rounded-sm border border-rule bg-surface-elevated px-2.5 py-1 font-sans text-xs text-content"
+            className="rounded-sm border border-rule bg-surface-raised px-2.5 py-1 font-sans text-xs text-content"
           />
         </div>
       </div>
@@ -405,7 +405,7 @@ export function AuditLogDashboard() {
                   return (
                     <div
                       key={log.id}
-                      className="group transition hover:bg-surface-elevated/40"
+                      className="group transition hover:bg-surface-raised/40"
                     >
                       <div
                         onClick={() => setExpandedId(isExpanded ? null : log.id)}
@@ -453,7 +453,7 @@ export function AuditLogDashboard() {
 
                       {/* Expandable Details Drawer */}
                       {isExpanded && (
-                        <div className="border-t border-rule/50 bg-surface-elevated/60 p-4 space-y-3 font-mono text-xs">
+                        <div className="border-t border-rule/50 bg-surface-raised/60 p-4 space-y-3 font-mono text-xs">
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-content-soft">
                             <div>
                               <span className="text-content font-sans font-medium block mb-1">
@@ -521,7 +521,7 @@ export function AuditLogDashboard() {
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="flex items-center gap-1 rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:bg-surface-elevated disabled:opacity-40 disabled:hover:bg-surface transition"
+            className="flex items-center gap-1 rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:bg-surface-raised disabled:opacity-40 disabled:hover:bg-surface transition"
           >
             <ChevronLeft className="h-3.5 w-3.5" />
             Previous
@@ -530,7 +530,7 @@ export function AuditLogDashboard() {
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page >= totalPages}
-            className="flex items-center gap-1 rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:bg-surface-elevated disabled:opacity-40 disabled:hover:bg-surface transition"
+            className="flex items-center gap-1 rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:bg-surface-raised disabled:opacity-40 disabled:hover:bg-surface transition"
           >
             Next
             <ChevronRight className="h-3.5 w-3.5" />
