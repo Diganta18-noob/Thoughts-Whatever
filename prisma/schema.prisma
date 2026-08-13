@@ -1,4 +1,4 @@
-// ─── Thoughts Whatever — Prisma Schema (MongoDB Atlas) ─────────
+// ─── Thoughts Whatever — Prisma Schema (Supabase PostgreSQL) ─────────
 // Bengali literary + documentary publication.
 
 generator client {
@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ─── Enums ──────────────────────────────────────────────────
@@ -34,7 +35,7 @@ enum TagKind {
 // ─── Content ────────────────────────────────────────────────
 
 model Piece {
-  id     String      @id @default(auto()) @map("_id") @db.ObjectId
+  id     String      @id @default(cuid())
   kind   PieceKind
   status PieceStatus @default(DRAFT)
   slug   String      @unique
@@ -69,14 +70,11 @@ model Piece {
   updatedAt   DateTime  @updatedAt
 
   // Relations
-  authorIds String[] @db.ObjectId
-  authors   Author[] @relation(fields: [authorIds], references: [id])
+  authors Author[]
+  tags    Tag[]
 
-  tagIds String[] @db.ObjectId
-  tags   Tag[]    @relation(fields: [tagIds], references: [id])
-
-  series      Series?         @relation(fields: [seriesId], references: [id], onDelete: SetNull)
-  seriesId    String?         @db.ObjectId
+  series      Series? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+  seriesId    String?
   seriesOrder Int?
 
   sources         Source[]
@@ -92,8 +90,8 @@ model Piece {
 // ─── Analytics ──────────────────────────────────────────────
 
 model AnalyticsEvent {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  pieceId   String?  @db.ObjectId
+  id        String   @id @default(cuid())
+  pieceId   String?
   eventType String // "view" | "scroll_25" | "scroll_50" | "scroll_75" | "scroll_100" | "instagram_click" | "reel_click"
   sessionId String // anonymous browser session
   referrer  String?
@@ -111,7 +109,7 @@ model AnalyticsEvent {
 
 /// A literary figure the work is *about* — রবীন্দ্রনাথ, নজরুল, জীবনানন্দ.
 model Author {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  id       String  @id @default(cuid())
   slug     String  @unique
   nameBn   String
   nameEn   String?
@@ -119,22 +117,20 @@ model Author {
   bioBn    String?
   portrait String?
 
-  pieceIds String[] @db.ObjectId
-  pieces   Piece[]  @relation(fields: [pieceIds], references: [id])
+  pieces Piece[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Tag {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  id      String  @id @default(cuid())
   slug    String  @unique
   labelBn String
   labelEn String?
   kind    TagKind @default(TOPIC)
 
-  pieceIds String[] @db.ObjectId
-  pieces   Piece[]  @relation(fields: [pieceIds], references: [id])
+  pieces Piece[]
 
   createdAt DateTime @default(now())
 
@@ -143,7 +139,7 @@ model Tag {
 
 /// ধারাবাহিক — a multi-part run meant to be read in order.
 model Series {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  id               String   @id @default(cuid())
   slug             String   @unique
   titleBn          String
   titleEn          String?
@@ -160,9 +156,9 @@ model Series {
 
 /// তথ্যসূত্র — citations on documentary pieces.
 model Source {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  id      String  @id @default(cuid())
   piece   Piece   @relation(fields: [pieceId], references: [id], onDelete: Cascade)
-  pieceId String  @db.ObjectId
+  pieceId String
   label   String // "সুনীল গঙ্গোপাধ্যায়, 'পূর্ব-পশ্চিম', আনন্দ পাবলিশার্স, ১৯৮৯"
   url     String?
   note    String?
@@ -172,9 +168,9 @@ model Source {
 }
 
 model TimelineEvent {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  id      String  @id @default(cuid())
   piece   Piece   @relation(fields: [pieceId], references: [id], onDelete: Cascade)
-  pieceId String  @db.ObjectId
+  pieceId String
   year    String // kept as text so "১৯৪৭" or "১৯৪৩–৪৪" both work
   labelBn String
   descBn  String?
@@ -187,7 +183,7 @@ model TimelineEvent {
 
 /// চিঠি — the newsletter list.
 model Subscriber {
-  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  id               String    @id @default(cuid())
   email            String    @unique
   nameBn           String?
   confirmed        Boolean   @default(false)
@@ -203,7 +199,7 @@ model Subscriber {
 // ─── Admin ──────────────────────────────────────────────────
 
 model AdminUser {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  id            String         @id @default(cuid())
   email         String         @unique
   passwordHash  String
   nameBn        String?
@@ -213,9 +209,9 @@ model AdminUser {
 }
 
 model RefreshToken {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(cuid())
   token       String    @unique
-  adminUserId String    @db.ObjectId
+  adminUserId String
   adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
   expiresAt   DateTime
   createdAt   DateTime  @default(now())
@@ -228,15 +224,14 @@ model RefreshToken {
   @@index([token, revoked])
 }
 
-
 model AuditLog {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  adminId    String   @db.ObjectId
+  id         String   @id @default(cuid())
+  adminId    String?
   adminEmail String
   adminName  String?
   action     String
   entityType String?
-  entityId   String?  @db.ObjectId
+  entityId   String?
   entitySlug String?
   summary    String
   changes    Json?
@@ -253,9 +248,8 @@ model AuditLog {
   @@index([createdAt])
 }
 
-
 model PromptLog {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   text      String
   summary   String?
   source    String   @default("manual") // "kiro" | "antigravity" | "manual" | "other"
@@ -264,7 +258,7 @@ model PromptLog {
   tags      String[]
   linkedTo  String?
   notes     String?
-  adminId   String?  @db.ObjectId
+  adminId   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
