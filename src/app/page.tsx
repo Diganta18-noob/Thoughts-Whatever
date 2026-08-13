@@ -13,21 +13,12 @@ import {
   getFeaturedSeries,
   getRecentPieces,
   getFilterFacets,
+  type CardPiece,
 } from "@/lib/pieces";
 import { extractPullQuotes } from "@/lib/markdown";
 import { JsonLd, websiteJsonLd, seriesJsonLd } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
-
-async function withTimeout<T>(promise: Promise<T>, fallback: T, ms = 6000): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
-  ]).catch((err) => {
-    console.error("HomePage query error:", err);
-    return fallback;
-  });
-}
 
 const DEFAULT_FACETS = {
   tags: [] as Array<{ slug: string; labelBn: string; kind: string; _count: { pieces: number } }>,
@@ -37,15 +28,27 @@ const DEFAULT_FACETS = {
 };
 
 export default async function HomePage() {
-  const [seriesRes, recentPiecesRes, facetsRes] = await Promise.allSettled([
-    withTimeout(getFeaturedSeries(3), [], 6000),
-    withTimeout(getRecentPieces({ take: 20 }), [], 6000),
-    withTimeout(getFilterFacets(), DEFAULT_FACETS, 6000),
-  ]);
+  let series: any[] = [];
+  let recentPieces: CardPiece[] = [];
+  let facets = DEFAULT_FACETS;
 
-  const series = seriesRes.status === "fulfilled" ? seriesRes.value : [];
-  const recentPieces = recentPiecesRes.status === "fulfilled" ? recentPiecesRes.value : [];
-  const facets = facetsRes.status === "fulfilled" ? facetsRes.value : DEFAULT_FACETS;
+  try {
+    recentPieces = await getRecentPieces({ take: 20 });
+  } catch (err) {
+    console.error("HomePage: Failed to fetch recentPieces:", err);
+  }
+
+  try {
+    series = await getFeaturedSeries(3);
+  } catch (err) {
+    console.error("HomePage: Failed to fetch featuredSeries:", err);
+  }
+
+  try {
+    facets = await getFilterFacets();
+  } catch (err) {
+    console.error("HomePage: Failed to fetch facets:", err);
+  }
 
   const leadSeries = series[0];
   const leadSlugs = new Set(leadSeries?.pieces.map((p) => p.slug) ?? []);
