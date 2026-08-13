@@ -165,3 +165,24 @@ export function flattenIssues(error: z.ZodError): Record<string, string> {
   }
   return out;
 }
+
+
+export const promptSourceSchema = z.enum(["kiro", "antigravity", "manual", "other"]);
+export const promptCategorySchema = z.enum(["feature", "design", "bug", "plan", "question", "other"]);
+export const promptStatusSchema = z.enum(["idea", "planned", "in-progress", "done", "rejected"]);
+
+export const promptInputSchema = z.object({
+  text: z.string().trim().min(1, "Prompt text is required"),
+  summary: optionalText,
+  source: promptSourceSchema.default("manual"),
+  category: promptCategorySchema.default("other"),
+  status: promptStatusSchema.default("idea"),
+  tags: z.array(z.string()).default([]),
+  linkedTo: optionalText,
+  notes: optionalText,
+});
+
+export const promptUpdateSchema = promptInputSchema.partial();
+
+export type PromptInput = z.infer<typeof promptInputSchema>;
+export type PromptUpdate = z.infer<typeof promptUpdateSchema>;

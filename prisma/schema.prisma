@@ -250,3 +250,24 @@ model AuditLog {
   @@index([severity, createdAt])
   @@index([createdAt])
 }
+
+
+model PromptLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  text      String
+  summary   String?
+  source    String   @default("manual") // "kiro" | "antigravity" | "manual" | "other"
+  category  String   @default("other")  // "feature" | "design" | "bug" | "plan" | "question" | "other"
+  status    String   @default("idea")   // "idea" | "planned" | "in-progress" | "done" | "rejected"
+  tags      String[]
+  linkedTo  String?
+  notes     String?
+  adminId   String?  @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([source, createdAt])
+  @@index([status, createdAt])
+  @@index([category, createdAt])
+  @@index([createdAt])
+}

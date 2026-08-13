@@ -1,3 +1,4 @@
+import { QuickAddPromptModal } from "@/components/admin/prompts/quick-add-modal";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -36,6 +37,7 @@ export default async function AdminLayout({
       </header>
 
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">{children}</div>
+      <QuickAddPromptModal />
     </div>
   );
 }

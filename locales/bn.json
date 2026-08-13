@@ -320,5 +320,6 @@
   "admin.transcribe.hide": "Hide Transcriber",
   "admin.transcribe.show": "Transcribe Audio",
   "admin.nav.auditLog": "অডিট লগ",
-  "admin.audit.title": "সিস্টেম অডিট লগ"
+  "admin.audit.title": "সিস্টেম অডিট লগ",
+  "admin.nav.prompts": "প্রম্পট লাইব্রেরি"
 }

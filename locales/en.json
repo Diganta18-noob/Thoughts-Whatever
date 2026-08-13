@@ -320,5 +320,6 @@
   "admin.transcribe.hide": "Hide Transcriber",
   "admin.transcribe.show": "Transcribe Audio",
   "admin.nav.auditLog": "Audit Log",
-  "admin.audit.title": "System Audit Log"
+  "admin.audit.title": "System Audit Log",
+  "admin.nav.prompts": "Prompts"
 }
