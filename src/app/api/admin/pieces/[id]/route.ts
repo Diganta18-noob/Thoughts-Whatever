@@ -14,7 +14,7 @@ export async function PUT(
   const gate = await guard();
   if ("response" in gate) return gate.response;
 
-  if (!isValidCuid(params.id)) {
+  if (!params?.id) {
     return fail("Invalid ID format.", 400);
   }
 
