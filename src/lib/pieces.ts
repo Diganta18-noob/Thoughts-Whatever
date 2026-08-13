@@ -31,10 +31,7 @@ export const cardSelect = {
 
 export type CardPiece = Prisma.PieceGetPayload<{ select: typeof cardSelect }>;
 
-const byNewest: Prisma.PieceOrderByWithRelationInput[] = [
-  { publishedAt: "desc" },
-  { createdAt: "desc" },
-];
+const byNewest: Prisma.PieceOrderByWithRelationInput = { publishedAt: "desc" };
 
 export const getRecentPieces = cache(
   async (opts: { kind?: PieceKind; take?: number; skip?: number } = {}) => {
@@ -239,7 +236,7 @@ export const getSeriesList = cache(async () => {
       pieces: {
         where: PUBLISHED,
         select: cardSelect,
-        orderBy: [{ seriesOrder: "asc" }, { publishedAt: "asc" }],
+        orderBy: { seriesOrder: "asc" },
       },
     },
     orderBy: { updatedAt: "desc" },
@@ -254,7 +251,7 @@ export const getFeaturedSeries = cache(async (take = 3) => {
       pieces: {
         where: PUBLISHED,
         select: cardSelect,
-        orderBy: [{ seriesOrder: "asc" }, { publishedAt: "asc" }],
+        orderBy: { seriesOrder: "asc" },
       },
     },
     take: take * 3,

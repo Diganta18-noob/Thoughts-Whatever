@@ -23,7 +23,10 @@ async function withTimeout<T>(promise: Promise<T>, fallback: T, ms = 6000): Prom
   return Promise.race([
     promise,
     new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
-  ]).catch(() => fallback);
+  ]).catch((err) => {
+    console.error("HomePage query error:", err);
+    return fallback;
+  });
 }
 
 const DEFAULT_FACETS = {
