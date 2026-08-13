@@ -84,6 +84,12 @@ export async function POST(req: Request) {
       importedCount++;
     }
 
+    if (importedCount > 0) {
+      import("@/lib/system/backup/auto-backup")
+        .then((m) => m.triggerAutoBackup(`csv.import_${importedCount}_rows`))
+        .catch((e) => console.error("[AutoBackup] Import trigger failed:", e));
+    }
+
     return NextResponse.json({ ok: true, importedCount });
   } catch (error) {
     console.error("CSV import failed:", error);

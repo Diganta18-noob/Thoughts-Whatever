@@ -41,6 +41,7 @@ export async function PUT(request: Request, props: RouteProps) {
 
   try {
     const piece = await updatePiece(id, body.data);
+    auditPieceAction("update", { id: piece.id, slug: piece.slug, titleBn: body.data.titleBn }).catch(() => {});
     revalidatePiece({
       kind: piece.kind,
       slug: piece.slug,
@@ -73,11 +74,12 @@ export async function DELETE(request: Request, props: RouteProps) {
 
   const piece = await prisma.piece.findUnique({
     where: { id },
-    select: { slug: true, kind: true },
+    select: { id: true, slug: true, kind: true, titleBn: true },
   });
   if (!piece) return fail("Piece not found.", 404);
 
   await prisma.piece.delete({ where: { id } });
+  auditPieceAction("delete", { id: piece.id, slug: piece.slug, titleBn: piece.titleBn }).catch(() => {});
   revalidatePiece({ kind: piece.kind, slug: piece.slug });
 
   return ok();

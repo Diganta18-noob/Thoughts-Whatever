@@ -15,6 +15,7 @@ export async function POST(request: Request) {
 
   try {
     const piece = await createPiece(body.data);
+    auditPieceAction("create", { id: piece.id, slug: piece.slug, titleBn: body.data.titleBn }).catch(() => {});
     revalidatePiece({ kind: piece.kind, slug: piece.slug });
     return ok({ id: piece.id, slug: piece.slug });
   } catch (error) {

@@ -74,6 +74,13 @@ export async function logAuditEvent(input: AuditLogInput): Promise<void> {
         severity: input.severity ?? "info",
       },
     });
+
+    // Auto-backup database on mutation actions (piece, series, author, tag, import, etc.)
+    if (!input.action.startsWith("admin.login") && !input.action.startsWith("admin.logout")) {
+      import("@/lib/system/backup/auto-backup")
+        .then((m) => m.triggerAutoBackup(input.action))
+        .catch((e) => console.error("[AutoBackup] Trigger failed:", e));
+    }
   } catch (err) {
     console.error("[AuditLog] Failed to write audit event:", err);
   }
