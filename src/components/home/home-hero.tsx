@@ -36,17 +36,6 @@ export function HomeHero({ today, totalPieces }: HomeHeroProps) {
         thoughts.whatever
       </motion.h1>
 
-      {/* Editorial Manifesto Quote */}
-      <motion.blockquote
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.2 }}
-        className="font-bengali text-bengali-base sm:text-bengali-lg text-content-soft max-w-2xl mx-auto leading-relaxed"
-        lang="bn"
-      >
-        “রিলে যা কয়েক মিনিটে বলা যায়, তার পুরোটা এখানে লেখা থাকে। সাহিত্য, পাঠ, আর তার পিছনের ইতিহাস — সূত্র সমেত।”
-      </motion.blockquote>
-
       {/* Dateline & Article Count */}
       <motion.div
         initial={{ opacity: 0 }}

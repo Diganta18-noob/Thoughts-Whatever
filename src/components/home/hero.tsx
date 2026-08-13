@@ -35,7 +35,7 @@ export function Hero() {
         }}
       />
 
-      <div className="relative z-10 flex w-full max-w-4xl flex-col items-center text-center">
+      <div className="relative z-10 flex w-full max-w-5xl flex-col items-center text-center">
         <Reveal>
           <p
             className={`text-xs uppercase tracking-[0.2em] text-content-faint ${isBn ? "font-bengali-sans normal-case tracking-normal" : "font-mono"}`}
@@ -47,21 +47,11 @@ export function Hero() {
 
         <SplitText
           as="h1"
-          lang="bn"
+          lang="en"
           text={siteConfig.name}
           delay={0.15}
-          className="mt-6 font-display text-[length:var(--step-7)] leading-[0.95] text-content"
+          className="mt-6 font-display text-[clamp(2.25rem,7vw,7.5rem)] whitespace-nowrap leading-none text-content tracking-tight max-w-full"
         />
-
-        <Reveal delay={0.5}>
-          <p
-            className="mx-auto mt-8 max-w-measure font-bengali text-bengali-lg leading-relaxed text-content-soft"
-            lang="bn"
-          >
-            রিলে যা কয়েক মিনিটে বলা যায়, তার পুরোটা এখানে লেখা থাকে। সাহিত্য,
-            পাঠ, আর তার পিছনের ইতিহাস — সূত্র সমেত।
-          </p>
-        </Reveal>
 
         <Reveal delay={0.65}>
           <div className="mt-12 flex flex-wrap items-center justify-center gap-x-3 gap-y-4">
