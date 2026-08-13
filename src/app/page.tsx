@@ -20,7 +20,7 @@ import {
 import { extractPullQuotes } from "@/lib/markdown";
 import { JsonLd, websiteJsonLd, seriesJsonLd } from "@/lib/seo";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 async function withTimeout<T>(promise: Promise<T>, fallback: T, ms = 10000): Promise<T> {
   return Promise.race([
