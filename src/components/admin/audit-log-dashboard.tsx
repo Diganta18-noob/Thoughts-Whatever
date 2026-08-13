@@ -238,7 +238,7 @@ export function AuditLogDashboard() {
 
         <div className="rounded-sm border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
-            <span className="font-sans text-xs">Today's Activity</span>
+            <span className="font-sans text-xs">Today&apos;s Activity</span>
             <Clock className="h-4 w-4 text-blue-400" />
           </div>
           <p className="mt-2 font-mono text-2xl font-semibold text-content">
