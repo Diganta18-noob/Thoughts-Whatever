@@ -54,7 +54,7 @@ export async function PUT(request: Request, props: RouteProps) {
       return fail("This slug is used in another piece.", 409);
     }
     console.error("updatePiece failed", error);
-    return fail("Could not save.", 500);
+    return fail(error instanceof Error ? error.message : "Could not save.", 500);
   }
 }
 

@@ -43,14 +43,18 @@ function scalarData(input: PieceInput) {
 }
 
 export async function createPiece(input: PieceInput) {
+  const cleanSeriesId = input.seriesId?.trim() || null;
+  const authorIds = Array.isArray(input.authorIds) ? input.authorIds.filter(Boolean) : [];
+  const tagIds = Array.isArray(input.tagIds) ? input.tagIds.filter(Boolean) : [];
+
   return prisma.piece.create({
     data: {
       ...scalarData(input),
-      seriesId: input.seriesId ?? null,
-      authors: { connect: input.authorIds.map((id) => ({ id })) },
-      tags: { connect: input.tagIds.map((id) => ({ id })) },
+      seriesId: cleanSeriesId,
+      authors: { connect: authorIds.map((id) => ({ id })) },
+      tags: { connect: tagIds.map((id) => ({ id })) },
       sources: {
-        create: input.sources.map((s, order) => ({
+        create: (input.sources || []).map((s, order) => ({
           label: s.label,
           url: s.url ?? null,
           note: s.note ?? null,
@@ -58,7 +62,7 @@ export async function createPiece(input: PieceInput) {
         })),
       },
       timeline: {
-        create: input.timeline.map((t, order) => ({
+        create: (input.timeline || []).map((t, order) => ({
           year: t.year,
           labelBn: t.labelBn,
           descBn: t.descBn ?? null,
@@ -71,22 +75,20 @@ export async function createPiece(input: PieceInput) {
 }
 
 export async function updatePiece(id: string, input: PieceInput) {
+  const cleanSeriesId = input.seriesId?.trim() || null;
+  const authorIds = Array.isArray(input.authorIds) ? input.authorIds.filter(Boolean) : [];
+  const tagIds = Array.isArray(input.tagIds) ? input.tagIds.filter(Boolean) : [];
+
   return prisma.piece.update({
     where: { id },
     data: {
       ...scalarData(input),
-      series: input.seriesId
-        ? { connect: { id: input.seriesId } }
-        : { disconnect: true },
-      // `set` rather than `connect` — an author removed in the editor has to
-      // actually come off the piece, or the /authors hub keeps listing it.
-      authors: { set: input.authorIds.map((authorId) => ({ id: authorId })) },
-      tags: { set: input.tagIds.map((tagId) => ({ id: tagId })) },
-      // Sources and the timeline are ordered lists the publisher reorders
-      // freely. Diffing them by id would buy nothing; replacing is honest.
+      seriesId: cleanSeriesId,
+      authors: { set: authorIds.map((authorId) => ({ id: authorId })) },
+      tags: { set: tagIds.map((tagId) => ({ id: tagId })) },
       sources: {
         deleteMany: {},
-        create: input.sources.map((s, order) => ({
+        create: (input.sources || []).map((s, order) => ({
           label: s.label,
           url: s.url ?? null,
           note: s.note ?? null,
@@ -95,7 +97,7 @@ export async function updatePiece(id: string, input: PieceInput) {
       },
       timeline: {
         deleteMany: {},
-        create: input.timeline.map((t, order) => ({
+        create: (input.timeline || []).map((t, order) => ({
           year: t.year,
           labelBn: t.labelBn,
           descBn: t.descBn ?? null,
