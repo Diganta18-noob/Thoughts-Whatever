@@ -20,7 +20,6 @@ const ITEMS: { href: string; key: TranslationKey; labelFallback?: string }[] = [
   { href: "/admin/settings", key: "admin.nav.settings" },
 ];
 
-
 export function AdminNav() {
   const rawPathname = usePathname();
   const pathname = rawPathname ?? "";
@@ -34,6 +33,9 @@ export function AdminNav() {
             ? pathname === "/admin"
             : pathname.startsWith(item.href);
 
+        const translated = t(item.key);
+        const displayText = (translated && translated !== item.key) ? translated : (item.labelFallback || item.key);
+
         return (
           <Link
             key={item.href}
@@ -45,11 +47,10 @@ export function AdminNav() {
                 : "text-content-soft hover:text-content",
             )}
           >
-            {item.labelFallback || t(item.key)}
+            {displayText}
           </Link>
         );
       })}
     </nav>
   );
 }
-
