@@ -20,7 +20,10 @@ function decodeSlug(raw: string) {
 
 export async function generateStaticParams() {
   try {
-    const list = await getSeriesList();
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("Timeout")), 5000)
+    );
+    const list = (await Promise.race([getSeriesList(), timeout])) as Awaited<ReturnType<typeof getSeriesList>>;
     return list.map((s) => ({ slug: s.slug }));
   } catch {
     return [];

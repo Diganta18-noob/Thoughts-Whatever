@@ -21,7 +21,10 @@ function decodeSlug(raw: string) {
 
 export async function generateStaticParams() {
   try {
-    const slugs = await getAllPublishedSlugs();
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("Timeout")), 5000)
+    );
+    const slugs = (await Promise.race([getAllPublishedSlugs(), timeout])) as Awaited<ReturnType<typeof getAllPublishedSlugs>>;
     return slugs
       .filter((p) => p.kind === "DOCUMENTARY")
       .map((p) => ({ slug: p.slug }));

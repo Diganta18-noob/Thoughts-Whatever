@@ -2,6 +2,7 @@
 const nextConfig = {
   compress: true,
   poweredByHeader: false,
+  staticPageGenerationTimeout: 180,
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -10,8 +11,8 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion", "date-fns", "@aws-sdk/client-s3", "cloudinary"],
+    serverComponentsExternalPackages: ["archiver"],
   },
-  serverExternalPackages: ["archiver"],
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 31536000,
