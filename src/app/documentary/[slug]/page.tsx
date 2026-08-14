@@ -8,6 +8,7 @@ import {
   getSeriesNeighbours,
   getAllPublishedSlugs,
 } from "@/lib/pieces";
+import { withTimeout } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -21,10 +22,7 @@ function decodeSlug(raw: string) {
 
 export async function generateStaticParams() {
   try {
-    const timeout = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("Timeout")), 4000)
-    );
-    const slugs = (await Promise.race([getAllPublishedSlugs(), timeout])) as Awaited<ReturnType<typeof getAllPublishedSlugs>>;
+    const slugs = await withTimeout(getAllPublishedSlugs(), [], 8000);
     return slugs
       .filter((p) => p.kind === "DOCUMENTARY")
       .slice(0, 10)
@@ -41,15 +39,32 @@ type RouteProps = {
 export async function generateMetadata(props: RouteProps): Promise<Metadata> {
   const params = await props?.params;
   const rawSlug = params?.slug || "";
-  const piece = await getPieceBySlug(decodeSlug(rawSlug));
-  if (!piece) return { title: "পাওয়া গেল না" };
-  return pieceMetadata(piece);
+  try {
+    const piece = await withTimeout(
+      getPieceBySlug(decodeSlug(rawSlug)),
+      null,
+      8000,
+    );
+    if (!piece) return { title: "পাওয়া গেল না" };
+    return pieceMetadata(piece);
+  } catch {
+    return { title: "পাওয়া গেল না" };
+  }
 }
 
 export default async function DocumentaryPiecePage(props: RouteProps) {
   const params = await props?.params;
   const rawSlug = params?.slug || "";
-  const piece = await getPieceBySlug(decodeSlug(rawSlug));
+  let piece = null;
+  try {
+    piece = await withTimeout(
+      getPieceBySlug(decodeSlug(rawSlug)),
+      null,
+      8000,
+    );
+  } catch {
+    piece = null;
+  }
   if (!piece) notFound();
 
   const [related, neighbours] = await Promise.all([

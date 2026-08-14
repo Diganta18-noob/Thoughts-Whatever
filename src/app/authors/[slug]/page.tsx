@@ -7,7 +7,7 @@ import { getAuthorBySlug } from "@/lib/pieces";
 import { prisma } from "@/lib/prisma";
 import { T } from "@/components/i18n/t";
 import { Count } from "@/components/i18n/values";
-import { absoluteUrl } from "@/lib/utils";
+import { absoluteUrl, withTimeout } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -21,13 +21,11 @@ function decodeSlug(raw: string) {
 
 export async function generateStaticParams() {
   try {
-    const timeout = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("Timeout")), 4000)
-    );
-    const authors = (await Promise.race([
+    const authors = await withTimeout(
       prisma.author.findMany({ select: { slug: true }, take: 10 }),
-      timeout,
-    ])) as { slug: string }[];
+      [],
+      8000,
+    );
     return authors.map((a) => ({ slug: a.slug }));
   } catch {
     return [];
@@ -41,24 +39,32 @@ type RouteProps = {
 export async function generateMetadata(props: RouteProps): Promise<Metadata> {
   const params = await props?.params;
   const rawSlug = params?.slug || "";
-  const author = await getAuthorBySlug(decodeSlug(rawSlug));
-  if (!author) return { title: "পাওয়া গেল না" };
+  try {
+    const author = await withTimeout(
+      getAuthorBySlug(decodeSlug(rawSlug)),
+      null,
+      8000,
+    );
+    if (!author) return { title: "পাওয়া গেল না" };
 
-  const description =
-    author.bioBn?.slice(0, 155) ||
-    `${author.nameBn} নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।`;
+    const description =
+      author.bioBn?.slice(0, 155) ||
+      `${author.nameBn} নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।`;
 
-  return {
-    title: author.nameBn,
-    description,
-    alternates: { canonical: `/authors/${author.slug}` },
-    openGraph: {
-      type: "profile",
+    return {
       title: author.nameBn,
       description,
-      images: author.portrait ? [{ url: author.portrait }] : undefined,
-    },
-  };
+      alternates: { canonical: `/authors/${author.slug}` },
+      openGraph: {
+        type: "profile",
+        title: author.nameBn,
+        description,
+        images: author.portrait ? [{ url: author.portrait }] : undefined,
+      },
+    };
+  } catch {
+    return { title: "পাওয়া গেল না" };
+  }
 }
 
 /**
@@ -72,7 +78,16 @@ export async function generateMetadata(props: RouteProps): Promise<Metadata> {
 export default async function AuthorPage(props: RouteProps) {
   const params = await props?.params;
   const rawSlug = params?.slug || "";
-  const author = await getAuthorBySlug(decodeSlug(rawSlug));
+  let author = null;
+  try {
+    author = await withTimeout(
+      getAuthorBySlug(decodeSlug(rawSlug)),
+      null,
+      8000,
+    );
+  } catch {
+    author = null;
+  }
   if (!author) notFound();
 
   return (

@@ -35,13 +35,21 @@ type RouteProps = {
 export async function generateMetadata(props: RouteProps): Promise<Metadata> {
   const params = await props?.params;
   const rawSlug = params?.slug || "";
-  const series = await getSeriesBySlug(decodeSlug(rawSlug));
-  if (!series) return { title: "পাওয়া গেল না" };
-  return {
-    title: `${series.titleBn} — সিরিজ`,
-    description: series.descBn ?? undefined,
-    alternates: { canonical: `/series/${series.slug}` },
-  };
+  try {
+    const series = await withTimeout(
+      getSeriesBySlug(decodeSlug(rawSlug)),
+      null,
+      8000,
+    );
+    if (!series) return { title: "পাওয়া গেল না" };
+    return {
+      title: `${series.titleBn} — সিরিজ`,
+      description: series.descBn ?? undefined,
+      alternates: { canonical: `/series/${series.slug}` },
+    };
+  } catch {
+    return { title: "পাওয়া গেল না" };
+  }
 }
 
 import { SeriesTracker } from "@/components/analytics/series-tracker";
@@ -49,7 +57,16 @@ import { SeriesTracker } from "@/components/analytics/series-tracker";
 export default async function SeriesPage(props: RouteProps) {
   const params = await props?.params;
   const rawSlug = params?.slug || "";
-  const series = await getSeriesBySlug(decodeSlug(rawSlug));
+  let series = null;
+  try {
+    series = await withTimeout(
+      getSeriesBySlug(decodeSlug(rawSlug)),
+      null,
+      8000,
+    );
+  } catch {
+    series = null;
+  }
   if (!series) notFound();
 
   const totalReadingMinutes = series.pieces.reduce(
