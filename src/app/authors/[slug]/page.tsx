@@ -78,16 +78,7 @@ export async function generateMetadata(props: RouteProps): Promise<Metadata> {
 export default async function AuthorPage(props: RouteProps) {
   const params = await props?.params;
   const rawSlug = params?.slug || "";
-  let author = null;
-  try {
-    author = await withTimeout(
-      getAuthorBySlug(decodeSlug(rawSlug)),
-      null,
-      8000,
-    );
-  } catch {
-    author = null;
-  }
+  const author = await getAuthorBySlug(decodeSlug(rawSlug));
   if (!author) notFound();
 
   return (

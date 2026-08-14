@@ -11,8 +11,8 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "framer-motion", "date-fns", "@aws-sdk/client-s3", "cloudinary"],
-    serverComponentsExternalPackages: ["archiver"],
+    optimizePackageImports: ["lucide-react", "framer-motion", "date-fns"],
+    serverComponentsExternalPackages: ["archiver", "@aws-sdk/client-s3", "cloudinary", "@prisma/client", "prisma"],
   },
   images: {
     formats: ["image/avif", "image/webp"],

@@ -57,16 +57,7 @@ import { SeriesTracker } from "@/components/analytics/series-tracker";
 export default async function SeriesPage(props: RouteProps) {
   const params = await props?.params;
   const rawSlug = params?.slug || "";
-  let series = null;
-  try {
-    series = await withTimeout(
-      getSeriesBySlug(decodeSlug(rawSlug)),
-      null,
-      8000,
-    );
-  } catch {
-    series = null;
-  }
+  const series = await getSeriesBySlug(decodeSlug(rawSlug));
   if (!series) notFound();
 
   const totalReadingMinutes = series.pieces.reduce(

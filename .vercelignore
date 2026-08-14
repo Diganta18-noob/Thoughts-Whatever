@@ -12,3 +12,10 @@ playwright-report/
 !README.md
 context/
 automation/
+*.gz
+*.zip
+*.tar
+*.bak
+.env
+.env.local
+node_modules

@@ -7,9 +7,9 @@ import {
   getPieceBySlug,
   getRelatedPieces,
   getSeriesNeighbours,
-  getAllPublishedSlugs,
 } from "@/lib/pieces";
 import { withTimeout } from "@/lib/utils";
+import { getBuildTimeSlugs } from "@/lib/build-params";
 
 export const revalidate = 300;
 
@@ -23,7 +23,7 @@ function decodeSlug(raw: string) {
 
 export async function generateStaticParams() {
   try {
-    const slugs = await withTimeout(getAllPublishedSlugs(), [], 8000);
+    const slugs = await getBuildTimeSlugs();
     return slugs
       .filter((p) => p.kind === "BLOG")
       .slice(0, 10)
@@ -56,16 +56,7 @@ export async function generateMetadata(props: RouteProps): Promise<Metadata> {
 export default async function BlogPiecePage(props: RouteProps) {
   const params = await props?.params;
   const rawSlug = params?.slug || "";
-  let piece = null;
-  try {
-    piece = await withTimeout(
-      getPieceBySlug(decodeSlug(rawSlug), "BLOG"),
-      null,
-      8000,
-    );
-  } catch {
-    piece = null;
-  }
+  const piece = await getPieceBySlug(decodeSlug(rawSlug), "BLOG");
   if (!piece) notFound();
 
   const [related, neighbours] = await Promise.all([

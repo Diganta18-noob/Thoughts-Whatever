@@ -285,11 +285,12 @@ export const getSeriesBySlug = cache(async (slug: string) => {
   return series && withSeriesCovers(series);
 });
 
-export const getAllPublishedSlugs = cache(async () =>
+export const getAllPublishedSlugs = cache(async (take = 50) =>
   prisma.piece.findMany({
     where: PUBLISHED,
-    select: { slug: true, kind: true, publishedAt: true, updatedAt: true },
+    select: { slug: true, kind: true },
     orderBy: byNewest,
+    take,
   }),
 );
 

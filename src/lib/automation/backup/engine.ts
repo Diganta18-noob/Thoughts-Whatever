@@ -103,9 +103,22 @@ export async function backupDatabase(): Promise<BackupArtifactInfo> {
     }
     const filePath = path.join(localDir, filename);
 
-    // Export primary tables to structured JSON
-    const [pieces, authors, tags, series, sources, timelineEvents, subscribers, adminUsers] = await Promise.all([
-      prisma.piece.findMany(),
+    // Export pieces in paginated batches to prevent memory spikes / OOM
+    const PAGE_SIZE = 50;
+    let skip = 0;
+    const pieces = [];
+    while (true) {
+      const batch = await prisma.piece.findMany({
+        take: PAGE_SIZE,
+        skip,
+      });
+      if (batch.length === 0) break;
+      pieces.push(...batch);
+      skip += PAGE_SIZE;
+    }
+
+    // Export remaining primary tables to structured JSON
+    const [authors, tags, series, sources, timelineEvents, subscribers, adminUsers] = await Promise.all([
       prisma.author.findMany(),
       prisma.tag.findMany(),
       prisma.series.findMany(),

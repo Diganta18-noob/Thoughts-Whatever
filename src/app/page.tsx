@@ -23,18 +23,9 @@ import {
 } from "@/lib/pieces";
 import { extractPullQuotes } from "@/lib/markdown";
 import { JsonLd, websiteJsonLd, seriesJsonLd } from "@/lib/seo";
+import { withTimeout } from "@/lib/utils";
 
 export const revalidate = 300;
-
-async function withTimeout<T>(promise: Promise<T>, fallback: T, ms = 2500): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
-  ]).catch((err) => {
-    console.error("HomePage query timeout/error:", err);
-    return fallback;
-  });
-}
 
 const DEFAULT_FACETS = {
   tags: [] as Array<{ slug: string; labelBn: string; kind: string; _count: { pieces: number } }>,
@@ -45,9 +36,9 @@ const DEFAULT_FACETS = {
 
 export default async function HomePage() {
   const [recentRes, seriesRes, facetsRes] = await Promise.allSettled([
-    withTimeout(getRecentPieces({ take: 20 }), [], 2500),
+    withTimeout(getRecentPieces({ take: 20 }), [], 5000),
     withTimeout(getFeaturedSeries(3), [], 2500),
-    withTimeout(getFilterFacets(), DEFAULT_FACETS, 2500),
+    withTimeout(getFilterFacets(), DEFAULT_FACETS, 5000),
   ]);
 
   const recentPieces: CardPiece[] = recentRes.status === "fulfilled" ? recentRes.value : [];

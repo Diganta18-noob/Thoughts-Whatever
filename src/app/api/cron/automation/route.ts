@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { runMasterPipeline, getLastPipelineReport } from "@/lib/automation/pipeline";
 import { writeLog } from "@/lib/automation/notifications/logger";
 
+export const maxDuration = 300;
+export const runtime = "nodejs";
+
 export async function GET(req: Request) {
   const authHeader = req.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;

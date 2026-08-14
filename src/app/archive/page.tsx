@@ -10,6 +10,8 @@ import { getArchivePieces, getFilterFacets } from "@/lib/pieces";
 import { KIND_META } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   title: "সংগ্রহ",
   description: "সব লেখা — লেখক, যুগ, রূপ ও বিষয় ধরে সাজানো।",

@@ -9,6 +9,9 @@ import {
   type Period,
 } from "@/lib/analytics";
 
+export const maxDuration = 60;
+export const runtime = "nodejs";
+
 const getCachedAnalytics = unstable_cache(
   async (period: Period) => {
     const [overview, dailyTrend, topArticles, seriesAnalytics] = await Promise.all([
