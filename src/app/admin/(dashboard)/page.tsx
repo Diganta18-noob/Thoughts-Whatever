@@ -1,34 +1,83 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { formatBengaliDate } from "@/lib/bengali";
 import { KIND_META, piecePath } from "@/lib/nav";
-import { AnalyticsDashboard } from "@/components/admin/analytics-dashboard";
+import {
+  getOverviewStats,
+  getDailyTrend,
+  getTopArticles,
+  getSeriesAnalytics,
+} from "@/lib/analytics";
+import { AnalyticsDashboard, type AnalyticsData } from "@/components/admin/analytics-dashboard";
+import { AnalyticsSkeleton } from "@/components/admin/analytics-skeleton";
 import { AdminDashboardHeader } from "@/components/admin/dashboard-header";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = { title: "Overview & Analytics" };
 
+function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
+  ]);
+}
+
 export default async function AdminHomePage() {
-  const recent = await prisma.piece.findMany({
-    select: {
-      id: true,
-      slug: true,
-      kind: true,
-      status: true,
-      titleBn: true,
-      updatedAt: true,
-    },
-    orderBy: { updatedAt: "desc" },
-    take: 8,
-  });
+  const [recentSettled, analyticsSettled] = await Promise.allSettled([
+    withTimeout(
+      prisma.piece.findMany({
+        select: {
+          id: true,
+          slug: true,
+          kind: true,
+          status: true,
+          titleBn: true,
+          updatedAt: true,
+        },
+        orderBy: { updatedAt: "desc" },
+        take: 8,
+      }),
+      8000,
+      []
+    ),
+    withTimeout(
+      Promise.all([
+        getOverviewStats("30d"),
+        getDailyTrend(30),
+        getTopArticles(10, "30d"),
+        getSeriesAnalytics(),
+      ]),
+      8000,
+      null
+    ),
+  ]);
+
+  const recent = recentSettled.status === "fulfilled" ? recentSettled.value : [];
+  let initialAnalyticsData: AnalyticsData | undefined = undefined;
+
+  if (analyticsSettled.status === "fulfilled" && analyticsSettled.value) {
+    const [overview, dailyTrend, topArticles, seriesAnalytics] = analyticsSettled.value;
+    initialAnalyticsData = {
+      overview,
+      dailyTrend,
+      topArticles: topArticles.map((t) => ({
+        ...t,
+        publishedAt: t.publishedAt ? t.publishedAt.toISOString() : null,
+      })),
+      seriesAnalytics,
+    };
+  }
 
   return (
     <div className="space-y-10">
       <AdminDashboardHeader />
 
-      {/* Interactive Analytics Dashboard */}
-      <AnalyticsDashboard />
+      {/* Interactive Analytics Dashboard with SSR initial data & fallback skeleton */}
+      <Suspense fallback={<AnalyticsSkeleton />}>
+        <AnalyticsDashboard initialData={initialAnalyticsData} />
+      </Suspense>
 
       {/* Recently Edited Section */}
       <div className="pt-4">

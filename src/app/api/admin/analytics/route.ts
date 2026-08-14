@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import {
   getOverviewStats,
@@ -7,6 +8,28 @@ import {
   getSeriesAnalytics,
   type Period,
 } from "@/lib/analytics";
+
+const getCachedAnalytics = unstable_cache(
+  async (period: Period) => {
+    const [overview, dailyTrend, topArticles, seriesAnalytics] = await Promise.all([
+      getOverviewStats(period),
+      getDailyTrend(period === "7d" ? 7 : 30),
+      getTopArticles(10, period),
+      getSeriesAnalytics(),
+    ]);
+    return {
+      overview,
+      dailyTrend,
+      topArticles: topArticles.map((t) => ({
+        ...t,
+        publishedAt: t.publishedAt ? t.publishedAt.toISOString() : null,
+      })),
+      seriesAnalytics,
+    };
+  },
+  ["admin-analytics-data"],
+  { revalidate: 60, tags: ["analytics"] }
+);
 
 export async function GET(req: Request) {
   const admin = await requireAdmin();
@@ -18,25 +41,15 @@ export async function GET(req: Request) {
   const period = (searchParams.get("period") as Period) || "30d";
 
   try {
-    // Parallelized server-side execution of all 4 aggregated analytics sections
-    const [overview, dailyTrend, topArticles, seriesAnalytics] = await Promise.all([
-      getOverviewStats(period),
-      getDailyTrend(period === "7d" ? 7 : 30),
-      getTopArticles(10, period),
-      getSeriesAnalytics(),
-    ]);
+    const data = await getCachedAnalytics(period);
 
     return NextResponse.json(
       {
         success: true,
-        overview,
-        dailyTrend,
-        topArticles,
-        seriesAnalytics,
+        ...data,
       },
       {
         headers: {
-          // Micro-cache dashboard response for 10 seconds to eliminate redundant serverless calls
           "Cache-Control": "private, max-age=60, stale-while-revalidate=120",
         },
       }

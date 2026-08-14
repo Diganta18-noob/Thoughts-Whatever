@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { toBengaliNumber } from "@/lib/bengali";
 import { ArrowUp, ArrowDown, Save, Loader2, ExternalLink } from "lucide-react";
+import { toast } from "react-hot-toast";
 import { useTranslation } from "@/components/providers/language-provider";
 
 export interface SeriesWithPieces {
@@ -30,7 +31,6 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
     initialSeriesList[0]?.id || null
   );
   const [saving, setSaving] = useState(false);
-  const [notice, setNotice] = useState("");
   const t = useTranslation();
 
   const activeSeries = seriesList.find((s) => s.id === selectedSeriesId);
@@ -56,13 +56,11 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
         s.id === activeSeries.id ? { ...s, pieces: updatedEpisodes } : s
       )
     );
-    setNotice("");
   };
 
   const saveOrder = async () => {
     if (!activeSeries || saving) return;
     setSaving(true);
-    setNotice("");
 
     const payload = activeSeries.pieces.map((ep, i) => ({
       pieceId: ep.id,
@@ -77,12 +75,12 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
       });
 
       if (res.ok) {
-        setNotice(t("admin.series.orderSaved"));
+        toast.success("Series order updated successfully!");
       } else {
-        setNotice(t("admin.series.orderSaveFailed"));
+        toast.error("Failed to save series order.");
       }
     } catch {
-      setNotice(t("admin.series.connectionError"));
+      toast.error("Network error saving series order.");
     } finally {
       setSaving(false);
     }
@@ -101,7 +99,6 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
               key={s.id}
               onClick={() => {
                 setSelectedSeriesId(s.id);
-                setNotice("");
               }}
               className={`w-full text-left rounded-sm px-3 py-2 font-bengali text-bengali-base transition ${
                 selectedSeriesId === s.id
@@ -162,12 +159,6 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
               </button>
             </div>
           </div>
-
-          {notice && (
-            <p className="border-l-2 border-accent pl-3 font-bengali text-xs text-accent" lang="bn">
-              {notice}
-            </p>
-          )}
 
           <div className="space-y-3">
             <span className="label" lang="en">

@@ -22,6 +22,7 @@ export const cardSelect = {
   excerptBn: true,
   coverImage: true,
   readingMinutes: true,
+  featured: true,
   publishedAt: true,
   audioUrl: true,
   seriesOrder: true,
@@ -133,6 +134,8 @@ export const getArchivePieces = cache(
     author?: string;
     series?: string;
     year?: string;
+    take?: number;
+    skip?: number;
   }) => {
     const where: Prisma.PieceWhereInput = { ...PUBLISHED };
 
@@ -153,7 +156,8 @@ export const getArchivePieces = cache(
       where,
       select: cardSelect,
       orderBy: byNewest,
-      take: 200,
+      take: filters.take ?? 50,
+      skip: filters.skip ?? 0,
     });
     return rows.map((row) => withCover(row));
   },
@@ -311,28 +315,24 @@ export const getPullQuoteCandidates = cache(async (take = 8) =>
 );
 
 export const getPublishingTimeline = cache(async () => {
-  const pieces = await prisma.piece.findMany({
-    where: PUBLISHED,
-    select: { publishedAt: true },
-    orderBy: { publishedAt: "desc" },
-  });
+  const rows = await prisma.$queryRaw<Array<{
+    year: number;
+    month: number;
+    count: bigint;
+  }>>`
+    SELECT
+      EXTRACT(YEAR FROM "publishedAt")::integer as year,
+      EXTRACT(MONTH FROM "publishedAt")::integer as month,
+      COUNT(*)::bigint as count
+    FROM "Piece"
+    WHERE status = 'PUBLISHED' AND "publishedAt" IS NOT NULL
+    GROUP BY EXTRACT(YEAR FROM "publishedAt"), EXTRACT(MONTH FROM "publishedAt")
+    ORDER BY year DESC, month DESC
+  `;
 
-  const groups = new Map<string, { year: number; month: number; count: number }>();
-
-  for (const piece of pieces) {
-    if (!piece.publishedAt) continue;
-    const d = new Date(piece.publishedAt);
-    const year = d.getUTCFullYear();
-    const month = d.getUTCMonth() + 1;
-    const key = `${year}-${month}`;
-
-    const existing = groups.get(key);
-    if (existing) {
-      existing.count += 1;
-    } else {
-      groups.set(key, { year, month, count: 1 });
-    }
-  }
-
-  return Array.from(groups.values());
+  return rows.map((r) => ({
+    year: Number(r.year),
+    month: Number(r.month),
+    count: Number(r.count),
+  }));
 });

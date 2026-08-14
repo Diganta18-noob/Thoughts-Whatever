@@ -55,7 +55,9 @@ export default async function HomePage() {
   const facets = facetsRes.status === "fulfilled" ? facetsRes.value : DEFAULT_FACETS;
 
   const leadSeries = series[0];
-  const leadSlugs = new Set(leadSeries?.pieces.map((p) => p.slug) ?? []);
+  const leadSlugs = new Set(
+    leadSeries?.pieces ? (leadSeries.pieces as Array<{ slug: string }>).map((p) => p.slug) : []
+  );
 
   // Primary hero content glimpse (latest uploaded piece)
   const primaryGlimpsePiece = recentPieces[0] ?? null;
@@ -82,13 +84,21 @@ export default async function HomePage() {
   const quotes = extractPullQuotes(quoteCandidates);
   const quote = quotes[0] ?? null;
 
-  const timeline = recentPieces
-    .filter((p) => p.publishedAt)
-    .map((p) => ({
-      slug: p.slug,
-      titleBn: p.titleBn,
-      publishedAt: p.publishedAt!,
-    }));
+  const timelineGroups = new Map<string, { year: number; month: number; count: number }>();
+  for (const p of recentPieces) {
+    if (!p.publishedAt) continue;
+    const d = new Date(p.publishedAt);
+    const year = d.getUTCFullYear();
+    const month = d.getUTCMonth() + 1;
+    const key = `${year}-${month}`;
+    const existing = timelineGroups.get(key);
+    if (existing) {
+      existing.count += 1;
+    } else {
+      timelineGroups.set(key, { year, month, count: 1 });
+    }
+  }
+  const timeline = Array.from(timelineGroups.values());
 
   const kindCounts = recentPieces.reduce(
     (acc, p) => {

@@ -17,10 +17,16 @@ export async function getOverviewStats(period: Period = "30d") {
     prisma.analyticsEvent.count({
       where: { eventType: "view", ...(dateFilter ? { createdAt: dateFilter } : {}) },
     }),
-    prisma.analyticsEvent.groupBy({
-      by: ["sessionId"],
-      where: { ...(dateFilter ? { createdAt: dateFilter } : {}) },
-    }),
+    startDate
+      ? prisma.$queryRaw<Array<{ count: bigint }>>`
+          SELECT COUNT(DISTINCT "sessionId") as count
+          FROM "AnalyticsEvent"
+          WHERE "createdAt" >= ${startDate}
+        `
+      : prisma.$queryRaw<Array<{ count: bigint }>>`
+          SELECT COUNT(DISTINCT "sessionId") as count
+          FROM "AnalyticsEvent"
+        `,
     prisma.piece.count({ where: { status: "PUBLISHED" } }),
     prisma.subscriber.count({ where: { unsubscribedAt: null } }),
     prisma.analyticsEvent.count({
@@ -31,9 +37,11 @@ export async function getOverviewStats(period: Period = "30d") {
     }),
   ]);
 
+  const uniqueVisitors = Number(uniqueVisitorsResult[0]?.count ?? 0);
+
   return {
     totalViews,
-    uniqueVisitors: uniqueVisitorsResult.length,
+    uniqueVisitors,
     totalArticles,
     totalSubscribers,
     totalReelClicks,
@@ -44,41 +52,47 @@ export async function getDailyTrend(days: number = 30) {
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - days);
 
-  const events = await prisma.analyticsEvent.findMany({
-    where: {
-      eventType: "view",
-      createdAt: { gte: startDate },
-    },
-    select: {
-      createdAt: true,
-      sessionId: true,
-    },
-    take: 10000,
-  });
+  const rows = await prisma.$queryRaw<Array<{
+    day: Date;
+    views: bigint;
+    visitors: bigint;
+  }>>`
+    SELECT
+      DATE_TRUNC('day', "createdAt") as day,
+      COUNT(*)::bigint as views,
+      COUNT(DISTINCT "sessionId")::bigint as visitors
+    FROM "AnalyticsEvent"
+    WHERE "eventType" = 'view'
+      AND "createdAt" >= ${startDate}
+    GROUP BY DATE_TRUNC('day', "createdAt")
+    ORDER BY day ASC
+  `;
 
-  const dailyMap: Record<string, { date: string; views: number; visitors: Set<string> }> = {};
+  const dailyMap: Record<string, { date: string; views: number; visitors: number }> = {};
 
-  // Pre-fill days
+  // Pre-fill days to avoid gaps in chart
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
     const key = d.toISOString().split("T")[0];
-    dailyMap[key] = { date: key, views: 0, visitors: new Set() };
+    dailyMap[key] = { date: key, views: 0, visitors: 0 };
   }
 
-  events.forEach((ev) => {
-    const key = ev.createdAt.toISOString().split("T")[0];
+  for (const row of rows) {
+    const key = new Date(row.day).toISOString().split("T")[0];
     if (dailyMap[key]) {
-      dailyMap[key].views += 1;
-      dailyMap[key].visitors.add(ev.sessionId);
+      dailyMap[key].views = Number(row.views);
+      dailyMap[key].visitors = Number(row.visitors);
+    } else {
+      dailyMap[key] = {
+        date: key,
+        views: Number(row.views),
+        visitors: Number(row.visitors),
+      };
     }
-  });
+  }
 
-  return Object.values(dailyMap).map((d) => ({
-    date: d.date,
-    views: d.views,
-    visitors: d.visitors.size,
-  }));
+  return Object.values(dailyMap).sort((a, b) => a.date.localeCompare(b.date));
 }
 
 export async function getTopArticles(limit: number = 10, period: Period = "30d") {

@@ -71,8 +71,12 @@ function buildHref(current: Filters, patch: Filters) {
 export default async function ArchivePage({
   searchParams,
 }: {
-  searchParams: RawParams;
+  searchParams: RawParams & { page?: string };
 }) {
+  const page = Math.max(1, parseInt(searchParams.page || "1", 10) || 1);
+  const pageSize = 50;
+  const skip = (page - 1) * pageSize;
+
   const filters: Filters = {
     kind: isKind(searchParams.kind) ? searchParams.kind : undefined,
     tag: searchParams.tag,
@@ -82,7 +86,7 @@ export default async function ArchivePage({
   };
 
   const [pieces, facets] = await Promise.all([
-    getArchivePieces(filters),
+    getArchivePieces({ ...filters, take: pageSize, skip }),
     getFilterFacets(),
   ]);
 
@@ -216,13 +220,46 @@ export default async function ArchivePage({
               </Link>
             </div>
           ) : (
-            <ol className="border-t border-rule">
-              {pieces.map((piece, i) => (
-                <li key={piece.slug}>
-                  <PieceRow piece={piece} index={i} />
-                </li>
-              ))}
-            </ol>
+            <>
+              <ol className="border-t border-rule">
+                {pieces.map((piece, i) => (
+                  <li key={piece.slug}>
+                    <PieceRow piece={piece} index={i} />
+                  </li>
+                ))}
+              </ol>
+
+              {(page > 1 || pieces.length === pageSize) && (
+                <div className="mt-8 flex items-center justify-between border-t border-rule pt-4 font-sans text-xs">
+                  {page > 1 ? (
+                    <Link
+                      href={buildHref(filters, {})}
+                      className="text-accent underline hover:opacity-80"
+                    >
+                      ← Previous page
+                    </Link>
+                  ) : (
+                    <span />
+                  )}
+
+                  {pieces.length === pageSize && (
+                    <Link
+                      href={`/archive?${new URLSearchParams({
+                        ...(searchParams.kind ? { kind: searchParams.kind } : {}),
+                        ...(searchParams.tag ? { tag: searchParams.tag } : {}),
+                        ...(searchParams.author ? { author: searchParams.author } : {}),
+                        ...(searchParams.series ? { series: searchParams.series } : {}),
+                        ...(searchParams.year ? { year: searchParams.year } : {}),
+                        page: String(page + 1),
+                      }).toString()}`}
+                      className="text-accent underline hover:opacity-80"
+                    >
+                      Next page →
+                    </Link>
+                  )}
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Loader2, Plus, X, ExternalLink, Mic } from "lucide-react";
+import { toast } from "react-hot-toast";
 import { Prose } from "@/components/reader/prose";
 import { bengaliSlug, countBengaliWords, readingMinutes, toBengaliNumber } from "@/lib/bengali";
 import { deriveExcerpt } from "@/lib/markdown";
@@ -246,7 +247,6 @@ export function PieceEditor({
   const [form, setForm] = useState<EditorPiece>(safeInitial);
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [notice, setNotice] = useState("");
   const [dirty, setDirty] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [showTranscriber, setShowTranscriber] = useState(false);
@@ -258,17 +258,16 @@ export function PieceEditor({
       audioUrl: audioUrl || prev.audioUrl,
     }));
     setDirty(true);
-    setNotice("Audio transcribed successfully via Whisper API! Transcribed text appended to Body.");
+    toast.success("Audio transcribed successfully! Text appended to body.");
   };
 
   // The slug follows the title only until the publisher edits it, and never on
   // an existing piece — a live URL must not change because a typo was fixed.
-  const slugTouched = useRef(!isNew || !!initial.slug);
+  const slugTouched = useRef(!isNew || !initial.slug);
 
   function set<K extends keyof EditorPiece>(key: K, value: EditorPiece[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
     setDirty(true);
-    setNotice("");
   }
 
   function setTitle(value: string) {
@@ -278,7 +277,6 @@ export function PieceEditor({
       slug: slugTouched.current ? prev.slug : bengaliSlug(value),
     }));
     setDirty(true);
-    setNotice("");
   }
 
   function toggleIn(key: "authorIds" | "tagIds", id: string) {
@@ -301,7 +299,8 @@ export function PieceEditor({
     setForm((prev) => (prev.publishedAt ? prev : { ...prev, publishedAt: local }));
   }, [publishedAtIso]);
 
-  const words = useMemo(() => countBengaliWords(form.bodyBn), [form.bodyBn]);  const minutes = useMemo(() => readingMinutes(form.bodyBn), [form.bodyBn]);
+  const words = useMemo(() => countBengaliWords(form.bodyBn), [form.bodyBn]);
+  const minutes = useMemo(() => readingMinutes(form.bodyBn), [form.bodyBn]);
   const autoExcerpt = useMemo(() => deriveExcerpt(form.bodyBn), [form.bodyBn]);
 
   // Leaving with unsaved work is the one loss this editor can actually cause.
@@ -316,7 +315,6 @@ export function PieceEditor({
     if (busy) return;
     setBusy(true);
     setErrors({});
-    setNotice("");
 
     const status = overrideStatus ?? form.status;
 
@@ -371,21 +369,21 @@ export function PieceEditor({
 
       if (!res.ok || !data.ok) {
         if (data.fieldErrors) setErrors(data.fieldErrors);
-        setNotice(data.error || t("admin.editor.saveError"));
+        toast.error(data.error || "Failed to save piece. Please check required fields.");
         setBusy(false);
         return;
       }
 
       setDirty(false);
       setForm((prev) => ({ ...prev, status }));
-      setNotice(
-        status === "PUBLISHED"
-          ? t("admin.editor.published")
-          : status === "ARCHIVED"
-          ? "আর্কাইভ করা হয়েছে এবং সাইট থেকে সরানো হয়েছে।"
-          : t("admin.editor.saved"),
-      );
 
+      if (status === "PUBLISHED") {
+        toast.success("Piece published successfully!");
+      } else if (status === "ARCHIVED") {
+        toast.success("Piece archived and removed from public view.");
+      } else {
+        toast.success("Draft saved successfully.");
+      }
 
       if (isNew && data.id) {
         router.replace(`/admin/pieces/${data.id}`);
@@ -393,7 +391,7 @@ export function PieceEditor({
         router.refresh();
       }
     } catch {
-      setNotice(t("admin.editor.connectionError"));
+      toast.error("Network error. Could not connect to server.");
     }
     setBusy(false);
   }
@@ -469,16 +467,6 @@ export function PieceEditor({
           </button>
         </div>
       </div>
-
-
-      {notice && (
-        <p
-          className="mt-4 border-l-2 border-accent pl-3 font-bengali text-[0.9375rem] text-accent"
-          lang="bn"
-        >
-          {notice}
-        </p>
-      )}
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         {/* ─── main column ──────────────────────────────── */}
