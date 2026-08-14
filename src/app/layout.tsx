@@ -9,6 +9,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 
+import { cookies } from "next/headers";
 import { ThemeScript } from "@/components/providers/theme-script";
 import { AppProviders } from "@/components/providers";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -126,6 +127,11 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = cookies();
+  const rawTheme = cookieStore.get("tw_theme")?.value ?? "cream";
+  const theme = rawTheme === "dark" ? "night" : ["cream", "sepia", "night"].includes(rawTheme) ? rawTheme : "cream";
+  const rawLang = cookieStore.get("tw_lang")?.value ?? "en";
+  const lang = rawLang === "bn" ? "bn" : "en";
 
   return (
     // lang follows the *interface* locale, not the content. ThemeScript
@@ -135,8 +141,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // every Bengali region carries its own lang="bn" (see prose.tsx,
     // article-view.tsx, piece-card.tsx), so screen readers still switch voice.
     <html
-      lang="en"
-      data-theme="cream"
+      lang={lang}
+      data-theme={theme}
       suppressHydrationWarning
       className={[
         bengaliSerif.variable,

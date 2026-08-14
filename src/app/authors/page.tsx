@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default async function AuthorsPage() {
   const { authors } = await withTimeout(
     getFilterFacets(),
-    { authors: [], tags: [], years: [] },
+    { authors: [], tags: [], series: [], years: [] },
     5000
   );
 
