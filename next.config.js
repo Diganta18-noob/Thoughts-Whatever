@@ -3,7 +3,7 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   swcMinify: true,
-  staticPageGenerationTimeout: 180,
+  staticPageGenerationTimeout: 60,
   typescript: {
     ignoreBuildErrors: true,
   },

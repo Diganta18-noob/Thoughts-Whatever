@@ -43,3 +43,18 @@ export function youtubeId(url?: string | null): string | null {
   );
   return match?.[1] ?? null;
 }
+
+/**
+ * Executes a promise with a timeout fallback, preventing static build lockups
+ * during connection pool contention or database delays.
+ */
+export async function withTimeout<T>(
+  promise: Promise<T>,
+  fallback: T,
+  ms = 5000
+): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
+  ]).catch(() => fallback);
+}

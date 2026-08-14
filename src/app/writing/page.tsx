@@ -4,7 +4,7 @@ import { ArticleCard } from "@/components/pieces/article-card";
 import { T } from "@/components/i18n/t";
 import { getRecentPieces, countPieces } from "@/lib/pieces";
 import { Count } from "@/components/i18n/values";
-
+import { withTimeout } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -17,8 +17,8 @@ export const metadata: Metadata = {
 
 export default async function WritingPage() {
   const [pieces, total] = await Promise.all([
-    getRecentPieces({ kind: "RACHANA", take: 60 }),
-    countPieces("RACHANA"),
+    withTimeout(getRecentPieces({ kind: "RACHANA", take: 60 }), [], 5000),
+    withTimeout(countPieces("RACHANA"), 0, 5000),
   ]);
 
   const [lead, ...rest] = pieces;

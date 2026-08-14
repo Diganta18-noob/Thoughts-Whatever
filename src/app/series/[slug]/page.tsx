@@ -7,6 +7,7 @@ import { piecePath } from "@/lib/nav";
 import { Count, LocalDate, Num, Reading } from "@/components/i18n/values";
 import { EditorialImage } from "@/components/pieces/editorial-image";
 import { Play, BookOpen, Layers } from "lucide-react";
+import { withTimeout } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -20,10 +21,7 @@ function decodeSlug(raw: string) {
 
 export async function generateStaticParams() {
   try {
-    const timeout = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("Timeout")), 4000)
-    );
-    const list = (await Promise.race([getSeriesList(), timeout])) as Awaited<ReturnType<typeof getSeriesList>>;
+    const list = await withTimeout(getSeriesList(), [], 8000);
     return list.slice(0, 10).map((s) => ({ slug: s.slug }));
   } catch {
     return [];

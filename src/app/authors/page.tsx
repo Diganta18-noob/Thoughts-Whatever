@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { getFilterFacets } from "@/lib/pieces";
 import { T } from "@/components/i18n/t";
 import { Count, Num } from "@/components/i18n/values";
-
+import { withTimeout } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -15,7 +15,11 @@ export const metadata: Metadata = {
 };
 
 export default async function AuthorsPage() {
-  const { authors } = await getFilterFacets();
+  const { authors } = await withTimeout(
+    getFilterFacets(),
+    { authors: [], tags: [], years: [] },
+    5000
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">

@@ -19,46 +19,53 @@ import { deriveExcerpt } from "@/lib/markdown";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const pieces = await prisma.piece.findMany({
-    where: PUBLISHED,
-    select: {
-      slug: true,
-      kind: true,
-      titleBn: true,
-      titleEn: true,
-      dekBn: true,
-      excerptBn: true,
-      bodyBn: true,
-      readingMinutes: true,
-      tags: { select: { labelBn: true } },
-      authors: { select: { nameBn: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    const pieces = await prisma.piece.findMany({
+      where: PUBLISHED,
+      select: {
+        slug: true,
+        kind: true,
+        titleBn: true,
+        titleEn: true,
+        dekBn: true,
+        excerptBn: true,
+        bodyBn: true,
+        readingMinutes: true,
+        tags: { select: { labelBn: true } },
+        authors: { select: { nameBn: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
 
-  const docs = pieces.map((piece) => {
-    const tagsText = piece.tags.map((t) => t.labelBn).join(" ");
-    const authorsText = piece.authors.map((a) => a.nameBn).join(" ");
+    const docs = pieces.map((piece) => {
+      const tagsText = piece.tags.map((t) => t.labelBn).join(" ");
+      const authorsText = piece.authors.map((a) => a.nameBn).join(" ");
 
-    return {
-      slug: piece.slug,
-      kind: piece.kind,
-      titleBn: piece.titleBn,
-      titleEn: piece.titleEn,
-      excerptBn:
-        piece.dekBn || piece.excerptBn || deriveExcerpt(piece.bodyBn, 150),
-      tagsText,
-      authorsText,
-      readingMinutes: piece.readingMinutes,
-      key: bengaliSearchKey(
-        `${piece.titleBn} ${piece.titleEn ?? ""} ${authorsText} ${tagsText}`,
-      ),
-    };
-  });
+      return {
+        slug: piece.slug,
+        kind: piece.kind,
+        titleBn: piece.titleBn,
+        titleEn: piece.titleEn,
+        excerptBn:
+          piece.dekBn || piece.excerptBn || deriveExcerpt(piece.bodyBn, 150),
+        tagsText,
+        authorsText,
+        readingMinutes: piece.readingMinutes,
+        key: bengaliSearchKey(
+          `${piece.titleBn} ${piece.titleEn ?? ""} ${authorsText} ${tagsText}`,
+        ),
+      };
+    });
 
-  return NextResponse.json(docs, {
-    headers: {
-      "Cache-Control": "public, max-age=60, s-maxage=300, stale-while-revalidate=3600",
-    },
-  });
+    return NextResponse.json(docs, {
+      headers: {
+        "Cache-Control": "public, max-age=60, s-maxage=300, stale-while-revalidate=3600",
+      },
+    });
+  } catch (err) {
+    console.error("search-index generation failed:", err);
+    return NextResponse.json([], {
+      headers: { "Cache-Control": "no-store" },
+    });
+  }
 }
