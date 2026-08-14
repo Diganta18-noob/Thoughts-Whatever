@@ -21,28 +21,15 @@ const script = `
 (function () {
   try {
     var root = document.documentElement;
-    var c = document.cookie.match(/(?:^|;\\s*)tw_theme=([^;]+)/);
-    var theme = c ? c[1] : (localStorage.getItem('${THEME_KEY}') || 'cream');
-    var validThemes = ['cream', 'dark', 'sepia', 'night'];
-    if (!theme || !validThemes.includes(theme)) {
+    var theme = localStorage.getItem('${THEME_KEY}');
+    if (theme !== 'cream' && theme !== 'sepia' && theme !== 'night') {
       theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'cream';
     }
-    if (theme === 'dark') theme = 'night';
-    root.setAttribute('data-theme', theme);
     root.dataset.theme = theme;
 
-    if (!c || c[1] !== theme) {
-      document.cookie = 'tw_theme=' + theme + '; path=/; max-age=31536000; SameSite=Lax';
-    }
-
-    var lc = document.cookie.match(/(?:^|;\\s*)tw_lang=([^;]+)/);
-    var lang = lc ? lc[1] : (localStorage.getItem('${LOCALE_KEY}') || 'en');
-    if (lang !== 'en' && lang !== 'bn') lang = 'en';
-    root.lang = lang;
-
-    if (!lc || lc[1] !== lang) {
-      document.cookie = 'tw_lang=' + lang + '; path=/; max-age=31536000; SameSite=Lax';
-    }
+    var locale = localStorage.getItem('${LOCALE_KEY}');
+    if (locale !== 'en' && locale !== 'bn') locale = 'en';
+    root.lang = locale;
 
     var raw = localStorage.getItem('${READING_KEY}');
     if (raw) {
@@ -62,4 +49,3 @@ const script = `
 export function ThemeScript() {
   return <script dangerouslySetInnerHTML={{ __html: script }} />;
 }
-

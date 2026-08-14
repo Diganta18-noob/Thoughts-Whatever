@@ -1,9 +1,8 @@
 "use client";
 
-import { motion, useInView, useAnimation, useReducedMotion } from "framer-motion";
-import { useEffect, useRef, type ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import type { ReactNode } from "react";
 import { duration, distance, ease, stagger, viewport } from "./motion-tokens";
-import { debug } from "@/lib/debug";
 
 type RevealProps = {
   children: ReactNode;
@@ -23,61 +22,18 @@ export function Reveal({
   as = "div",
 }: RevealProps) {
   const reduced = useReducedMotion();
-  const ref = useRef<HTMLElement>(null);
-  const controls = useAnimation();
-  const isInView = useInView(ref, { once: true, margin: viewport.margin });
-  const Tag = (motion as any)[as] || motion.div;
-
-  useEffect(() => {
-    if (reduced) return;
-    if (isInView) {
-      controls.start({
-        opacity: 1,
-        y: 0,
-        transition: { duration: duration.slow, ease: ease.entrance, delay },
-      });
-    }
-  }, [isInView, controls, reduced, delay]);
-
-  // Safety net: if element is in viewport on mount but Framer
-  // missed the initial observation, force-reveal after 300ms
-  useEffect(() => {
-    if (reduced) return;
-    const el = ref.current;
-    if (!el) return;
-
-    const timer = setTimeout(() => {
-      const rect = el.getBoundingClientRect();
-      const isVisible =
-        rect.top < window.innerHeight &&
-        rect.bottom > 0 &&
-        rect.left < window.innerWidth &&
-        rect.right > 0;
-
-      if (isVisible) {
-        debug.log("REVEAL", "Missed IntersectionObserver — forcing reveal", {
-          element: el.getAttribute("data-reveal-id") ?? el.tagName.toLowerCase(),
-        });
-        controls.start({
-          opacity: 1,
-          y: 0,
-          transition: { duration: duration.base, ease: ease.entrance },
-        });
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [controls, reduced]);
+  const Tag = motion[as];
 
   if (reduced) return <Tag className={className}>{children}</Tag>;
 
   return (
     <Tag
-      ref={ref}
       data-reveal
       className={className}
       initial={{ opacity: 0, y: y === "lg" ? distance.riseLarge : distance.rise }}
-      animate={controls}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={viewport}
+      transition={{ duration: duration.slow, ease: ease.entrance, delay }}
     >
       {children}
     </Tag>

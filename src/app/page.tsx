@@ -23,7 +23,7 @@ import {
 } from "@/lib/pieces";
 import { extractPullQuotes } from "@/lib/markdown";
 import { JsonLd, websiteJsonLd, seriesJsonLd } from "@/lib/seo";
-import { debug } from "@/lib/debug";
+import { withTimeout } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -34,30 +34,16 @@ const DEFAULT_FACETS = {
   years: [] as number[],
 };
 
-async function getHomepageDataWithTimeout() {
-  const TIMEOUT_MS = 8000; // 8 seconds max
-
-  const dataPromise = Promise.all([
-    getRecentPieces({ take: 20 }),
-    getFeaturedSeries(3),
-    getFilterFacets(),
+export default async function HomePage() {
+  const [recentRes, seriesRes, facetsRes] = await Promise.allSettled([
+    withTimeout(getRecentPieces({ take: 20 }), [], 5000),
+    withTimeout(getFeaturedSeries(3), [], 2500),
+    withTimeout(getFilterFacets(), DEFAULT_FACETS, 5000),
   ]);
 
-  const timeoutPromise = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new Error("Homepage data timeout after 8s")), TIMEOUT_MS)
-  );
-
-  return Promise.race([dataPromise, timeoutPromise]);
-}
-
-export default async function HomePage() {
-  const end = debug.time("HOME", "Promise.all data fetch");
-  const [recentPieces, series, facets] = await getHomepageDataWithTimeout();
-  end();
-  debug.log("HOME", "All homepage data resolved", {
-    series: series.length,
-    pieces: recentPieces.length,
-  });
+  const recentPieces: CardPiece[] = recentRes.status === "fulfilled" ? recentRes.value : [];
+  const series: any[] = seriesRes.status === "fulfilled" ? seriesRes.value : [];
+  const facets = facetsRes.status === "fulfilled" ? facetsRes.value : DEFAULT_FACETS;
 
   const leadSeries = series[0];
   const leadSlugs = new Set(

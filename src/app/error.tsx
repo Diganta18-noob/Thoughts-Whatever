@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useLanguageSafe } from "@/components/providers/language-provider";
 import { cn } from "@/lib/utils";
@@ -13,18 +12,12 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const router = useRouter();
   const { t, locale, isBn } = useLanguageSafe();
   const face = isBn ? "font-bengali" : "font-serif";
 
   useEffect(() => {
     console.error(error);
   }, [error]);
-
-  const handleRetry = () => {
-    router.refresh();
-    reset();
-  };
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center px-4 py-20 sm:px-6">
@@ -47,7 +40,7 @@ export default function Error({
         <div className="mt-8 flex flex-wrap justify-center gap-2">
           <button
             type="button"
-            onClick={handleRetry}
+            onClick={reset}
             className={cn(
               "rounded-sm bg-accent px-4 py-2 text-[0.9375rem] text-surface transition hover:opacity-90",
               face,

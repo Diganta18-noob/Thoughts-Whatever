@@ -63,10 +63,8 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
   const setTheme = useCallback((next: Theme) => {
     setThemeState(next);
     document.documentElement.dataset.theme = next;
-    document.documentElement.setAttribute("data-theme", next);
     try {
       localStorage.setItem(THEME_KEY, next);
-      document.cookie = `tw_theme=${next}; path=/; max-age=31536000; SameSite=Lax`;
     } catch {
       /* ignore */
     }

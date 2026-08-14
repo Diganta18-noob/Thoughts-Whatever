@@ -77,7 +77,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.lang = next;
     try {
       localStorage.setItem(LOCALE_KEY, next);
-      document.cookie = `tw_lang=${next}; path=/; max-age=31536000; SameSite=Lax`;
     } catch {
       /* storage disabled — the choice just won't outlive the tab */
     }
@@ -93,7 +92,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       document.documentElement.lang = next;
       try {
         localStorage.setItem(LOCALE_KEY, next);
-        document.cookie = `tw_lang=${next}; path=/; max-age=31536000; SameSite=Lax`;
       } catch {
         /* ignore */
       }

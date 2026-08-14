@@ -416,28 +416,3 @@ html.lenis body {
   white-space: nowrap;
   border-width: 0;
 }
-
-/* ══════════════════════════════════════════════════════════════
-   Framer Motion safety net
-   Framer serialises initial={{ opacity:0 }} into SSR HTML.
-   If hydration is delayed or Framer misses the IntersectionObserver
-   trigger, content stays invisible. This keyframe fires after a
-   200ms delay and forces all reveal elements to opacity:1 as a
-   last-resort fallback. Framer's own animation (which runs at 0ms
-   delay on success) overrides this immediately when working correctly.
-   On failure, this rescue animation kicks in after 200ms.
-   ══════════════════════════════════════════════════════════════ */
-
-@keyframes reveal-rescue {
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-[data-reveal] {
-  /* Start invisible — Framer takes over on success */
-  /* On failure: CSS rescues after 200ms */
-  animation: reveal-rescue 0ms 200ms forwards;
-}
-
