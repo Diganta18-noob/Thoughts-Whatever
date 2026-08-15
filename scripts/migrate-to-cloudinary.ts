@@ -22,7 +22,12 @@ cloudinary.config({
   api_secret: apiSecret,
 });
 
-async function uploadToCloudinary(input: string, publicId: string): Promise<string | null> {
+const DRY_RUN = process.argv.includes("--dry-run");
+if (DRY_RUN) console.log("🧪 DRY RUN — no database writes\n");
+
+type Uploaded = { url: string; width: number; height: number };
+
+async function uploadToCloudinary(input: string, publicId: string): Promise<Uploaded | null> {
   try {
     console.log(`  📤 Uploading to Cloudinary (${publicId})...`);
     const result = await cloudinary.uploader.upload(input, {
@@ -35,10 +40,24 @@ async function uploadToCloudinary(input: string, publicId: string): Promise<stri
         { fetch_format: "auto" },
       ],
     });
-    return result.secure_url;
+    return { url: result.secure_url, width: result.width, height: result.height };
   } catch (err: any) {
     console.error(`  ❌ Failed uploading ${publicId}:`, err?.message || err);
     return null;
+  }
+}
+
+/** Never overwrite the only copy of an image with a URL that does not resolve. */
+async function verify(url: string): Promise<boolean> {
+  try {
+    const res = await fetch(url, { method: "GET" });
+    const type = res.headers.get("content-type") ?? "";
+    const ok = res.ok && type.startsWith("image/");
+    if (!ok) console.error(`  ❌ Verification failed: ${res.status} ${type}`);
+    return ok;
+  } catch (err: any) {
+    console.error(`  ❌ Verification threw:`, err?.message || err);
+    return false;
   }
 }
 
@@ -100,14 +119,24 @@ async function run() {
       continue;
     }
 
-    const cdnUrl = await uploadToCloudinary(sourceInput, publicId);
-    if (cdnUrl) {
-      await prisma.piece.update({
-        where: { id: piece.id },
-        data: { coverImage: cdnUrl },
-      });
-      console.log(`  ✨ Updated DB with Cloudinary CDN URL: ${cdnUrl}`);
+    const uploaded = await uploadToCloudinary(sourceInput, publicId);
+    if (!uploaded) continue;
+    if (!(await verify(uploaded.url))) continue;
+
+    if (DRY_RUN) {
+      console.log(`  🧪 would set ${uploaded.url} (${uploaded.width}x${uploaded.height})`);
+      continue;
     }
+
+    await prisma.piece.update({
+      where: { id: piece.id },
+      data: {
+        coverImage: uploaded.url,
+        coverImageWidth: uploaded.width,
+        coverImageHeight: uploaded.height,
+      },
+    });
+    console.log(`  ✨ ${uploaded.url} (${uploaded.width}x${uploaded.height})`);
   }
 
   // Also check Series cover images
@@ -116,19 +145,35 @@ async function run() {
     if (s.coverImage && s.coverImage.startsWith("data:")) {
       console.log(`\n📌 Processing Series: ${s.slug}`);
       const publicId = `series_${s.slug.replace(/[^a-zA-Z0-9_-]/g, "_")}`;
-      const cdnUrl = await uploadToCloudinary(s.coverImage, publicId);
-      if (cdnUrl) {
-        await prisma.series.update({
-          where: { id: s.id },
-          data: { coverImage: cdnUrl },
-        });
-        console.log(`  ✨ Updated Series DB with Cloudinary CDN URL: ${cdnUrl}`);
+      const uploaded = await uploadToCloudinary(s.coverImage, publicId);
+      if (!uploaded) continue;
+      if (!(await verify(uploaded.url))) continue;
+
+      if (DRY_RUN) {
+        console.log(`  🧪 would set ${uploaded.url} (${uploaded.width}x${uploaded.height})`);
+        continue;
       }
+
+      await prisma.series.update({
+        where: { id: s.id },
+        data: {
+          coverImage: uploaded.url,
+          coverImageWidth: uploaded.width,
+          coverImageHeight: uploaded.height,
+        },
+      });
+      console.log(`  ✨ ${uploaded.url} (${uploaded.width}x${uploaded.height})`);
     }
   }
 
   console.log("\n🎉 Cloudinary Image Migration Complete!");
-  process.exit(0);
 }
 
-run();
+run()
+  .catch((err) => {
+    console.error("Migration failed:", err);
+    process.exitCode = 1;
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

@@ -12,6 +12,8 @@
     "test:coverage": "jest --coverage",
     "test:transliteration": "jest transliterate.test.ts",
     "postinstall": "prisma generate",
+    "migrate:covers": "tsx scripts/migrate-to-cloudinary.ts",
+    "backfill:dimensions": "tsx scripts/backfill-image-dimensions.ts",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
