@@ -1,42 +1,31 @@
 import { prisma } from "../src/lib/prisma";
-import https from "https";
-import http from "http";
+import sharp from "sharp";
 
 /**
  * One-time script to backfill coverImageWidth and coverImageHeight for existing database pieces.
  */
-async function probeImageSize(url: string): Promise<{ width: number; height: number } | null> {
-  return new Promise((resolve) => {
-    const client = url.startsWith("https") ? https : http;
-    const req = client.get(url, (res) => {
-      if (res.statusCode !== 200) {
-        resolve(null);
-        return;
-      }
-      const chunks: Buffer[] = [];
-      res.on("data", (chunk) => chunks.push(chunk));
-      res.on("end", () => {
-        try {
-          const buffer = Buffer.concat(chunks);
-          // Try probing image size from buffer header
-          const sizeOf = require("image-size");
-          const dimensions = sizeOf(buffer);
-          if (dimensions.width && dimensions.height) {
-            resolve({ width: dimensions.width, height: dimensions.height });
-          } else {
-            resolve(null);
-          }
-        } catch {
-          resolve(null);
-        }
-      });
-    });
-    req.on("error", () => resolve(null));
-    req.setTimeout(5000, () => {
-      req.destroy();
-      resolve(null);
-    });
-  });
+
+/** Handles both a remote URL and a legacy base64 data URI. */
+async function probeImageSize(src: string): Promise<{ width: number; height: number } | null> {
+  try {
+    let buffer: Buffer;
+
+    if (src.startsWith("data:")) {
+      const base64 = src.slice(src.indexOf(",") + 1);
+      buffer = Buffer.from(base64, "base64");
+    } else if (/^https?:\/\//i.test(src)) {
+      const res = await fetch(src);
+      if (!res.ok) return null;
+      buffer = Buffer.from(await res.arrayBuffer());
+    } else {
+      return null;
+    }
+
+    const { width, height } = await sharp(buffer).metadata();
+    return width && height ? { width, height } : null;
+  } catch {
+    return null;
+  }
 }
 
 async function main() {
@@ -59,7 +48,8 @@ async function main() {
   for (const piece of pieces) {
     if (!piece.coverImage) continue;
 
-    console.log(`Probing image for piece "${piece.slug}": ${piece.coverImage}`);
+    // Truncated: a legacy data-URI cover is up to 3 MB of base64 on one line.
+    console.log(`Probing image for piece "${piece.slug}": ${piece.coverImage.slice(0, 60)}…`);
     const dims = await probeImageSize(piece.coverImage);
 
     if (dims) {
