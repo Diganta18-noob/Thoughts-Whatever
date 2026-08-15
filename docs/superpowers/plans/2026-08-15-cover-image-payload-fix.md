@@ -206,7 +206,7 @@ Expected: PASS, 10 tests.
 
 - [ ] **Step 5: Rewrite the route over the resolver**
 
-Replace the body of `src/app/api/cover/[owner]/[slug]/route.ts` with:
+Replace the body of `src/app/api/cover/[owner]/[slug]/route.ts` with the code below. Note that every response sets **both** `Cache-Control` and `CDN-Cache-Control`: Step 6 removes this route from the `next.config.js` cache rule, so the route is the only thing setting them, and a 404 must not inherit the year-long value.
 
 ```ts
 import { prisma } from "@/lib/prisma";
@@ -214,7 +214,10 @@ import { resolveCover } from "@/lib/cover-resolver";
 
 const MISS = {
   status: 404,
-  headers: { "Cache-Control": "public, max-age=60" },
+  headers: {
+    "Cache-Control": "public, max-age=60",
+    "CDN-Cache-Control": "public, max-age=60",
+  },
 } as const;
 
 const IMMUTABLE = "public, max-age=31536000, s-maxage=31536000, immutable";
@@ -262,7 +265,11 @@ export async function GET(
   if (resolved.kind === "remote") {
     return new Response(null, {
       status: 307,
-      headers: { Location: resolved.url, "Cache-Control": IMMUTABLE },
+      headers: {
+        Location: resolved.url,
+        "Cache-Control": IMMUTABLE,
+        "CDN-Cache-Control": IMMUTABLE,
+      },
     });
   }
 
@@ -271,48 +278,80 @@ export async function GET(
       "Content-Type": resolved.mime,
       "Content-Length": String(resolved.bytes.byteLength),
       "Cache-Control": IMMUTABLE,
+      "CDN-Cache-Control": IMMUTABLE,
       "X-Content-Type-Options": "nosniff",
     },
   });
 }
 ```
 
-- [ ] **Step 6: Give the cover route sole ownership of its cache headers**
+- [ ] **Step 6: Take the cover route out of the shared cache rule, but not the security rule**
 
-In `next.config.js`, the catch-all `source: "/:path*"` rule sets `CDN-Cache-Control: public, max-age=300, s-maxage=300, ...`, which applies to `/api/cover/*` too and caps CDN caching at 5 minutes.
+In `next.config.js`, one catch-all `source: "/:path*"` rule currently sets both the security headers and `CDN-Cache-Control: public, max-age=300, s-maxage=300, ...`. That cache value applies to `/api/cover/*` too and caps CDN caching of covers at 5 minutes.
 
 The obvious fix — adding a `CDN-Cache-Control: immutable` entry to the existing `/api/cover/:path*` block — is **wrong**, and this was verified empirically: Next.js *appends* config headers to a Route Handler's own response headers rather than replacing them. A 404 from this route sets `Cache-Control: public, max-age=60` itself, so it would ship two conflicting `Cache-Control` lines and, worse, become CDN-cacheable for a year. A cover added later would sit behind a cached 404.
 
-Config headers cannot vary by status code, so exactly one layer must own them: the route. Two changes.
+Config headers cannot vary by status code, so the route must own its cache headers alone (Step 5 already does this). But excluding `/api/cover` from the whole catch-all would also strip HSTS, `X-Frame-Options`, `Referrer-Policy` and `Permissions-Policy` from cover responses — a silent security regression, since that path has those headers today.
 
-First, exclude the cover route from the catch-all and **delete the `/api/cover/:path*` block entirely**. The catch-all's `source` becomes:
+So split the one rule into two: a security rule that still matches everything, and a cache rule that skips the cover route. Delete the `/api/cover/:path*` block entirely — including its pre-existing `Cache-Control` entry — and replace the single catch-all with:
 
 ```js
+      {
+        // Everything, cover route included.
+        source: "/:path*",
+        headers: [
+          {
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
+          },
+          {
+            key: "Link",
+            value: "<https://res.cloudinary.com>; rel=preconnect; crossorigin",
+          },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "origin-when-cross-origin",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+        ],
+      },
+      {
+        // Cache directives only, and never for the cover route: that route
+        // varies its own Cache-Control by status code, and config headers
+        // append rather than replace, so a 404 would ship two conflicting
+        // values and become CDN-cacheable for a year.
         source: "/:path((?!api/cover).*)",
+        headers: [
+          {
+            key: "CDN-Cache-Control",
+            value: "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+          },
+        ],
+      },
 ```
 
-Leave every header inside the catch-all untouched — HSTS, `X-Frame-Options`, `Referrer-Policy` and the rest must still apply to every other route.
+The two rules set disjoint header keys, so both matching a normal route produces no duplicates.
 
-Second, in `src/app/api/cover/[owner]/[slug]/route.ts`, set both cache headers per response so a miss is cached briefly and a hit is cached forever:
-
-```ts
-const MISS = {
-  status: 404,
-  headers: {
-    "Cache-Control": "public, max-age=60",
-    "CDN-Cache-Control": "public, max-age=60",
-  },
-} as const;
-
-const IMMUTABLE = "public, max-age=31536000, s-maxage=31536000, immutable";
-```
-
-and give both the 307 and the 200 response `"Cache-Control": IMMUTABLE` **and** `"CDN-Cache-Control": IMMUTABLE`.
-
-Verify all three cases with `curl -sI`, counting the header lines rather than eyeballing them:
+Verify with `curl -sI` against the dev server, counting header lines rather than eyeballing them:
 - a real cover → exactly one `Cache-Control`, containing `immutable`
 - a missing cover → exactly one `Cache-Control`, containing `max-age=60`, and **not** `immutable`
-- `/` → still carries `Strict-Transport-Security` and `X-Frame-Options` from the catch-all
+- a real cover → still carries `Strict-Transport-Security` and `X-Frame-Options`, and has **no** `CDN-Cache-Control: max-age=300`
+- `/` → exactly one `CDN-Cache-Control` (`max-age=300`) plus all the security headers
 
 That last check matters: `:path((?!api/cover).*)` must still match the root path. If it does not, report it rather than working around it.
 
