@@ -78,25 +78,28 @@ export async function POST(request: NextRequest) {
           size: result.bytes,
         });
       } catch (cloudinaryErr: unknown) {
-        const errMsg = cloudinaryErr instanceof Error ? cloudinaryErr.message : String(cloudinaryErr);
-        console.warn("Cloudinary upload failed, using Data URI fallback:", errMsg);
+        const errMsg =
+          cloudinaryErr instanceof Error ? cloudinaryErr.message : String(cloudinaryErr);
+        console.error("Cloudinary upload failed:", errMsg);
 
-        // Fallback: return dataUri when Cloudinary fails or credentials invalid
-        return NextResponse.json({
-          ok: true,
-          url: dataUri,
-          size: file.size,
-          warning: "Cloudinary CDN upload unavailable; image stored locally as Data URI",
-        });
+        return NextResponse.json(
+          { ok: false, error: `Cloudinary upload failed: ${errMsg}` },
+          { status: 502 },
+        );
       }
     }
 
-    // Fallback: return dataUri when Cloudinary credentials are not set
-    return NextResponse.json({
-      ok: true,
-      url: dataUri,
-      size: file.size,
-    });
+    // No silent data-URI fallback: a data URI written into `coverImage` inlines
+    // the whole image into every HTML and RSC payload and cannot be optimized
+    // or cached. Failing here is better than poisoning the database.
+    return NextResponse.json(
+      {
+        ok: false,
+        error:
+          "Cloudinary is not configured. Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET before uploading images.",
+      },
+      { status: 503 },
+    );
   } catch (error: unknown) {
     console.error("Upload route error:", error);
     const message = error instanceof Error ? error.message : "Upload failed";
