@@ -500,10 +500,15 @@ With `npm run dev` running:
 
 ```bash
 curl -s "http://localhost:3000/archive" | wc -c
-curl -s "http://localhost:3000/archive" | grep -c "data:image" || true
+curl -s "http://localhost:3000/archive" | grep -c 'data:image/[a-z+]*;base64,' || true
 ```
 
-Expected: byte count falls from ~3,028,381 to under 200,000, and the `data:image` count is `0`.
+Expected: byte count falls from ~3,028,381 to under 200,000, and the base64 count is `0`.
+
+Grep for `data:image/…;base64,` and not the bare string `data:image`: the site
+uses a decorative inline SVG texture (`url("data:image/svg+xml,%3Csvg…")`), so
+a bare `grep -c "data:image"` returns `1` on a fully fixed page and reads as a
+failure.
 
 - [ ] **Step 7: Commit**
 
@@ -534,8 +539,19 @@ Cards never need the stored value — they need a URL, and `coverSrc` can build 
 Create `src/lib/__tests__/card-select.test.ts`:
 
 ```ts
-import { describe, it, expect } from "@jest/globals";
-import { cardSelect } from "@/lib/pieces";
+import { describe, it, expect, jest } from "@jest/globals";
+
+// `pieces.ts` wraps its queries in React's `cache()`, which only exists in the
+// react canary Next.js bundles for the App Router — the installed react 18.3.1
+// does not export it, so importing the module under jest throws without this.
+// The same shim is needed by any standalone `tsx` script that imports pieces.ts.
+jest.mock("react", () => ({
+  ...(jest.requireActual("react") as object),
+  cache: <T,>(fn: T) => fn,
+}));
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { cardSelect } = require("@/lib/pieces") as typeof import("@/lib/pieces");
 
 describe("cardSelect", () => {
   it("never selects the coverImage blob column", () => {
@@ -1227,10 +1243,14 @@ Leave every other `<Link>` in the codebase alone. Article and nav links are wort
 With `npm run dev`:
 
 ```bash
-curl -s "http://localhost:3000/" | grep -o 'href="/writing/' | wc -l
+curl -s "http://localhost:3000/" | grep -oE 'href="/(writing|documentary|blog)/[^"]+"' | wc -l
 ```
 
 Expected: greater than `0` (production currently returns `0`). Check the dev server log shows no `[home]` errors.
+
+Match all three kind paths, not just `/writing/`: articles route by kind via
+`KIND_META[...].path`, so a working home page can legitimately contain zero
+`/writing/` links while showing a dozen `/documentary/` ones.
 
 - [ ] **Step 4: Verify the archive stopped fanning out**
 
@@ -1276,7 +1296,7 @@ Push the branch and let Vercel deploy, or `npx vercel --prod`. Wait for the depl
 for p in "/" "/documentary" "/archive" "/writing" "/series"; do
   printf "%-14s " "$p"
   curl -s --compressed "https://thoughts-whatever.vercel.app$p" -o /tmp/pg.html -w "wire=%{size_download} time=%{time_total} "
-  printf "raw=%s b64=%s\n" "$(wc -c < /tmp/pg.html)" "$(grep -c 'data:image' /tmp/pg.html || true)"
+  printf "raw=%s b64=%s\n" "$(wc -c < /tmp/pg.html)" "$(grep -c 'data:image/[a-z+]*;base64,' /tmp/pg.html || true)"
 done
 ```
 
@@ -1284,13 +1304,13 @@ Success criteria, all of which must hold:
 - `/documentary` wire size under **150,000** bytes (was 4,175,753).
 - `/archive` wire size under **150,000** bytes (was 1,984,542).
 - Every route reports `b64=0`.
-- `/` returns a non-zero count for `grep -o 'href="/writing/'`.
+- `/` returns a non-zero count for `grep -oE 'href="/(writing|documentary|blog)/[^"]+"'`.
 
 - [ ] **Step 4: Confirm the article RSC payload shrank**
 
 ```bash
 curl -s -H "RSC: 1" --compressed "https://thoughts-whatever.vercel.app/writing/crime-and-punishment-3" -o /tmp/a.bin -w "rsc wire=%{size_download} time=%{time_total}\n"
-grep -c "data:image" /tmp/a.bin || true
+grep -c 'data:image/[a-z+]*;base64,' /tmp/a.bin || true
 ```
 
 Expected: wire size under **60,000** bytes (was 908,919) and `0` data URIs.
