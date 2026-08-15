@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { PUBLISHED } from "@/lib/pieces";
 import { KIND_META } from "@/lib/nav";
+import { absoluteCoverUrl, coverMime } from "@/lib/images";
 import { absoluteUrl, siteConfig } from "@/lib/utils";
 
 /**
@@ -87,7 +88,9 @@ export async function GET() {
         `      <pubDate>${rfc822(piece.publishedAt ?? piece.updatedAt)}</pubDate>`,
         `      <description>${esc(description)}</description>`,
         piece.coverImage
-          ? `      <enclosure url="${esc(absoluteUrl(piece.coverImage))}" type="image/jpeg" />`
+          ? `      <enclosure url="${esc(
+              absoluteCoverUrl("piece", piece.slug, piece.coverImage) ?? "",
+            )}" type="${esc(coverMime(piece.coverImage))}" />`
           : null,
         categories || null,
         "    </item>",
