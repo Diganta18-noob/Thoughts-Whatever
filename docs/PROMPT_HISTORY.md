@@ -128,14 +128,110 @@ it is showing Invalid ID format. . fix it
 
 ---
 
-## 15. Documentation Directive
+## 15. Documentation Directive (Initial)
 ```text
 now store the all prompt i have made now
 ```
 
 ---
 
-## Summary of Solutions Executed
+## 16. Master Prompt 7 — Build-Time Pool Exhaustion & Prerendering Failure (`EMAXCONNSESSION`)
+```text
+02:28:02.181 Error occurred prerendering page "/authors".
+02:28:02.183 Error in connector: Error querying the database: FATAL: (EMAXCONNSESSION) max clients reached in session mode - max clients are limited to pool_size: 15
+> Export encountered errors on following paths:
+/admin/(dashboard)/analytics/page: /admin/analytics
+/authors/page: /authors
+Error: Command "npm run build" exited with 1
+
+the previous eror log
+```
+
+---
+
+## 17. Master Prompt 8 — Admin UI Feedback Standardization
+```text
+the messgae should be in toast message and it should be in english
+```
+
+---
+
+## 18. Master Prompt 9 — Build Failure P2024: Connection Pool Exhaustion on Prerender Routes
+```text
+13:25:05.865 code: 'P2024', meta: { modelName: 'Series', connection_limit: 1, timeout: 10 }
+13:25:05.868 Error occurred prerendering page "/series/crime-and-punishment"
+13:25:05.868 Timed out fetching a new connection from the connection pool. (Current connection pool timeout: 10, connection limit: 1)
+at async /vercel/path0/.next/server/app/api/search-index/route.js:1:15445
+> Export encountered errors on following paths:
+/series/[slug]/page: /series/crime-and-punishment
+Error: Command "npm run build" exited with 1
+```
+
+---
+
+## 19. Environment Configuration Guidance
+```text
+tell me what update i need to make in vercel env for database url
+```
+```text
+give me
+```
+```text
+update this on this project local env
+```
+
+---
+
+## 20. Master Prompt 10 — Visual Reference Baseline Archive
+```text
+Implementation Plan - Complete Visual Reference Screenshot Archive
+Capture an automated, comprehensive baseline archive of every public, dynamic, admin, theme, and viewport state across the entire website before applying further refactors.
+```
+
+---
+
+## 21. Master Prompt 11 — Stuck Skeleton & Invisible Reveal Elements Analysis
+```text
+why this things is also
+```
+```text
+option 1
+```
+```text
+Master Plan - Thoughts Whatever: Stuck Skeleton Fix
+Root Cause Analysis & Fix Plan for Framer Motion SSR initial opacity:0 serialization vs React 18 hydration bailout on mobile / slow connections.
+```
+
+---
+
+## 22. Rollback Directive — Revert Hydration Safety Net to Restore Sub-Second Refresh
+```text
+push it
+```
+```text
+go back to previous commit , because after refersh it takes sometime to load, it should be referssj within a sec
+```
+
+---
+
+## 23. Master Prompt 12 — API Architecture & Performance Evaluation
+```text
+see how many api call is happening, is it healty metthod , is it a good way to make a dedicated single api within single api the all api call willbe there for better preformance .
+```
+
+---
+
+## 24. Repository Synchronization & Push Directive
+```text
+pull the code
+```
+```text
+push the last day all prompt
+```
+
+---
+
+## Complete Summary of Solutions Executed
 
 | # | Prompt Topic | Root Cause | Solution Applied |
 |---|---|---|---|
@@ -145,3 +241,10 @@ now store the all prompt i have made now
 | 4 | Page Refresh Loading Hang | Sequential `await` queries & cold serverless execution | Converted to parallel `Promise.allSettled` with 2.5s timeouts and React `<Suspense>` streaming |
 | 5 | Archiving Status Not Working | Missing `PUBLISHED` status filter in `getRecentPieces` | Enforced `{ status: "PUBLISHED" }` on public queries so `ARCHIVED` pieces are automatically hidden from public site |
 | 6 | "Invalid ID format." Error | `isValidCuid` only accepted legacy CUIDs | Updated `isValidCuid` regex in `admin-api.ts` to accept 24-character MongoDB ObjectIds |
+| 7 | Supabase PostgreSQL Migration | MongoDB ObjectId indexing bottlenecks and complex relations | Migrated database to Supabase PostgreSQL with normalized relational foreign keys |
+| 8 | Auto Database Snapshots | Missing automated disaster recovery on production mutations | Implemented `backupDatabase()` snapshot engine triggering timestamped JSON exports on mutations |
+| 9 | `EMAXCONNSESSION` on Build | Build workers opening unpooled database connections simultaneously | Configured Supabase Session Pooler with `pgbouncer=true`, connection limits, and defensive fallbacks |
+| 10 | P2024 Build Pool Starvation | `/api/search-index` fetching full markdown during static page generation | Set `runtime = "nodejs"` on dynamic search index and added `build-params.ts` shared slug deduplication cache |
+| 11 | Visual Baseline Archive | Lack of permanent visual regression reference | Built automated Playwright snapshot runner generating ~185 screenshots across all routes and viewports in `SCREENSHOT_INDEX.md` |
+| 12 | Hydration Stuck Skeleton | Framer Motion SSR HTML opacity:0 serialization race | Diagnosed hydration interaction; rolled back heavy client wrapper to preserve sub-second native ISR load speed |
+| 13 | API Architecture Audit | Question regarding multi-endpoint vs consolidated single-API performance | Audited Next.js App Router Server Component direct DB execution vs client REST calls, verifying current architecture is optimal |
