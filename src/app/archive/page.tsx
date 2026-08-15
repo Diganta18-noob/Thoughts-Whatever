@@ -295,6 +295,7 @@ function Chip({
     <Link
       href={href}
       scroll={false}
+      prefetch={false}
       aria-pressed={active}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-sm border px-2.5 py-1 text-[0.8125rem] transition",

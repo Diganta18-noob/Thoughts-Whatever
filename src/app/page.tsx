@@ -45,6 +45,21 @@ export default async function HomePage() {
   const series: any[] = seriesRes.status === "fulfilled" ? seriesRes.value : [];
   const facets = facetsRes.status === "fulfilled" ? facetsRes.value : DEFAULT_FACETS;
 
+  // A silent empty fallback once hid a 9 MB query for weeks. If a section
+  // degrades, say so in the server log.
+  for (const [name, res] of [
+    ["getRecentPieces", recentRes],
+    ["getFeaturedSeries", seriesRes],
+    ["getFilterFacets", facetsRes],
+  ] as const) {
+    if (res.status === "rejected") {
+      console.error(`[home] ${name} rejected:`, res.reason);
+    }
+  }
+  if (recentPieces.length === 0) {
+    console.error("[home] rendering with zero pieces — query timed out or returned empty");
+  }
+
   const leadSeries = series[0];
   const leadSlugs = new Set(
     leadSeries?.pieces ? (leadSeries.pieces as Array<{ slug: string }>).map((p) => p.slug) : []
