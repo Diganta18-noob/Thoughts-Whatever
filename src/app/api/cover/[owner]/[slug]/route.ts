@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { normalizeMime } from "@/lib/images";
-
-const DATA_URI = /^data:([a-z0-9.+-]+\/[a-z0-9.+-]+);base64,(.*)$/is;
+import { resolveCover } from "@/lib/cover-resolver";
 
 const MISS = {
   status: 404,
   headers: { "Cache-Control": "public, max-age=60" },
 } as const;
+
+const IMMUTABLE = "public, max-age=31536000, s-maxage=31536000, immutable";
 
 function decodeSlug(raw: string) {
   try {
@@ -44,23 +44,22 @@ export async function GET(
   { params }: { params: { owner: string; slug: string } },
 ) {
   const stored = await findCover(params.owner, params.slug);
-  if (!stored) return new Response(null, MISS);
+  const resolved = resolveCover(stored);
 
-  const match = DATA_URI.exec(stored.trim());
-  if (!match) return new Response(null, MISS);
+  if (resolved.kind === "missing") return new Response(null, MISS);
 
-  const [, mime, base64] = match;
-  const type = normalizeMime(mime!);
-  if (!type.startsWith("image/")) return new Response(null, MISS);
+  if (resolved.kind === "remote") {
+    return new Response(null, {
+      status: 307,
+      headers: { Location: resolved.url, "Cache-Control": IMMUTABLE },
+    });
+  }
 
-  const bytes = Buffer.from(base64!, "base64");
-  if (bytes.byteLength === 0) return new Response(null, MISS);
-
-  return new Response(bytes, {
+  return new Response(resolved.bytes, {
     headers: {
-      "Content-Type": type,
-      "Content-Length": String(bytes.byteLength),
-      "Cache-Control": "public, max-age=31536000, immutable",
+      "Content-Type": resolved.mime,
+      "Content-Length": String(resolved.bytes.byteLength),
+      "Cache-Control": IMMUTABLE,
       "X-Content-Type-Options": "nosniff",
     },
   });
