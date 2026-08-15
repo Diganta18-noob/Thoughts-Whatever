@@ -12,15 +12,24 @@ function fingerprint(value: string): string {
   return (hash >>> 0).toString(36);
 }
 
+/**
+ * Resolve a cover to something safe to put in the render tree.
+ *
+ * Legacy rows store the whole image as a base64 data URI. Returning that
+ * verbatim inlines hundreds of KB into every HTML and RSC payload, and
+ * `next/image` cannot optimize a `data:` URI. So any data URI is swapped for
+ * the `/api/cover` path, which is CDN-cacheable, browser-cacheable, and
+ * optimizable. Real URLs pass through untouched.
+ */
 export function coverSrc(
   owner: CoverOwner,
   slug: string,
   coverImage?: string | null,
-): string | null {
+): string {
+  const proxied = `/api/cover/${owner}/${encodeURIComponent(slug)}`;
   const value = coverImage?.trim();
-  if (!value) {
-    return `/api/cover/${owner}/${encodeURIComponent(slug)}`;
-  }
+  if (!value) return proxied;
+  if (value.startsWith("data:")) return proxied;
   return value;
 }
 
