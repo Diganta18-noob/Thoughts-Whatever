@@ -7,20 +7,30 @@ export const PUBLISHED: Prisma.PieceWhereInput = {
   status: "PUBLISHED",
 };
 
-function withCover<T extends { slug: string; coverImage: string | null }>(
+function withCover<T extends { slug: string; coverImage?: string | null }>(
   row: T,
   owner: "piece" | "series" = "piece",
-): T {
+): T & { coverImage: string } {
   return { ...row, coverImage: coverSrc(owner, row.slug, row.coverImage) };
 }
 
+/**
+ * `coverImage` is deliberately NOT selected.
+ *
+ * Legacy rows hold the entire image as a base64 data URI (up to 3.1 MB), so
+ * selecting it turned a 4 KB list query into a 2.8 MB transfer and blew the
+ * home page's query timeouts. `withCover` reconstructs a URL from the slug
+ * instead. The two dimension columns are plain ints and stay, so cards can
+ * reserve space and avoid layout shift.
+ */
 export const cardSelect = {
   slug: true,
   kind: true,
   titleBn: true,
   dekBn: true,
   excerptBn: true,
-  coverImage: true,
+  coverImageWidth: true,
+  coverImageHeight: true,
   readingMinutes: true,
   featured: true,
   publishedAt: true,
@@ -29,7 +39,20 @@ export const cardSelect = {
   authors: { select: { slug: true, nameBn: true } },
 } satisfies Prisma.PieceSelect;
 
-export type CardPiece = Prisma.PieceGetPayload<{ select: typeof cardSelect }>;
+export type CardPiece = Prisma.PieceGetPayload<{ select: typeof cardSelect }> & {
+  coverImage: string;
+};
+
+/** Same reasoning as `cardSelect`: never select `Series.coverImage`. */
+const seriesSelect = {
+  id: true,
+  slug: true,
+  titleBn: true,
+  titleEn: true,
+  descBn: true,
+  coverImageWidth: true,
+  coverImageHeight: true,
+} satisfies Prisma.SeriesSelect;
 
 const byNewest: Prisma.PieceOrderByWithRelationInput = { createdAt: "desc" };
 
@@ -221,10 +244,10 @@ export const getAuthorBySlug = cache(async (slug: string) => {
 function withSeriesCovers<
   T extends {
     slug: string;
-    coverImage: string | null;
-    pieces: { slug: string; coverImage: string | null }[];
+    coverImage?: string | null;
+    pieces: { slug: string; coverImage?: string | null }[];
   },
->(series: T): T {
+>(series: T) {
   return {
     ...withCover(series, "series"),
     pieces: series.pieces.map((row) => withCover(row)),
@@ -233,7 +256,8 @@ function withSeriesCovers<
 
 export const getSeriesList = cache(async () => {
   const rows = await prisma.series.findMany({
-    include: {
+    select: {
+      ...seriesSelect,
       pieces: {
         where: PUBLISHED,
         select: cardSelect,
@@ -247,7 +271,8 @@ export const getSeriesList = cache(async () => {
 
 export const getFeaturedSeries = cache(async (take = 3) => {
   const rows = await prisma.series.findMany({
-    include: {
+    select: {
+      ...seriesSelect,
       pieces: {
         where: PUBLISHED,
         select: cardSelect,
@@ -274,7 +299,8 @@ export const getFeaturedSeries = cache(async (take = 3) => {
 export const getSeriesBySlug = cache(async (slug: string) => {
   const series = await prisma.series.findUnique({
     where: { slug },
-    include: {
+    select: {
+      ...seriesSelect,
       pieces: {
         where: PUBLISHED,
         select: cardSelect,
