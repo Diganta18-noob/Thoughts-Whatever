@@ -1,9 +1,16 @@
 import { prisma } from "@/lib/prisma";
 import { resolveCover } from "@/lib/cover-resolver";
 
+// This route owns its cache headers outright: `next.config.js` excludes
+// `/api/cover` from its catch-all, because config headers are appended to a
+// Route Handler's own and cannot vary by status code — which would leave a 404
+// carrying both `max-age=60` and a year-long `immutable`.
 const MISS = {
   status: 404,
-  headers: { "Cache-Control": "public, max-age=60" },
+  headers: {
+    "Cache-Control": "public, max-age=60",
+    "CDN-Cache-Control": "public, max-age=60",
+  },
 } as const;
 
 const IMMUTABLE = "public, max-age=31536000, s-maxage=31536000, immutable";
@@ -51,7 +58,11 @@ export async function GET(
   if (resolved.kind === "remote") {
     return new Response(null, {
       status: 307,
-      headers: { Location: resolved.url, "Cache-Control": IMMUTABLE },
+      headers: {
+        Location: resolved.url,
+        "Cache-Control": IMMUTABLE,
+        "CDN-Cache-Control": IMMUTABLE,
+      },
     });
   }
 
@@ -60,6 +71,7 @@ export async function GET(
       "Content-Type": resolved.mime,
       "Content-Length": String(resolved.bytes.byteLength),
       "Cache-Control": IMMUTABLE,
+      "CDN-Cache-Control": IMMUTABLE,
       "X-Content-Type-Options": "nosniff",
     },
   });

@@ -42,6 +42,10 @@ export function resolveCover(stored: string | null | undefined): CoverResolution
     return { kind: "data", mime, bytes };
   }
 
+  // A protocol-relative value would redirect off-origin to an arbitrary host,
+  // and `new URL()` cannot parse it, so the loop guard below would miss it too.
+  if (value.startsWith("//")) return { kind: "missing" };
+
   const isUrl = /^https?:\/\//i.test(value) || value.startsWith("/");
   if (!isUrl || isSelfReference(value)) return { kind: "missing" };
 

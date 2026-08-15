@@ -47,6 +47,11 @@ describe("resolveCover", () => {
   it("refuses to redirect to the cover endpoint itself (loop guard)", () => {
     expect(resolveCover("/api/cover/piece/abc").kind).toBe("missing");
     expect(resolveCover("https://example.com/api/cover/piece/abc").kind).toBe("missing");
+    expect(resolveCover("//evil.example.com/api/cover/piece/abc").kind).toBe("missing");
+  });
+
+  it("rejects protocol-relative values", () => {
+    expect(resolveCover("//evil.example.com/x.jpg").kind).toBe("missing");
   });
 
   it("rejects junk that is neither a data URI nor a URL", () => {
