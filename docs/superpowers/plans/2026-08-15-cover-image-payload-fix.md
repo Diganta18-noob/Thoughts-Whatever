@@ -120,6 +120,11 @@ describe("resolveCover", () => {
   it("refuses to redirect to the cover endpoint itself (loop guard)", () => {
     expect(resolveCover("/api/cover/piece/abc").kind).toBe("missing");
     expect(resolveCover("https://example.com/api/cover/piece/abc").kind).toBe("missing");
+    expect(resolveCover("//evil.example.com/api/cover/piece/abc").kind).toBe("missing");
+  });
+
+  it("rejects protocol-relative values", () => {
+    expect(resolveCover("//evil.example.com/x.jpg").kind).toBe("missing");
   });
 
   it("rejects junk that is neither a data URI nor a URL", () => {
@@ -141,8 +146,13 @@ Create `src/lib/cover-resolver.ts`:
 ```ts
 import { normalizeMime } from "@/lib/images";
 
+/**
+ * `bytes` is `Buffer<ArrayBuffer>` rather than a bare `Buffer`: the default
+ * `ArrayBufferLike` type parameter is not assignable to `BodyInit`, so
+ * `new Response(bytes)` in the route would not typecheck.
+ */
 export type CoverResolution =
-  | { kind: "data"; mime: string; bytes: Buffer }
+  | { kind: "data"; mime: string; bytes: Buffer<ArrayBuffer> }
   | { kind: "remote"; url: string }
   | { kind: "missing" };
 
@@ -178,6 +188,10 @@ export function resolveCover(stored: string | null | undefined): CoverResolution
     return { kind: "data", mime, bytes };
   }
 
+  // A protocol-relative value would redirect off-origin to an arbitrary host,
+  // and `new URL()` cannot parse it, so the loop guard below would miss it too.
+  if (value.startsWith("//")) return { kind: "missing" };
+
   const isUrl = /^https?:\/\//i.test(value) || value.startsWith("/");
   if (!isUrl || isSelfReference(value)) return { kind: "missing" };
 
@@ -188,7 +202,7 @@ export function resolveCover(stored: string | null | undefined): CoverResolution
 - [ ] **Step 4: Run the test to verify it passes**
 
 Run: `npx jest src/lib/__tests__/cover-resolver.test.ts`
-Expected: PASS, 9 tests.
+Expected: PASS, 10 tests.
 
 - [ ] **Step 5: Rewrite the route over the resolver**
 
@@ -263,25 +277,44 @@ export async function GET(
 }
 ```
 
-- [ ] **Step 6: Stop the catch-all header from capping CDN cache on covers**
+- [ ] **Step 6: Give the cover route sole ownership of its cache headers**
 
-In `next.config.js`, the `source: "/:path*"` rule sets `CDN-Cache-Control: public, max-age=300, s-maxage=300, ...`, which applies to `/api/cover/*` too and caps CDN caching at 5 minutes. Add an override **after** the existing `/api/cover/:path*` block's `Cache-Control` entry, so that block reads:
+In `next.config.js`, the catch-all `source: "/:path*"` rule sets `CDN-Cache-Control: public, max-age=300, s-maxage=300, ...`, which applies to `/api/cover/*` too and caps CDN caching at 5 minutes.
+
+The obvious fix — adding a `CDN-Cache-Control: immutable` entry to the existing `/api/cover/:path*` block — is **wrong**, and this was verified empirically: Next.js *appends* config headers to a Route Handler's own response headers rather than replacing them. A 404 from this route sets `Cache-Control: public, max-age=60` itself, so it would ship two conflicting `Cache-Control` lines and, worse, become CDN-cacheable for a year. A cover added later would sit behind a cached 404.
+
+Config headers cannot vary by status code, so exactly one layer must own them: the route. Two changes.
+
+First, exclude the cover route from the catch-all and **delete the `/api/cover/:path*` block entirely**. The catch-all's `source` becomes:
 
 ```js
-      {
-        source: "/api/cover/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, s-maxage=31536000, immutable",
-          },
-          {
-            key: "CDN-Cache-Control",
-            value: "public, max-age=31536000, s-maxage=31536000, immutable",
-          },
-        ],
-      },
+        source: "/:path((?!api/cover).*)",
 ```
+
+Leave every header inside the catch-all untouched — HSTS, `X-Frame-Options`, `Referrer-Policy` and the rest must still apply to every other route.
+
+Second, in `src/app/api/cover/[owner]/[slug]/route.ts`, set both cache headers per response so a miss is cached briefly and a hit is cached forever:
+
+```ts
+const MISS = {
+  status: 404,
+  headers: {
+    "Cache-Control": "public, max-age=60",
+    "CDN-Cache-Control": "public, max-age=60",
+  },
+} as const;
+
+const IMMUTABLE = "public, max-age=31536000, s-maxage=31536000, immutable";
+```
+
+and give both the 307 and the 200 response `"Cache-Control": IMMUTABLE` **and** `"CDN-Cache-Control": IMMUTABLE`.
+
+Verify all three cases with `curl -sI`, counting the header lines rather than eyeballing them:
+- a real cover → exactly one `Cache-Control`, containing `immutable`
+- a missing cover → exactly one `Cache-Control`, containing `max-age=60`, and **not** `immutable`
+- `/` → still carries `Strict-Transport-Security` and `X-Frame-Options` from the catch-all
+
+That last check matters: `:path((?!api/cover).*)` must still match the root path. If it does not, report it rather than working around it.
 
 - [ ] **Step 7: Verify the endpoint locally**
 
