@@ -33,12 +33,9 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/:path((?!api/cover).*)",
+        // Everything, cover route included.
+        source: "/:path*",
         headers: [
-          {
-            key: "CDN-Cache-Control",
-            value: "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
-          },
           {
             key: "X-DNS-Prefetch-Control",
             value: "on",
@@ -66,6 +63,19 @@ const nextConfig = {
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
+          },
+        ],
+      },
+      {
+        // Cache directives only, and never for the cover route: that route
+        // varies its own Cache-Control by status code, and config headers
+        // append rather than replace, so a 404 would ship two conflicting
+        // values and become CDN-cacheable for a year.
+        source: "/:path((?!api/cover).*)",
+        headers: [
+          {
+            key: "CDN-Cache-Control",
+            value: "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
           },
         ],
       },
