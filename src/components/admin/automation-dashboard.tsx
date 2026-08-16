@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "react-hot-toast";
 
 interface AutomationState {
@@ -9,7 +9,7 @@ interface AutomationState {
     status: string;
     memoryUsageMb: number;
     dbConnected: boolean;
-    uptimeSec: number;
+    uptimeSec?: number;
   };
   security?: {
     activeSessions: number;
@@ -28,27 +28,47 @@ interface AutomationState {
 export function AutomationDashboard() {
   const [data, setData] = useState<AutomationState | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [triggering, setTriggering] = useState(false);
+  const isFetchingRef = useRef(false);
 
-  const fetchStatus = async () => {
+  const fetchStatus = useCallback(async (isManualRetry = false) => {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
     try {
-      const res = await fetch("/api/admin/automation");
-      const json = await res.json();
-      if (json.ok) {
-        setData(json.status);
+      const res = await fetch("/api/admin/automation", {
+        headers: { Accept: "application/json" },
+        cache: "no-store",
+      });
+
+      if (!res.ok) {
+        throw new Error(`Status HTTP ${res.status}`);
       }
-    } catch {
-      toast.error("Failed to load automation status");
+
+      const json = await res.json();
+      if (json.ok && json.status) {
+        setData(json.status);
+        setError(null);
+      } else {
+        throw new Error(json.error || "Invalid response format");
+      }
+    } catch (err: any) {
+      const msg = err.message || "Failed to load automation status";
+      setError(msg);
+      if (isManualRetry) {
+        toast.error("Failed to load automation status");
+      }
     } finally {
+      isFetchingRef.current = false;
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchStatus();
-    const interval = setInterval(fetchStatus, 10000);
+    const interval = setInterval(() => fetchStatus(false), 15000);
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchStatus]);
 
   const runPipelineNow = async () => {
     setTriggering(true);
@@ -62,7 +82,7 @@ export function AutomationDashboard() {
       const json = await res.json();
       if (json.ok) {
         toast.success("Pipeline executed successfully!", { id: "pipeline" });
-        fetchStatus();
+        fetchStatus(true);
       } else {
         toast.error(`Pipeline error: ${json.error}`, { id: "pipeline" });
       }
@@ -73,14 +93,34 @@ export function AutomationDashboard() {
     }
   };
 
-  if (loading) {
-    return <div className="p-6 text-journal-inkSoft font-mono text-sm">Loading Production Automation Engine status...</div>;
+  if (loading && !data) {
+    return (
+      <div className="p-6 bg-journal-paper rounded-lg border border-journal-rule text-journal-inkSoft font-mono text-xs animate-pulse">
+        Connecting to Production Automation Hub...
+      </div>
+    );
   }
 
   const isHealthy = data?.health?.status === "HEALTHY";
 
   return (
     <div className="space-y-6">
+      {/* ── Error Banner if any ── */}
+      {error && !data && (
+        <div className="flex items-center justify-between p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg text-xs font-mono text-amber-600">
+          <span>⚠️ Automation status temporarily unavailable: {error}</span>
+          <button
+            onClick={() => {
+              setLoading(true);
+              fetchStatus(true);
+            }}
+            className="px-3 py-1 bg-amber-600 text-white rounded hover:bg-amber-700 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
       {/* ── Header Controls ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-journal-paperEdge p-5 rounded-lg border border-journal-rule">
         <div>
@@ -104,7 +144,7 @@ export function AutomationDashboard() {
       </div>
 
       {/* ── Status Grid ── */}
-      <div className="grid grid-[#0] sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div className="bg-journal-paper p-4 rounded border border-journal-rule">
           <p className="text-xs text-journal-inkFaint uppercase tracking-wider font-mono">Database & Health</p>
           <p className="text-xl font-bold text-journal-ink mt-1">
@@ -115,8 +155,10 @@ export function AutomationDashboard() {
 
         <div className="bg-journal-paper p-4 rounded border border-journal-rule">
           <p className="text-xs text-journal-inkFaint uppercase tracking-wider font-mono">Active Sessions</p>
-          <p className="text-xl font-bold text-journal-ink mt-1">{data?.security?.activeSessions || 0}</p>
-          <p className="text-xs text-journal-inkSoft font-mono mt-1">Revoked Reuses: {data?.security?.revokedTokenReuseAttempts || 0}</p>
+          <p className="text-xl font-bold text-journal-ink mt-1">{data?.security?.activeSessions ?? 0}</p>
+          <p className="text-xs text-journal-inkSoft font-mono mt-1">
+            Revoked Reuses: {data?.security?.revokedTokenReuseAttempts ?? 0}
+          </p>
         </div>
 
         <div className="bg-journal-paper p-4 rounded border border-journal-rule">
@@ -181,7 +223,7 @@ export function AutomationDashboard() {
       {/* ── Live Log Terminal ── */}
       <div className="bg-journal-ink p-4 rounded-lg border border-journal-inkSoft font-mono text-xs text-journal-paper">
         <div className="flex items-center justify-between mb-2 pb-2 border-b border-journal-inkSoft/40 text-journal-inkFaint">
-          <span>📟 Live Automation System Logs (`automation.log`)</span>
+          <span>📟 Live Automation System Logs (`automation.log` & AuditLog)</span>
           <span>Last 50 entries</span>
         </div>
         <div className="max-h-60 overflow-y-auto space-y-1 font-mono text-[11px] leading-relaxed select-text">

@@ -90,9 +90,7 @@ export async function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get(REFRESH_COOKIE_NAME)?.value;
   const legacyToken = request.cookies.get(LEGACY_COOKIE_NAME)?.value;
 
-  const tokenToVerify = accessToken || refreshToken || legacyToken;
-
-  if (!tokenToVerify) {
+  if (!accessToken && !refreshToken && !legacyToken) {
     if (isAdminApiRoute) {
       return NextResponse.json(
         { ok: false, error: "unauthorized", code: 401 },
@@ -108,7 +106,15 @@ export async function middleware(request: NextRequest) {
   }
 
   const secret = process.env.AUTH_SECRET || "";
-  const isValid = await verifyJwtHs256(tokenToVerify, secret);
+  let isValid = false;
+
+  if (accessToken && (await verifyJwtHs256(accessToken, secret))) {
+    isValid = true;
+  } else if (refreshToken && (await verifyJwtHs256(refreshToken, secret))) {
+    isValid = true;
+  } else if (legacyToken && (await verifyJwtHs256(legacyToken, secret))) {
+    isValid = true;
+  }
 
   if (!isValid) {
     if (isAdminApiRoute) {

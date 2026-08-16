@@ -12,12 +12,30 @@ import { auditPerformance, auditSecurity, generateAnalyticsReport, runHealthChec
 import { rotateLogs, writeLog } from "./notifications/logger";
 import { sendDailyProductionReportEmail } from "./notifications/email-report";
 import { PipelineReport, StepLog } from "./types";
+import { prisma } from "@/lib/prisma";
 
 let lastReport: PipelineReport | null = null;
 let isPipelineExecuting = false;
 
 export function getLastPipelineReport(): PipelineReport | null {
   return lastReport;
+}
+
+export async function getLatestPipelineReport(): Promise<PipelineReport | null> {
+  if (lastReport) return lastReport;
+  try {
+    const log = await prisma.auditLog.findFirst({
+      where: { action: "automation_pipeline" },
+      orderBy: { createdAt: "desc" },
+      select: { metadata: true },
+    });
+    if (log?.metadata && typeof log.metadata === "object") {
+      return log.metadata as unknown as PipelineReport;
+    }
+  } catch {
+    /* fallback to null */
+  }
+  return null;
 }
 
 export function isPipelineRunning(): boolean {
@@ -175,6 +193,18 @@ export async function runMasterPipeline(): Promise<PipelineReport> {
     };
 
     lastReport = report;
+
+    await prisma.auditLog
+      .create({
+        data: {
+          adminEmail: "system@thoughts.whatever.com",
+          action: "automation_pipeline",
+          summary: `15-Step Pipeline completed (${overallStatus}) in ${(totalDurationMs / 1000).toFixed(1)}s`,
+          severity: overallStatus === "FAILED" ? "error" : overallStatus === "WARNING" ? "warn" : "info",
+          metadata: report as any,
+        },
+      })
+      .catch(() => null);
 
     await executeStep(15, "Send Daily Production Report Email", async () => {
       await sendDailyProductionReportEmail(report);
