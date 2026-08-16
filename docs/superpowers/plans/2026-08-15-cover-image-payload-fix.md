@@ -500,15 +500,20 @@ With `npm run dev` running:
 
 ```bash
 curl -s "http://localhost:3000/archive" | wc -c
-curl -s "http://localhost:3000/archive" | grep -c 'data:image/[a-z+]*;base64,' || true
+curl -s "http://localhost:3000/archive" | grep -o 'data:image/[a-z+]*;base64,' | wc -l
 ```
 
 Expected: byte count falls from ~3,028,381 to under 200,000, and the base64 count is `0`.
 
-Grep for `data:image/…;base64,` and not the bare string `data:image`: the site
-uses a decorative inline SVG texture (`url("data:image/svg+xml,%3Csvg…")`), so
-a bare `grep -c "data:image"` returns `1` on a fully fixed page and reads as a
-failure.
+Two traps in this check, both of which produce a passing-looking number on a
+broken page:
+- Grep for `data:image/…;base64,` and not the bare string `data:image`. The site
+  uses a decorative inline SVG texture (`url("data:image/svg+xml,%3Csvg…")`),
+  which is not a raster blob and is not the problem.
+- Use `grep -o … | wc -l`, never `grep -c`. `grep -c` counts matching *lines*,
+  and rendered HTML is essentially one line — production `/archive` reports
+  `1` with `grep -c` while actually carrying 13 blobs and 2,905,660 bytes of
+  base64.
 
 - [ ] **Step 7: Commit**
 
@@ -1296,7 +1301,7 @@ Push the branch and let Vercel deploy, or `npx vercel --prod`. Wait for the depl
 for p in "/" "/documentary" "/archive" "/writing" "/series"; do
   printf "%-14s " "$p"
   curl -s --compressed "https://thoughts-whatever.vercel.app$p" -o /tmp/pg.html -w "wire=%{size_download} time=%{time_total} "
-  printf "raw=%s b64=%s\n" "$(wc -c < /tmp/pg.html)" "$(grep -c 'data:image/[a-z+]*;base64,' /tmp/pg.html || true)"
+  printf "raw=%s b64=%s\n" "$(wc -c < /tmp/pg.html)" "$(grep -o 'data:image/[a-z+]*;base64,' /tmp/pg.html | wc -l)"
 done
 ```
 
@@ -1310,7 +1315,7 @@ Success criteria, all of which must hold:
 
 ```bash
 curl -s -H "RSC: 1" --compressed "https://thoughts-whatever.vercel.app/writing/crime-and-punishment-3" -o /tmp/a.bin -w "rsc wire=%{size_download} time=%{time_total}\n"
-grep -c 'data:image/[a-z+]*;base64,' /tmp/a.bin || true
+grep -o 'data:image/[a-z+]*;base64,' /tmp/a.bin | wc -l
 ```
 
 Expected: wire size under **60,000** bytes (was 908,919) and `0` data URIs.
