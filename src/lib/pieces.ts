@@ -15,6 +15,28 @@ function withCover<T extends { slug: string; coverImage?: string | null }>(
 }
 
 /**
+ * `ogImage` is the *second* blob column on Piece, and on every legacy row it
+ * holds a byte-for-byte copy of the base64 `coverImage` — 133 KB to 320 KB of
+ * it. Dropping `coverImage` from the list selects was not enough: the article
+ * page's `getPieceBySlug` uses `include:`, which pulls every scalar, so one
+ * full blob still reached the RSC stream (283,695 chars on
+ * crime-and-punishment-3, which alone was 90% of that page's payload).
+ *
+ * Nulling it here is behaviour-preserving, not a feature change. The only read
+ * path is `shareImage` in `lib/seo.tsx`, which pipes the value through
+ * `absoluteImageUrl` — that already discards any data URI and falls back to the
+ * `/api/cover` URL. So a data-URI `ogImage` renders exactly nothing today; it
+ * was pure payload weight. A real URL is a usable share image and passes
+ * through untouched.
+ */
+export function sanitizeShareImage<T extends { ogImage?: string | null }>(
+  row: T,
+): T & { ogImage: string | null } {
+  const value = row.ogImage?.trim();
+  return { ...row, ogImage: !value || value.startsWith("data:") ? null : value };
+}
+
+/**
  * `coverImage` is deliberately NOT selected.
  *
  * Legacy rows hold the entire image as a base64 data URI (up to 3.1 MB), so
@@ -99,7 +121,7 @@ export const getPieceBySlug = cache(async (slug: string, kind?: PieceKind) => {
       timeline: { orderBy: { order: "asc" } },
     },
   });
-  return piece && withCover(piece);
+  return piece && sanitizeShareImage(withCover(piece));
 });
 
 export type FullPiece = NonNullable<Awaited<ReturnType<typeof getPieceBySlug>>>;
