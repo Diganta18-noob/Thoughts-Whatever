@@ -70,6 +70,12 @@ below rather than compared.
 > taken through `/_next/image`. Treat the totals here as the local baseline to
 > compare that against.
 
+Both **wire** columns are *compressed transfer bytes* — `curl --compressed`,
+i.e. what the browser actually downloads — measured the same way on both sides
+so the ratio is meaningful. Raw response bytes are given separately below,
+because the two differ by 7-8× on these pages and confusing them makes the fix
+look either trivial or miraculous.
+
 | Route | Before (wire) | After (wire) | Before b64 blobs | After b64 blobs |
 | :--- | ---: | ---: | ---: | ---: |
 | `/` | 10,600 (0 article links) | 17,296 (12 links) | 0 | 0 |
@@ -81,6 +87,14 @@ below rather than compared.
 
 `/documentary` is the headline number: **4,175,753 → 14,459 wire bytes, a 289×
 reduction**, and 9.0 MB of base64 removed from the raw payload.
+
+Raw (uncompressed) response bytes for the same "after" build, for anyone
+re-measuring without `--compressed`: `/` 121,487 · `/documentary` 108,598 ·
+`/archive` 121,383 · `/writing` 41,579 · `/series` 54,470 ·
+`/writing/crime-and-punishment-3` 96,186 HTML / 29,297 RSC. Zero `data:image`
+occurrences on all of them. No `[withTimeout]` line appeared in the server log
+during these requests, so every query completed inside its budget rather than
+being papered over by a fallback.
 
 The home page went from 0 to 12 article links. It was not slow, it was empty —
 the 9 MB `getFeaturedSeries` query exceeded its `withTimeout` guard, and the
@@ -146,9 +160,10 @@ than a real cloud name.
 
 This distinction matters to anyone reading the numbers above. The endpoint
 currently proxies bytes out of the database, so a cover is one database read per
-cache miss; after the migration it will proxy them from Cloudinary instead. The
-payload figures do not change either way — the blob leaves the HTML regardless —
-but the origin cost does.
+cache miss — `/api/cover/series/crime-and-punishment` is a **2,376,528-byte
+PNG** served that way today. After the migration it proxies from Cloudinary
+instead. The payload figures do not change either way — the blob leaves the HTML
+regardless — but the origin cost does.
 
 Also outstanding before that migration can run: the Cloudinary API secret was
 printed in plaintext by the SDK's own 401 error and needs rotating.
