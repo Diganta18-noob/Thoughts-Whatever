@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { checkHealth } from "@/lib/system/health";
+import { getLiveAutomationState } from "@/lib/system/automation-state";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -11,11 +12,24 @@ export async function GET() {
 
   try {
     const health = await checkHealth();
-    return NextResponse.json(health, {
-      headers: {
-        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+    let automation = null;
+    try {
+      automation = await getLiveAutomationState();
+    } catch {
+      /* ignore */
+    }
+
+    return NextResponse.json(
+      {
+        ...health,
+        automation,
       },
-    });
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      }
+    );
   } catch (err: any) {
     return NextResponse.json(
       { error: err.message || "Health check failed" },

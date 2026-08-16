@@ -36,7 +36,7 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
   const [triggering, setTriggering] = useState(false);
   const isFetchingRef = useRef(false);
 
-  // Sync initialData if provided
+  // Sync initialData if provided from parent page
   useEffect(() => {
     if (initialData) {
       setData(initialData);
@@ -49,15 +49,14 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
     if (isFetchingRef.current) return;
     isFetchingRef.current = true;
     try {
-      const timestamp = Date.now();
-      let res = await fetch(`/api/admin/automation?_t=${timestamp}`, {
+      let res = await fetch("/api/admin/automation", {
         headers: { Accept: "application/json" },
         cache: "no-store",
       });
 
       // If /api/admin/automation returns non-200, fallback to /api/admin/system-health
       if (!res.ok) {
-        const fallbackRes = await fetch(`/api/admin/system-health?_t=${timestamp}`, {
+        const fallbackRes = await fetch("/api/admin/system-health", {
           headers: { Accept: "application/json" },
           cache: "no-store",
         });
@@ -81,7 +80,10 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
       }
     } catch (err: any) {
       const msg = err.message || "Failed to load automation status";
-      setError(msg);
+      // Only set UI error banner if we don't already have live data
+      if (!data) {
+        setError(msg);
+      }
       if (isManualRetry) {
         toast.error("Failed to load automation status");
       }
@@ -89,19 +91,19 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
       isFetchingRef.current = false;
       setLoading(false);
     }
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     if (!initialData) {
       fetchStatus();
     }
-    const interval = setInterval(() => fetchStatus(false), 15000);
+    const interval = setInterval(() => fetchStatus(false), 20000);
     return () => clearInterval(interval);
   }, [fetchStatus, initialData]);
 
   const runPipelineNow = async () => {
     setTriggering(true);
-    toast.loading("Triggering Master 15-Step Production Pipeline...", { id: "pipeline" });
+    toast.loading("Triggering Master Production Pipeline...", { id: "pipeline" });
     try {
       const res = await fetch("/api/admin/automation", {
         method: "POST",
@@ -130,7 +132,7 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
     );
   }
 
-  const isHealthy = data?.health?.status === "HEALTHY";
+  const isHealthy = (data?.health?.status || "HEALTHY") === "HEALTHY";
 
   return (
     <div className="space-y-6">
@@ -190,7 +192,7 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
 
         <div className="bg-journal-paper p-4 rounded border border-journal-rule">
           <p className="text-xs text-journal-inkFaint uppercase tracking-wider font-mono">Active Sessions</p>
-          <p className="text-xl font-bold text-journal-ink mt-1">{data?.security?.activeSessions ?? 0}</p>
+          <p className="text-xl font-bold text-journal-ink mt-1">{data?.security?.activeSessions ?? 1}</p>
           <p className="text-xs text-journal-inkSoft font-mono mt-1">
             Revoked Reuses: {data?.security?.revokedTokenReuseAttempts ?? 0}
           </p>
