@@ -61,11 +61,20 @@ async function verifyJwtHs256(token: string, secretStr: string): Promise<boolean
   }
 }
 
+const PUBLIC_ADMIN_PATHS = new Set([
+  "/admin/login",
+  "/api/admin/login",
+  "/admin/forgot-password",
+  "/admin/reset-password",
+  "/api/admin/forgot-password",
+  "/api/admin/reset-password",
+]);
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1. Exclude public admin routes (e.g. login API, login page)
-  if (pathname === "/admin/login" || pathname === "/api/admin/login") {
+  // 1. Exclude public admin routes (e.g. login API, forgot-password, reset-password)
+  if (PUBLIC_ADMIN_PATHS.has(pathname)) {
     return NextResponse.next();
   }
 
