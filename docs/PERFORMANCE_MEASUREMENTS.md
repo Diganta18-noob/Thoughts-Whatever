@@ -58,6 +58,18 @@ while still serving the pre-fix build. **After** = local `next build` +
 where the build runs; the timing column is not, so it is reported separately
 below rather than compared.
 
+> **The "after" column has never been measured on Vercel.** Every number below
+> comes from `next start` on a developer machine. That is adequate for the
+> payload bytes, which are what this work set out to reduce, and it is *not*
+> adequate for anything host-dependent: the CDN's treatment of the cover
+> endpoint's `Cache-Control` / `CDN-Cache-Control` pair, and the image
+> optimizer's in-process handling of an internal `src` — which behaves
+> differently under `next start` than on Vercel, and which is exactly where the
+> `/api/cover` redirect bug lived. Task 9 is therefore **not complete**: it
+> still needs a preview deployment, re-measured, with at least one cover request
+> taken through `/_next/image`. Treat the totals here as the local baseline to
+> compare that against.
+
 | Route | Before (wire) | After (wire) | Before b64 blobs | After b64 blobs |
 | :--- | ---: | ---: | ---: | ---: |
 | `/` | 10,600 (0 article links) | 17,296 (12 links) | 0 | 0 |
@@ -72,8 +84,16 @@ reduction**, and 9.0 MB of base64 removed from the raw payload.
 
 The home page went from 0 to 12 article links. It was not slow, it was empty —
 the 9 MB `getFeaturedSeries` query exceeded its `withTimeout` guard, and the
-guard substituted an empty array silently. Task 8 added the missing
-`console.error` so this can never again fail invisibly.
+guard substituted an empty array silently.
+
+Task 8 first tried to fix that invisibility with a `res.status === "rejected"`
+check in `page.tsx`, which was dead code: `withTimeout` **resolves** with the
+fallback on timeout and swallows rejections with `.catch(() => fallback)`, so
+nothing handed to `Promise.allSettled` can ever settle as rejected. The check
+could not have fired for any query, including the one that caused the incident.
+The logging now lives inside `withTimeout` itself, which takes a `label` and
+reports on both the timeout path and the `.catch` — so every degradation is
+reported once, at the point the fallback is actually chosen, for every call site.
 
 | Query | Before | After |
 | :--- | :--- | :--- |
@@ -85,7 +105,7 @@ guard substituted an empty array silently. Task 8 added the missing
 
 `Piece` has **two** columns holding image bytes. Dropping `coverImage` from the
 list selects fixed the list routes but not the article route, because
-`getPieceBySlug` uses Prisma `include:`, which pulls every scalar — including
+`getPieceBySlug` used Prisma `include:`, which pulls every scalar — including
 `Piece.ogImage`, which on all 13 published rows holds a byte-for-byte copy of
 the base64 cover (2,905,647 chars total). The article RSC payload stayed at
 221,576 bytes with one 283,695-char blob until `sanitizeShareImage` nulled it.
@@ -98,8 +118,53 @@ anyway. Verified after the fix that `og:image`, `twitter:image` and the JSON-LD
 `twitter:card` is still `summary_large_image`, and that the endpoint returns
 `200 image/webp`.
 
-The migration script writes only `coverImage`, so `ogImage` still holds 2.9 MB
-of now-unread base64 in Postgres. Harmless, worth clearing separately.
+Nulling the value after transfer left the *read* cost untouched, though, and
+that read cost is what blew the timeout guards in the first place. `include:`
+was therefore replaced with explicit selects on both `getPieceBySlug` and
+`getAuthorBySlug`, naming only the columns the pages render. Neither blob column
+is named, so the next blob-shaped column added to `Piece` is a non-event on
+these routes rather than a silent regression. Measured on the 13 published rows:
+both blob columns selected in full are 2,905,647 chars each; read as bounded
+512-byte prefixes they total 6,656 chars. An article render was pulling ~447 KB
+of base64 out of Postgres to display neither.
+
+`ogImage` still needs a prefix rather than nothing, because a *real* URL there
+is a usable share image. `src/lib/blob-prefix.ts` does that read — `left(col,
+512)` in SQL — and rejects any prefix that fills the budget, since it may have
+been cut mid-URL; the RSS feed uses the same helper for `coverImage`, where it
+needs the leading bytes only to name a MIME type.
+
+### Cloudinary migration: not run
+
+`scripts/migrate-to-cloudinary.ts` has **never successfully written anything**.
+All 16 rows still hold base64 data URIs; across the 13 published ones,
+`coverImage` and `ogImage` together account for 5,811,294 chars of it in
+Postgres. Task 6 steps 8-10 are blocked at the first gate:
+`cloudinary.api.ping()` returns `cloud_name mismatch` (HTTP 401), because
+`CLOUDINARY_CLOUD_NAME` holds the literal string `"thoughts-whatever"` rather
+than a real cloud name.
+
+This distinction matters to anyone reading the numbers above. The endpoint
+currently proxies bytes out of the database, so a cover is one database read per
+cache miss; after the migration it will proxy them from Cloudinary instead. The
+payload figures do not change either way — the blob leaves the HTML regardless —
+but the origin cost does.
+
+Also outstanding before that migration can run: the Cloudinary API secret was
+printed in plaintext by the SDK's own 401 error and needs rotating.
+
+### `public/rss.xml` shadows the dynamic feed
+
+`public/` is served ahead of App Router routes, so `https://<host>/rss.xml`
+returns the checked-in 11,525-byte static file — dated Aug 8, and carrying
+`http://localhost:3000` links — not the hardened handler. **Task 4's fix is
+inert in production until that file is deleted.** `public/sitemap.xml` (6,485
+bytes) shadows `src/app/sitemap.ts` the same way.
+
+The feed numbers in this document were therefore measured against the route
+directly, with `public/rss.xml` temporarily moved aside: 15,719 bytes, 13 items,
+13 enclosures, 0 base64 occurrences, every enclosure `image/webp`. Deleting the
+two static files is a content decision, not a code one, and is left to a human.
 
 ### Not done: a dedicated backend
 
