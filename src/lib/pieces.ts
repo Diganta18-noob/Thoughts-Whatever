@@ -72,9 +72,9 @@ export type CardPiece = Prisma.PieceGetPayload<{ select: typeof cardSelect }> & 
  * The two dimension columns are read by the series detail page's hero, which
  * passes them to `EditorialImage` — without them the component falls back to
  * `probeImageDimensions`, a second client-side fetch of the same cover just to
- * read its header. Both are null on all 4 rows today (Task 7's backfill covered
- * `Piece` only), so the fallback still fires; the wiring is what makes filling
- * them in worth doing.
+ * read its header. The Cloudinary migration filled them from the upload
+ * response, so 3 of the 4 rows now carry real dimensions and skip that probe;
+ * the fourth has no cover at all.
  */
 const seriesSelect = {
   id: true,

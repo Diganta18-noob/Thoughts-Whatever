@@ -58,17 +58,18 @@ while still serving the pre-fix build. **After** = local `next build` +
 where the build runs; the timing column is not, so it is reported separately
 below rather than compared.
 
-> **The "after" column has never been measured on Vercel.** Every number below
-> comes from `next start` on a developer machine. That is adequate for the
-> payload bytes, which are what this work set out to reduce, and it is *not*
-> adequate for anything host-dependent: the CDN's treatment of the cover
-> endpoint's `Cache-Control` / `CDN-Cache-Control` pair, and the image
-> optimizer's in-process handling of an internal `src` — which behaves
-> differently under `next start` than on Vercel, and which is exactly where the
-> `/api/cover` redirect bug lived. Task 9 is therefore **not complete**: it
-> still needs a preview deployment, re-measured, with at least one cover request
-> taken through `/_next/image`. Treat the totals here as the local baseline to
-> compare that against.
+> **The "after" column below has never been measured on Vercel.** Every number
+> in the table comes from `next start` on a developer machine. That is adequate
+> for the payload bytes, which are what this work set out to reduce, and it is
+> *not* adequate for anything host-dependent. Two things were host-dependent and
+> both have since been measured on real Vercel, in "Production, on the pre-fix
+> build with migrated data" below: the CDN's treatment of the cover endpoint's
+> `Cache-Control` / `CDN-Cache-Control` pair (confirmed — a 404 there really does
+> inherit the catch-all's page directive), and the image optimizer's handling of
+> an internal `src` (production optimizes the Cloudinary URL directly and returns
+> AVIF). What remains unmeasured on Vercel is **this branch's own code**, which
+> is not deployed anywhere: `main` is 28 commits behind. Read the table as the
+> local baseline for whatever a preview deploy is eventually compared against.
 
 Both **wire** columns are *compressed transfer bytes* — `curl --compressed`,
 i.e. what the browser actually downloads — measured the same way on both sides
@@ -148,25 +149,164 @@ is a usable share image. `src/lib/blob-prefix.ts` does that read — `left(col,
 been cut mid-URL; the RSS feed uses the same helper for `coverImage`, where it
 needs the leading bytes only to name a MIME type.
 
-### Cloudinary migration: not run
+### Cloudinary migration: run 2026-08-16
 
-`scripts/migrate-to-cloudinary.ts` has **never successfully written anything**.
-All 16 rows still hold base64 data URIs; across the 13 published ones,
-`coverImage` and `ogImage` together account for 5,811,294 chars of it in
-Postgres. Task 6 steps 8-10 are blocked at the first gate:
-`cloudinary.api.ping()` returns `cloud_name mismatch` (HTTP 401), because
-`CLOUDINARY_CLOUD_NAME` holds the literal string `"thoughts-whatever"` rather
-than a real cloud name.
+`scripts/migrate-to-cloudinary.ts` had never successfully written anything —
+`cloudinary.api.ping()` failed with `cloud_name mismatch` (HTTP 401) because
+`CLOUDINARY_CLOUD_NAME` held the literal string `"thoughts-whatever"`. With a
+real cloud name supplied, ping returned `status: ok` and the migration ran: a
+`--dry-run` first (which uploads for real but writes nothing), then the live
+pass. All 16 rows now hold `https://res.cloudinary.com/...` URLs.
 
-This distinction matters to anyone reading the numbers above. The endpoint
-currently proxies bytes out of the database, so a cover is one database read per
-cache miss — `/api/cover/series/crime-and-punishment` is a **2,376,528-byte
-PNG** served that way today. After the migration it proxies from Cloudinary
-instead. The payload figures do not change either way — the blob leaves the HTML
-regardless — but the origin cost does.
+A full `scripts/export-full-db.ts` backup was taken first and verified on disk —
+`backups/mongodb-backup-2026-08-16T14-21-53-446Z.json`, 9,752,880 bytes,
+containing all 16 data URIs (6,579,270 chars). That file is the only remaining
+copy of the pre-migration images, so it is not disposable.
 
-Also outstanding before that migration can run: the Cloudinary API secret was
-printed in plaintext by the SDK's own 401 error and needs rotating.
+Because the dry run creates the assets, the live pass reported `existing` on all
+16 and reused them rather than re-uploading — `overwrite: false` behaving as
+designed. Every URL was fetched and checked for a `200` plus an `image/*`
+content-type before its row was written.
+
+What moved out of Postgres, measured on the 13 published rows:
+
+| Column | Before | After |
+| :--- | ---: | ---: |
+| `Piece.coverImage` (13 published) | 2,905,647 chars | 1,404 chars |
+| `Series.coverImage` (3 rows) | 3,673,623 chars | 345 chars |
+| `Piece.ogImage` (13 published) | 2,905,647 chars | **2,905,647 chars — untouched** |
+
+Longest surviving `coverImage` value: 115 chars. `coverImageWidth`/`Height` came
+back from the upload response, so all 16 rows now carry dimensions — including
+the 3 series rows that were null, which is what `seriesSelect`'s comment was
+waiting on: the series hero no longer falls back to `probeImageDimensions`.
+
+`ogImage` is deliberately still base64. Task 6's Interfaces block scopes it to
+`coverImage` plus dimensions, and `ogImage` is already inert on every read path —
+`pieceSelect` does not name it, and `getPieceBySlug` reads it as a bounded
+512-byte prefix that `usablePrefix` rejects for anything starting `data:`. It
+costs nothing per request and 2.9 MB at rest. Pointing it at the row's new
+Cloudinary URL would be strictly better than the status quo, but it is a write
+to a column no task authorized, so it is left as a decision rather than done
+quietly.
+
+The API secret still needs rotating. It was printed in plaintext by the SDK's own
+401 error, and again in the chat transcript that supplied it.
+
+### The endpoint after the migration
+
+`/api/cover` no longer decodes a blob out of Postgres; it takes the `remote`
+branch and proxies Cloudinary. That path existed but had only ever been exercised
+by unit tests. Verified end-to-end on a production build:
+
+| Request | Result |
+| :--- | :--- |
+| `/api/cover/piece/crime-and-punishment-1` | 200 `image/jpeg` 216,989 B |
+| `/api/cover/piece/রক্তকরবী` (percent-encoded) | 200 `image/jpeg` 244,192 B |
+| `/api/cover/series/crime-and-punishment` | 200 `image/jpeg` **233,658 B** (was a 2,376,528-byte PNG out of Postgres — 10.2×) |
+| `/_next/image?url=/api/cover/piece/…&w=640&q=75` | 200 `image/jpeg` 104,891 B |
+| same, with a browser `Accept: image/avif,image/webp` | 200 `image/avif` **78,645 B** |
+| `/_next/image?url=/api/cover/series/…&w=1080&q=75` | 200 `image/jpeg` 209,591 B |
+
+Proxied covers carry `Cache-Control` and `CDN-Cache-Control` of
+`public, max-age=31536000, s-maxage=31536000, immutable`, plus `nosniff`. The
+`next/image` chain — optimizer → `/api/cover` → proxy → Cloudinary — returns
+bytes at every step, which is the whole point of proxying rather than
+redirecting: a 307 there fails, for the reason the route's own comment records.
+
+**The first `/_next/image` numbers taken after the migration were wrong, and the
+trap is worth naming.** They came back byte-identical to the pre-migration run
+(100,694 B) because the optimizer's cache key is the `src` URL, `w` and `q` — all
+unchanged by a migration that only altered what the endpoint reads. With
+`minimumCacheTTL: 31536000` those entries would serve for a year.
+`X-Nextjs-Cache: HIT` is the tell; the table above was re-measured after
+`rm -rf .next/cache/images` and shows `MISS`. The same applies on Vercel: covers
+optimized before the migration keep serving until that cache turns over. Harmless
+here — it is the same picture, since the data URI was the upload source — but any
+re-measurement that skips this step is measuring the old bytes.
+
+Page payloads did not move, which is the expected result: the blob left the HTML
+at Task 3, not Task 6. `/` 121,484 raw / 17,291 wire · `/documentary` 108,598 /
+14,463 · `/archive` 121,383 / 17,359 · `/writing` 41,579 / 7,804 · `/series`
+54,470 / 9,173 · `/series/crime-and-punishment` 58,088 / 10,351 ·
+`/writing/crime-and-punishment-1` 76,676 / 15,847 ·
+`/authors/fyodor-dostoevsky` 49,438 / 8,991. All 200, zero base64 rasters, zero
+`res.cloudinary.com` in the HTML (covers still route through `/api/cover`), and
+no `[withTimeout]` line in the server log.
+
+One counting note, so a future re-measure does not read a regression into it: a
+bare `grep -c "data:image"` finds **one** hit on `/`. It is a hand-written
+decorative `data:image/svg+xml` grain texture in an `aria-hidden`
+`background-image` — 25 chars of prefix, present before the migration and
+unrelated to covers. The figures in this document count base64 *rasters*
+(`data:image/(png|jpe?g|webp|gif|avif);base64`), which are zero everywhere.
+
+The feed changed shape for the better: 15,576 bytes, 13 items, 13 enclosures, now
+pointing **directly at `res.cloudinary.com`** with `type="image/jpeg"` instead of
+at `/api/cover` with `image/webp`. `absoluteCoverUrl` passes a stored URL through
+untouched, so feed readers fetch the CDN with no origin hop. (Locally the item
+links still say `http://localhost:3000` because `NEXT_PUBLIC_SITE_URL` is unset
+outside Vercel.)
+
+Re-measuring the feed under `next start` has a footgun of its own. Moving
+`public/rss.xml` aside **while the server is running** produces a bare `400`, not
+the route: `next start` enumerates `public/` once at boot and keeps serving
+`/rss.xml` from that manifest, then fails on the missing file. Nothing is logged,
+so it reads like a route regression. Move the file first, then start the server —
+booted that way the route answers `200`.
+
+### Production, on the pre-fix build with migrated data
+
+The migration changed data that the *deployed* build reads, so production was
+re-measured. Nothing was deployed: `main` is still at `dffaf88`, 28 commits
+behind this branch, and the CI deploy job only fires on `main`.
+
+| Route | Before (wire) | Now (wire) | Change |
+| :--- | ---: | ---: | ---: |
+| `/documentary` | 4,175,753 | 12,998 | **321×** |
+| `/archive` | 1,984,550 | 14,847 | 134× |
+| `/` | 10,600 (0 links) | 102,272 raw (5 links) | see below |
+| `/writing` | 8,466 | 8,466 | — |
+| `/series` | 9,528 | 9,498 | — |
+
+Zero base64 rasters on all of them. **The data migration alone fixed the empty
+home page**, with none of this branch's code deployed: `/` went from 58,262 bytes
+and 0 article links to 102,272 bytes and 5 — the same 5 unique piece links the
+fixed local build renders. The 9 MB read that was blowing `getFeaturedSeries`'s
+`withTimeout` guard is now a few hundred bytes, so the query finishes and the
+fallback stops firing. The page is ISR-cached at `s-maxage=300`; the change only
+became visible after `X-Vercel-Cache` went `HIT → STALE → HIT` on a fresh render,
+which is why an immediate re-check after the migration still showed the old page.
+
+Covers render on the deployed build because main's `coverSrc` returns a stored
+value verbatim and `res.cloudinary.com` is already in `remotePatterns` there —
+production optimizes the Cloudinary URL directly, `200 image/avif` 20,411 B at
+the size the documentary grid requests.
+
+`/api/cover` returns **404 for every migrated cover on production**, and that is
+harmless: main's version of the route matches `^data:...;base64,` and treats
+anything else as a miss, but main's `coverSrc` only falls back to the endpoint
+when the column is empty, so production HTML contains **0** `/api/cover`
+references. The endpoint is unreachable dead code there until this branch merges,
+at which point the proxy path verified above takes over. The 8 pieces and 1
+series with a null `coverImage` do reach it and get the 404 → placeholder, exactly
+as they did before.
+
+That 404 did settle one thing the local build could not. It came back carrying
+both its own `Cache-Control: public, max-age=60` **and**
+`CDN-Cache-Control: public, max-age=300, s-maxage=300, stale-while-revalidate=86400`
+from main's catch-all `source: "/:path*"` — live Vercel confirmation of the claim
+in the route's comment, that config headers are appended to a Route Handler's own
+and cannot vary by status code. A 404 there really would ship a cache directive
+meant for pages. This branch splits that block so the cover route is excluded.
+
+**Still unmeasured on Vercel:** this branch's own code. The `/api/cover` proxy
+under Vercel's CDN — whether the edge honours its `immutable` pair on a 200 and
+the short TTLs on a 404/502 — cannot be observed until the branch is deployed,
+because the deployed route is main's data-URI-only version. A preview deploy was
+not possible from here: the repo has no `.vercel` link and no token, so `vercel`
+would need an interactive login. Deploying is the human's call. Everything that
+does not depend on the branch's code is now measured on real Vercel above.
 
 ### `public/rss.xml` shadows the dynamic feed
 
