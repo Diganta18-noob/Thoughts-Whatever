@@ -50,6 +50,11 @@ export async function sendMail(options: SendMailOptions): Promise<nodemailer.Sen
 }
 
 export async function sendPasswordResetEmail(to: string, resetUrl: string): Promise<nodemailer.SentMessageInfo> {
+  const deliveryAddress =
+    (to.endsWith("@thoughts.whatever.com") || to.endsWith("@whatver.com"))
+      ? (process.env.NOTIFICATION_EMAIL_TO || process.env.SMTP_USER || to)
+      : to;
+
   const subject = "[Thoughts Whatever] Password Reset Request / পাসওয়ার্ড রিসেট";
 
   const text = `Hello,\n\nYou requested a password reset for your Thoughts Whatever account. Click the link below to set a new password:\n\n${resetUrl}\n\nThis link will expire in 30 minutes and can only be used once. If you did not request this password reset, please ignore this email.\n\n---\n\nনমস্কার,\n\nআপনি Thoughts Whatever অ্যাকাউন্টের পাসওয়ার্ড রিসেটের অনুরোধ করেছেন। নতুন পাসওয়ার্ড সেট করতে নিচের লিংকে ক্লিক করুন:\n\n${resetUrl}\n\nএই লিংকটির মেয়াদ ৩০ মিনিট এবং এটি কেবল একবারই ব্যবহার করা যাবে। আপনি যদি এই অনুরোধ না করে থাকেন, তবে এই ইমেলটি উপেক্ষা করতে পারেন।`;
@@ -111,7 +116,7 @@ export async function sendPasswordResetEmail(to: string, resetUrl: string): Prom
   `;
 
   return sendMail({
-    to,
+    to: deliveryAddress,
     subject,
     text,
     html,

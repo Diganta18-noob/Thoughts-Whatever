@@ -75,18 +75,18 @@ describe("Mailer Service", () => {
   it("sendPasswordResetEmail includes bilingual copy, reset URL, and 30-minute expiry note in both HTML and text", async () => {
     process.env.SMTP_HOST = "smtp.mailgun.org";
     process.env.SMTP_PORT = "587";
-    process.env.SMTP_USER = "sender@thoughts.whatever.com";
+    process.env.SMTP_USER = "sender@example.com";
     process.env.SMTP_PASSWORD = "secret-password";
 
     mockSendMail.mockResolvedValue({ messageId: "msg-reset-123" });
 
     const resetUrl = "https://thoughts-whatever.vercel.app/admin/reset-password?token=secret-token-123";
-    await sendPasswordResetEmail("admin@thoughts.whatever.com", resetUrl);
+    await sendPasswordResetEmail("admin@example.com", resetUrl);
 
     expect(mockSendMail).toHaveBeenCalledTimes(1);
     const callArg = mockSendMail.mock.calls[0][0];
 
-    expect(callArg.to).toBe("admin@thoughts.whatever.com");
+    expect(callArg.to).toBe("admin@example.com");
     expect(callArg.subject).toContain("Password Reset");
     expect(callArg.text).toContain(resetUrl);
     expect(callArg.text).toContain("30 minutes");
@@ -94,5 +94,21 @@ describe("Mailer Service", () => {
     expect(callArg.html).toContain(resetUrl);
     expect(callArg.html).toContain("30 minutes");
     expect(callArg.html).toContain("৩০ মিনিট");
+  });
+
+  it("routes placeholder domain admin emails to NOTIFICATION_EMAIL_TO or SMTP_USER so emails never bounce", async () => {
+    process.env.SMTP_HOST = "smtp.mailgun.org";
+    process.env.SMTP_PORT = "587";
+    process.env.SMTP_USER = "real-admin@gmail.com";
+    process.env.NOTIFICATION_EMAIL_TO = "real-admin@gmail.com";
+    process.env.SMTP_PASSWORD = "secret-password";
+
+    mockSendMail.mockResolvedValue({ messageId: "msg-reset-456" });
+
+    const resetUrl = "https://thoughts-whatever.vercel.app/admin/reset-password?token=token-456";
+    await sendPasswordResetEmail("admin@thoughts.whatever.com", resetUrl);
+
+    const callArg = mockSendMail.mock.calls[0][0];
+    expect(callArg.to).toBe("real-admin@gmail.com");
   });
 });

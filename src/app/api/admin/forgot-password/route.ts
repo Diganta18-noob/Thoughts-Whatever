@@ -68,10 +68,19 @@ export async function POST(request: Request) {
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || undefined;
 
   try {
-    const admin = await prisma.adminUser.findUnique({
+    let admin = await prisma.adminUser.findUnique({
       where: { email },
       select: { id: true, email: true },
     });
+
+    if (!admin && (
+      (process.env.NOTIFICATION_EMAIL_TO && email === process.env.NOTIFICATION_EMAIL_TO.trim().toLowerCase()) ||
+      (process.env.SMTP_USER && email === process.env.SMTP_USER.trim().toLowerCase())
+    )) {
+      admin = await prisma.adminUser.findFirst({
+        select: { id: true, email: true },
+      });
+    }
 
     if (!admin) {
       // Burn comparable time to prevent user enumeration
