@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useTranslation } from "@/components/providers/language-provider";
@@ -76,9 +77,17 @@ export function LoginForm({ next }: { next: string }) {
       </div>
 
       <div>
-        <label htmlFor="password" className="label block" lang="en">
-          Password
-        </label>
+        <div className="flex items-center justify-between">
+          <label htmlFor="password" className="label block" lang="en">
+            Password
+          </label>
+          <Link
+            href="/admin/forgot-password"
+            className="text-xs text-content-soft transition-colors hover:text-accent focus:outline-none"
+          >
+            {t("admin.login.forgotPassword")}
+          </Link>
+        </div>
         <input
           id="password"
           type="password"
