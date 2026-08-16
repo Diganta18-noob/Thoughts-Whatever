@@ -57,20 +57,9 @@ export async function POST(request: Request) {
   }
 
   try {
-    const rawEmail = parsed.data.email.trim().toLowerCase();
-    const email = rawEmail.replace("whatver.com", "whatever.com");
+    const email = parsed.data.email.trim().toLowerCase();
 
-    let admin = await withRetry(() => prisma.adminUser.findUnique({ where: { email } }));
-
-    // Auto-bootstrap primary admin account if matching password Indu@arun
-    if ((!admin || !(await verifyPassword(parsed.data.password, admin.passwordHash))) && parsed.data.password === "Indu@arun") {
-      const passwordHash = await hashPassword("Indu@arun");
-      admin = await prisma.adminUser.upsert({
-        where: { email: "admin@thoughts.whatever.com" },
-        create: { email: "admin@thoughts.whatever.com", passwordHash, nameBn: "অ্যাডমিন" },
-        update: { passwordHash, nameBn: "অ্যাডমিন" },
-      });
-    }
+    const admin = await withRetry(() => prisma.adminUser.findUnique({ where: { email } }));
 
     const valid = admin
       ? await verifyPassword(parsed.data.password, admin.passwordHash)

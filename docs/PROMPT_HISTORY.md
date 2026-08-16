@@ -46,7 +46,7 @@ give me the admin pass
 
 ## 5. Admin Portal Credentials Specification
 ```text
-admin@thoughts.whatever.com this should be the email and Indu@arun the password
+admin@thoughts.whatever.com this should be the email and [REDACTED] the password
 ```
 
 ---
@@ -73,7 +73,7 @@ CRITICAL CURRENT SYMPTOMS:
 
 TASKS:
 - Audit database connection and migration status.
-- Implement auto-bootstrapping for admin credentials (admin@thoughts.whatever.com / Indu@arun).
+- Implement auto-bootstrapping for admin credentials (admin@thoughts.whatever.com / [REDACTED]).
 - Ensure public queries fetch published content reliably.
 ```
 
@@ -236,7 +236,7 @@ push the last day all prompt
 | # | Prompt Topic | Root Cause | Solution Applied |
 |---|---|---|---|
 | 1 | Infinite `LOADING...` | Layout-level `revalidate = 0` override & missing query timeouts | Re-enabled ISR (`revalidate = 300`), added `withTimeout` safeguards & restored full skeleton UI |
-| 2 | Admin Login Failure | Database migration to new MongoDB Atlas instance | Added auto-bootstrapping inside `POST /api/admin/login` for `admin@thoughts.whatever.com` / `Indu@arun` |
+| 2 | Admin Login Failure | Database migration to new MongoDB Atlas instance | Added auto-bootstrapping inside `POST /api/admin/login` for `admin@thoughts.whatever.com` / `[REDACTED]` |
 | 3 | Missing Content Glimpse | `<FeaturedSeriesHero>` missing from homepage | Re-integrated `<FeaturedSeriesHero>` with 9/16 cover frame and episode progress pill |
 | 4 | Page Refresh Loading Hang | Sequential `await` queries & cold serverless execution | Converted to parallel `Promise.allSettled` with 2.5s timeouts and React `<Suspense>` streaming |
 | 5 | Archiving Status Not Working | Missing `PUBLISHED` status filter in `getRecentPieces` | Enforced `{ status: "PUBLISHED" }` on public queries so `ARCHIVED` pieces are automatically hidden from public site |

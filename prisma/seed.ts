@@ -656,7 +656,13 @@ async function main() {
   const published = PIECES.filter((p) => p.status !== "DRAFT").length;
   console.log(`  pieces   ${PIECES.length} (${published} published, ${PIECES.length - published} draft)`);
 
-  const passwordHash = await bcrypt.hash("Indu@arun", 12);
+  const seedPassword = process.env.SEED_ADMIN_PASSWORD;
+  if (!seedPassword) {
+    console.error("SEED_ADMIN_PASSWORD environment variable is required to seed the admin user.");
+    process.exit(1);
+  }
+
+  const passwordHash = await bcrypt.hash(seedPassword, 12);
   await prisma.adminUser.upsert({
     where: { email: "admin@thoughts.whatever.com" },
     create: {
