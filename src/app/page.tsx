@@ -35,27 +35,17 @@ const DEFAULT_FACETS = {
 };
 
 export default async function HomePage() {
-  const [recentRes, seriesRes, facetsRes] = await Promise.allSettled([
-    withTimeout(getRecentPieces({ take: 20 }), [], 5000),
-    withTimeout(getFeaturedSeries(3), [], 2500),
-    withTimeout(getFilterFacets(), DEFAULT_FACETS, 5000),
+  // `Promise.all`, not `allSettled`: `withTimeout` resolves with its fallback on
+  // both timeout and rejection, so nothing here can ever settle as `rejected`.
+  // An `allSettled` wrapper implied otherwise and the `rejected` branch it fed
+  // was unreachable — the degradation log lives inside `withTimeout` now, which
+  // is the only layer that still knows the reason. Labels name the section there.
+  const [recentPieces, series, facets] = await Promise.all([
+    withTimeout(getRecentPieces({ take: 20 }), [] as CardPiece[], 5000, "home getRecentPieces"),
+    withTimeout(getFeaturedSeries(3), [] as any[], 2500, "home getFeaturedSeries"),
+    withTimeout(getFilterFacets(), DEFAULT_FACETS, 5000, "home getFilterFacets"),
   ]);
 
-  const recentPieces: CardPiece[] = recentRes.status === "fulfilled" ? recentRes.value : [];
-  const series: any[] = seriesRes.status === "fulfilled" ? seriesRes.value : [];
-  const facets = facetsRes.status === "fulfilled" ? facetsRes.value : DEFAULT_FACETS;
-
-  // A silent empty fallback once hid a 9 MB query for weeks. If a section
-  // degrades, say so in the server log.
-  for (const [name, res] of [
-    ["getRecentPieces", recentRes],
-    ["getFeaturedSeries", seriesRes],
-    ["getFilterFacets", facetsRes],
-  ] as const) {
-    if (res.status === "rejected") {
-      console.error(`[home] ${name} rejected:`, res.reason);
-    }
-  }
   if (recentPieces.length === 0) {
     console.error("[home] rendering with zero pieces — query timed out or returned empty");
   }

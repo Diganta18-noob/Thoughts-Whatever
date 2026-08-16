@@ -47,14 +47,43 @@ export function youtubeId(url?: string | null): string | null {
 /**
  * Executes a promise with a timeout fallback, preventing static build lockups
  * during connection pool contention or database delays.
+ *
+ * Degradation is logged here rather than at the call site, because here is the
+ * only place that still knows why the fallback is being used. Callers cannot
+ * tell: this never rejects, so `Promise.allSettled` around it always reports
+ * `fulfilled` and a `res.status === "rejected"` check is dead code. A silent
+ * empty fallback is exactly what hid a 9 MB query for weeks — the whole point
+ * of logging it is that the next such regression shows up in the server log
+ * instead of looking like an empty section.
+ *
+ * `label` names the query in that log. It is optional so the ~20 existing call
+ * sites keep working; an unlabelled failure still logs its error, which is the
+ * part that carries a stack.
  */
 export async function withTimeout<T>(
   promise: Promise<T>,
   fallback: T,
-  ms = 5000
+  ms = 5000,
+  label = "query",
 ): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
-  ]).catch(() => fallback);
+  // Cleared in `finally` below: an uncleared timer keeps the event loop alive
+  // for up to `ms` after the response is already sent.
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((resolve) => {
+        timer = setTimeout(() => {
+          console.error(`[withTimeout] ${label} exceeded ${ms}ms — serving fallback`);
+          resolve(fallback);
+        }, ms);
+      }),
+    ]);
+  } catch (error) {
+    console.error(`[withTimeout] ${label} failed — serving fallback:`, error);
+    return fallback;
+  } finally {
+    clearTimeout(timer);
+  }
 }
