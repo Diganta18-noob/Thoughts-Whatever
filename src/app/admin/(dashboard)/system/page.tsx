@@ -112,7 +112,7 @@ export default function SystemHealthPage() {
 
   return (
     <div className="p-6 space-y-8 max-w-7xl mx-auto">
-      <AutomationDashboard />
+      <AutomationDashboard initialData={health?.automation} />
 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>

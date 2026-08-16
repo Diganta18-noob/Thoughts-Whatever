@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "react-hot-toast";
 
-interface AutomationState {
+export interface AutomationState {
   isRunning: boolean;
   health?: {
     status: string;
@@ -25,23 +25,50 @@ interface AutomationState {
   };
 }
 
-export function AutomationDashboard() {
-  const [data, setData] = useState<AutomationState | null>(null);
-  const [loading, setLoading] = useState(true);
+interface AutomationDashboardProps {
+  initialData?: AutomationState | null;
+}
+
+export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
+  const [data, setData] = useState<AutomationState | null>(initialData || null);
+  const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState<string | null>(null);
   const [triggering, setTriggering] = useState(false);
   const isFetchingRef = useRef(false);
+
+  // Sync initialData if provided
+  useEffect(() => {
+    if (initialData) {
+      setData(initialData);
+      setLoading(false);
+      setError(null);
+    }
+  }, [initialData]);
 
   const fetchStatus = useCallback(async (isManualRetry = false) => {
     if (isFetchingRef.current) return;
     isFetchingRef.current = true;
     try {
-      const res = await fetch("/api/admin/automation", {
+      const timestamp = Date.now();
+      let res = await fetch(`/api/admin/automation?_t=${timestamp}`, {
         headers: { Accept: "application/json" },
         cache: "no-store",
       });
 
+      // If /api/admin/automation returns non-200, fallback to /api/admin/system-health
       if (!res.ok) {
+        const fallbackRes = await fetch(`/api/admin/system-health?_t=${timestamp}`, {
+          headers: { Accept: "application/json" },
+          cache: "no-store",
+        });
+        if (fallbackRes.ok) {
+          const healthJson = await fallbackRes.json();
+          if (healthJson?.automation) {
+            setData(healthJson.automation);
+            setError(null);
+            return;
+          }
+        }
         throw new Error(`Status HTTP ${res.status}`);
       }
 
@@ -65,10 +92,12 @@ export function AutomationDashboard() {
   }, []);
 
   useEffect(() => {
-    fetchStatus();
+    if (!initialData) {
+      fetchStatus();
+    }
     const interval = setInterval(() => fetchStatus(false), 15000);
     return () => clearInterval(interval);
-  }, [fetchStatus]);
+  }, [fetchStatus, initialData]);
 
   const runPipelineNow = async () => {
     setTriggering(true);

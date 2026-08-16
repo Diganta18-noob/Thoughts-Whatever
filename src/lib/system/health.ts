@@ -4,6 +4,8 @@ import checkDiskSpace from "check-disk-space";
 import { S3Client, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { getBackupsDir } from "./backup/storage";
 
+import { getAutomationStatus } from "@/lib/automation/status";
+
 const BACKUPS_DIR = getBackupsDir();
 
 export interface SystemHealthStatus {
@@ -16,6 +18,7 @@ export interface SystemHealthStatus {
     r2Connectivity: { passed: boolean; details: string };
   };
   lastMaintenanceReport?: any;
+  automation?: any;
 }
 
 export async function checkHealth(): Promise<SystemHealthStatus> {
@@ -111,6 +114,13 @@ export async function checkHealth(): Promise<SystemHealthStatus> {
   const allPassed = diskPassed && backupPassed && countPassed && r2Passed;
   const critical = !diskPassed;
 
+  let automation = null;
+  try {
+    automation = await getAutomationStatus();
+  } catch {
+    /* ignore fallback */
+  }
+
   return {
     status: allPassed ? "HEALTHY" : critical ? "CRITICAL" : "DEGRADED",
     timestamp: new Date().toISOString(),
@@ -121,5 +131,6 @@ export async function checkHealth(): Promise<SystemHealthStatus> {
       r2Connectivity: { passed: r2Passed, details: r2Details },
     },
     lastMaintenanceReport,
+    automation,
   };
 }

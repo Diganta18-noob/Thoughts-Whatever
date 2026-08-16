@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="dark" />
+<title>Thoughts Whatever — before &amp; after</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,500&family=Noto+Serif+Bengali:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --void:#0b0908;
+  --panel:#151110;
+  --panel-2:#1c1613;
+  --rule:#2e2621;
+  --ink:#f2e9dc;
+  --ink-soft:#b9a88f;
+  --ink-faint:#7a6a57;
+  --gold:#c79a4b;
+  --gold-bright:#e3b968;
+  --cover:#3a2419;
+  --step-3:clamp(1.25rem,1.1rem + 0.7vw,1.6rem);
+  --step-4:clamp(1.45rem,1.2rem + 1.1vw,2rem);
+  --step-6:clamp(2rem,1.4rem + 2.7vw,3.2rem);
+  --step-7:clamp(2.3rem,1.3rem + 4.4vw,4.8rem);
+  --section-y:clamp(2.2rem,1.6rem + 2.6vw,4.4rem);
+  --section-y-sm:clamp(1.5rem,1.2rem + 1.3vw,2.4rem);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--void);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:clamp(28px,5vw,64px) clamp(16px,4vw,32px) 90px;}
+.wrap{max-width:920px;margin:0 auto;}
+.display{font-family:"Fraunces",Georgia,serif;}
+.bn{font-family:"Noto Serif Bengali","Fraunces",serif;}
+.frame{background:var(--panel);border:1px solid var(--rule);border-radius:16px;overflow:hidden;}
+.chrome{display:flex;align-items:center;gap:6px;padding:13px 18px;border-bottom:1px solid var(--rule);}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--rule);}
+.u{flex:1;text-align:center;font-size:12px;color:var(--ink-faint);}
+.tag{font-size:12px;font-weight:500;}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start;}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:start;}
+.pin{width:25px;height:25px;min-width:25px;border-radius:50%;background:var(--panel-2);border:1px solid var(--gold);color:var(--gold-bright);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;}
+.bar{height:9px;border-radius:5px;background:var(--rule);}
+@media (max-width:560px){
+  .hero-after{grid-template-columns:1fr;}
+  .split-after{grid-template-columns:1fr;}
+  .cat-grid{grid-template-columns:1fr;}
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header style="margin-bottom:36px;">
+  <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);">Design QA — home page</div>
+  <div class="display" style="font-style:italic;font-size:clamp(1.6rem,3vw,2.2rem);margin-top:10px;">Before <span style="color:var(--gold);">→</span> after</div>
+</header>
+
+<div class="frame" style="margin-bottom:26px;">
+  <div class="chrome">
+    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    <span class="u">thoughts-whatever.vercel.app</span>
+    <span class="tag" style="color:#c98a63;">Before</span>
+  </div>
+  <div style="background:var(--void);">
+
+    <section style="position:relative;text-align:center;padding:52px 22px 0;">
+      <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);">Bengali literature, close reading, and documentary</div>
+      <div class="display" style="font-style:italic;font-size:clamp(1.7rem,4vw,2.2rem);margin:16px 0 20px;">Thoughts Whatever</div>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <span style="font-size:12px;padding:9px 18px;border:1px solid var(--rule);border-radius:30px;color:var(--ink-soft);">Latest Series</span>
+        <span style="font-size:12px;padding:9px 18px;border:1px solid var(--rule);border-radius:30px;color:var(--ink-soft);">Explore Archive</span>
+      </div>
+      <div style="height:60px;"></div>
+      <span class="pin" style="position:absolute;top:14px;right:14px;" title="Hero claims the full frame, then leaves it empty">1</span>
+    </section>
+
+    <section style="padding:0 22px 30px;">
+      <div style="display:flex;gap:14px;background:var(--panel-2);border-radius:10px;padding:14px;">
+        <div style="width:58px;height:78px;flex-shrink:0;border-radius:6px;background:var(--cover);"></div>
+        <div style="flex:1;">
+          <div style="font-size:11px;color:var(--ink-faint);">Documentary · 31 Jul 2026 · 3 min</div>
+          <div class="bn" lang="bn" style="font-size:15px;margin:5px 0 8px;">রক্তকরবী</div>
+          <div class="bar" style="width:90%;margin-bottom:6px;"></div>
+          <div class="bar" style="width:60%;margin-bottom:10px;"></div>
+          <div style="font-size:11px;color:var(--gold-bright);">Continue reading →</div>
+        </div>
+      </div>
+    </section>
+
+    <section style="position:relative;padding:16px 22px;border-top:1px solid var(--rule);">
+      <div style="border-bottom:1px solid var(--rule);padding-bottom:10px;margin-bottom:16px;">
+        <div class="bn" lang="bn" style="font-size:19px;">সাম্প্রতিক</div>
+        <div style="font-size:11px;font-style:italic;color:var(--ink-faint);margin-top:3px;">Latest</div>
+      </div>
+      <div class="grid3">
+        <div style="aspect-ratio:4/3;border-radius:6px;background:var(--cover);"></div>
+        <div style="aspect-ratio:3/4;border-radius:6px;background:var(--cover);"></div>
+        <div style="aspect-ratio:4/5;border-radius:6px;background:var(--cover);"></div>
+      </div>
+      <span class="pin" style="position:absolute;top:16px;right:22px;" title="Fluid spacing and type scale exist, but every section uses the same fixed padding and heading size">2</span>
+      <span class="pin" style="position:absolute;bottom:16px;right:22px;" title="Six cover ratios across the page — no shared aspect ratio">3</span>
+    </section>
+
+    <section style="position:relative;padding:16px 22px;border-top:1px solid var(--rule);">
+      <div style="border-bottom:1px solid var(--rule);padding-bottom:10px;margin-bottom:16px;">
+        <div class="bn" lang="bn" style="font-size:19px;">নির্বাচিত</div>
+        <div style="font-size:11px;font-style:italic;color:var(--ink-faint);margin-top:3px;">Featured</div>
+      </div>
+      <div class="grid4">
+        <div style="aspect-ratio:4/5;border-radius:6px;background:var(--cover);"></div>
+        <div style="aspect-ratio:16/9;border-radius:6px;background:var(--cover);"></div>
+        <div style="aspect-ratio:3/4;border-radius:6px;background:var(--cover);"></div>
+        <div style="aspect-ratio:4/3;border-radius:6px;background:var(--cover);"></div>
+      </div>
+      <span class="pin" style="position:absolute;top:16px;right:22px;" title="The same full-width header repeats — six times, no hierarchy">4</span>
+    </section>
+
+    <section style="position:relative;padding:16px 22px;border-top:1px solid var(--rule);">
+      <div style="border-bottom:1px solid var(--rule);padding-bottom:10px;margin-bottom:16px;">
+        <div class="bn" lang="bn" style="font-size:19px;">বিভাগ</div>
+        <div style="font-size:11px;font-style:italic;color:var(--ink-faint);margin-top:3px;">Categories</div>
+      </div>
+      <div class="grid3">
+        <div style="min-height:118px;display:flex;flex-direction:column;justify-content:space-between;background:var(--panel-2);border-radius:8px;padding:16px 12px;text-align:center;">
+          <div class="bn" lang="bn" style="font-size:14px;color:var(--ink-soft);">রচনা</div>
+          <div lang="bn" style="font-size:11px;color:var(--ink-faint);">৭টি</div>
+        </div>
+        <div style="min-height:118px;display:flex;flex-direction:column;justify-content:space-between;background:var(--panel-2);border-radius:8px;padding:16px 12px;text-align:center;">
+          <div class="bn" lang="bn" style="font-size:14px;color:var(--ink-soft);">তথ্যচিত্র</div>
+          <div lang="bn" style="font-size:11px;color:var(--ink-faint);">৩টি</div>
+        </div>
+        <div style="min-height:118px;display:flex;flex-direction:column;justify-content:space-between;background:var(--panel-2);border-radius:8px;padding:16px 12px;text-align:center;">
+          <div class="bn" lang="bn" style="font-size:14px;color:var(--ink-soft);">ব্লগ</div>
+          <div lang="bn" style="font-size:11px;color:var(--ink-faint);">৪টি</div>
+        </div>
+      </div>
+      <span class="pin" style="position:absolute;top:16px;right:22px;" title="Categories carry only a word and a faint count — no content">5</span>
+    </section>
+
+    <section style="position:relative;padding:16px 22px 60px;border-top:1px solid var(--rule);">
+      <div style="border-bottom:1px solid var(--rule);padding-bottom:10px;margin-bottom:16px;">
+        <div class="bn" lang="bn" style="font-size:19px;">সময়রেখা</div>
+        <div style="font-size:11px;font-style:italic;color:var(--ink-faint);margin-top:3px;">Timeline</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <span style="font-size:11px;padding:6px 12px;border:1px solid var(--rule);border-radius:16px;color:var(--ink-faint);">Jul 2026</span>
+        <span style="font-size:11px;padding:6px 12px;border:1px solid var(--rule);border-radius:16px;color:var(--ink-faint);">Aug 2026</span>
+      </div>
+      <span class="pin" style="position:absolute;top:16px;right:22px;" title="Timeline and archive sit almost empty, then a gap opens before the newsletter">6</span>
+    </section>
+
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px 26px;margin:22px 0 34px;padding:20px 24px;background:var(--panel);border:1px solid var(--rule);border-radius:14px;">
+  <div style="display:flex;gap:12px;align-items:flex-start;"><span class="pin">1</span><span style="font-size:13px;color:var(--ink-soft);line-height:1.5;padding-top:3px;">Hero claims the full frame, then leaves it empty</span></div>
+  <div style="display:flex;gap:12px;align-items:flex-start;"><span class="pin">2</span><span style="font-size:13px;color:var(--ink-soft);line-height:1.5;padding-top:3px;">Fluid spacing and type scale exist, but go unused</span></div>
+  <div style="display:flex;gap:12px;align-items:flex-start;"><span class="pin">3</span><span style="font-size:13px;color:var(--ink-soft);line-height:1.5;padding-top:3px;">Six cover ratios on one page, no shared ratio</span></div>
+  <div style="display:flex;gap:12px;align-items:flex-start;"><span class="pin">4</span><span style="font-size:13px;color:var(--ink-soft);line-height:1.5;padding-top:3px;">The same header repeats six times, no hierarchy</span></div>
+  <div style="display:flex;gap:12px;align-items:flex-start;"><span class="pin">5</span><span style="font-size:13px;color:var(--ink-soft);line-height:1.5;padding-top:3px;">Categories carry a count and nothing else</span></div>
+  <div style="display:flex;gap:12px;align-items:flex-start;"><span class="pin">6</span><span style="font-size:13px;color:var(--ink-soft);line-height:1.5;padding-top:3px;">Timeline and archive sit almost empty, then a void</span></div>
+</div>
+
+<div style="text-align:center;padding:6px 0 30px;">
+  <div style="color:var(--gold);font-size:20px;">↓</div>
+  <div style="font-size:12px;color:var(--ink-faint);margin-top:6px;">same components, tokens actually applied</div>
+</div>
+
+<div class="frame">
+  <div class="chrome">
+    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    <span class="u">thoughts-whatever.vercel.app</span>
+    <span class="tag" style="color:var(--gold-bright);">After</span>
+  </div>
+  <div style="background:var(--void);">
+
+    <section class="hero-after" style="padding:var(--section-y) 22px var(--section-y-sm);display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(18px,4vw,36px);align-items:center;">
+      <div>
+        <div class="bn" lang="bn" style="font-size:12px;color:var(--gold-bright);">প্রবন্ধ ও তথ্যচিত্রের সংগ্রহ</div>
+        <div class="display" style="font-style:italic;font-size:var(--step-7);line-height:1.02;margin:14px 0 22px;">Thoughts<br />Whatever</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <span class="bn" lang="bn" style="font-size:13px;padding:11px 20px;border-radius:30px;background:var(--gold);color:#2c1c08;font-weight:600;">Continue — মেঘনাদবধ ৬</span>
+          <span style="font-size:13px;padding:11px 20px;border:1px solid var(--rule);border-radius:30px;color:var(--ink-soft);">Latest series</span>
+        </div>
+      </div>
+      <div style="background:var(--panel-2);border:1px solid var(--rule);border-radius:12px;overflow:hidden;">
+        <div style="aspect-ratio:3/4;background:var(--cover);"></div>
+        <div class="bn" lang="bn" style="padding:12px 14px;font-size:13px;color:var(--ink-soft);">মেঘনাদবধ কাব্য · পর্ব ৬ · ১২ মিনিট</div>
+      </div>
+    </section>
+    <div style="text-align:center;font-size:11px;color:var(--ink-faint);padding-bottom:16px;">— next section peeks above the fold —</div>
+
+    <section style="padding:var(--section-y) 22px;border-top:1px solid var(--rule);">
+      <div class="bn" lang="bn" style="font-size:var(--step-6);font-weight:500;">নির্বাচিত ধারাবাহিক</div>
+      <div style="width:64px;height:2px;background:var(--gold);margin-top:16px;"></div>
+      <div class="grid3" style="margin-top:30px;">
+        <div style="position:relative;">
+          <div style="aspect-ratio:3/4;border-radius:10px;background:var(--cover);"></div>
+          <span lang="bn" style="position:absolute;top:10px;left:10px;font-size:13px;color:var(--gold-bright);font-weight:600;">০১</span>
+        </div>
+        <div style="position:relative;">
+          <div style="aspect-ratio:3/4;border-radius:10px;background:var(--cover);"></div>
+          <span lang="bn" style="position:absolute;top:10px;left:10px;font-size:13px;color:var(--gold-bright);font-weight:600;">০২</span>
+        </div>
+        <div style="position:relative;">
+          <div style="aspect-ratio:3/4;border-radius:10px;background:var(--cover);"></div>
+          <span lang="bn" style="position:absolute;top:10px;left:10px;font-size:13px;color:var(--gold-bright);font-weight:600;">০৩</span>
+        </div>
+      </div>
+      <div style="height:3px;background:var(--rule);border-radius:2px;margin-top:18px;max-width:220px;overflow:hidden;">
+        <div style="height:100%;width:62%;background:var(--gold);"></div>
+      </div>
+    </section>
+
+    <section class="split-after" style="padding:var(--section-y-sm) 22px;border-top:1px solid var(--rule);display:block;">
+      <div class="bn" lang="bn" style="font-size:var(--step-4);font-weight:500;">সাম্প্রতিক পর্ব</div>
+      <div style="width:40px;height:1px;background:var(--rule);margin-top:12px;"></div>
+      <div class="split-after" style="display:grid;grid-template-columns:1.3fr 1fr;gap:24px;margin-top:22px;align-items:start;">
+        <div style="aspect-ratio:16/9;border-radius:10px;background:var(--cover);"></div>
+        <div>
+          <div style="display:flex;gap:10px;padding:12px 0;border-top:1px solid var(--rule);font-size:14px;align-items:baseline;"><span lang="bn" style="color:var(--gold-bright);font-size:12px;">০১</span><span class="bn" lang="bn">শিরোনাম</span></div>
+          <div style="display:flex;gap:10px;padding:12px 0;border-top:1px solid var(--rule);font-size:14px;align-items:baseline;"><span lang="bn" style="color:var(--gold-bright);font-size:12px;">০২</span><span class="bn" lang="bn">শিরোনাম</span></div>
+          <div style="display:flex;gap:10px;padding:12px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);font-size:14px;align-items:baseline;"><span lang="bn" style="color:var(--gold-bright);font-size:12px;">০৩</span><span class="bn" lang="bn">শিরোনাম</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:var(--section-y-sm) 22px;border-top:1px solid var(--rule);">
+      <div class="bn" lang="bn" style="font-size:var(--step-4);font-weight:500;">বিভাগ</div>
+      <div style="width:40px;height:1px;background:var(--rule);margin-top:12px;"></div>
+      <div class="grid3 cat-grid" style="margin-top:22px;">
+        <div style="background:var(--panel-2);border:1px solid var(--rule);border-radius:10px;padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span class="bn" lang="bn" style="font-size:14px;color:var(--ink-soft);">রচনা</span>
+            <span lang="bn" style="font-size:20px;color:var(--gold-bright);font-weight:600;">৭</span>
+          </div>
+          <div style="border-top:1px solid var(--rule);margin-top:12px;padding-top:10px;">
+            <div style="font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em;">Latest</div>
+            <div class="bn" lang="bn" style="font-size:12px;color:var(--ink-soft);margin-top:4px;">মেঘনাদবধ ৬ →</div>
+          </div>
+        </div>
+        <div style="background:var(--panel-2);border:1px solid var(--rule);border-radius:10px;padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span class="bn" lang="bn" style="font-size:14px;color:var(--ink-soft);">তথ্যচিত্র</span>
+            <span lang="bn" style="font-size:20px;color:var(--gold-bright);font-weight:600;">৩</span>
+          </div>
+          <div style="border-top:1px solid var(--rule);margin-top:12px;padding-top:10px;">
+            <div style="font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em;">Latest</div>
+            <div class="bn" lang="bn" style="font-size:12px;color:var(--ink-soft);margin-top:4px;">শিরোনাম →</div>
+          </div>
+        </div>
+        <div style="background:var(--panel-2);border:1px solid var(--rule);border-radius:10px;padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span class="bn" lang="bn" style="font-size:14px;color:var(--ink-soft);">ব্লগ</span>
+            <span lang="bn" style="font-size:20px;color:var(--gold-bright);font-weight:600;">৪</span>
+          </div>
+          <div style="border-top:1px solid var(--rule);margin-top:12px;padding-top:10px;">
+            <div style="font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em;">Latest</div>
+            <div class="bn" lang="bn" style="font-size:12px;color:var(--ink-soft);margin-top:4px;">শিরোনাম →</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:18px 22px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <span class="bn" lang="bn" style="font-size:12px;color:var(--ink-faint);">সংগ্রহ &nbsp; ২০২৬ <span style="color:var(--gold-bright);font-weight:600;">৯</span> &nbsp; ২০২৫ <span style="color:var(--gold-bright);font-weight:600;">৮</span></span>
+      <span class="bn" lang="bn" style="font-size:12px;color:var(--ink-faint);">সময়রেখা &nbsp; জুলাই <span style="color:var(--gold-bright);font-weight:600;">৩</span> · আগস্ট <span style="color:var(--gold-bright);font-weight:600;">৭</span></span>
+    </section>
+
+    <section style="padding:var(--section-y) 22px;text-align:center;">
+      <div style="font-size:32px;color:var(--gold);line-height:1;">❝</div>
+      <div class="bn" lang="bn" style="font-style:italic;font-size:var(--step-3);color:var(--ink);line-height:1.65;max-width:480px;margin:14px auto 0;">একটি উদ্ধৃতি এখানে থাকবে যা পাঠককে থামিয়ে দেয়।</div>
+    </section>
+
+  </div>
+</div>
+
+<div style="text-align:center;font-size:12px;color:var(--ink-faint);margin-top:30px;">Wireframe demo — layout and hierarchy only. Cover art and copy are placeholders.</div>
+
+</div>
+</body>
+</html>
