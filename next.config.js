@@ -67,11 +67,8 @@ const nextConfig = {
         ],
       },
       {
-        // Cache directives only, and never for the cover route: that route
-        // varies its own Cache-Control by status code, and config headers
-        // append rather than replace, so a 404 would ship two conflicting
-        // values and become CDN-cacheable for a year.
-        source: "/:path((?!api/cover).*)",
+        // Cache directives for public content only, never for /api or /admin routes
+        source: "/:path((?!api|admin).*)",
         headers: [
           {
             key: "CDN-Cache-Control",

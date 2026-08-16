@@ -47,28 +47,40 @@ export async function GET() {
     const logs = formattedDbLogs.length > 0 ? formattedDbLogs : fileLogs;
     const isRunning = isPipelineRunning();
 
-    return NextResponse.json({
-      ok: true,
-      status: {
-        isRunning,
-        lastReport,
-        health: {
-          status: health.status,
-          dbConnected: health.dbConnected,
-          memoryUsageMb: health.memoryUsageMb,
+    return NextResponse.json(
+      {
+        ok: true,
+        status: {
+          isRunning,
+          lastReport,
+          health: {
+            status: health.status,
+            dbConnected: health.dbConnected,
+            memoryUsageMb: health.memoryUsageMb,
+          },
+          security: {
+            activeSessions: security.activeSessions,
+            revokedTokenReuseAttempts: security.revokedTokenReuseAttempts,
+          },
+          logs,
         },
-        security: {
-          activeSessions: security.activeSessions,
-          revokedTokenReuseAttempts: security.revokedTokenReuseAttempts,
-        },
-        logs,
       },
-    });
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      }
+    );
   } catch (err) {
     console.error("[AutomationStatus] Failed to load automation status:", err);
     return NextResponse.json(
       { ok: false, error: err instanceof Error ? err.message : String(err) },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      }
     );
   }
 }
