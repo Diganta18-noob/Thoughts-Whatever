@@ -73,8 +73,10 @@ export function CoverImage({
   priority?: boolean;
   className?: string;
 }) {
+  // `coverSrc` is total — it falls back to the `/api/cover` path — so there is
+  // no "no cover" case to render nothing for. A missing image surfaces as the
+  // endpoint's 404, which `FillImage`'s `onError` turns into the placeholder.
   const src = coverSrc(owner, slug, coverImage);
-  if (!src) return null;
 
   return (
     <FillImage

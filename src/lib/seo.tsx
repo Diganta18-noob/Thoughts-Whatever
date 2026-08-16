@@ -22,7 +22,12 @@ type SeoPiece = {
   tags?: { labelBn: string }[];
 };
 
-function shareImage(piece: SeoPiece): string | null {
+/**
+ * Always resolves: a real `ogImage` URL wins, otherwise the cover — and
+ * `absoluteCoverUrl` is total. So every piece has a share image, and
+ * `summary_large_image` is always the right card type.
+ */
+function shareImage(piece: SeoPiece): string {
   return (
     absoluteImageUrl(piece.ogImage) ??
     absoluteCoverUrl("piece", piece.slug, piece.coverImage)
@@ -53,13 +58,13 @@ export function pieceMetadata(piece: SeoPiece): Metadata {
       publishedTime: piece.publishedAt?.toISOString(),
       modifiedTime: piece.updatedAt?.toISOString(),
       tags: piece.tags?.map((t) => t.labelBn),
-      images: image ? [{ url: image }] : undefined,
+      images: [{ url: image }],
     },
     twitter: {
-      card: image ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: piece.titleBn,
       description,
-      images: image ? [image] : undefined,
+      images: [image],
     },
   };
 }
@@ -75,7 +80,7 @@ export function articleJsonLd(piece: SeoPiece) {
     description:
       piece.seoDescription || piece.dekBn || piece.excerptBn || undefined,
     inLanguage: "bn",
-    image: shareImage(piece) ?? undefined,
+    image: shareImage(piece),
     datePublished: piece.publishedAt?.toISOString(),
     dateModified: (piece.updatedAt ?? piece.publishedAt)?.toISOString(),
     mainEntityOfPage: { "@type": "WebPage", "@id": url },

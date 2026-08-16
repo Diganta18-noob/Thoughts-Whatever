@@ -77,19 +77,20 @@ export default async function SeriesPage(props: RouteProps) {
       {/* Series Hero Section */}
       <div className="my-8 rounded-xl border border-rule/80 bg-surface-raised/40 p-6 sm:p-10 shadow-sm backdrop-blur">
         <div className="grid gap-8 md:grid-cols-[1.5fr_2.5fr] md:items-center">
-          {series.coverImage ? (
-            <EditorialImage
-              src={series.coverImage}
-              alt={series.titleBn}
-              priority
-              aspectRatioOverride="aspect-[4/3]"
-              className="rounded-lg shadow-md"
-            />
-          ) : (
-            <div className="flex aspect-[4/3] items-center justify-center rounded-lg bg-surface/60 border border-rule/60 text-content-faint">
-              <Layers className="h-16 w-16 opacity-40" />
-            </div>
-          )}
+          {/* No placeholder branch: `withSeriesCovers` runs every series through
+              `coverSrc`, so `coverImage` is always a URL. A series with no image
+              gets a 404 from `/api/cover`, and `FillImage`'s `onError` renders
+              the "Image Unavailable" box — the one place that decision can
+              actually be made. */}
+          <EditorialImage
+            src={series.coverImage}
+            alt={series.titleBn}
+            width={series.coverImageWidth}
+            height={series.coverImageHeight}
+            priority
+            aspectRatioOverride="aspect-[4/3]"
+            className="rounded-lg shadow-md"
+          />
 
           <div className="space-y-4">
             <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-accent">

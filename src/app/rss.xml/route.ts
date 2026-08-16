@@ -114,7 +114,7 @@ export async function GET() {
         `      <description>${esc(description)}</description>`,
         cover
           ? `      <enclosure url="${esc(
-              absoluteCoverUrl("piece", piece.slug, usable) ?? "",
+              absoluteCoverUrl("piece", piece.slug, usable),
             )}" type="${esc(coverMime(usable))}" />`
           : null,
         categories || null,

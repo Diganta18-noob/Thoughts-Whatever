@@ -2,16 +2,6 @@ import { absoluteUrl } from "@/lib/utils";
 
 export type CoverOwner = "piece" | "series";
 
-function fingerprint(value: string): string {
-  const sample = `${value.length}|${value.slice(0, 64)}|${value.slice(-64)}`;
-  let hash = 0x811c9dc5;
-  for (let i = 0; i < sample.length; i += 1) {
-    hash ^= sample.charCodeAt(i);
-    hash = Math.imul(hash, 0x01000193);
-  }
-  return (hash >>> 0).toString(36);
-}
-
 /**
  * Resolve a cover to something safe to put in the render tree.
  *
@@ -37,13 +27,18 @@ function absolutize(src: string): string {
   return src.startsWith("/") ? absoluteUrl(src) : src;
 }
 
+/**
+ * Always a URL, never null: `coverSrc` falls back to the `/api/cover` path, and
+ * that endpoint answers for every slug — with bytes, or with a 404 the
+ * component's `onError` turns into the placeholder. A nullable return type here
+ * would push a fallback onto every caller for a case that cannot arise.
+ */
 export function absoluteCoverUrl(
   owner: CoverOwner,
   slug: string,
   coverImage?: string | null,
-): string | null {
-  const src = coverSrc(owner, slug, coverImage);
-  return src ? absolutize(src) : null;
+): string {
+  return absolutize(coverSrc(owner, slug, coverImage));
 }
 
 export function absoluteImageUrl(src?: string | null): string | null {

@@ -66,7 +66,16 @@ export type CardPiece = Prisma.PieceGetPayload<{ select: typeof cardSelect }> & 
   coverImage: string;
 };
 
-/** Same reasoning as `cardSelect`: never select `Series.coverImage`. */
+/**
+ * Same reasoning as `cardSelect`: never select `Series.coverImage`.
+ *
+ * The two dimension columns are read by the series detail page's hero, which
+ * passes them to `EditorialImage` — without them the component falls back to
+ * `probeImageDimensions`, a second client-side fetch of the same cover just to
+ * read its header. Both are null on all 4 rows today (Task 7's backfill covered
+ * `Piece` only), so the fallback still fires; the wiring is what makes filling
+ * them in worth doing.
+ */
 const seriesSelect = {
   id: true,
   slug: true,
