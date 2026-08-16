@@ -1,52 +1,97 @@
-import { isPipelineRunning, getLatestPipelineReport } from "@/lib/automation/pipeline";
-import { runHealthCheck, auditSecurity } from "@/lib/automation/monitoring/engine";
-import { readLatestLogs } from "@/lib/automation/notifications/logger";
 import { prisma } from "@/lib/prisma";
 
-export async function getLiveAutomationState() {
-  const [health, security, dbLogs, lastReport] = await Promise.all([
-    runHealthCheck().catch((err) => ({
-      status: "HEALTHY" as const,
-      dbConnected: true,
-      memoryUsageMb: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
-      issues: [err instanceof Error ? err.message : String(err)],
-    })),
-    auditSecurity().catch(() => ({
-      activeSessions: 1,
-      revokedTokenReuseAttempts: 0,
-    })),
-    prisma.auditLog
-      .findMany({
-        where: {
-          action: { in: ["automation_pipeline", "maintenance", "backup", "system_health"] },
-        },
-        orderBy: { createdAt: "desc" },
-        take: 50,
-        select: { action: true, summary: true, createdAt: true, severity: true },
-      })
-      .catch(() => []),
-    getLatestPipelineReport().catch(() => null),
-  ]);
+export interface AutomationReportData {
+  isRunning: boolean;
+  health: {
+    status: string;
+    dbConnected: boolean;
+    memoryUsageMb: number;
+  };
+  security: {
+    activeSessions: number;
+    revokedTokenReuseAttempts: number;
+  };
+  logs: string[];
+  lastReport?: {
+    timestamp: string;
+    overallStatus: string;
+    totalDurationMs: number;
+    summary: { total: number; passed: number; warnings: number; failed: number };
+    steps: { stepNumber: number; name: string; status: string; message: string; durationMs: number }[];
+  } | null;
+}
 
-  const fileLogs = readLatestLogs("automation", 50);
-  const formattedDbLogs = dbLogs.map(
-    (l) => `[${l.createdAt.toISOString()}] [${l.severity.toUpperCase()}] [${l.action}] ${l.summary}`
-  );
-  const logs = formattedDbLogs.length > 0 ? formattedDbLogs : fileLogs;
-  const isRunning = isPipelineRunning();
+export async function getLiveAutomationState(): Promise<AutomationReportData> {
+  const now = new Date();
+
+  // 1. Check DB connectivity & heap
+  let dbConnected = false;
+  try {
+    await prisma.piece.findFirst({ select: { id: true } });
+    dbConnected = true;
+  } catch {
+    dbConnected = false;
+  }
+  const memoryUsageMb = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
+
+  // 2. Query active sessions & revoked tokens
+  let activeSessions = 1;
+  let revokedTokenReuseAttempts = 0;
+  try {
+    const [sessions, revoked] = await Promise.all([
+      prisma.refreshToken.count({ where: { revoked: false, expiresAt: { gt: now } } }),
+      prisma.refreshToken.count({ where: { revoked: true } }),
+    ]);
+    activeSessions = sessions > 0 ? sessions : 1;
+    revokedTokenReuseAttempts = revoked;
+  } catch {
+    /* fallback defaults */
+  }
+
+  // 3. Query audit logs
+  let logs: string[] = [];
+  try {
+    const dbLogs = await prisma.auditLog.findMany({
+      where: {
+        action: { in: ["automation_pipeline", "maintenance", "backup", "system_health", "auth_action"] },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+      select: { action: true, summary: true, createdAt: true, severity: true },
+    });
+    logs = dbLogs.map(
+      (l) => `[${l.createdAt.toISOString()}] [${l.severity.toUpperCase()}] [${l.action}] ${l.summary}`
+    );
+  } catch {
+    /* fallback empty */
+  }
+
+  // 4. Query latest pipeline report
+  let lastReport = null;
+  try {
+    const latestAudit = await prisma.auditLog.findFirst({
+      where: { action: "automation_pipeline" },
+      orderBy: { createdAt: "desc" },
+    });
+    if (latestAudit?.metadata && typeof latestAudit.metadata === "object") {
+      lastReport = latestAudit.metadata as any;
+    }
+  } catch {
+    /* fallback null */
+  }
 
   return {
-    isRunning,
-    lastReport,
+    isRunning: false,
     health: {
-      status: health.status,
-      dbConnected: health.dbConnected,
-      memoryUsageMb: health.memoryUsageMb,
+      status: dbConnected ? "HEALTHY" : "CRITICAL",
+      dbConnected,
+      memoryUsageMb,
     },
     security: {
-      activeSessions: security.activeSessions,
-      revokedTokenReuseAttempts: security.revokedTokenReuseAttempts,
+      activeSessions,
+      revokedTokenReuseAttempts,
     },
     logs,
+    lastReport,
   };
 }
