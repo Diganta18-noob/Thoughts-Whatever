@@ -150,6 +150,15 @@ export const loginSchema = z.object({
   password: z.string().min(8, "পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে"),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.email("সঠিক ইমেল দিন"),
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1, "টোকেন প্রদান করুন"),
+  password: z.string().min(8, "পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে"),
+});
+
 export const subscribeSchema = z.object({
   email: z.email("সঠিক ইমেল ঠিকানা দিন"),
   nameBn: optionalText,

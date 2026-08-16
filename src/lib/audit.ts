@@ -76,7 +76,12 @@ export async function logAuditEvent(input: AuditLogInput): Promise<void> {
     });
 
     // Auto-backup database on mutation actions (piece, series, author, tag, import, etc.)
-    if (!input.action.startsWith("admin.login") && !input.action.startsWith("admin.logout")) {
+    if (
+      !input.action.startsWith("admin.login") &&
+      !input.action.startsWith("admin.logout") &&
+      !input.action.startsWith("admin.forgot_password") &&
+      !input.action.startsWith("admin.reset_password")
+    ) {
       import("@/lib/system/backup/auto-backup")
         .then((m) => m.triggerAutoBackup(input.action))
         .catch((e) => console.error("[AutoBackup] Trigger failed:", e));
@@ -127,18 +132,37 @@ export function auditSeriesAction(
 }
 
 export function auditAuthAction(
-  action: "login" | "logout" | "login_failed",
+  action:
+    | "login"
+    | "logout"
+    | "login_failed"
+    | "forgot_password"
+    | "reset_password"
+    | "reset_password_failed",
   extra: { adminId?: string; adminEmail?: string; reason?: string }
 ) {
+  let summary = "";
+  if (action === "login_failed") {
+    summary = `Failed login attempt for ${extra.adminEmail || "unknown"}`;
+  } else if (action === "login") {
+    summary = `Admin ${extra.adminEmail} logged in`;
+  } else if (action === "logout") {
+    summary = `Admin ${extra.adminEmail} logged out`;
+  } else if (action === "forgot_password") {
+    summary = `Password reset requested for ${extra.adminEmail || "unknown"}`;
+  } else if (action === "reset_password") {
+    summary = `Password reset completed for ${extra.adminEmail || "unknown"}`;
+  } else if (action === "reset_password_failed") {
+    summary = `Failed password reset attempt for ${extra.adminEmail || "unknown"}${extra.reason ? `: ${extra.reason}` : ""}`;
+  }
+
   return logAuditEvent({
     action: `admin.${action}`,
-    summary:
-      action === "login_failed"
-        ? `Failed login attempt for ${extra.adminEmail || "unknown"}`
-        : action === "login"
-        ? `Admin ${extra.adminEmail} logged in`
-        : `Admin ${extra.adminEmail} logged out`,
-    severity: action === "login_failed" ? "warning" : "info",
+    summary,
+    severity:
+      action === "login_failed" || action === "reset_password_failed"
+        ? "warning"
+        : "info",
     adminId: extra.adminId,
     adminEmail: extra.adminEmail,
     metadata: extra.reason ? { reason: extra.reason } : undefined,
