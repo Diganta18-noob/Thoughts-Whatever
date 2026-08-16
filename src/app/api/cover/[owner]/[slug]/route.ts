@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { PUBLISHED } from "@/lib/pieces";
 import { resolveCover, resolveRemoteTarget } from "@/lib/cover-resolver";
 
 // This route owns its cache headers outright: `next.config.js` excludes
@@ -38,12 +39,21 @@ function decodeSlug(raw: string) {
   }
 }
 
+/**
+ * Only published covers are served.
+ *
+ * Without the status filter this endpoint answered for drafts too, so anyone
+ * who guessed an unpublished slug got its artwork — and got it back under a
+ * year-long `immutable`, which would keep serving after the piece was deleted.
+ * Every other public read path already filters on `PUBLISHED`; this one was the
+ * gap.
+ */
 async function findCover(owner: string, rawSlug: string) {
   const slug = decodeSlug(rawSlug);
 
   if (owner === "piece") {
     const piece = await prisma.piece.findFirst({
-      where: { slug },
+      where: { slug, ...PUBLISHED },
       select: { coverImage: true },
     });
     return piece?.coverImage ?? null;
@@ -52,7 +62,20 @@ async function findCover(owner: string, rawSlug: string) {
   if (owner === "series") {
     const series = await prisma.series.findFirst({
       where: { slug },
-      select: { coverImage: true, pieces: { select: { coverImage: true }, take: 1 } },
+      select: {
+        coverImage: true,
+        // A series without its own cover borrows one from an episode. Both the
+        // filter and the ordering matter: unfiltered and unordered, this
+        // returned whichever row Postgres happened to hand back first, so the
+        // same URL could serve a different image between requests — and could
+        // serve a draft's.
+        pieces: {
+          where: PUBLISHED,
+          select: { coverImage: true },
+          orderBy: { seriesOrder: "asc" },
+          take: 1,
+        },
+      },
     });
     if (!series) return null;
     return series.coverImage || series.pieces[0]?.coverImage || null;

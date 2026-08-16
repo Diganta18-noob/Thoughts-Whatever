@@ -1,16 +1,29 @@
 import { describe, it, expect, jest, beforeEach, afterAll } from "@jest/globals";
 
-const findFirstPiece = jest.fn<() => Promise<{ coverImage: string | null } | null>>();
+// The route imports `PUBLISHED` from `@/lib/pieces`, which wraps its queries in
+// React's `cache()` — an API the App Router polyfills but the installed react
+// 18.3.1 does not export.
+jest.mock("react", () => ({
+  ...(jest.requireActual("react") as object),
+  cache: <T,>(fn: T) => fn,
+}));
+
+type Args = { where?: unknown; select?: unknown };
+
+const findFirstPiece = jest.fn<(args: Args) => Promise<{ coverImage: string | null } | null>>();
+const findFirstSeries = jest.fn<
+  (args: Args) => Promise<{ coverImage: string | null; pieces: { coverImage: string | null }[] } | null>
+>();
 
 jest.mock("@/lib/prisma", () => ({
   prisma: {
-    piece: { findFirst: () => findFirstPiece() },
-    series: { findFirst: () => Promise.resolve(null) },
+    piece: { findFirst: (args: Args) => findFirstPiece(args) },
+    series: { findFirst: (args: Args) => findFirstSeries(args) },
   },
 }));
 
-// Loaded with `require` rather than a top-level import so the prisma mock above
-// is unambiguously in place before the route module resolves it.
+// Loaded with `require` rather than a top-level import so the mocks above are
+// unambiguously in place before the route module resolves them.
 const { GET } = require("@/app/api/cover/[owner]/[slug]/route") as typeof import("@/app/api/cover/[owner]/[slug]/route");
 
 const REQUEST_URL = "https://thoughts-whatever.vercel.app/api/cover/piece/abc";
@@ -29,6 +42,8 @@ function get(params = { owner: "piece", slug: "abc" }) {
 
 beforeEach(() => {
   findFirstPiece.mockReset();
+  findFirstSeries.mockReset();
+  findFirstSeries.mockResolvedValue(null);
   fetchMock.mockReset();
   globalThis.fetch = fetchMock as unknown as typeof fetch;
 });
@@ -128,5 +143,62 @@ describe("GET /api/cover/[owner]/[slug]", () => {
 
     expect(res.status).toBe(404);
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  /**
+   * A cover is public artwork for a *published* piece. Unfiltered, this endpoint
+   * answered for drafts too, so guessing an unpublished slug returned its
+   * artwork — under a year-long `immutable`, so it kept being served even after
+   * the piece was deleted.
+   */
+  it("only looks at published pieces", async () => {
+    findFirstPiece.mockResolvedValue(null);
+
+    await get();
+
+    expect(findFirstPiece.mock.calls[0]![0].where).toEqual({
+      slug: "abc",
+      status: "PUBLISHED",
+    });
+  });
+
+  it("decodes a Bengali slug before querying", async () => {
+    findFirstPiece.mockResolvedValue(null);
+
+    await get({ owner: "piece", slug: encodeURIComponent("রক্তকরবী") });
+
+    expect(findFirstPiece.mock.calls[0]![0].where).toEqual({
+      slug: "রক্তকরবী",
+      status: "PUBLISHED",
+    });
+  });
+
+  it("borrows a series cover from its first published episode, deterministically", async () => {
+    findFirstSeries.mockResolvedValue({
+      coverImage: null,
+      pieces: [{ coverImage: `data:image/png;base64,${PNG_B64}` }],
+    });
+
+    const res = await get({ owner: "series", slug: "s" });
+
+    expect(res.status).toBe(200);
+    // Unfiltered and unordered, this returned whichever row Postgres handed
+    // back first — so the same URL could serve a different image per request,
+    // and could serve a draft's.
+    expect(findFirstSeries.mock.calls[0]![0].select).toMatchObject({
+      pieces: {
+        where: { status: "PUBLISHED" },
+        orderBy: { seriesOrder: "asc" },
+        take: 1,
+      },
+    });
+  });
+
+  it("404s an unknown owner without querying", async () => {
+    const res = await get({ owner: "author", slug: "x" });
+
+    expect(res.status).toBe(404);
+    expect(findFirstPiece).not.toHaveBeenCalled();
+    expect(findFirstSeries).not.toHaveBeenCalled();
   });
 });
