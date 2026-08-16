@@ -2,6 +2,7 @@ import { cache } from "react";
 import type { Prisma, PieceKind } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { coverSrc } from "@/lib/images";
+import { publishedBlobPrefixes, usablePrefix } from "@/lib/blob-prefix";
 
 export const PUBLISHED: Prisma.PieceWhereInput = {
   status: "PUBLISHED",
@@ -18,7 +19,7 @@ function withCover<T extends { slug: string; coverImage?: string | null }>(
  * `ogImage` is the *second* blob column on Piece, and on every legacy row it
  * holds a byte-for-byte copy of the base64 `coverImage` — 133 KB to 320 KB of
  * it. Dropping `coverImage` from the list selects was not enough: the article
- * page's `getPieceBySlug` uses `include:`, which pulls every scalar, so one
+ * page's `getPieceBySlug` used `include:`, which pulls every scalar, so one
  * full blob still reached the RSC stream (283,695 chars on
  * crime-and-punishment-3, which alone was 90% of that page's payload).
  *
@@ -104,24 +105,80 @@ export const getFeaturedPieces = cache(async (take = 3) => {
   return rows.map((row) => withCover(row));
 });
 
-export const getPieceBySlug = cache(async (slug: string, kind?: PieceKind) => {
-  const piece = await prisma.piece.findFirst({
-    where: { slug, ...PUBLISHED, ...(kind ? { kind } : {}) },
-    include: {
-      authors: { select: { slug: true, nameBn: true, era: true } },
-      tags: { select: { slug: true, labelBn: true, kind: true } },
-      series: {
-        select: {
-          slug: true,
-          titleBn: true,
-          _count: { select: { pieces: { where: PUBLISHED } } },
-        },
-      },
-      sources: { orderBy: { order: "asc" } },
-      timeline: { orderBy: { order: "asc" } },
+/**
+ * Everything an article page renders, named one field at a time.
+ *
+ * This was an `include:`, which pulls every scalar on the row. That is how
+ * `ogImage` kept crossing the database boundary after `coverImage` had been
+ * dealt with everywhere else, and it is why the fix had to be applied per
+ * column — `withCover` for one, `sanitizeShareImage` for the other. An explicit
+ * select makes the class of bug structurally impossible instead: the next
+ * blob-shaped column added to `Piece` is simply not read here, and nobody has to
+ * remember to patch it.
+ *
+ * Neither blob column is listed. `withCover` rewrites `coverImage` to the
+ * `/api/cover` URL for every other surface on the site, so the article hero is
+ * now consistent with the cards rather than the exception; `ogImage` is read as
+ * a bounded prefix in `getPieceBySlug` below, because a *real* URL there is a
+ * usable share image and must survive.
+ */
+const pieceSelect = {
+  id: true,
+  kind: true,
+  status: true,
+  slug: true,
+  titleBn: true,
+  titleEn: true,
+  subtitleBn: true,
+  dekBn: true,
+  bodyBn: true,
+  excerptBn: true,
+  coverImageWidth: true,
+  coverImageHeight: true,
+  reelUrl: true,
+  videoUrl: true,
+  audioUrl: true,
+  audioSec: true,
+  readingMinutes: true,
+  featured: true,
+  viewCount: true,
+  seoDescription: true,
+  publishedAt: true,
+  createdAt: true,
+  updatedAt: true,
+  seriesId: true,
+  seriesOrder: true,
+  authors: { select: { slug: true, nameBn: true, era: true } },
+  tags: { select: { slug: true, labelBn: true, kind: true } },
+  series: {
+    select: {
+      slug: true,
+      titleBn: true,
+      _count: { select: { pieces: { where: PUBLISHED } } },
     },
-  });
-  return piece && sanitizeShareImage(withCover(piece));
+  },
+  // Source and TimelineEvent are short text rows with no image columns, so
+  // taking them whole costs nothing and stays correct as they grow.
+  sources: { orderBy: { order: "asc" } },
+  timeline: { orderBy: { order: "asc" } },
+} satisfies Prisma.PieceSelect;
+
+export const getPieceBySlug = cache(async (slug: string, kind?: PieceKind) => {
+  // Concurrent, not sequential: the prefix read is a lookup on `slug`'s unique
+  // index returning at most 512 bytes, so it costs a connection and no
+  // measurable latency — against up to 320 KB of base64 it replaces.
+  const [piece, shareImages] = await Promise.all([
+    prisma.piece.findFirst({
+      where: { slug, ...PUBLISHED, ...(kind ? { kind } : {}) },
+      select: pieceSelect,
+    }),
+    publishedBlobPrefixes("ogImage", [slug]),
+  ]);
+
+  if (!piece) return null;
+
+  const ogImage = usablePrefix(shareImages.get(slug));
+  return sanitizeShareImage(withCover({ ...piece, ogImage }));
 });
 
 export type FullPiece = NonNullable<Awaited<ReturnType<typeof getPieceBySlug>>>;
@@ -251,10 +308,28 @@ export const getFilterFacets = cache(async () => {
   };
 });
 
+/**
+ * Same reasoning as `pieceSelect`: an explicit list, not `include:`.
+ *
+ * `portrait` stays. It is not a blob column by design — `validation.ts` accepts
+ * only a URL there, all 7 rows are null today, and the author page renders it
+ * directly. `/api/cover` has no `author` owner to proxy it through, so dropping
+ * it would silently remove the portrait rather than reroute it.
+ */
+const authorSelect = {
+  slug: true,
+  nameBn: true,
+  nameEn: true,
+  era: true,
+  bioBn: true,
+  portrait: true,
+} satisfies Prisma.AuthorSelect;
+
 export const getAuthorBySlug = cache(async (slug: string) => {
   const author = await prisma.author.findUnique({
     where: { slug },
-    include: {
+    select: {
+      ...authorSelect,
       pieces: { where: PUBLISHED, select: cardSelect, orderBy: byNewest },
     },
   });

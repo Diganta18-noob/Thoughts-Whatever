@@ -1,6 +1,6 @@
-import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { PUBLISHED } from "@/lib/pieces";
+import { publishedBlobPrefixes, usablePrefix } from "@/lib/blob-prefix";
 import { KIND_META } from "@/lib/nav";
 import { absoluteCoverUrl, coverMime } from "@/lib/images";
 import { absoluteUrl, siteConfig } from "@/lib/utils";
@@ -15,19 +15,6 @@ import { absoluteUrl, siteConfig } from "@/lib/utils";
  */
 
 const ITEMS = 30;
-
-/**
- * How much of `coverImage` the feed reads per row.
- *
- * The enclosure needs two facts — does a cover exist, and what is its mime —
- * and neither needs the image. Selecting the column outright pulled up to 30
- * base64 blobs (~9 MB on today's data) across the wire to compute a filename
- * extension, which is the same mistake `cardSelect` exists to prevent. A
- * bounded prefix answers both questions in 512 bytes: a data URI declares its
- * mime in the first ~30 characters, and a migrated Cloudinary URL fits whole
- * with room to spare.
- */
-const COVER_PREFIX = 512;
 
 /**
  * Served fresh on every request, then held by the CDN for an hour — see the
@@ -66,29 +53,11 @@ function rfc822(date: Date) {
 /**
  * Existence and mime of each cover, without the bytes.
  *
- * Prisma cannot project a substring of a column, so this is raw SQL. Keyed by
- * slug, which is `@unique` on Piece.
+ * The enclosure needs two facts — does a cover exist, and what is its mime —
+ * and neither needs the image. Selecting the column outright pulled up to 30
+ * base64 blobs (~9 MB on today's data) across the wire to compute a filename
+ * extension, which is the same mistake `cardSelect` exists to prevent.
  */
-async function coverPrefixes(slugs: string[]): Promise<Map<string, string>> {
-  const found = new Map<string, string>();
-  if (slugs.length === 0) return found;
-
-  // `::int` is required, not decorative: Prisma binds a JS number as `bigint`,
-  // and Postgres has no `left(text, bigint)` — without the cast this fails at
-  // runtime with 42883.
-  const rows = await prisma.$queryRaw<Array<{ slug: string; cover: string | null }>>`
-    SELECT slug, left("coverImage", ${COVER_PREFIX}::int) AS cover
-    FROM "Piece"
-    WHERE slug IN (${Prisma.join(slugs)})
-  `;
-
-  for (const row of rows) {
-    const value = row.cover?.trim();
-    if (value) found.set(row.slug, value);
-  }
-  return found;
-}
-
 export async function GET() {
   const pieces = await prisma.piece.findMany({
     where: PUBLISHED,
@@ -108,7 +77,7 @@ export async function GET() {
     take: ITEMS,
   });
 
-  const covers = await coverPrefixes(pieces.map((p) => p.slug));
+  const covers = await publishedBlobPrefixes("coverImage", pieces.map((p) => p.slug));
 
   const self = absoluteUrl("/rss.xml");
   const updated = pieces[0]?.publishedAt ?? new Date();
@@ -129,13 +98,10 @@ export async function GET() {
         .join("\n");
 
       const cover = covers.get(piece.slug);
-      // A prefix that exactly fills the budget may have been cut mid-URL, so it
-      // is not safe to publish. Passing `null` instead falls back to the
-      // /api/cover path, which serves the same bytes and is always correct, at
-      // the cost of a generic mime. Not reachable on any real cover URL.
-      const usable = cover && cover.length >= COVER_PREFIX && !cover.startsWith("data:")
-        ? null
-        : cover;
+      // A prefix cut mid-URL is not safe to publish; `usablePrefix` returns null
+      // for one. That falls back to the /api/cover path, which serves the same
+      // bytes and is always correct, at the cost of a generic mime.
+      const usable = usablePrefix(cover);
 
       return [
         "    <item>",
