@@ -94,7 +94,14 @@ export async function POST(request: Request) {
       requestedUserAgent: userAgent,
     });
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://thoughts-whatever.vercel.app";
+    let siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    if (!siteUrl || (process.env.NODE_ENV === "production" && siteUrl.includes("localhost"))) {
+      siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "https://thoughts-whatever.vercel.app";
+    }
     const resetUrl = `${siteUrl.replace(/\/+$/, "")}/admin/reset-password?token=${rawToken}`;
 
     await sendPasswordResetEmail(admin.email, resetUrl);
