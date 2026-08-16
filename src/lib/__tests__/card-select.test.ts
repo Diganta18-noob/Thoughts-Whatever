@@ -8,7 +8,8 @@ jest.mock("react", () => ({
   cache: <T,>(fn: T) => fn,
 }));
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// `require`, not `import`: the mock above must be installed before `pieces.ts`
+// is evaluated, and a static import is hoisted above it.
 const { cardSelect } = require("@/lib/pieces") as typeof import("@/lib/pieces");
 
 describe("cardSelect", () => {

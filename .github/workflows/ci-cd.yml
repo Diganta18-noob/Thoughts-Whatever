@@ -26,11 +26,14 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
+      # `npm run build` proves neither of these: next.config.js sets
+      # typescript.ignoreBuildErrors and eslint.ignoreDuringBuilds. These two
+      # steps are the only real type and lint gates in the repo.
       - name: Run ESLint
         run: npm run lint
 
       - name: TypeScript Check
-        run: npx tsc --noEmit
+        run: npm run typecheck
 
   test:
     name: Run Unit Tests

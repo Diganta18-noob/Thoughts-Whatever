@@ -17,8 +17,12 @@ export const metadata: Metadata = {
 export default async function AuthorsPage() {
   const { authors } = await withTimeout(
     getFilterFacets(),
-    { authors: [], tags: [], years: [] },
-    5000
+    // `series: []` is not optional: the fallback has to be assignable to the
+    // real return type, and without it `tsc --noEmit` fails here — the one error
+    // that kept CI's typecheck step red, and with it every job downstream.
+    { authors: [], tags: [], years: [], series: [] },
+    5000,
+    "getFilterFacets(authors)",
   );
 
   return (
