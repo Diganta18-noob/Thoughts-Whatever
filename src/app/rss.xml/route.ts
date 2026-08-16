@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { PUBLISHED } from "@/lib/pieces";
 import { KIND_META } from "@/lib/nav";
@@ -15,9 +16,31 @@ import { absoluteUrl, siteConfig } from "@/lib/utils";
 
 const ITEMS = 30;
 
-/** Rebuilt hourly; every admin mutation also revalidates this path. */
+/**
+ * How much of `coverImage` the feed reads per row.
+ *
+ * The enclosure needs two facts — does a cover exist, and what is its mime —
+ * and neither needs the image. Selecting the column outright pulled up to 30
+ * base64 blobs (~9 MB on today's data) across the wire to compute a filename
+ * extension, which is the same mistake `cardSelect` exists to prevent. A
+ * bounded prefix answers both questions in 512 bytes: a data URI declares its
+ * mime in the first ~30 characters, and a migrated Cloudinary URL fits whole
+ * with room to spare.
+ */
+const COVER_PREFIX = 512;
+
+/**
+ * Served fresh on every request, then held by the CDN for an hour — see the
+ * `Cache-Control` on the response below, which is what actually governs
+ * staleness here.
+ *
+ * `force-dynamic` is load-bearing and not an oversight: 9799413 added it so a
+ * Vercel build cannot fail on database access. It also means this route has no
+ * ISR cache, so a `revalidate` export would be dead config and
+ * `revalidatePath("/rss.xml")` cannot pull the feed forward — a publish shows
+ * up when the CDN entry expires.
+ */
 export const dynamic = "force-dynamic";
-export const revalidate = 3600;
 
 /**
  * XML escaping, applied to every interpolated value.
@@ -40,6 +63,32 @@ function rfc822(date: Date) {
   return date.toUTCString();
 }
 
+/**
+ * Existence and mime of each cover, without the bytes.
+ *
+ * Prisma cannot project a substring of a column, so this is raw SQL. Keyed by
+ * slug, which is `@unique` on Piece.
+ */
+async function coverPrefixes(slugs: string[]): Promise<Map<string, string>> {
+  const found = new Map<string, string>();
+  if (slugs.length === 0) return found;
+
+  // `::int` is required, not decorative: Prisma binds a JS number as `bigint`,
+  // and Postgres has no `left(text, bigint)` — without the cast this fails at
+  // runtime with 42883.
+  const rows = await prisma.$queryRaw<Array<{ slug: string; cover: string | null }>>`
+    SELECT slug, left("coverImage", ${COVER_PREFIX}::int) AS cover
+    FROM "Piece"
+    WHERE slug IN (${Prisma.join(slugs)})
+  `;
+
+  for (const row of rows) {
+    const value = row.cover?.trim();
+    if (value) found.set(row.slug, value);
+  }
+  return found;
+}
+
 export async function GET() {
   const pieces = await prisma.piece.findMany({
     where: PUBLISHED,
@@ -52,13 +101,14 @@ export async function GET() {
       excerptBn: true,
       publishedAt: true,
       updatedAt: true,
-      coverImage: true,
       authors: { select: { nameBn: true } },
       tags: { select: { labelBn: true } },
     },
     orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
     take: ITEMS,
   });
+
+  const covers = await coverPrefixes(pieces.map((p) => p.slug));
 
   const self = absoluteUrl("/rss.xml");
   const updated = pieces[0]?.publishedAt ?? new Date();
@@ -78,6 +128,15 @@ export async function GET() {
         .map((label) => `      <category>${esc(label)}</category>`)
         .join("\n");
 
+      const cover = covers.get(piece.slug);
+      // A prefix that exactly fills the budget may have been cut mid-URL, so it
+      // is not safe to publish. Passing `null` instead falls back to the
+      // /api/cover path, which serves the same bytes and is always correct, at
+      // the cost of a generic mime. Not reachable on any real cover URL.
+      const usable = cover && cover.length >= COVER_PREFIX && !cover.startsWith("data:")
+        ? null
+        : cover;
+
       return [
         "    <item>",
         `      <title>${esc(piece.titleBn)}</title>`,
@@ -87,10 +146,10 @@ export async function GET() {
         `      <guid isPermaLink="true">${esc(link)}</guid>`,
         `      <pubDate>${rfc822(piece.publishedAt ?? piece.updatedAt)}</pubDate>`,
         `      <description>${esc(description)}</description>`,
-        piece.coverImage
+        cover
           ? `      <enclosure url="${esc(
-              absoluteCoverUrl("piece", piece.slug, piece.coverImage) ?? "",
-            )}" type="${esc(coverMime(piece.coverImage))}" />`
+              absoluteCoverUrl("piece", piece.slug, usable) ?? "",
+            )}" type="${esc(coverMime(usable))}" />`
           : null,
         categories || null,
         "    </item>",
