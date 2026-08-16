@@ -177,9 +177,15 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
         <div className="bg-journal-paper p-4 rounded border border-journal-rule">
           <p className="text-xs text-journal-inkFaint uppercase tracking-wider font-mono">Database & Health</p>
           <p className="text-xl font-bold text-journal-ink mt-1">
-            {data?.health?.dbConnected ? "✅ Connected" : "❌ Disconnected"}
+            {data?.health
+              ? data.health.dbConnected
+                ? "✅ Connected"
+                : "❌ Disconnected"
+              : "⏳ Checking..."}
           </p>
-          <p className="text-xs text-journal-inkSoft font-mono mt-1">Heap: {data?.health?.memoryUsageMb || 0} MB</p>
+          <p className="text-xs text-journal-inkSoft font-mono mt-1">
+            Heap: {data?.health ? `${data.health.memoryUsageMb} MB` : "—"}
+          </p>
         </div>
 
         <div className="bg-journal-paper p-4 rounded border border-journal-rule">
