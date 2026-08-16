@@ -18,11 +18,26 @@ function pieceUrl(kind: keyof typeof KIND_META, slug: string) {
 }
 
 /**
- * Rebuilt hourly, and immediately on publish — every admin mutation calls
- * `revalidatePath("/sitemap.xml")`.
+ * Regenerated on every request.
+ *
+ * `force-dynamic` is load-bearing for the same reason as `/rss.xml`: it stops a
+ * Vercel build failing on database access. The consequence is that this route
+ * has no ISR cache, which makes two things untrue that a `revalidate = 3600`
+ * export sitting here used to imply — it is not rebuilt hourly, and
+ * `revalidatePath("/sitemap.xml")` has no cache entry to invalidate, so an
+ * admin mutation calling it does nothing here. The dead export is gone rather
+ * than left as documentation of a behaviour that isn't happening.
+ *
+ * Next serves this with `Cache-Control: public, max-age=0, must-revalidate`, so
+ * there is no CDN caching either and the three queries below run per request.
+ * A metadata route cannot set its own headers; buying a CDN TTL means either
+ * dropping `force-dynamic` (accepting build-time database access, as CI already
+ * provides `DATABASE_URL`) or moving this to a route handler that can set
+ * `s-maxage` the way `/rss.xml` does. Neither is urgent at 27 URLs.
+ *
+ * Note also that `public/sitemap.xml` currently shadows this route entirely.
  */
 export const dynamic = "force-dynamic";
-export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [pieces, authors, seriesList] = await Promise.all([
