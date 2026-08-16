@@ -302,11 +302,22 @@ meant for pages. This branch splits that block so the cover route is excluded.
 
 **Still unmeasured on Vercel:** this branch's own code. The `/api/cover` proxy
 under Vercel's CDN — whether the edge honours its `immutable` pair on a 200 and
-the short TTLs on a 404/502 — cannot be observed until the branch is deployed,
-because the deployed route is main's data-URI-only version. A preview deploy was
-not possible from here: the repo has no `.vercel` link and no token, so `vercel`
-would need an interactive login. Deploying is the human's call. Everything that
-does not depend on the branch's code is now measured on real Vercel above.
+the short TTLs on a 404/502 — cannot be observed until the branch is reachable,
+because the deployed route is main's data-URI-only version.
+
+A preview **does** exist and built successfully. Vercel's GitHub integration
+deployed `2a82bdf` at 12:44Z:
+
+```
+https://thoughts-whatever-71he1p7ui-digantas-projects-7e2f5959.vercel.app
+```
+
+It is not measurable from here because Deployment Protection is on: every request
+answers `302` to `vercel.com/sso-api`, so the CDN never serves the route. Closing
+this out needs one of three human actions — a Protection Bypass for Automation
+secret (sent as `x-vercel-protection-bypass`), turning protection off for
+previews, or merging to `main`. The `vercel` CLI is installed but the repo has no
+`.vercel` link and no token, so it cannot substitute.
 
 ### `public/rss.xml` shadows the dynamic feed
 
