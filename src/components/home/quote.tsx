@@ -16,7 +16,7 @@ export function Quote({ quote }: { quote: PullQuote | null }) {
   const href = piecePath(quote.kind as PieceKindKey, quote.slug);
 
   return (
-    <section className="relative flex min-h-[70svh] items-center justify-center py-24">
+    <section className="relative flex min-h-[70svh] items-center justify-center py-section-lg">
       <figure className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
         <span
           aria-hidden
@@ -27,7 +27,7 @@ export function Quote({ quote }: { quote: PullQuote | null }) {
 
         <motion.blockquote
           data-reveal
-          className="relative font-bengali text-[length:var(--step-4)] font-light leading-[1.6] text-content"
+          className="relative font-bengali text-step-5 font-light leading-[1.4] text-content"
           lang="bn"
           {...(reduced
             ? {}

@@ -26,7 +26,7 @@ function LargeCard({ piece }: { piece: CardPiece }) {
             owner="piece"
             slug={piece.slug}
             coverImage={piece.coverImage}
-            aspect="aspect-[4/3]"
+            aspect="aspect-[16/9]"
             rounded="rounded-sm"
             sizes="(max-width: 768px) 100vw, 60vw"
             overlay
@@ -121,6 +121,8 @@ function SmallCard({ piece }: { piece: CardPiece }) {
   );
 }
 
+import { SectionHeader } from "@/components/home/section-header";
+
 export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
   const { isBn, t } = useLanguage();
 
@@ -129,19 +131,12 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
   const [lead, ...rest] = pieces;
 
   return (
-    <section className="py-16">
-      <Reveal>
-        <div className="mb-8 border-b border-rule pb-3">
-          <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
-            সাম্প্রতিক
-          </h2>
-          {!isBn && (
-            <p className="mt-1 font-serif text-sm italic text-content-faint" lang="en">
-              {t("home.latestGloss")}
-            </p>
-          )}
-        </div>
-      </Reveal>
+    <section className="py-section">
+      <SectionHeader
+        titleBn="সাম্প্রতিক"
+        gloss={t("home.latestGloss")}
+        rank="section"
+      />
 
       <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
         {lead && (

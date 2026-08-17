@@ -6,14 +6,21 @@ import { useLanguage } from "@/components/providers/language-provider";
 import { formatNumber } from "@/lib/i18n/format";
 import { KIND_META, type PieceKindKey } from "@/lib/nav";
 
-type KindCount = { kind: PieceKindKey; count: number };
+import { SectionHeader } from "@/components/home/section-header";
+
+export type KindCategoryData = {
+  kind: PieceKindKey;
+  count: number;
+  latest?: { slug: string; titleBn: string } | null;
+};
+
 type FormTag = { slug: string; labelBn: string; count: number };
 
 export function Categories({
   kinds,
   forms,
 }: {
-  kinds: KindCount[];
+  kinds: KindCategoryData[];
   forms: FormTag[];
 }) {
   const { locale, isBn, t } = useLanguage();
@@ -23,43 +30,53 @@ export function Categories({
   const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-widest";
 
   return (
-    <section className="py-16">
-      <Reveal>
-        <div className="mb-8 border-b border-rule pb-3">
-          <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
-            বিভাগ
-          </h2>
-          {!isBn && (
-            <p className="mt-1 font-serif text-sm italic text-content-faint" lang="en">
-              {t("home.categoriesGloss")}
-            </p>
-          )}
-        </div>
-      </Reveal>
+    <section className="py-section">
+      <SectionHeader
+        titleBn="বিভাগ"
+        gloss={t("home.categoriesGloss")}
+        rank="utility"
+      />
 
       <Stagger as="ul" className="grid gap-px overflow-hidden rounded-sm bg-rule sm:grid-cols-3">
-        {kinds.map(({ kind, count }) => (
+        {kinds.map(({ kind, count, latest }) => (
           <StaggerItem key={kind} as="li" className="bg-surface">
             <Link
               href={KIND_META[kind].path}
               className="group flex h-full flex-col justify-between gap-6 p-6 transition hover:bg-surface-raised"
             >
               <div>
-                <h3
-                  className="font-bengali text-xl font-medium text-content transition group-hover:text-accent"
-                  lang="bn"
-                >
-                  {KIND_META[kind].labelBn}
-                </h3>
+                <div className="flex items-baseline justify-between gap-4">
+                  <h3
+                    className="font-display text-step-4 text-content transition group-hover:text-accent"
+                    lang="bn"
+                  >
+                    {KIND_META[kind].labelBn}
+                  </h3>
+                  <span className="font-mono text-step-5 leading-none text-gold tabular-nums">
+                    {formatNumber(count, locale)}
+                  </span>
+                </div>
                 {!isBn && (
                   <p className="mt-1 font-serif text-sm italic text-content-faint" lang="en">
                     {KIND_META[kind].labelEn}
                   </p>
                 )}
               </div>
-              <span className={`text-xs text-content-faint ${monoFace}`}>
-                {t("common.count", { count: formatNumber(count, locale) })}
-              </span>
+
+              {latest ? (
+                <div className="mt-auto border-t border-rule pt-4">
+                  <span className={`text-step-0 text-content-faint ${monoFace}`}>
+                    {t("home.latestIn") || "সর্বশেষ:"}
+                  </span>
+                  <p className="mt-1 font-bengali text-step-2 text-content-soft group-hover:text-accent transition line-clamp-1" lang="bn">
+                    {latest.titleBn} →
+                  </p>
+                </div>
+              ) : (
+                <span className={`text-xs text-content-faint ${monoFace}`}>
+                  {t("common.count", { count: formatNumber(count, locale) })}
+                </span>
+              )}
             </Link>
           </StaggerItem>
         ))}

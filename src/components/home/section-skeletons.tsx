@@ -4,7 +4,7 @@ export function HeroCardSkeleton() {
   return (
     <div className="w-full rounded-sm border border-rule bg-surface p-6 animate-pulse">
       <div className="flex flex-col gap-6 md:flex-row md:items-center">
-        <div className="aspect-[9/16] w-full max-w-[200px] rounded bg-content/10"></div>
+        <div className="aspect-[3/4] w-full max-w-[200px] rounded bg-content/10"></div>
         <div className="flex-1 space-y-4">
           <div className="h-4 w-28 rounded bg-content/10"></div>
           <div className="h-8 w-3/4 rounded bg-content/10"></div>

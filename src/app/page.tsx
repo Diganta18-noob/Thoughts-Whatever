@@ -104,10 +104,32 @@ export default async function HomePage() {
     {} as Record<string, number>,
   );
 
+  const latestByKind = recentPieces.reduce(
+    (acc, p) => {
+      if (!acc[p.kind]) {
+        acc[p.kind] = { slug: p.slug, titleBn: p.titleBn };
+      }
+      return acc;
+    },
+    {} as Record<string, { slug: string; titleBn: string }>,
+  );
+
   const kinds = [
-    { kind: "RACHANA" as const, count: kindCounts.RACHANA ?? 4 },
-    { kind: "DOCUMENTARY" as const, count: kindCounts.DOCUMENTARY ?? 14 },
-    { kind: "BLOG" as const, count: kindCounts.BLOG ?? 2 },
+    {
+      kind: "RACHANA" as const,
+      count: kindCounts.RACHANA ?? 4,
+      latest: latestByKind.RACHANA ?? null,
+    },
+    {
+      kind: "DOCUMENTARY" as const,
+      count: kindCounts.DOCUMENTARY ?? 14,
+      latest: latestByKind.DOCUMENTARY ?? null,
+    },
+    {
+      kind: "BLOG" as const,
+      count: kindCounts.BLOG ?? 2,
+      latest: latestByKind.BLOG ?? null,
+    },
   ];
 
   const formTags = (facets.tags ?? [])
@@ -127,10 +149,10 @@ export default async function HomePage() {
 
       <Hero />
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 space-y-16">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {/* Content Glimpse Hero Card for Recent Upload */}
         {primaryGlimpsePiece && (
-          <section className="pt-4">
+          <section className="pt-4 pb-8">
             <Suspense fallback={<HeroCardSkeleton />}>
               <FeaturedSeriesHero
                 piece={primaryGlimpsePiece}
@@ -156,9 +178,9 @@ export default async function HomePage() {
 
         {featuredWriting.length > 0 && <FeaturedWriting pieces={featuredWriting} />}
         <Categories kinds={kinds} forms={formTags} />
-        {timeline.length > 0 && <Timeline entries={timeline} />}
-        <ArchiveTeaser years={facets.years ?? []} />
-        {authors.length > 0 && <Authors authors={authors} />}
+        {timeline.length >= 6 && <Timeline entries={timeline} />}
+        {(facets.years?.length ?? 0) >= 2 && <ArchiveTeaser years={facets.years ?? []} />}
+        {authors.length >= 3 && <Authors authors={authors} />}
       </div>
 
       {quote && <Quote quote={quote} />}

@@ -24,12 +24,7 @@ function EditorialCard({
   const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-widest";
   const { cardMotionProps } = useCardHover();
 
-  const aspect =
-    layout === "large"
-      ? "aspect-[4/5]"
-      : layout === "wide"
-      ? "aspect-[16/9]"
-      : "aspect-[3/4]";
+  const aspect = "aspect-[3/4]";
 
   const sizes =
     layout === "large"
@@ -96,6 +91,8 @@ function EditorialCard({
   );
 }
 
+import { SectionHeader } from "@/components/home/section-header";
+
 export function FeaturedWriting({ pieces }: { pieces: CardPiece[] }) {
   const { isBn, t } = useLanguage();
 
@@ -104,19 +101,12 @@ export function FeaturedWriting({ pieces }: { pieces: CardPiece[] }) {
   const [lead, second, ...rest] = pieces;
 
   return (
-    <section className="py-16">
-      <Reveal>
-        <div className="mb-8 border-b border-rule pb-3">
-          <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
-            নির্বাচিত
-          </h2>
-          {!isBn && (
-            <p className="mt-1 font-serif text-sm italic text-content-faint" lang="en">
-              {t("home.featuredGloss")}
-            </p>
-          )}
-        </div>
-      </Reveal>
+    <section className="py-section">
+      <SectionHeader
+        titleBn="নির্বাচিত"
+        gloss={t("home.featuredGloss")}
+        rank="section"
+      />
 
       <div className="grid gap-8 lg:grid-cols-2">
         {lead && (

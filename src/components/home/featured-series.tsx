@@ -132,25 +132,20 @@ function SeriesCard({
   );
 }
 
+import { SectionHeader } from "@/components/home/section-header";
+
 export function FeaturedSeries({ series }: { series: SeriesWithPieces[] }) {
   const { locale, isBn, t } = useLanguage();
 
   if (!series.length) return null;
 
   return (
-    <section className="py-16">
-      <Reveal>
-        <div className="mb-8 border-b border-rule pb-3">
-          <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
-            ধারাবাহিক
-          </h2>
-          {!isBn && (
-            <p className="mt-1 font-serif text-sm italic text-content-faint" lang="en">
-              {t("home.seriesGloss")}
-            </p>
-          )}
-        </div>
-      </Reveal>
+    <section className="py-section-lg">
+      <SectionHeader
+        titleBn="ধারাবাহিক"
+        gloss={t("home.seriesGloss")}
+        rank="anchor"
+      />
 
       <Stagger as="div" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3" delay={0.1}>
         {series.map((s) => (

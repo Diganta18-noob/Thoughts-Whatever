@@ -37,6 +37,8 @@ const EN_MONTHS = [
   "Dec",
 ];
 
+import { SectionHeader } from "@/components/home/section-header";
+
 export function Timeline({ entries }: { entries: TimelineEntry[] }) {
   const { locale, isBn, t } = useLanguage();
 
@@ -46,19 +48,12 @@ export function Timeline({ entries }: { entries: TimelineEntry[] }) {
   const months = isBn ? BN_MONTHS : EN_MONTHS;
 
   return (
-    <section className="py-16">
-      <Reveal>
-        <div className="mb-8 border-b border-rule pb-3">
-          <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
-            সময়রেখা
-          </h2>
-          {!isBn && (
-            <p className="mt-1 font-serif text-sm italic text-content-faint" lang="en">
-              {t("home.timelineGloss")}
-            </p>
-          )}
-        </div>
-      </Reveal>
+    <section className="py-section">
+      <SectionHeader
+        titleBn="সময়রেখা"
+        gloss={t("home.timelineGloss")}
+        rank="utility"
+      />
 
       <Reveal delay={0.1}>
         <div className="relative -mx-4 sm:-mx-6">

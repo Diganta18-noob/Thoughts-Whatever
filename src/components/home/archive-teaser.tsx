@@ -5,6 +5,8 @@ import { Reveal } from "@/components/motion/reveal";
 import { useLanguage } from "@/components/providers/language-provider";
 import { formatNumber } from "@/lib/i18n/format";
 
+import { SectionHeader } from "@/components/home/section-header";
+
 export function ArchiveTeaser({ years }: { years: number[] }) {
   const { locale, isBn, t } = useLanguage();
 
@@ -13,19 +15,12 @@ export function ArchiveTeaser({ years }: { years: number[] }) {
   const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-widest";
 
   return (
-    <section className="py-16">
-      <Reveal>
-        <div className="mb-8 border-b border-rule pb-3">
-          <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
-            সংগ্রহ
-          </h2>
-          {!isBn && (
-            <p className="mt-1 font-serif text-sm italic text-content-faint" lang="en">
-              {t("home.archiveGloss")}
-            </p>
-          )}
-        </div>
-      </Reveal>
+    <section className="py-section">
+      <SectionHeader
+        titleBn="সংগ্রহ"
+        gloss={t("home.archiveGloss")}
+        rank="utility"
+      />
 
       <Reveal delay={0.1}>
         <div>

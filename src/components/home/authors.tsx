@@ -11,25 +11,20 @@ type AuthorEntry = {
   count: number;
 };
 
+import { SectionHeader } from "@/components/home/section-header";
+
 export function Authors({ authors }: { authors: AuthorEntry[] }) {
   const { locale, isBn, t } = useLanguage();
 
   if (!authors.length) return null;
 
   return (
-    <section className="py-16">
-      <Reveal>
-        <div className="mb-8 border-b border-rule pb-3">
-          <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
-            লেখক
-          </h2>
-          {!isBn && (
-            <p className="mt-1 font-serif text-sm italic text-content-faint" lang="en">
-              {t("home.authorsGloss")}
-            </p>
-          )}
-        </div>
-      </Reveal>
+    <section className="py-section">
+      <SectionHeader
+        titleBn="লেখক"
+        gloss={t("home.authorsGloss")}
+        rank="utility"
+      />
 
       <Stagger as="ul" className="flex flex-wrap gap-x-6 gap-y-3" delay={0.1}>
         {authors.map((author) => (
