@@ -1,13 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { PortraitCover } from "@/components/pieces/portrait-cover";
-import { piecePath, KIND_META } from "@/lib/nav";
-import { toBanglaDate } from "@/lib/bengali";
-import { formatDate, formatReading } from "@/lib/i18n/format";
+import Image from "next/image";
+import { piecePath } from "@/lib/nav";
 import { useLanguage } from "@/components/providers/language-provider";
-import { cn } from "@/lib/utils";
 import type { PieceCardData } from "@/components/pieces/piece-card";
 
 export interface FeaturedSeriesHeroProps {
@@ -25,119 +21,92 @@ export function FeaturedSeriesHero({
   seriesTitleBn,
   seriesSlug,
 }: FeaturedSeriesHeroProps) {
-  const { locale, isBn, t } = useLanguage();
-  const meta = KIND_META[piece.kind];
+  const { isBn } = useLanguage();
   const summary = piece.dekBn || piece.excerptBn;
-  const metaFace = isBn ? "font-bengali-sans" : "font-sans";
-  const banglaDate = piece.publishedAt ? toBanglaDate(piece.publishedAt) : null;
-
-  const episodeText = `${currentEpisodeNumber} / ${totalEpisodesInSeries}`;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-rule/70 bg-gradient-to-b from-surface-raised/50 to-surface-raised/20 p-6 sm:p-8 lg:p-12 shadow-sm transition-all duration-300 hover:border-rule">
-      <div className="grid gap-8 lg:grid-cols-[2fr_3fr] lg:items-center lg:gap-12 min-h-[500px]">
-        {/* 1. Left 40% — Portrait Cover Frame */}
-        <div className="flex items-center justify-center">
-          {piece.coverImage && (
-            <Link href={piecePath(piece.kind, piece.slug)} className="block w-full max-w-sm">
-              <PortraitCover
+    <section className="relative my-2">
+      <div className="relative overflow-hidden rounded-lg border border-rule/70 bg-surface-raised/40 p-6 sm:p-8 transition-colors hover:border-rule">
+        <div className="grid gap-8 lg:grid-cols-[220px_1fr_260px] lg:items-center">
+          {/* 1. Left: Square / Portrait Cover */}
+          <div className="relative aspect-square w-full max-w-[220px] mx-auto lg:mx-0 overflow-hidden rounded border border-rule/60 bg-surface shadow-md">
+            {piece.coverImage ? (
+              <Image
                 src={piece.coverImage}
                 alt={piece.titleBn}
-                width={piece.coverImageWidth}
-                height={piece.coverImageHeight}
-                priority
-                size="hero"
-                aspectRatio="9/16"
+                fill
+                sizes="(max-width: 768px) 220px, 220px"
+                className="object-cover object-center transition-transform duration-500 hover:scale-105"
               />
-            </Link>
-          )}
-        </div>
-
-        {/* 2. Right 60% — Text Block */}
-        <div className="flex flex-col justify-center min-w-0">
-          {/* Badges & Meta */}
-          <div className="mb-4 flex flex-wrap items-center gap-3">
-            <span className="label !text-accent font-bengali-sans uppercase tracking-wider text-xs">
-              {isBn ? meta.labelBn : meta.labelEn}
-            </span>
-
-            {seriesTitleBn && (
-              <>
-                <span className="text-rule">•</span>
-                <span className="font-bengali-sans text-xs text-content-soft">
-                  {seriesTitleBn}
-                </span>
-              </>
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-content/5 font-serif text-content-faint">
+                {piece.titleBn}
+              </div>
             )}
-
-            {piece.publishedAt && (
-              <>
-                <span className="text-rule">•</span>
-                <span className={cn(metaFace, "text-xs text-content-faint")}>
-                  {formatDate(piece.publishedAt, locale)}
-                </span>
-              </>
-            )}
-
-            <span className="text-rule">•</span>
-            <span className={cn(metaFace, "text-xs text-content-faint")}>
-              {formatReading(piece.readingMinutes, locale)}
-            </span>
           </div>
 
-          {/* Episode Progress Bar Pill */}
-          <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-rule/60 bg-surface/80 px-3.5 py-1 text-xs text-content-soft self-start">
-            <span className="font-bengali-sans" lang="bn">পর্ব {currentEpisodeNumber} / {totalEpisodesInSeries}</span>
-            <div className="h-1.5 w-16 overflow-hidden rounded-full bg-rule/50">
-              <div
-                className="h-full bg-accent transition-all duration-500"
-                style={{ width: `${(currentEpisodeNumber / totalEpisodesInSeries) * 100}%` }}
-              />
+          {/* 2. Center: Editorial Metadata, Title & CTA */}
+          <div className="flex flex-col justify-center min-w-0">
+            <span className="text-[0.7rem] uppercase tracking-[0.16em] text-accent font-mono font-medium mb-2.5">
+              {isBn ? "নির্বাচিত তথ্যচিত্র" : "FEATURED DOCUMENTARY"}
+            </span>
+
+            <h2 className="font-display text-2xl sm:text-3xl text-content font-medium leading-tight mb-3" lang="bn">
+              <Link
+                href={piecePath(piece.kind, piece.slug)}
+                className="transition hover:text-accent"
+              >
+                {piece.titleBn}
+              </Link>
+            </h2>
+
+            {summary && (
+              <p
+                className="font-bengali text-sm leading-relaxed text-content-soft line-clamp-3 mb-6"
+                lang="bn"
+              >
+                {summary}
+              </p>
+            )}
+
+            <div className="flex items-center gap-4">
+              <Link
+                href={piecePath(piece.kind, piece.slug)}
+                className="inline-flex items-center gap-2 rounded-sm border border-accent/40 bg-accent/5 px-4 py-2 text-xs font-medium text-accent transition hover:bg-accent hover:text-white"
+              >
+                <span>{isBn ? "এখনই দেখুন" : "Watch now"}</span>
+                <span aria-hidden>→</span>
+              </Link>
+
+              {seriesSlug && (
+                <Link
+                  href={`/series/${seriesSlug}`}
+                  className="text-xs font-bengali-sans text-content-soft hover:text-accent transition"
+                  lang="bn"
+                >
+                  সব পর্ব ({totalEpisodesInSeries}) →
+                </Link>
+              )}
             </div>
           </div>
 
-          {/* Huge Bengali Title */}
-          <h2
-            className="font-bengali font-medium text-3xl sm:text-4xl lg:text-5xl leading-tight text-content tracking-tight mb-4 transition-colors hover:text-accent"
-            lang="bn"
-          >
-            <Link href={piecePath(piece.kind, piece.slug)}>
-              {piece.titleBn}
-            </Link>
-          </h2>
-
-          {/* Short Editorial Description (2-3 lines) */}
-          {summary && (
-            <p
-              className="font-bengali text-bengali-base sm:text-bengali-lg text-content-soft leading-relaxed line-clamp-3 mb-8"
-              lang="bn"
-            >
-              {summary}
+          {/* 3. Right: Manifesto / Literary Pull Quote */}
+          <div className="relative border-t lg:border-t-0 lg:border-l border-rule/70 pt-6 lg:pt-0 lg:pl-8 flex flex-col justify-center">
+            <span className="font-serif text-3xl text-accent leading-none -mb-1 select-none">
+              “
+            </span>
+            <blockquote className="space-y-1 text-xs sm:text-sm font-sans text-content-soft leading-relaxed">
+              <p>We read closely.</p>
+              <p>We question gently.</p>
+              <p>We document truthfully.</p>
+              <p>We keep going.</p>
+            </blockquote>
+            <p className="mt-3 text-[0.7rem] font-mono tracking-wider text-content-faint">
+              — Thoughts Whatever
             </p>
-          )}
-
-          {/* Action Row */}
-          <div className="flex flex-wrap items-center gap-6 pt-2">
-            <Link
-              href={piecePath(piece.kind, piece.slug)}
-              className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-medium text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow"
-            >
-              <span>Continue Reading</span>
-              <span>→</span>
-            </Link>
-
-            {seriesSlug && (
-              <Link
-                href={`/series/${seriesSlug}`}
-                className="text-xs font-bengali-sans text-content-soft hover:text-accent transition"
-                lang="bn"
-              >
-                সব পর্ব দেখুন ({totalEpisodesInSeries}) →
-              </Link>
-            )}
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

@@ -21,7 +21,7 @@ export function Hero() {
   const face = isBn ? "font-bengali" : "font-serif";
 
   return (
-    <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 sm:px-6">
+    <section className="relative flex min-h-[68svh] flex-col items-center justify-center overflow-hidden px-4 pt-16 pb-10 sm:px-6">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,rgb(var(--surface-raised)/0.9),transparent_70%)]"
@@ -50,11 +50,11 @@ export function Hero() {
           lang="en"
           text={siteConfig.name}
           delay={0.15}
-          className="mt-6 font-display text-[clamp(2.25rem,7vw,7.5rem)] whitespace-nowrap leading-none text-content tracking-tight max-w-full"
+          className="mt-6 font-display text-step-7 leading-[1.05] tracking-tight text-content max-w-full"
         />
 
-        <Reveal delay={0.65}>
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-x-3 gap-y-4">
+        <Reveal delay={0.4}>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-4">
             {resumeHref && lastRead && (
               <Magnetic>
                 <Link
