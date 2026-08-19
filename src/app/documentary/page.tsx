@@ -4,12 +4,11 @@ import { ArticleCard } from "@/components/pieces/article-card";
 import { T } from "@/components/i18n/t";
 import { getRecentPieces, countPieces } from "@/lib/pieces";
 import { Count } from "@/components/i18n/values";
-import { withTimeout } from "@/lib/utils";
 
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "ডকুমেন্টারি",
+  title: "তথ্যচিত্র",
   description:
     "গবেষণাভিত্তিক তথ্যচিত্র — সূত্র, কালরেখা ও সম্পূর্ণ লেখা সমেত।",
   alternates: { canonical: "/documentary" },
@@ -17,8 +16,8 @@ export const metadata: Metadata = {
 
 export default async function DocumentaryPage() {
   const [pieces, total] = await Promise.all([
-    withTimeout(getRecentPieces({ kind: "DOCUMENTARY", take: 40 }), [], 5000),
-    withTimeout(countPieces("DOCUMENTARY"), 0, 5000),
+    getRecentPieces({ kind: "DOCUMENTARY", take: 40 }),
+    countPieces("DOCUMENTARY"),
   ]);
 
   const [lead, ...rest] = pieces;

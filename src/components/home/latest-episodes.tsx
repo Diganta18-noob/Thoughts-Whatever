@@ -2,40 +2,40 @@
 
 import Link from "next/link";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
+import { CoverImage } from "@/components/media/cover-image";
 import { useLanguage } from "@/components/providers/language-provider";
 import { formatReading, formatDate } from "@/lib/i18n/format";
 import { piecePath } from "@/lib/nav";
 import type { CardPiece } from "@/lib/pieces";
+
 import { motion } from "framer-motion";
 import { CoverImageFrame } from "@/components/media/cover-image-frame";
 import { useCardHover } from "@/lib/hooks/use-card-hover";
 
-function DocumentaryCard({ piece }: { piece: CardPiece }) {
+function LargeCard({ piece }: { piece: CardPiece }) {
   const { locale, isBn } = useLanguage();
   const href = piecePath(piece.kind, piece.slug);
-  const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-wider";
+  const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-widest";
   const { cardMotionProps } = useCardHover();
 
   return (
-    <motion.article className="group flex flex-col" {...cardMotionProps}>
-      <Link href={href} className="block group">
-        <div className="overflow-hidden rounded-sm border border-rule/60 bg-surface-raised transition-all duration-300 group-hover:border-accent/40">
-          {piece.coverImage && (
-            <CoverImageFrame
-              owner="piece"
-              slug={piece.slug}
-              coverImage={piece.coverImage}
-              aspect="aspect-[16/9]"
-              rounded="rounded-none"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-              overlay
-            />
-          )}
-        </div>
+    <motion.article className="group" {...cardMotionProps}>
+      <Link href={href} className="block">
+        {piece.coverImage && (
+          <CoverImageFrame
+            owner="piece"
+            slug={piece.slug}
+            coverImage={piece.coverImage}
+            aspect="aspect-[4/3]"
+            rounded="rounded-sm"
+            sizes="(max-width: 768px) 100vw, 60vw"
+            overlay
+          />
+        )}
 
-        <div className="mt-3.5">
-          <div className={`flex items-center gap-2 text-[0.72rem] text-content-faint ${monoFace}`}>
-            <time dateTime={piece.publishedAt ? new Date(piece.publishedAt).toISOString() : undefined}>
+        <div className="mt-5">
+          <div className={`flex items-baseline gap-3 text-xs text-content-faint ${monoFace}`}>
+            <time dateTime={piece.publishedAt?.toISOString()}>
               {piece.publishedAt && formatDate(piece.publishedAt, locale)}
             </time>
             <span>·</span>
@@ -43,7 +43,7 @@ function DocumentaryCard({ piece }: { piece: CardPiece }) {
           </div>
 
           <h3
-            className="mt-2 font-display text-base font-medium leading-snug text-content transition-colors group-hover:text-accent line-clamp-1"
+            className="mt-3 font-bengali text-2xl font-medium leading-tight text-content transition group-hover:text-accent"
             lang="bn"
           >
             {piece.titleBn}
@@ -51,7 +51,65 @@ function DocumentaryCard({ piece }: { piece: CardPiece }) {
 
           {piece.dekBn && (
             <p
-              className="mt-1.5 font-bengali text-xs leading-relaxed text-content-soft line-clamp-2"
+              className="mt-3 font-bengali text-base leading-relaxed text-content-soft"
+              lang="bn"
+            >
+              {piece.dekBn}
+            </p>
+          )}
+
+          {piece.excerptBn && (
+            <p
+              className="mt-4 line-clamp-3 font-bengali text-sm leading-relaxed text-content-faint"
+              lang="bn"
+            >
+              {piece.excerptBn}
+            </p>
+          )}
+        </div>
+      </Link>
+    </motion.article>
+  );
+}
+
+function SmallCard({ piece }: { piece: CardPiece }) {
+  const { locale, isBn } = useLanguage();
+  const href = piecePath(piece.kind, piece.slug);
+  const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-widest";
+  const { cardMotionProps } = useCardHover();
+
+  return (
+    <motion.article className="group" {...cardMotionProps}>
+      <Link href={href} className="block">
+        {piece.coverImage && (
+          <CoverImageFrame
+            owner="piece"
+            slug={piece.slug}
+            coverImage={piece.coverImage}
+            aspect="aspect-[3/4]"
+            rounded="rounded-sm"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            overlay
+          />
+        )}
+
+        <div className="mt-4">
+          <div className={`flex items-baseline gap-2 text-xs text-content-faint ${monoFace}`}>
+            <time dateTime={piece.publishedAt?.toISOString()}>
+              {piece.publishedAt && formatDate(piece.publishedAt, locale)}
+            </time>
+          </div>
+
+          <h3
+            className="mt-2 font-bengali text-base font-medium leading-snug text-content transition group-hover:text-accent"
+            lang="bn"
+          >
+            {piece.titleBn}
+          </h3>
+
+          {piece.dekBn && (
+            <p
+              className="mt-2 line-clamp-2 font-bengali text-sm leading-relaxed text-content-soft"
               lang="bn"
             >
               {piece.dekBn}
@@ -64,34 +122,44 @@ function DocumentaryCard({ piece }: { piece: CardPiece }) {
 }
 
 export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
-  const { isBn } = useLanguage();
+  const { isBn, t } = useLanguage();
 
   if (!pieces.length) return null;
 
-  return (
-    <section className="py-10 sm:py-14">
-      <div className="mb-6 sm:mb-8 flex items-end justify-between border-b border-rule/60 pb-3">
-        <div>
-          <h2 className="text-[0.75rem] sm:text-xs font-mono uppercase tracking-[0.18em] text-content font-medium">
-            {isBn ? "সাম্প্রতিক তথ্যচিত্র" : "LATEST DOCUMENTARIES"}
-          </h2>
-        </div>
-        <Link
-          href="/documentary"
-          className="text-xs font-sans text-accent hover:underline flex items-center gap-1 transition"
-        >
-          <span>{isBn ? "সব দেখুন" : "View all"}</span>
-          <span aria-hidden>→</span>
-        </Link>
-      </div>
+  const [lead, ...rest] = pieces;
 
-      <Stagger as="div" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {pieces.slice(0, 4).map((piece) => (
-          <StaggerItem key={piece.slug} as="div">
-            <DocumentaryCard piece={piece} />
-          </StaggerItem>
-        ))}
-      </Stagger>
+  return (
+    <section className="py-16">
+      <Reveal>
+        <div className="mb-8 border-b border-rule pb-3">
+          <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
+            সাম্প্রতিক
+          </h2>
+          {!isBn && (
+            <p className="mt-1 font-serif text-sm italic text-content-faint" lang="en">
+              {t("home.latestGloss")}
+            </p>
+          )}
+        </div>
+      </Reveal>
+
+      <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
+        {lead && (
+          <Reveal delay={0.1}>
+            <LargeCard piece={lead} />
+          </Reveal>
+        )}
+
+        {rest.length > 0 && (
+          <Stagger as="div" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1" delay={0.2}>
+            {rest.slice(0, 3).map((piece) => (
+              <StaggerItem key={piece.slug}>
+                <SmallCard piece={piece} />
+              </StaggerItem>
+            ))}
+          </Stagger>
+        )}
+      </div>
     </section>
   );
 }

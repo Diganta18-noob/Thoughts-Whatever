@@ -5,7 +5,6 @@ import { getSeriesList } from "@/lib/pieces";
 import { piecePath } from "@/lib/nav";
 import { T } from "@/components/i18n/t";
 import { Count, CountLink, Num } from "@/components/i18n/values";
-import { withTimeout } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -16,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function SeriesIndexPage() {
-  const seriesList = await withTimeout(getSeriesList(), [], 5000);
+  const seriesList = await getSeriesList();
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">

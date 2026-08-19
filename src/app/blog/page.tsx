@@ -5,7 +5,6 @@ import { LetterBlock } from "@/components/newsletter/letter-block";
 import { T } from "@/components/i18n/t";
 import { getRecentPieces, countPieces } from "@/lib/pieces";
 import { Count } from "@/components/i18n/values";
-import { withTimeout } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -18,8 +17,8 @@ export const metadata: Metadata = {
 
 export default async function BlogPage() {
   const [pieces, total] = await Promise.all([
-    withTimeout(getRecentPieces({ kind: "BLOG", take: 60 }), [], 5000),
-    withTimeout(countPieces("BLOG"), 0, 5000),
+    getRecentPieces({ kind: "BLOG", take: 60 }),
+    countPieces("BLOG"),
   ]);
 
   return (

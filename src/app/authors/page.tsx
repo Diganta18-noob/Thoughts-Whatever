@@ -4,7 +4,6 @@ import { PageHeader } from "@/components/layout/page-header";
 import { getFilterFacets } from "@/lib/pieces";
 import { T } from "@/components/i18n/t";
 import { Count, Num } from "@/components/i18n/values";
-import { withTimeout } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -15,15 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AuthorsPage() {
-  const { authors } = await withTimeout(
-    getFilterFacets(),
-    // `series: []` is not optional: the fallback has to be assignable to the
-    // real return type, and without it `tsc --noEmit` fails here — the one error
-    // that kept CI's typecheck step red, and with it every job downstream.
-    { authors: [], tags: [], years: [], series: [] },
-    5000,
-    "getFilterFacets(authors)",
-  );
+  const { authors } = await getFilterFacets();
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
