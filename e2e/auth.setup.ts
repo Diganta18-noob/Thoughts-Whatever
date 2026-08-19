@@ -10,10 +10,7 @@ setup("authenticate as admin", async ({ page }) => {
   await emailInput.waitFor({ state: "visible", timeout: 15000 });
 
   const email = process.env.TEST_ADMIN_EMAIL || "admin@thoughts.whatever.com";
-  const password = process.env.TEST_ADMIN_PASSWORD;
-  if (!password) {
-    throw new Error("TEST_ADMIN_PASSWORD environment variable is required for e2e tests.");
-  }
+  const password = process.env.TEST_ADMIN_PASSWORD || "[REDACTED]";
 
   await emailInput.fill(email);
   await page.getByTestId("password-input").fill(password);

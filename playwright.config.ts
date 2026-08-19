@@ -19,10 +19,14 @@ export default defineConfig({
   },
 
   projects: [
-    // Setup project for authentication storage state
     {
       name: "setup",
       testMatch: /.*\.setup\.ts/,
+    },
+    {
+      name: "public",
+      testMatch: /.*08-production-reliability\.spec\.ts|.*03-public-reading\.spec\.ts/,
+      use: { ...devices["Desktop Chrome"] },
     },
     {
       name: "chromium",
@@ -32,9 +36,9 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: "npm run dev",
+    command: "npm run start",
     url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
     timeout: 120 * 1000,
   },
 });
