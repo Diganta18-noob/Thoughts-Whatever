@@ -1,8 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import type { ReactNode } from "react";
+import { motion, useAnimation, useInView, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, type ReactNode } from "react";
 import { duration, distance, ease, stagger, viewport } from "./motion-tokens";
+import { debug } from "@/lib/debug";
 
 type RevealProps = {
   children: ReactNode;
@@ -23,17 +24,58 @@ export function Reveal({
 }: RevealProps) {
   const reduced = useReducedMotion();
   const Tag = motion[as];
+  const ref = useRef<HTMLElement>(null);
+  const controls = useAnimation();
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start({
+        opacity: 1,
+        y: 0,
+        transition: { duration: duration.slow, ease: ease.entrance, delay },
+      });
+    }
+  }, [isInView, controls, delay]);
+
+  // Safety net: if element is in viewport on mount but Framer
+  // missed the initial observation, force-reveal after 300ms
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const timer = setTimeout(() => {
+      const rect = el.getBoundingClientRect();
+      const isVisible =
+        rect.top < window.innerHeight &&
+        rect.bottom > 0 &&
+        rect.left < window.innerWidth &&
+        rect.right > 0;
+
+      if (isVisible) {
+        debug.log("REVEAL", "Missed IntersectionObserver — forcing reveal", {
+          element: el.getAttribute("data-reveal-id") ?? el.className ?? "unknown",
+        });
+        controls.start({
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.3, ease: ease.entrance },
+        });
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [controls]);
 
   if (reduced) return <Tag className={className}>{children}</Tag>;
 
   return (
     <Tag
+      ref={ref as any}
       data-reveal
       className={className}
       initial={{ opacity: 0, y: y === "lg" ? distance.riseLarge : distance.rise }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={viewport}
-      transition={{ duration: duration.slow, ease: ease.entrance, delay }}
+      animate={controls}
     >
       {children}
     </Tag>

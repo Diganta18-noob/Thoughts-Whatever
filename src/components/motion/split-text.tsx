@@ -78,6 +78,7 @@ export function SplitText({
                 return (
                   <motion.span
                     key={index}
+                    data-reveal
                     className="inline-block"
                     variants={{
                       hidden: { opacity: 0, y: "0.32em" },

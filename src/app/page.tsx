@@ -12,30 +12,36 @@ import {
   getFeaturedSeries,
   getRecentPieces,
   getFilterFacets,
-  type CardPiece,
 } from "@/lib/pieces";
 import { JsonLd, websiteJsonLd, seriesJsonLd } from "@/lib/seo";
-import { withTimeout } from "@/lib/utils";
+import { debug } from "@/lib/debug";
 
 export const revalidate = 300;
 
-const DEFAULT_FACETS = {
-  tags: [] as Array<{ slug: string; labelBn: string; kind: string; _count: { pieces: number } }>,
-  authors: [] as Array<{ slug: string; nameBn: string; era: string | null; _count: { pieces: number } }>,
-  series: [] as Array<{ slug: string; titleBn: string }>,
-  years: [] as number[],
-};
+async function getHomepageDataWithTimeout() {
+  const TIMEOUT_MS = 8000; // 8 seconds max
 
-export default async function HomePage() {
-  const [recentPieces, series, facets] = await Promise.all([
-    withTimeout(getRecentPieces({ take: 20 }), [] as CardPiece[], 5000, "home getRecentPieces"),
-    withTimeout(getFeaturedSeries(3), [] as any[], 2500, "home getFeaturedSeries"),
-    withTimeout(getFilterFacets(), DEFAULT_FACETS, 5000, "home getFilterFacets"),
+  const dataPromise = Promise.all([
+    getRecentPieces({ take: 20 }),
+    getFeaturedSeries(3),
+    getFilterFacets(),
   ]);
 
-  if (recentPieces.length === 0) {
-    console.error("[home] rendering with zero pieces — query timed out or returned empty");
-  }
+  const timeoutPromise = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error("Homepage data timeout after 8s")), TIMEOUT_MS),
+  );
+
+  return Promise.race([dataPromise, timeoutPromise]);
+}
+
+export default async function HomePage() {
+  const end = debug.time("HOME", "Promise.all data fetch");
+  const [recentPieces, series, facets] = await getHomepageDataWithTimeout();
+  end();
+  debug.log("HOME", "All homepage data resolved", {
+    series: series.length,
+    pieces: recentPieces.length,
+  });
 
   const leadSeries = series[0];
 

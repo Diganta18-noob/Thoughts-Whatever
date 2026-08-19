@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { LOCALE_KEY } from "./theme-script";
+import { LOCALE_KEY, LOCALE_COOKIE } from "./theme-script";
 import { en, type Dictionary, type TranslationKey } from "@/lib/i18n/en";
 import { bn } from "@/lib/i18n/bn";
 import {
@@ -77,6 +77,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.lang = next;
     try {
       localStorage.setItem(LOCALE_KEY, next);
+      document.cookie = `${LOCALE_COOKIE}=${encodeURIComponent(next)}; path=/; max-age=31536000; SameSite=Lax`;
     } catch {
       /* storage disabled — the choice just won't outlive the tab */
     }
@@ -92,6 +93,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       document.documentElement.lang = next;
       try {
         localStorage.setItem(LOCALE_KEY, next);
+        document.cookie = `${LOCALE_COOKIE}=${encodeURIComponent(next)}; path=/; max-age=31536000; SameSite=Lax`;
       } catch {
         /* ignore */
       }

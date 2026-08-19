@@ -17,20 +17,38 @@ export const READING_KEY = "tw:reading";
  */
 export const LOCALE_KEY = "thoughts-whatever-locale";
 
+export const THEME_COOKIE = "tw_theme";
+export const LOCALE_COOKIE = "tw_lang";
+
 const script = `
 (function () {
   try {
     var root = document.documentElement;
-    var theme = localStorage.getItem('${THEME_KEY}');
-    if (theme !== 'cream' && theme !== 'sepia' && theme !== 'night') {
-      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'cream';
-    }
-    root.dataset.theme = theme;
 
-    var locale = localStorage.getItem('${LOCALE_KEY}');
+    // 1. Read theme from cookie first (matches SSR), fallback to localStorage or OS preference
+    var tc = document.cookie.match(/(?:^|; )tw_theme=([^;]+)/);
+    var theme = tc ? decodeURIComponent(tc[1]) : (localStorage.getItem('${THEME_KEY}') || '');
+    if (theme !== 'cream' && theme !== 'sepia' && theme !== 'night') {
+      theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'cream';
+    }
+    root.setAttribute('data-theme', theme);
+
+    // Sync cookie if missing or different so subsequent SSR passes match perfectly
+    if (!tc || decodeURIComponent(tc[1]) !== theme) {
+      document.cookie = 'tw_theme=' + encodeURIComponent(theme) + '; path=/; max-age=31536000; SameSite=Lax';
+    }
+
+    // 2. Read locale from cookie first (matches SSR), fallback to localStorage
+    var lc = document.cookie.match(/(?:^|; )tw_lang=([^;]+)/);
+    var locale = lc ? decodeURIComponent(lc[1]) : (localStorage.getItem('${LOCALE_KEY}') || 'en');
     if (locale !== 'en' && locale !== 'bn') locale = 'en';
     root.lang = locale;
 
+    if (!lc || decodeURIComponent(lc[1]) !== locale) {
+      document.cookie = 'tw_lang=' + encodeURIComponent(locale) + '; path=/; max-age=31536000; SameSite=Lax';
+    }
+
+    // 3. Reader typography overrides
     var raw = localStorage.getItem('${READING_KEY}');
     if (raw) {
       var r = JSON.parse(raw);

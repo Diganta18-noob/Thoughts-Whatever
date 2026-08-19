@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 import {
   Noto_Serif_Bengali,
   Hind_Siliguri,
@@ -126,17 +127,21 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = cookies();
+  const rawTheme = cookieStore.get("tw_theme")?.value;
+  const theme = rawTheme === "night" || rawTheme === "sepia" ? rawTheme : "cream";
+  const rawLang = cookieStore.get("tw_lang")?.value;
+  const lang = rawLang === "bn" ? "bn" : "en";
 
   return (
     // lang follows the *interface* locale, not the content. ThemeScript
-    // overwrites this before first paint from the stored preference; `en` is
-    // the SSR value because that is DEFAULT_LOCALE, and it is what a reader
-    // with storage disabled ends up seeing. Bengali prose is not affected —
-    // every Bengali region carries its own lang="bn" (see prose.tsx,
-    // article-view.tsx, piece-card.tsx), so screen readers still switch voice.
+    // and cookies guarantee the SSR value matches the client preference.
+    // Bengali prose is not affected — every Bengali region carries its
+    // own lang="bn" (see prose.tsx, article-view.tsx, piece-card.tsx),
+    // so screen readers still switch voice.
     <html
-      lang="en"
-      data-theme="cream"
+      lang={lang}
+      data-theme={theme}
       suppressHydrationWarning
       className={[
         bengaliSerif.variable,

@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { READING_KEY, THEME_KEY } from "./theme-script";
+import { READING_KEY, THEME_KEY, THEME_COOKIE } from "./theme-script";
 
 export type Theme = "cream" | "sepia" | "night";
 export type ReadingFamily = "serif" | "sans";
@@ -65,6 +65,7 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.dataset.theme = next;
     try {
       localStorage.setItem(THEME_KEY, next);
+      document.cookie = `${THEME_COOKIE}=${encodeURIComponent(next)}; path=/; max-age=31536000; SameSite=Lax`;
     } catch {
       /* ignore */
     }

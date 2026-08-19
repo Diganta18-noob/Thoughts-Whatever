@@ -231,6 +231,19 @@ push the last day all prompt
 
 ---
 
+## 25. Master Plan — Stuck Skeleton Fix (Framer Motion SSR & Hydration Resilience)
+```text
+Master Plan — Thoughts Whatever: Stuck Skeleton Fix
+Root Cause Report (Confirmed):
+1. CSS Safety Net: @keyframes reveal-rescue with 200ms fallback for [data-reveal]
+2. ThemeScript & Hydration Fix: Synchronize tw_theme and tw_lang cookies across SSR layout and client
+3. Self-healing Reveal Component: useInView + useAnimation with 300ms IntersectionObserver miss detection
+4. Database Query Timeout: 8-second Promise.race timeout in page.tsx with router.refresh error recovery
+5. Production Diagnostic Logging: NEXT_PUBLIC_DEBUG_LOADING diagnostic telemetry in debug.ts
+```
+
+---
+
 ## Complete Summary of Solutions Executed
 
 | # | Prompt Topic | Root Cause | Solution Applied |
@@ -248,3 +261,4 @@ push the last day all prompt
 | 11 | Visual Baseline Archive | Lack of permanent visual regression reference | Built automated Playwright snapshot runner generating ~185 screenshots across all routes and viewports in `SCREENSHOT_INDEX.md` |
 | 12 | Hydration Stuck Skeleton | Framer Motion SSR HTML opacity:0 serialization race | Diagnosed hydration interaction; rolled back heavy client wrapper to preserve sub-second native ISR load speed |
 | 13 | API Architecture Audit | Question regarding multi-endpoint vs consolidated single-API performance | Audited Next.js App Router Server Component direct DB execution vs client REST calls, verifying current architecture is optimal |
+| 14 | Stuck Skeleton Permanent Fix | Framer Motion SSR opacity:0 serialization and ThemeScript hydration mismatches | Added CSS reveal-rescue safety net, cookie-synced ThemeScript, 300ms miss-healing Reveal, 8s DB timeout, and diagnostic logging |

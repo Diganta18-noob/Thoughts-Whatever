@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useLanguageSafe } from "@/components/providers/language-provider";
 import { cn } from "@/lib/utils";
@@ -12,12 +13,21 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const { t, locale, isBn } = useLanguageSafe();
   const face = isBn ? "font-bengali" : "font-serif";
 
   useEffect(() => {
     console.error(error);
   }, [error]);
+
+  const handleRetry = () => {
+    startTransition(() => {
+      router.refresh();
+      reset();
+    });
+  };
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center px-4 py-20 sm:px-6">
@@ -40,13 +50,14 @@ export default function Error({
         <div className="mt-8 flex flex-wrap justify-center gap-2">
           <button
             type="button"
-            onClick={reset}
+            onClick={handleRetry}
+            disabled={isPending}
             className={cn(
-              "rounded-sm bg-accent px-4 py-2 text-[0.9375rem] text-surface transition hover:opacity-90",
+              "rounded-sm bg-accent px-4 py-2 text-[0.9375rem] text-surface transition hover:opacity-90 disabled:opacity-50",
               face,
             )}
           >
-            {t("common.retry")}
+            {isPending ? "..." : t("common.retry")}
           </button>
           <Link
             href="/"
