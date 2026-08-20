@@ -26,3 +26,11 @@ next-env.d.ts
 /playwright-report/
 /e2e/.auth/
 
+# Obsidian
+.obsidian/
+docs/.obsidian/
+docs/templates/
+docs/00_HOME_DASHBOARD.md
+docs/Content_Series_MOC.md
+docs/OBSIDIAN_GUIDE.md
+
