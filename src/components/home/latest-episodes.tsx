@@ -12,29 +12,30 @@ import { motion } from "framer-motion";
 import { CoverImageFrame } from "@/components/media/cover-image-frame";
 import { useCardHover } from "@/lib/hooks/use-card-hover";
 
-function LargeCard({ piece }: { piece: CardPiece }) {
+function EpisodeCard({ piece }: { piece: CardPiece }) {
   const { locale, isBn } = useLanguage();
   const href = piecePath(piece.kind, piece.slug);
-  const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-widest";
   const { cardMotionProps } = useCardHover();
 
   return (
-    <motion.article className="group" {...cardMotionProps}>
+    <motion.article className="group flex flex-col justify-between rounded-xl border border-rule/70 bg-surface-raised/20 p-4 transition-all duration-300 hover:border-rule hover:bg-surface-raised/40" {...cardMotionProps}>
       <Link href={href} className="block">
         {piece.coverImage && (
-          <CoverImageFrame
-            owner="piece"
-            slug={piece.slug}
-            coverImage={piece.coverImage}
-            aspect="aspect-[4/3]"
-            rounded="rounded-sm"
-            sizes="(max-width: 768px) 100vw, 60vw"
-            overlay
-          />
+          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg">
+            <CoverImageFrame
+              owner="piece"
+              slug={piece.slug}
+              coverImage={piece.coverImage}
+              aspect="aspect-[16/10]"
+              rounded="rounded-lg"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              overlay
+            />
+          </div>
         )}
 
-        <div className="mt-5">
-          <div className={`flex items-baseline gap-3 text-xs text-content-faint ${monoFace}`}>
+        <div className="mt-4">
+          <div className="flex items-baseline gap-2 text-[0.6875rem] text-content-faint font-sans">
             <time dateTime={piece.publishedAt?.toISOString()}>
               {piece.publishedAt && formatDate(piece.publishedAt, locale)}
             </time>
@@ -43,7 +44,7 @@ function LargeCard({ piece }: { piece: CardPiece }) {
           </div>
 
           <h3
-            className="mt-3 font-bengali text-2xl font-medium leading-tight text-content transition group-hover:text-accent"
+            className="mt-2 font-bengali text-lg font-medium leading-snug text-content transition-colors group-hover:text-accent"
             lang="bn"
           >
             {piece.titleBn}
@@ -51,65 +52,7 @@ function LargeCard({ piece }: { piece: CardPiece }) {
 
           {piece.dekBn && (
             <p
-              className="mt-3 font-bengali text-base leading-relaxed text-content-soft"
-              lang="bn"
-            >
-              {piece.dekBn}
-            </p>
-          )}
-
-          {piece.excerptBn && (
-            <p
-              className="mt-4 line-clamp-3 font-bengali text-sm leading-relaxed text-content-faint"
-              lang="bn"
-            >
-              {piece.excerptBn}
-            </p>
-          )}
-        </div>
-      </Link>
-    </motion.article>
-  );
-}
-
-function SmallCard({ piece }: { piece: CardPiece }) {
-  const { locale, isBn } = useLanguage();
-  const href = piecePath(piece.kind, piece.slug);
-  const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-widest";
-  const { cardMotionProps } = useCardHover();
-
-  return (
-    <motion.article className="group" {...cardMotionProps}>
-      <Link href={href} className="block">
-        {piece.coverImage && (
-          <CoverImageFrame
-            owner="piece"
-            slug={piece.slug}
-            coverImage={piece.coverImage}
-            aspect="aspect-[3/4]"
-            rounded="rounded-sm"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            overlay
-          />
-        )}
-
-        <div className="mt-4">
-          <div className={`flex items-baseline gap-2 text-xs text-content-faint ${monoFace}`}>
-            <time dateTime={piece.publishedAt?.toISOString()}>
-              {piece.publishedAt && formatDate(piece.publishedAt, locale)}
-            </time>
-          </div>
-
-          <h3
-            className="mt-2 font-bengali text-base font-medium leading-snug text-content transition group-hover:text-accent"
-            lang="bn"
-          >
-            {piece.titleBn}
-          </h3>
-
-          {piece.dekBn && (
-            <p
-              className="mt-2 line-clamp-2 font-bengali text-sm leading-relaxed text-content-soft"
+              className="mt-2 line-clamp-2 font-bengali text-xs leading-relaxed text-content-soft"
               lang="bn"
             >
               {piece.dekBn}
@@ -117,6 +60,16 @@ function SmallCard({ piece }: { piece: CardPiece }) {
           )}
         </div>
       </Link>
+
+      <div className="mt-4 pt-3 border-t border-rule/30">
+        <Link
+          href={href}
+          className="inline-flex items-center gap-1 text-xs font-medium text-accent transition hover:opacity-80"
+        >
+          <span>Read essay</span>
+          <span>→</span>
+        </Link>
+      </div>
     </motion.article>
   );
 }
@@ -126,40 +79,36 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
 
   if (!pieces.length) return null;
 
-  const [lead, ...rest] = pieces;
-
   return (
-    <section className="py-16">
+    <section className="py-8">
       <Reveal>
-        <div className="mb-8 border-b border-rule pb-3">
-          <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
-            সাম্প্রতিক
-          </h2>
-          {!isBn && (
-            <p className="mt-1 font-serif text-sm italic text-content-faint" lang="en">
-              {t("home.latestGloss")}
-            </p>
-          )}
+        <div className="mb-6 flex items-center justify-between border-b border-rule/50 pb-2">
+          <div className="flex items-baseline gap-3">
+            <span className="font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-accent/90">
+              Latest
+            </span>
+            <h2 className="font-bengali text-xl font-medium text-content hidden sm:inline" lang="bn">
+              সাম্প্রতিক
+            </h2>
+          </div>
+          <Link
+            href="/writing"
+            className="inline-flex items-center gap-1 font-mono text-[0.6875rem] uppercase tracking-wider text-content-soft transition hover:text-accent"
+          >
+            <span>View all</span>
+            <span>→</span>
+          </Link>
         </div>
       </Reveal>
 
-      <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
-        {lead && (
-          <Reveal delay={0.1}>
-            <LargeCard piece={lead} />
-          </Reveal>
-        )}
-
-        {rest.length > 0 && (
-          <Stagger as="div" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1" delay={0.2}>
-            {rest.slice(0, 3).map((piece) => (
-              <StaggerItem key={piece.slug}>
-                <SmallCard piece={piece} />
-              </StaggerItem>
-            ))}
-          </Stagger>
-        )}
-      </div>
+      <Stagger as="div" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4" delay={0.1}>
+        {pieces.slice(0, 4).map((piece) => (
+          <StaggerItem key={piece.slug}>
+            <EpisodeCard piece={piece} />
+          </StaggerItem>
+        ))}
+      </Stagger>
     </section>
   );
 }
+

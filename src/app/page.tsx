@@ -117,9 +117,9 @@ export default async function HomePage() {
       <Hero />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 space-y-16">
-        {/* Content Glimpse Hero Card for Recent Upload */}
+        {/* Featured Card (Top) */}
         {primaryGlimpsePiece && (
-          <section className="pt-4">
+          <section className="pt-2">
             <Suspense fallback={<HeroCardSkeleton />}>
               <FeaturedSeriesHero
                 piece={primaryGlimpsePiece}
@@ -131,18 +131,21 @@ export default async function HomePage() {
           </section>
         )}
 
-        {series.length > 0 && (
-          <Suspense fallback={<SeriesGridSkeleton />}>
-            <FeaturedSeries series={series} />
-          </Suspense>
-        )}
-
+        {/* Latest Episodes 4-Card Grid */}
         {latestEpisodes.length > 0 && (
           <Suspense fallback={<EpisodesSkeleton />}>
             <LatestEpisodes pieces={latestEpisodes} />
           </Suspense>
         )}
 
+        {/* Series Section */}
+        {series.length > 0 && (
+          <Suspense fallback={<SeriesGridSkeleton />}>
+            <FeaturedSeries series={series} />
+          </Suspense>
+        )}
+
+        {/* Featured Longform Writing */}
         {featuredWriting.length > 0 && <FeaturedWriting pieces={featuredWriting} />}
         <Categories kinds={kinds} forms={formTags} />
         {timeline.length > 0 && <Timeline entries={timeline} />}
