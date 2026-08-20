@@ -106,7 +106,7 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
             </h2>
           </div>
           <Link
-            href="/writing"
+            href="/archive"
             className="group/link inline-flex items-center gap-1 font-mono text-[0.6875rem] uppercase tracking-widest text-content-soft transition-colors hover:text-accent"
           >
             <span>View all</span>

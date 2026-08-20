@@ -216,7 +216,7 @@ export function FeaturedWriting({ pieces }: { pieces: CardPiece[] }) {
             </h2>
           </div>
           <Link
-            href="/writing"
+            href="/archive"
             className="group/link inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-content-soft transition-colors hover:text-accent"
           >
             <span>View archive</span>
