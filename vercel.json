@@ -2,10 +2,6 @@
   "regions": ["bom1"],
   "crons": [
     {
-      "path": "/api/health",
-      "schedule": "*/5 * * * *"
-    },
-    {
       "path": "/api/cron/automation",
       "schedule": "30 19 * * *"
     },
@@ -15,4 +11,5 @@
     }
   ]
 }
+
 
