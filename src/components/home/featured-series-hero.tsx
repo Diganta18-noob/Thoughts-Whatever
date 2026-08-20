@@ -37,15 +37,18 @@ export function FeaturedSeriesHero({
         <div className="flex items-center justify-center">
           {piece.coverImage && (
             <Link href={piecePath(piece.kind, piece.slug)} className="block w-full max-w-sm">
-              <PortraitCover
-                src={piece.coverImage}
-                alt={piece.titleBn}
-                width={piece.coverImageWidth}
-                height={piece.coverImageHeight}
-                priority
-                size="hero"
-                aspectRatio="3/4"
-              />
+              <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl shadow-2xl">
+                <CoverImageFrame
+                  owner="piece"
+                  slug={piece.slug}
+                  coverImage={piece.coverImage}
+                  aspect="aspect-[3/4]"
+                  rounded="rounded-xl"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 35vw"
+                  priority
+                  overlay
+                />
+              </div>
             </Link>
           )}
         </div>
