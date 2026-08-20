@@ -93,6 +93,7 @@ export const getRecentPieces = cache(
     const rows = await prisma.piece.findMany({
       where: { ...PUBLISHED, ...(opts.kind ? { kind: opts.kind } : {}) },
       select: cardSelect,
+      orderBy: byNewest,
       take: opts.take ?? 12,
       skip: opts.skip ?? 0,
     });
