@@ -33,13 +33,13 @@ const DEFAULT_FACETS = {
 };
 
 export default async function HomePage() {
-  const [recentPieces, series, facets] = await Promise.all([
+  const [recentPieces = [], series = [], facets = DEFAULT_FACETS] = await Promise.all([
     getRecentPieces({ take: 20 }),
     getFeaturedSeries(3),
     getFilterFacets(),
-  ]);
+  ]).catch(() => [[], [], DEFAULT_FACETS]);
 
-  const leadSeries = series[0];
+  const leadSeries = series?.[0];
   const leadSlugs = new Set(
     leadSeries?.pieces ? (leadSeries.pieces as Array<{ slug: string }>).map((p) => p.slug) : []
   );
@@ -73,6 +73,7 @@ export default async function HomePage() {
   for (const p of recentPieces) {
     if (!p.publishedAt) continue;
     const d = new Date(p.publishedAt);
+    if (Number.isNaN(d.getTime())) continue;
     const year = d.getUTCFullYear();
     const month = d.getUTCMonth() + 1;
     const key = `${year}-${month}`;
@@ -99,14 +100,14 @@ export default async function HomePage() {
     { kind: "BLOG" as const, count: kindCounts.BLOG ?? 2 },
   ];
 
-  const formTags = (facets.tags ?? [])
+  const formTags = (facets?.tags ?? [])
     .filter((t) => t.kind === "FORM")
-    .map((t) => ({ slug: t.slug, labelBn: t.labelBn, count: t._count.pieces }));
+    .map((t) => ({ slug: t.slug, labelBn: t.labelBn, count: t._count?.pieces ?? 1 }));
 
-  const authors = (facets.authors ?? []).map((a) => ({
+  const authors = (facets?.authors ?? []).map((a) => ({
     slug: a.slug,
     nameBn: a.nameBn,
-    count: a._count.pieces,
+    count: a._count?.pieces ?? 1,
   }));
 
   return (

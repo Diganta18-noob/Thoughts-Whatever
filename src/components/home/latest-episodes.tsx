@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { useLanguage } from "@/components/providers/language-provider";
-import { formatReading, formatDate } from "@/lib/i18n/format";
+import { formatReading, formatDate, toIsoString } from "@/lib/i18n/format";
 import { piecePath, KIND_META } from "@/lib/nav";
 import type { CardPiece } from "@/lib/pieces";
 import { motion } from "framer-motion";
@@ -42,7 +42,7 @@ function EpisodeCard({ piece }: { piece: CardPiece }) {
           <div>
             {/* Meta row */}
             <div className="flex items-center justify-between text-[0.6875rem] font-sans text-content-faint">
-              <time dateTime={piece.publishedAt?.toISOString()}>
+              <time dateTime={toIsoString(piece.publishedAt)}>
                 {piece.publishedAt && formatDate(piece.publishedAt, locale)}
               </time>
               <span>{formatReading(piece.readingMinutes, locale)}</span>

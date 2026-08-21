@@ -3,6 +3,7 @@ import { absoluteUrl, siteConfig } from "@/lib/utils";
 import { absoluteCoverUrl, absoluteImageUrl } from "@/lib/images";
 import { deriveExcerpt } from "@/lib/markdown";
 import { piecePath, KIND_META, type PieceKindKey } from "@/lib/nav";
+import { toIsoString } from "@/lib/i18n/format";
 
 type SeoPiece = {
   slug: string;
@@ -55,8 +56,8 @@ export function pieceMetadata(piece: SeoPiece): Metadata {
       description,
       siteName: siteConfig.name,
       locale: "bn_BD",
-      publishedTime: piece.publishedAt?.toISOString(),
-      modifiedTime: piece.updatedAt?.toISOString(),
+      publishedTime: toIsoString(piece.publishedAt),
+      modifiedTime: toIsoString(piece.updatedAt),
       tags: piece.tags?.map((t) => t.labelBn),
       images: [{ url: image }],
     },
@@ -81,8 +82,8 @@ export function articleJsonLd(piece: SeoPiece) {
       piece.seoDescription || piece.dekBn || piece.excerptBn || undefined,
     inLanguage: "bn",
     image: shareImage(piece),
-    datePublished: piece.publishedAt?.toISOString(),
-    dateModified: (piece.updatedAt ?? piece.publishedAt)?.toISOString(),
+    datePublished: toIsoString(piece.publishedAt),
+    dateModified: toIsoString(piece.updatedAt ?? piece.publishedAt),
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     author: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
     publisher: {
@@ -177,7 +178,7 @@ export function seriesJsonLd(series: {
           name: piece.titleBn,
           url: absoluteUrl(piecePath(piece.kind, piece.slug)),
           inLanguage: "bn",
-          datePublished: piece.publishedAt?.toISOString(),
+          datePublished: toIsoString(piece.publishedAt),
         },
       })),
     },

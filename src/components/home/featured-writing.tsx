@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { useLanguage } from "@/components/providers/language-provider";
-import { formatReading, formatDate } from "@/lib/i18n/format";
+import { formatReading, formatDate, toIsoString } from "@/lib/i18n/format";
 import { piecePath, KIND_META } from "@/lib/nav";
 import type { CardPiece } from "@/lib/pieces";
 import { motion } from "framer-motion";
@@ -82,7 +82,7 @@ function FeaturedHeroSpread({ piece }: { piece: CardPiece }) {
             <span className="text-rule">•</span>
             {piece.publishedAt && (
               <>
-                <time dateTime={piece.publishedAt.toISOString()}>
+                <time dateTime={toIsoString(piece.publishedAt)}>
                   {formatDate(piece.publishedAt, locale)}
                 </time>
                 <span className="text-rule">•</span>
@@ -132,7 +132,7 @@ function SupportingEditorialItem({
             {indexStr}
           </span>
           <time
-            dateTime={piece.publishedAt?.toISOString()}
+            dateTime={toIsoString(piece.publishedAt)}
             className="font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint"
           >
             {piece.publishedAt && formatDate(piece.publishedAt, locale)}

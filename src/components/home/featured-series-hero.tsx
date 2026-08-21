@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { CoverImageFrame } from "@/components/media/cover-image-frame";
 import { piecePath, KIND_META } from "@/lib/nav";
-import { formatDate, formatReading } from "@/lib/i18n/format";
+import { formatDate, formatReading, toIsoString } from "@/lib/i18n/format";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useCardHover } from "@/lib/hooks/use-card-hover";
 import type { PieceCardData } from "@/components/pieces/piece-card";
@@ -63,7 +63,7 @@ export function FeaturedSeriesHero({
             <span className="text-content-faint">·</span>
             {piece.publishedAt && (
               <>
-                <time dateTime={piece.publishedAt.toISOString()} className="text-content-faint">
+                <time dateTime={toIsoString(piece.publishedAt)} className="text-content-faint">
                   {formatDate(piece.publishedAt, locale)}
                 </time>
                 <span className="text-content-faint">·</span>

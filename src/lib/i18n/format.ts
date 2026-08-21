@@ -38,6 +38,21 @@ const EN_WEEKDAYS = [
 const asDate = (date: Date | string) =>
   typeof date === "string" ? new Date(date) : date;
 
+/** Safely format a Date or string to ISO string, returning undefined on invalid or missing date */
+export function toIsoString(date?: Date | string | null): string | undefined {
+  if (!date) return undefined;
+  if (typeof date === "string") return date;
+  if (date instanceof Date && !Number.isNaN(date.getTime())) {
+    return date.toISOString();
+  }
+  try {
+    const d = new Date(date);
+    return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+  } catch {
+    return undefined;
+  }
+}
+
 /** ২০২৬ under Bengali, 2026 under English. */
 export function formatNumber(input: number | string, locale: Locale): string {
   return locale === "bn" ? toBengaliNumber(input) : String(input);
