@@ -426,7 +426,7 @@ async function main() {
       console.log(`\n📄 Processing Solo Article: "${file}" -> Title: "${titleBn}" (slug: ${slug})`);
 
       const rawContent = fs.readFileSync(filePath, "utf-8");
-      const formattedBody = await formatArticleBody(titleBn, rawContent);
+      const formattedBody = await formatArticleBody(rawContent, titleBn);
       const epAiMeta = await generateEpisodeMetadata(titleBn, titleBn, formattedBody, 1);
 
       const coverPath = findThumbnail(soloThumbnailDir, titleBn);
