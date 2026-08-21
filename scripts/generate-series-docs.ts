@@ -56,16 +56,16 @@ function findThumbnail(thumbnailDir: string, episodeBaseName: string): string | 
   const normalizedTarget = episodeBaseName.trim().replace(/\s+/g, " ").toLowerCase();
 
   for (const file of files) {
-    const ext = path.extname(file).toLowerCase();
-    if (!validExts.includes(ext)) continue;
+    const ext = path.extname(file);
+    if (!validExts.includes(ext.toLowerCase())) continue;
     const base = path.basename(file, ext).trim().replace(/\s+/g, " ").toLowerCase();
     if (base === normalizedTarget) return file;
   }
 
   // Prefix match fallback
   for (const file of files) {
-    const ext = path.extname(file).toLowerCase();
-    if (!validExts.includes(ext)) continue;
+    const ext = path.extname(file);
+    if (!validExts.includes(ext.toLowerCase())) continue;
     const base = path.basename(file, ext).trim().replace(/\s+/g, " ").toLowerCase();
     if (base.startsWith(normalizedTarget) || normalizedTarget.startsWith(base)) return file;
   }
