@@ -4,6 +4,7 @@ import { runMaintenance } from "@/lib/system/maintenance/orchestrator";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+export const maxDuration = 300;
 
 export async function GET() {
   const admin = await requireAdmin();
@@ -12,11 +13,18 @@ export async function GET() {
   return NextResponse.json({ message: "Maintenance API Ready. Use POST to trigger." });
 }
 
-export async function POST() {
+export async function POST(req: Request) {
   const admin = await requireAdmin();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
+    const body = await req.json().catch(() => ({}));
+    if (body.action === "run-full-pipeline") {
+      const { runMasterPipeline } = await import("@/lib/automation/pipeline");
+      const report = await runMasterPipeline();
+      return NextResponse.json({ ok: true, message: "Pipeline executed successfully", report });
+    }
+
     const report = await runMaintenance();
     return NextResponse.json({ ok: true, report });
   } catch (err: any) {

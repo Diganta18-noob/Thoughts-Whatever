@@ -105,20 +105,34 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
     setTriggering(true);
     toast.loading("Triggering Master Production Pipeline...", { id: "pipeline" });
     try {
-      const res = await fetch("/api/admin/automation", {
+      let res = await fetch("/api/admin/automation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "run-full-pipeline" }),
       });
-      const json = await res.json();
-      if (json.ok) {
+
+      // If /api/admin/automation returns 404 or fails, fallback to /api/admin/maintenance
+      if (!res.ok && res.status === 404) {
+        const fallbackRes = await fetch("/api/admin/maintenance", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "run-full-pipeline" }),
+        });
+        if (fallbackRes.ok) {
+          res = fallbackRes;
+        }
+      }
+
+      const json = await res.json().catch(() => null);
+      if (res.ok && json?.ok) {
         toast.success("Pipeline executed successfully!", { id: "pipeline" });
         fetchStatus(true);
       } else {
-        toast.error(`Pipeline error: ${json.error}`, { id: "pipeline" });
+        const errDetail = json?.error || (res.status ? `HTTP ${res.status}` : "Trigger error");
+        toast.error(`Pipeline error: ${errDetail}`, { id: "pipeline" });
       }
-    } catch {
-      toast.error("Network error triggering pipeline", { id: "pipeline" });
+    } catch (err: any) {
+      toast.error(err?.message || "Network error triggering pipeline", { id: "pipeline" });
     } finally {
       setTriggering(false);
     }

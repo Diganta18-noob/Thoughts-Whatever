@@ -6,6 +6,7 @@ import { getLiveAutomationState } from "@/lib/system/automation-state";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+export const maxDuration = 300;
 
 export async function GET() {
   const admin = await requireAdmin();
