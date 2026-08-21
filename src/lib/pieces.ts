@@ -177,18 +177,20 @@ export const getPieceBySlug = cache(async (slug: string, kind?: PieceKind) => {
   // Concurrent, not sequential: the prefix read is a lookup on `slug`'s unique
   // index returning at most 512 bytes, so it costs a connection and no
   // measurable latency — against up to 320 KB of base64 it replaces.
-  const [piece, shareImages] = await Promise.all([
+  const [piece, shareImages, coverImages] = await Promise.all([
     prisma.piece.findFirst({
       where: { slug, ...PUBLISHED, ...(kind ? { kind } : {}) },
       select: pieceSelect,
     }),
     publishedBlobPrefixes("ogImage", [slug]),
+    publishedBlobPrefixes("coverImage", [slug]),
   ]);
 
   if (!piece) return null;
 
   const ogImage = usablePrefix(shareImages.get(slug));
-  return sanitizeShareImage(withCover({ ...piece, ogImage }));
+  const coverImage = usablePrefix(coverImages.get(slug));
+  return sanitizeShareImage(withCover({ ...piece, coverImage, ogImage }));
 });
 
 export type FullPiece = NonNullable<Awaited<ReturnType<typeof getPieceBySlug>>>;
