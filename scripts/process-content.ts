@@ -104,11 +104,47 @@ function findThumbnail(thumbnailDir: string, episodeBaseName: string): string | 
 }
 
 /**
- * Extract episode number from filename (e.g., "মেঘনাদবধ কাব্য 1" -> 1).
+ * Extract episode number from filename (e.g., "মেঘনাদবধ কাব্য 1" -> 1, "পর্ব-২" -> 2, "অন্তিম পর্ব" -> 3).
  */
 function extractEpisodeNumber(filename: string): number {
-  const match = filename.match(/(\d+)/);
+  if (filename.includes("অন্তিম") || filename.toLowerCase().includes("final")) {
+    return 3;
+  }
+  const bengaliDigits: Record<string, string> = {
+    "১": "1", "২": "2", "৩": "3", "৪": "4", "৫": "5",
+    "৬": "6", "৭": "7", "৮": "8", "৯": "9", "০": "0",
+  };
+  const converted = filename.replace(/[১-৯০]/g, (d) => bengaliDigits[d] || d);
+  const match = converted.match(/(\d+)/);
   return match ? parseInt(match[1], 10) : 1;
+}
+
+async function findAuthorForSeries(seriesTitle: string) {
+  const title = seriesTitle.toLowerCase();
+  if (title.includes("চোখের বালি") || title.includes("chokher bali")) {
+    return await prisma.author.findFirst({ where: { slug: "রবীন্দ্রনাথ-ঠাকুর" } });
+  }
+  if (title.includes("আনন্দমঠ") || title.includes("anandamath")) {
+    return await prisma.author.findFirst({ where: { slug: "বঙ্কিমচন্দ্র-চট্টোপাধ্যায়" } });
+  }
+  if (title.includes("মেঘনাদ") || title.includes("meghnad")) {
+    let author = await prisma.author.findFirst({ where: { slug: "মাইকেল-মধুসূদন-দত্ত" } });
+    if (!author) {
+      author = await prisma.author.create({
+        data: {
+          nameBn: "মাইকেল মধুসূদন দত্ত",
+          nameEn: "Michael Madhusudan Dutt",
+          slug: "মাইকেল-মধুসূদন-দত্ত",
+          bioBn: "বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ মহাকবি এবং অমিত্রাক্ষর ছন্দের প্রবর্তক।",
+        },
+      });
+    }
+    return author;
+  }
+  if (title.includes("crime") || title.includes("dostoevsky")) {
+    return await prisma.author.findFirst({ where: { slug: "fyodor-dostoevsky" } });
+  }
+  return null;
 }
 
 async function main() {
@@ -258,12 +294,18 @@ async function main() {
         tagIds.push(tag.id);
       }
 
-      // Generate SEO URL slug
-      let pieceSlug = bengaliSlug(fileBaseName);
-      if (!pieceSlug || pieceSlug.length < 3) {
-        pieceSlug = `${seriesSlug}-episode-${episodeNumber}`;
+      // Generate standard SEO URL slug & Clean Title
+      let pieceSlug = `${seriesSlug}-${episodeNumber}`;
+      let formattedTitleBn = fileBaseName.trim();
+      if (episodeNumber === 1 && !formattedTitleBn.includes("|") && !formattedTitleBn.includes("পর্ব") && !/\d/.test(formattedTitleBn)) {
+        formattedTitleBn = cleanSeriesTitle;
+      } else if (episodeNumber === 2 && !formattedTitleBn.includes("|") && !/\d/.test(formattedTitleBn)) {
+        formattedTitleBn = `${cleanSeriesTitle} | পর্ব-২`;
+      } else if (episodeNumber === 3 && formattedTitleBn.includes("অন্তিম")) {
+        formattedTitleBn = `${cleanSeriesTitle} | অন্তিম পর্ব`;
       }
 
+      const author = await findAuthorForSeries(cleanSeriesTitle);
       const publishedAt = new Date();
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://thoughts-whatever.vercel.app";
       const fullUrl = `${baseUrl}/writing/${pieceSlug}`;
@@ -287,7 +329,7 @@ async function main() {
             kind,
             status: "PUBLISHED",
             slug: pieceSlug,
-            titleBn: fileBaseName,
+            titleBn: formattedTitleBn,
             titleEn: epAiMeta.titleEn,
             bodyBn: formattedBody,
             excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
@@ -300,6 +342,7 @@ async function main() {
             seriesId: series.id,
             seriesOrder: episodeNumber,
             tags: { set: tagIds.map((id) => ({ id })) },
+            authors: author ? { set: [{ id: author.id }] } : undefined,
           },
         });
       } else {
@@ -309,7 +352,7 @@ async function main() {
             kind,
             status: "PUBLISHED",
             slug: pieceSlug,
-            titleBn: fileBaseName,
+            titleBn: formattedTitleBn,
             titleEn: epAiMeta.titleEn,
             bodyBn: formattedBody,
             excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
@@ -322,6 +365,7 @@ async function main() {
             seriesId: series.id,
             seriesOrder: episodeNumber,
             tags: { connect: tagIds.map((id) => ({ id })) },
+            authors: author ? { connect: [{ id: author.id }] } : undefined,
           },
         });
       }

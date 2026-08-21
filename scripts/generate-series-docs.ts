@@ -23,7 +23,15 @@ dotenv.config();
 // ─── Helpers ──────────────────────────────────────────────────
 
 function extractEpisodeNumber(filename: string): number {
-  const match = filename.match(/(\d+)/);
+  if (filename.includes("অন্তিম") || filename.toLowerCase().includes("final")) {
+    return 3;
+  }
+  const bengaliDigits: Record<string, string> = {
+    "১": "1", "২": "2", "৩": "3", "৪": "4", "৫": "5",
+    "৬": "6", "৭": "7", "৮": "8", "৯": "9", "০": "0",
+  };
+  const converted = filename.replace(/[১-৯০]/g, (d) => bengaliDigits[d] || d);
+  const match = converted.match(/(\d+)/);
   return match ? parseInt(match[1], 10) : 1;
 }
 
