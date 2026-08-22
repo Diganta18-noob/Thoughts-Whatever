@@ -109,6 +109,66 @@ async function main() {
       reelUrl: "https://www.instagram.com/reel/DbQbrhnAzSq/",
       authorName: "বঙ্কিমচন্দ্র চট্টোপাধ্যায়",
     },
+
+    // 8. দেবী - প্রভাতকুমার মুখোপাধ্যায় (July 27)
+    {
+      match: (p: any) => p.slug === "দেবী" || p.titleBn.includes("দেবী"),
+      titleBn: "দেবী",
+      publishedAt: new Date("2026-07-27T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DbTEHQPA5u3/",
+      authorName: "প্রভাতকুমার মুখোপাধ্যায়",
+    },
+
+    // 9. বিমলা (ঘরে-বাইরে) - রবীন্দ্রনাথ ঠাকুর (July 28)
+    {
+      match: (p: any) => p.slug === "ঘরে-বাইরে" || p.titleBn.includes("ঘরে-বাইরে") || p.titleBn.includes("বিমলা"),
+      titleBn: "বিমলা (ঘরে-বাইরে)",
+      publishedAt: new Date("2026-07-28T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/reel/DbVdKYygFzu/",
+      authorName: "রবীন্দ্রনাথ ঠাকুর",
+    },
+
+    // 9.5. কপালকুণ্ডলা - বঙ্কিমচন্দ্র চট্টোপাধ্যায় (July 29)
+    {
+      match: (p: any) => p.slug === "কপালকুণ্ডলা" || p.titleBn.includes("কপালকুণ্ডলা") || p.titleBn.includes("কপালকুন্ডলা"),
+      titleBn: "কপালকুণ্ডলা",
+      publishedAt: new Date("2026-07-29T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/reel/DbYKScqAyXg/",
+      authorName: "বঙ্কিমচন্দ্র চট্টোপাধ্যায়",
+    },
+
+    // 10. চোখের বালি (পর্ব-১) - রবীন্দ্রনাথ ঠাকুর (July 31)
+    {
+      match: (p: any) =>
+        (p.slug === "চোখের-বালি-1" || p.slug.includes("chokher-bali-1") || p.titleBn.includes("চোখের বালি")) &&
+        (p.seriesOrder === 1 || p.slug.endsWith("1")),
+      titleBn: "চোখের বালি",
+      publishedAt: new Date("2026-07-31T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/reel/DbdTwFZg-lO/",
+      authorName: "রবীন্দ্রনাথ ঠাকুর",
+    },
+
+    // 11. চোখের বালি | পর্ব-২ - রবীন্দ্রনাথ ঠাকুর (August 1)
+    {
+      match: (p: any) =>
+        (p.slug === "চোখের-বালি-2" || p.slug.includes("chokher-bali-2") || p.titleBn.includes("চোখের বালি")) &&
+        (p.seriesOrder === 2 || p.slug.endsWith("2")),
+      titleBn: "চোখের বালি | পর্ব-২",
+      publishedAt: new Date("2026-08-01T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/reel/DbfnmrGgT9r/",
+      authorName: "রবীন্দ্রনাথ ঠাকুর",
+    },
+
+    // 12. চোখের বালি | অন্তিম পর্ব - রবীন্দ্রনাথ ঠাকুর (August 2)
+    {
+      match: (p: any) =>
+        (p.slug === "চোখের-বালি-3" || p.slug.includes("chokher-bali-3") || p.titleBn.includes("চোখের বালি")) &&
+        (p.seriesOrder === 3 || p.slug.endsWith("3")),
+      titleBn: "চোখের বালি | অন্তিম পর্ব",
+      publishedAt: new Date("2026-08-02T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/reel/DbisO90A4Ue/",
+      authorName: "রবীন্দ্রনাথ ঠাকুর",
+    },
   ];
 
   console.log("\n=======================================================");
