@@ -194,8 +194,11 @@ async function main() {
       }
     }
 
-    // Clean series title (remove "Series" suffix if present)
-    const cleanSeriesTitle = folderName.replace(/\s*Series\s*$/i, "").trim();
+    // Clean series title (remove author suffix like " - দীনবন্ধু মিত্র" and "Series" suffix if present)
+    const cleanSeriesTitle = folderName
+      .replace(/\s*-\s*[^\n]+$/i, "")
+      .replace(/\s*Series\s*$/i, "")
+      .trim();
     const seriesSlug = bengaliSlug(cleanSeriesTitle);
 
     console.log(`\n📚 Processing Series Folder: "${folderName}" -> Title: "${cleanSeriesTitle}"`);
