@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { runMaintenance } from "@/lib/system/maintenance/orchestrator";
+import { runMasterPipeline } from "@/lib/automation/pipeline";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -20,7 +21,6 @@ export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
     if (body.action === "run-full-pipeline") {
-      const { runMasterPipeline } = await import("@/lib/automation/pipeline");
       const report = await runMasterPipeline();
       return NextResponse.json({ ok: true, message: "Pipeline executed successfully", report });
     }
