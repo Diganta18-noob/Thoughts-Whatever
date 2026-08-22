@@ -207,6 +207,8 @@ html.lenis body {
   }
 
   .prose-bengali p {
+    font-size: inherit;
+    line-height: var(--reading-leading);
     text-wrap: pretty;
     orphans: 2;
     widows: 2;
