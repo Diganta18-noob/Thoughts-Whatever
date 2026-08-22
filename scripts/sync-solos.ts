@@ -67,11 +67,37 @@ async function main() {
     });
   }
 
+  let manik = await prisma.author.findFirst({ where: { slug: "মানিক-বন্দ্যোপাধ্যায়" } });
+  if (!manik) {
+    manik = await prisma.author.create({
+      data: {
+        nameBn: "মানিক বন্দ্যোপাধ্যায়",
+        nameEn: "Manik Bandyopadhyay",
+        slug: "মানিক-বন্দ্যোপাধ্যায়",
+        bioBn: "আধুনিক বাংলা কথাসাহিত্যের অন্যতম প্রধান ঔপন্যাসিক ও বাস্তববাদী কথাসাহিত্যিক।",
+      },
+    });
+  }
+
+  let shelley = await prisma.author.findFirst({ where: { slug: "mary-shelley" } });
+  if (!shelley) {
+    shelley = await prisma.author.create({
+      data: {
+        nameBn: "মেরি শেলি",
+        nameEn: "Mary Shelley",
+        slug: "mary-shelley",
+        bioBn: "English novelist best known for her iconic Gothic masterpiece Frankenstein.",
+      },
+    });
+  }
+
   const solos = [
     { file: "ঘরে-বাইরে.txt", thumb: "ঘরে-বাইরে.PNG", slug: "ঘরে-বাইরে", title: "বিমলা (ঘরে-বাইরে)", author: tagore },
     { file: "দেবী .txt", thumb: "দেবী.PNG", slug: "দেবী", title: "দেবী", author: sarat },
     { file: "রক্তকরবী.txt", thumb: "রক্তকরবী.PNG", slug: "রক্তকরবী", title: "রক্তকরবী", author: tagore },
     { file: "কপালকুন্ডলা.txt", thumb: "কপালকুন্ডলা.PNG", slug: "কপালকুণ্ডলা", title: "কপালকুণ্ডলা", author: bankim },
+    { file: "পদ্মা নদীর মাঝি.txt", thumb: "পদ্মা নদীর মাঝি.PNG", slug: "পদ্মা-নদীর-মাঝি", title: "পদ্মা নদীর মাঝি", author: manik },
+    { file: "Frankenstein.txt", thumb: "Frankenstein.PNG", slug: "frankenstein", title: "Frankenstein", author: shelley },
   ];
 
   for (const s of solos) {

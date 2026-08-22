@@ -169,6 +169,31 @@ async function main() {
       reelUrl: "https://www.instagram.com/reel/DbisO90A4Ue/",
       authorName: "রবীন্দ্রনাথ ঠাকুর",
     },
+
+    // 13. পদ্মা নদীর মাঝি - মানিক বন্দ্যোপাধ্যায় (August 4)
+    {
+      match: (p: any) =>
+        p.slug === "পদ্মা-নদীর-মাঝি" ||
+        p.slug.includes("padma") ||
+        p.titleBn.includes("পদ্মা নদীর মাঝি"),
+      titleBn: "পদ্মা নদীর মাঝি",
+      publishedAt: new Date("2026-08-04T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DbnWzEngeuK/",
+      authorName: "মানিক বন্দ্যোপাধ্যায়",
+    },
+
+    // 14. Frankenstein - Mary Shelley (August 5)
+    {
+      match: (p: any) =>
+        p.slug === "frankenstein" ||
+        p.slug.includes("frankenstein") ||
+        p.titleBn.toLowerCase().includes("frankenstein") ||
+        (p.titleEn && p.titleEn.toLowerCase().includes("frankenstein")),
+      titleBn: "Frankenstein",
+      publishedAt: new Date("2026-08-05T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Dbqe-LmACcl/",
+      authorName: "Mary Shelley",
+    },
   ];
 
   console.log("\n=======================================================");
