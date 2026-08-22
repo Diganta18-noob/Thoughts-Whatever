@@ -11,6 +11,9 @@ import {
   UploadCloud,
   Image as ImageIcon,
   BarChart2,
+  BookOpen,
+  Globe,
+  Target,
   HeartPulse,
   SearchCheck,
   Activity,
@@ -58,6 +61,8 @@ const NAV_GROUPS: NavGroup[] = [
     name: "Intelligence",
     items: [
       { href: "/admin/analytics", label: "Analytics", icon: BarChart2 },
+      { href: "/admin/engagement", label: "Reading & Engagement", icon: BookOpen },
+      { href: "/admin/geography", label: "Audience Geography", icon: Globe },
       { href: "/admin/content-health", label: "Content Health", icon: HeartPulse },
       { href: "/admin/seo", label: "SEO Scanner", icon: SearchCheck },
     ],
@@ -66,6 +71,7 @@ const NAV_GROUPS: NavGroup[] = [
     name: "Workflow",
     items: [
       { href: "/admin/activity", label: "Activity Feed", icon: Activity },
+      { href: "/admin/goals", label: "Editorial Goals", icon: Target },
       { href: "/admin/notifications", label: "Notifications", icon: Bell },
       { href: "/admin/prompts", label: "Prompts & Ideas", icon: Sparkles },
     ],

@@ -1,67 +1,59 @@
-import { NextResponse } from "next/server";
-import { unstable_cache } from "next/cache";
+import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import {
   getOverviewStats,
   getDailyTrend,
   getTopArticles,
   getSeriesAnalytics,
-  type Period,
+  getTrafficSources,
+  Period,
 } from "@/lib/analytics";
 
-export const maxDuration = 60;
-export const runtime = "nodejs";
-
-const getCachedAnalytics = unstable_cache(
-  async (period: Period) => {
-    const [overview, dailyTrend, topArticles, seriesAnalytics] = await Promise.all([
-      getOverviewStats(period),
-      getDailyTrend(period === "7d" ? 7 : 30),
-      getTopArticles(10, period),
-      getSeriesAnalytics(),
-    ]);
-    return {
-      overview,
-      dailyTrend,
-      topArticles: topArticles.map((t) => ({
-        ...t,
-        publishedAt: t.publishedAt ? t.publishedAt.toISOString() : null,
-      })),
-      seriesAnalytics,
-    };
-  },
-  ["admin-analytics-data"],
-  { revalidate: 60, tags: ["analytics"] }
-);
-
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   const admin = await requireAdmin();
   if (!admin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
   }
 
   const { searchParams } = new URL(req.url);
   const period = (searchParams.get("period") as Period) || "30d";
+  const format = searchParams.get("format");
 
   try {
-    const data = await getCachedAnalytics(period);
+    const days = period === "7d" ? 7 : period === "90d" ? 90 : period === "today" || period === "yesterday" ? 2 : 30;
 
-    return NextResponse.json(
-      {
-        success: true,
-        ...data,
-      },
-      {
-        headers: {
-          "Cache-Control": "private, max-age=60, stale-while-revalidate=120",
-        },
+    const [overview, dailyTrend, topArticles, seriesStats, sources] = await Promise.all([
+      getOverviewStats(period),
+      getDailyTrend(days),
+      getTopArticles(10, period),
+      getSeriesAnalytics(),
+      getTrafficSources(period),
+    ]);
+
+    if (format === "csv") {
+      let csv = "Date,Page Views,Unique Visitors\n";
+      for (const row of dailyTrend) {
+        csv += `${row.date},${row.views},${row.visitors}\n`;
       }
-    );
-  } catch (error) {
-    console.error("Failed to fetch consolidated admin dashboard analytics:", error);
-    return NextResponse.json(
-      { success: false, error: "Internal server error" },
-      { status: 500 }
-    );
+      return new NextResponse(csv, {
+        headers: {
+          "Content-Type": "text/csv",
+          "Content-Disposition": `attachment; filename="analytics-${period}.csv"`,
+        },
+      });
+    }
+
+    return NextResponse.json({
+      ok: true,
+      period,
+      overview,
+      dailyTrend,
+      topArticles,
+      seriesStats,
+      sources,
+    });
+  } catch (err: any) {
+    console.error("[AnalyticsAPI] Error querying analytics:", err);
+    return NextResponse.json({ ok: false, error: err.message }, { status: 500 });
   }
 }

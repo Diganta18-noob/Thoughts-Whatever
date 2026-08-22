@@ -32,7 +32,10 @@
 | Route Pattern | Rendering Strategy | Key File Path | Auth Guard Required |
 |---------------|-------------------|---------------|---------------------|
 | `/admin/login` | Dynamic | `src/app/admin/login/page.tsx` | Admin Login Page (Public/Guest) |
-| `/admin` | Dynamic | `src/app/admin/(dashboard)/page.tsx` | Overview & Interactive Analytics Dashboard. Admin Only. |
+| `/admin/analytics` | Dynamic | `src/app/admin/(dashboard)/analytics/page.tsx` | Advanced analytics, daily trend & CSV export. Admin Only. |
+| `/admin/engagement` | Dynamic | `src/app/admin/(dashboard)/engagement/page.tsx` | Reading depth curves & completion funnel. Admin Only. |
+| `/admin/geography` | Dynamic | `src/app/admin/(dashboard)/geography/page.tsx` | Geographic audience distribution & regional hubs. Admin Only. |
+| `/admin/goals` | Dynamic | `src/app/admin/(dashboard)/goals/page.tsx` | Editorial targets & KPI tracking. Admin Only. |
 | `/admin/activity` | Dynamic | `src/app/admin/(dashboard)/activity/page.tsx` | Real-time live activity stream. Admin Only. |
 | `/admin/notifications` | Dynamic | `src/app/admin/(dashboard)/notifications/page.tsx` | Operational alerts & notification center. Admin Only. |
 | `/admin/team` | Dynamic | `src/app/admin/(dashboard)/team/page.tsx` | Team, RBAC roles & permission matrix. Admin Only. |

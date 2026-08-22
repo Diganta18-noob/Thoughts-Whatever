@@ -461,3 +461,26 @@ model PromptLog {
   @@index([category, createdAt])
   @@index([createdAt])
 }
+
+// ─── Phase 3: Analytics, Intelligence & Goal Tracking ───────
+
+model Goal {
+  id           String   @id @default(cuid())
+  title        String
+  metricKey    String   // "pageviews" | "articles_published" | "subscribers" | "avg_reading_time" | "seo_score"
+  targetValue  Float
+  currentValue Float    @default(0)
+  unit         String   @default("count") // "count" | "minutes" | "percent" | "score"
+  period       String   @default("monthly") // "weekly" | "monthly" | "quarterly" | "annual"
+  startDate    DateTime @default(now())
+  endDate      DateTime
+  owner        String?
+  status       String   @default("ON_TRACK") // "ON_TRACK" | "AT_RISK" | "BEHIND"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([metricKey])
+  @@index([status])
+  @@index([endDate])
+}
+
