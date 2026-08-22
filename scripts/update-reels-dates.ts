@@ -194,6 +194,51 @@ async function main() {
       reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Dbqe-LmACcl/",
       authorName: "Mary Shelley",
     },
+
+    // 15. নীলদর্পণ (পর্ব-১) - দীনবন্ধু মিত্র (August 7)
+    {
+      match: (p: any) =>
+        (p.slug.includes("nildarpan") || p.slug.includes("নীলদর্পণ") || p.titleBn.includes("নীলদর্পণ")) &&
+        (p.seriesOrder === 1 || p.slug.endsWith("1") || (!p.seriesOrder && !p.slug.includes("2") && !p.slug.includes("3") && !p.slug.includes("পর্ব"))),
+      titleBn: "নীলদর্পণ",
+      publishedAt: new Date("2026-08-07T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Dbvu34ShwC4/",
+      authorName: "দীনবন্ধু মিত্র",
+    },
+
+    // 16. নীলদর্পণ (পর্ব-২) - দীনবন্ধু মিত্র (August 8)
+    {
+      match: (p: any) =>
+        (p.slug.includes("nildarpan") || p.slug.includes("নীলদর্পণ") || p.titleBn.includes("নীলদর্পণ")) &&
+        (p.seriesOrder === 2 || p.slug.endsWith("2") || p.titleBn.includes("পর্ব - ২") || p.titleBn.includes("পর্ব-২")),
+      titleBn: "নীলদর্পণ | পর্ব-২",
+      publishedAt: new Date("2026-08-08T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Dbx9lAngmrd/",
+      authorName: "দীনবন্ধু মিত্র",
+    },
+
+    // 17. নীলদর্পণ (অন্তিম পর্ব) - দীনবন্ধু মিত্র (August 9)
+    {
+      match: (p: any) =>
+        (p.slug.includes("nildarpan") || p.slug.includes("নীলদর্পণ") || p.titleBn.includes("নীলদর্পণ")) &&
+        (p.seriesOrder === 3 || p.slug.endsWith("3") || p.titleBn.includes("অন্তিম") || p.slug.includes("final") || p.slug.includes("last")),
+      titleBn: "নীলদর্পণ | অন্তিম পর্ব",
+      publishedAt: new Date("2026-08-09T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db0OSW4AlG5/",
+      authorName: "দীনবন্ধু মিত্র",
+    },
+
+    // 18. ক্ষুদিরাম বসু (August 11)
+    {
+      match: (p: any) =>
+        p.slug === "ক্ষুদিরাম-বসু" ||
+        p.slug.includes("khudiram") ||
+        p.titleBn.includes("ক্ষুদিরাম"),
+      titleBn: "ক্ষুদিরাম বসু",
+      publishedAt: new Date("2026-08-11T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db5q8YKAjQc/",
+      authorName: "পীতাম্বর দাস",
+    },
   ];
 
   console.log("\n=======================================================");

@@ -91,6 +91,18 @@ async function main() {
     });
   }
 
+  let pitambar = await prisma.author.findFirst({ where: { slug: "পীতাম্বর-দাস" } });
+  if (!pitambar) {
+    pitambar = await prisma.author.create({
+      data: {
+        nameBn: "পীতাম্বর দাস",
+        nameEn: "Pitambar Das",
+        slug: "পীতাম্বর-দাস",
+        bioBn: "কালজয়ী দেশাত্মবোধক গান 'একবার বিদায় দে মা ঘুরে আসি'-র রচয়িতা ও চারণকবি।",
+      },
+    });
+  }
+
   const solos = [
     { file: "ঘরে-বাইরে.txt", thumb: "ঘরে-বাইরে.PNG", slug: "ঘরে-বাইরে", title: "বিমলা (ঘরে-বাইরে)", author: tagore },
     { file: "দেবী .txt", thumb: "দেবী.PNG", slug: "দেবী", title: "দেবী", author: sarat },
@@ -98,6 +110,7 @@ async function main() {
     { file: "কপালকুন্ডলা.txt", thumb: "কপালকুন্ডলা.PNG", slug: "কপালকুণ্ডলা", title: "কপালকুণ্ডলা", author: bankim },
     { file: "পদ্মা নদীর মাঝি.txt", thumb: "পদ্মা নদীর মাঝি.PNG", slug: "পদ্মা-নদীর-মাঝি", title: "পদ্মা নদীর মাঝি", author: manik },
     { file: "Frankenstein.txt", thumb: "Frankenstein.PNG", slug: "frankenstein", title: "Frankenstein", author: shelley },
+    { file: "ক্ষুদিরাম বসু.txt", thumb: "ক্ষুদিরাম বসু.png", slug: "ক্ষুদিরাম-বসু", title: "ক্ষুদিরাম বসু", author: pitambar },
   ];
 
   for (const s of solos) {

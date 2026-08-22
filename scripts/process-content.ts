@@ -127,6 +127,20 @@ async function findAuthorForSeries(seriesTitle: string) {
   if (title.includes("আনন্দমঠ") || title.includes("anandamath")) {
     return await prisma.author.findFirst({ where: { slug: "বঙ্কিমচন্দ্র-চট্টোপাধ্যায়" } });
   }
+  if (title.includes("নীলদর্পণ") || title.includes("nildarpan") || title.includes("dinabandhu") || title.includes("দীনবন্ধু")) {
+    let author = await prisma.author.findFirst({ where: { slug: "দীনবন্ধু-মিত্র" } });
+    if (!author) {
+      author = await prisma.author.create({
+        data: {
+          nameBn: "দীনবন্ধু মিত্র",
+          nameEn: "Dinabandhu Mitra",
+          slug: "দীনবন্ধু-মিত্র",
+          bioBn: "বাংলা নাট্যসাহিত্যের অন্যতম শ্রেষ্ঠ নাট্যকার ও নীলদর্পণ নাটকের স্রষ্টা।",
+        },
+      });
+    }
+    return author;
+  }
   if (title.includes("মেঘনাদ") || title.includes("meghnad")) {
     let author = await prisma.author.findFirst({ where: { slug: "মাইকেল-মধুসূদন-দত্ত" } });
     if (!author) {
@@ -171,7 +185,14 @@ async function main() {
 
   for (const folderName of seriesFolders) {
     const contextSeriesDir = path.join(contextBaseDir, folderName);
-    const thumbnailSeriesDir = path.join(thumbnailBaseDir, folderName);
+    let thumbnailSeriesDir = path.join(thumbnailBaseDir, folderName);
+    if (!fs.existsSync(thumbnailSeriesDir)) {
+      const cleanName = folderName.replace(/\s*-\s*[^\n]+$/i, "").replace(/\s*Series\s*$/i, "").trim();
+      const altThumb = path.join(thumbnailBaseDir, cleanName);
+      if (fs.existsSync(altThumb)) {
+        thumbnailSeriesDir = altThumb;
+      }
+    }
 
     // Clean series title (remove "Series" suffix if present)
     const cleanSeriesTitle = folderName.replace(/\s*Series\s*$/i, "").trim();
