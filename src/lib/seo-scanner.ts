@@ -109,9 +109,9 @@ export async function runSEOAndBrokenLinkAudit(admin?: { id: string; email: stri
 
     // 2. Title & Duplicate Title Check (25 pts)
     let structureScore = 25;
-    if (p.titleBn.length < 5) {
-      structureScore -= 15;
-      pieceScore -= 15;
+    if (p.titleBn.trim().length < 3) {
+      structureScore -= 10;
+      pieceScore -= 10;
       issues.push({
         type: "title_length",
         severity: "warning",
@@ -140,15 +140,15 @@ export async function runSEOAndBrokenLinkAudit(admin?: { id: string; email: stri
     // 3. Heading Structure & Image Alt Text (25 pts)
     let imageScore = 25;
     if (!p.coverImage) {
-      imageScore -= 15;
-      pieceScore -= 15;
+      // Minor advisory for cover image
+      imageScore -= 5;
+      pieceScore -= 5;
       issues.push({
         type: "image_alt",
-        severity: "warning",
-        message: "Missing featured cover image",
+        severity: "info",
+        message: "No custom featured cover image specified",
         field: "coverImage",
       });
-      warningCount++;
     }
 
     // Inspect markdown images for empty alt text
