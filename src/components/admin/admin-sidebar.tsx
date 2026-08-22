@@ -9,7 +9,10 @@ import {
   FolderTree,
   Tags,
   UploadCloud,
+  Image as ImageIcon,
   BarChart2,
+  HeartPulse,
+  SearchCheck,
   Activity,
   Bell,
   Sparkles,
@@ -47,6 +50,7 @@ const NAV_GROUPS: NavGroup[] = [
       { href: "/admin/pieces", label: "Pieces", icon: FileText },
       { href: "/admin/series", label: "Series", icon: FolderTree },
       { href: "/admin/taxonomy", label: "Taxonomy", icon: Tags },
+      { href: "/admin/media", label: "Media Library", icon: ImageIcon },
       { href: "/admin/import", label: "Import", icon: UploadCloud },
     ],
   },
@@ -54,6 +58,8 @@ const NAV_GROUPS: NavGroup[] = [
     name: "Intelligence",
     items: [
       { href: "/admin/analytics", label: "Analytics", icon: BarChart2 },
+      { href: "/admin/content-health", label: "Content Health", icon: HeartPulse },
+      { href: "/admin/seo", label: "SEO Scanner", icon: SearchCheck },
     ],
   },
   {

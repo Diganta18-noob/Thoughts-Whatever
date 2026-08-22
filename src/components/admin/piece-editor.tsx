@@ -250,6 +250,29 @@ export function PieceEditor({
   const [dirty, setDirty] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [showTranscriber, setShowTranscriber] = useState(false);
+  const [previewLoading, setPreviewLoading] = useState(false);
+
+  const handleSharePreview = async () => {
+    if (!form.id) {
+      toast.error("Please save the piece once before generating a preview link.");
+      return;
+    }
+    setPreviewLoading(true);
+    try {
+      const res = await fetch(`/api/admin/pieces/${form.id}/preview`, { method: "POST" });
+      const data = await res.json();
+      if (data.ok && data.previewUrl) {
+        window.open(data.previewUrl, "_blank");
+        toast.success("Staging preview link opened in new tab!");
+      } else {
+        toast.error("Failed to generate preview link");
+      }
+    } catch {
+      toast.error("Network error");
+    } finally {
+      setPreviewLoading(false);
+    }
+  };
 
   const handleTranscriptionComplete = (text: string, audioUrl?: string) => {
     setForm((prev) => ({
@@ -443,6 +466,28 @@ export function PieceEditor({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {!isNew && form.id && (
+            <>
+              <Link
+                href={`/admin/pieces/${form.id}/history`}
+                className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-2 font-serif text-sm text-content-soft transition hover:text-accent"
+                title="View revision history and compare versions"
+              >
+                History
+              </Link>
+
+              <button
+                type="button"
+                onClick={handleSharePreview}
+                disabled={previewLoading}
+                className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-2 font-serif text-sm text-content-soft transition hover:text-accent disabled:opacity-50"
+                title="Open temporary staging preview for review"
+              >
+                {previewLoading ? "Generating..." : "Staging Preview"}
+              </button>
+            </>
+          )}
+
           <button
             type="button"
             onClick={() => setShowPreview((v) => !v)}

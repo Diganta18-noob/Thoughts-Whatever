@@ -69,6 +69,12 @@ model Piece {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
+  // Staging & Review (Phase 2)
+  previewToken     String?   @unique
+  previewExpiresAt DateTime?
+  reviewStatus     String?   @default("draft") // "draft" | "in_review" | "approved" | "scheduled" | "published"
+  reviewComments   Json?     // Array of { id, authorName, authorEmail, comment, createdAt }
+
   // Relations
   authors Author[]
   tags    Tag[]
@@ -80,11 +86,112 @@ model Piece {
   sources         Source[]
   timeline        TimelineEvent[]
   analyticsEvents AnalyticsEvent[]
+  revisions       ArticleRevision[]
+  seoScans        SEOScan[]
+  brokenLinks     BrokenLink[]
 
   @@index([kind, status, publishedAt])
   @@index([status, publishedAt])
   @@index([status, featured])
   @@index([seriesId, seriesOrder])
+  @@index([previewToken])
+  @@index([reviewStatus])
+}
+
+// ─── Phase 2: Content Power & Editorial Intelligence ───────
+
+model ArticleRevision {
+  id            String    @id @default(cuid())
+  pieceId       String
+  piece         Piece     @relation(fields: [pieceId], references: [id], onDelete: Cascade)
+  version       Int
+  titleBn       String
+  titleEn       String?
+  subtitleBn    String?
+  dekBn         String?
+  bodyBn        String    // markdown content
+  excerptBn     String?
+  coverImage    String?
+  metadata      Json?     // tags, authors, series, readingMinutes, sources, timeline
+  editedBy      String?
+  editedByEmail String?
+  editedByName  String?
+  changeSummary String?
+  status        String    @default("DRAFT")
+  createdAt     DateTime  @default(now())
+
+  @@index([pieceId, version])
+  @@index([pieceId, createdAt])
+}
+
+model Media {
+  id           String       @id @default(cuid())
+  filename     String
+  originalName String
+  mimeType     String
+  sizeBytes    Int
+  width        Int?
+  height       Int?
+  url          String
+  altText      String?
+  caption      String?
+  uploadedBy   String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  usages       MediaUsage[]
+
+  @@index([mimeType])
+  @@index([createdAt])
+  @@index([filename])
+}
+
+model MediaUsage {
+  id          String   @id @default(cuid())
+  mediaId     String
+  media       Media    @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  entityType  String   // "Piece" | "Series" | "Author"
+  entityId    String
+  field       String   // "coverImage" | "bodyBn" | "portrait"
+  entityTitle String?
+  createdAt   DateTime @default(now())
+
+  @@unique([mediaId, entityType, entityId, field])
+  @@index([mediaId])
+  @@index([entityType, entityId])
+}
+
+model SEOScan {
+  id        String   @id @default(cuid())
+  pieceId   String?
+  piece     Piece?   @relation(fields: [pieceId], references: [id], onDelete: Cascade)
+  url       String
+  score     Int      // 0-100
+  issues    Json     // array of { type: string, severity: "info" | "warning" | "critical", message: string, field?: string }
+  metrics   Json?    // { titleLength, wordCount, headingsCount, imagesWithAlt, brokenLinksCount }
+  scannedAt DateTime @default(now())
+
+  @@index([pieceId])
+  @@index([scannedAt])
+  @@index([score])
+}
+
+model BrokenLink {
+  id          String   @id @default(cuid())
+  url         String
+  pieceId     String?
+  piece       Piece?   @relation(fields: [pieceId], references: [id], onDelete: Cascade)
+  sourceType  String   // "Piece" | "Series" | "Author"
+  sourceTitle String?
+  statusCode  Int?
+  reason      String
+  ignored     Boolean  @default(false)
+  lastChecked DateTime @default(now())
+
+  @@index([pieceId])
+  @@index([sourceType])
+  @@index([lastChecked])
+  @@index([ignored])
 }
 
 // ─── Analytics ──────────────────────────────────────────────

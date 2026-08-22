@@ -40,6 +40,11 @@
 | `/admin/pieces` | Dynamic | `src/app/admin/(dashboard)/pieces/page.tsx` | Articles list table (Drafts/Published/Archived). Admin Only. |
 | `/admin/pieces/new` | Dynamic | `src/app/admin/(dashboard)/pieces/new/page.tsx` | Create new article editor page. Admin Only. |
 | `/admin/pieces/[id]` | Dynamic | `src/app/admin/(dashboard)/pieces/[id]/page.tsx` | Edit existing article editor page. Admin Only. |
+| `/admin/pieces/[id]/history` | Dynamic | `src/app/admin/(dashboard)/pieces/[id]/history/page.tsx` | Article revisions, version control & visual diff. Admin Only. |
+| `/admin/media` | Dynamic | `src/app/admin/(dashboard)/media/page.tsx` | Media library with usage tracking. Admin Only. |
+| `/admin/content-health` | Dynamic | `src/app/admin/(dashboard)/content-health/page.tsx` | Content health scoring & recommendations. Admin Only. |
+| `/admin/seo` | Dynamic | `src/app/admin/(dashboard)/seo/page.tsx` | SEO score & broken link scanner. Admin Only. |
+| `/preview/[token]` | Dynamic | `src/app/preview/[token]/page.tsx` | Secure staging preview for review. Non-indexed. |
 | `/admin/series` | Dynamic | `src/app/admin/(dashboard)/series/page.tsx` | Series episode reordering manager. Admin Only. |
 | `/admin/taxonomy` | Dynamic | `src/app/admin/(dashboard)/taxonomy/page.tsx` | Authors, tags, and categories CRUD manager. Admin Only. |
 | `/admin/subscribers` | Dynamic | `src/app/admin/(dashboard)/subscribers/page.tsx` | Newsletter subscribers list & statistics. Admin Only. |
