@@ -1,12 +1,46 @@
 import fs from "fs";
 import path from "path";
+import dotenv from "dotenv";
+dotenv.config();
+import { v2 as cloudinary } from "cloudinary";
+import sharp from "sharp";
 import { prisma } from "../src/lib/prisma";
 import { readingMinutes } from "../src/lib/bengali";
 import { deriveExcerpt } from "../src/lib/markdown";
 import { cleanMarkdownBody } from "./content-ai";
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+async function uploadImage(imagePath: string, folderName: string): Promise<{ url: string; width: number; height: number } | null> {
+  if (!fs.existsSync(imagePath)) {
+    console.warn(`⚠️ Thumbnail not found at: ${imagePath}`);
+    return null;
+  }
+  const rawBuffer = fs.readFileSync(imagePath);
+  const metadata = await sharp(rawBuffer).metadata();
+  const optimizedBuffer = await sharp(rawBuffer)
+    .resize({ width: 1600, withoutEnlargement: true })
+    .webp({ quality: 82 })
+    .toBuffer();
+
+  const dataUri = `data:image/webp;base64,${optimizedBuffer.toString("base64")}`;
+  const result = await cloudinary.uploader.upload(dataUri, {
+    folder: folderName,
+    transformation: [{ width: 1600, crop: "limit" }, { quality: "auto:good" }, { fetch_format: "auto" }],
+  });
+  return {
+    url: result.secure_url,
+    width: result.width || metadata.width || 1200,
+    height: result.height || metadata.height || 630,
+  };
+}
+
 async function main() {
-  console.log("Updating solo pieces in database...");
+  console.log("Updating solo pieces and thumbnails in database...");
 
   const tagore = await prisma.author.findFirst({ where: { slug: "রবীন্দ্রনাথ-ঠাকুর" } });
   let sarat = await prisma.author.findFirst({ where: { slug: "শরৎচন্দ্র-চট্টোপাধ্যায়" } });
@@ -34,10 +68,10 @@ async function main() {
   }
 
   const solos = [
-    { file: "ঘরে-বাইরে.txt", slug: "ঘরে-বাইরে", title: "বিমলা (ঘরে-বাইরে)", author: tagore },
-    { file: "দেবী .txt", slug: "দেবী", title: "দেবী", author: sarat },
-    { file: "রক্তকরবী.txt", slug: "রক্তকরবী", title: "রক্তকরবী", author: tagore },
-    { file: "কপালকুন্ডলা.txt", slug: "কপালকুণ্ডলা", title: "কপালকুণ্ডলা", author: bankim },
+    { file: "ঘরে-বাইরে.txt", thumb: "ঘরে-বাইরে.PNG", slug: "ঘরে-বাইরে", title: "বিমলা (ঘরে-বাইরে)", author: tagore },
+    { file: "দেবী .txt", thumb: "দেবী.PNG", slug: "দেবী", title: "দেবী", author: sarat },
+    { file: "রক্তকরবী.txt", thumb: "রক্তকরবী.PNG", slug: "রক্তকরবী", title: "রক্তকরবী", author: tagore },
+    { file: "কপালকুন্ডলা.txt", thumb: "কপালকুন্ডলা.PNG", slug: "কপালকুণ্ডলা", title: "কপালকুণ্ডলা", author: bankim },
   ];
 
   for (const s of solos) {
@@ -45,6 +79,21 @@ async function main() {
     const body = cleanMarkdownBody(raw, s.title);
     const excerpt = deriveExcerpt(body);
     const mins = readingMinutes(body);
+
+    const thumbPath = path.join(process.cwd(), "Content", "Thumnail", "Solo", s.thumb);
+    let coverImage = null;
+    let coverImageWidth = null;
+    let coverImageHeight = null;
+
+    if (fs.existsSync(thumbPath)) {
+      console.log(`🖼️ Uploading thumbnail for ${s.title}...`);
+      const imgRes = await uploadImage(thumbPath, "solo-pieces");
+      if (imgRes) {
+        coverImage = imgRes.url;
+        coverImageWidth = imgRes.width;
+        coverImageHeight = imgRes.height;
+      }
+    }
 
     const updated = await prisma.piece.upsert({
       where: { slug: s.slug },
@@ -54,6 +103,10 @@ async function main() {
         excerptBn: excerpt,
         readingMinutes: mins,
         status: "PUBLISHED",
+        coverImage: coverImage || undefined,
+        coverImageWidth: coverImageWidth || undefined,
+        coverImageHeight: coverImageHeight || undefined,
+        ogImage: coverImage || undefined,
         authors: s.author ? { set: [{ id: s.author.id }] } : undefined,
       },
       create: {
@@ -65,14 +118,18 @@ async function main() {
         readingMinutes: mins,
         status: "PUBLISHED",
         kind: "RACHANA",
+        coverImage,
+        coverImageWidth,
+        coverImageHeight,
+        ogImage: coverImage,
         authors: s.author ? { connect: [{ id: s.author.id }] } : undefined,
       },
     });
 
-    console.log(`✅ Updated ${updated.slug} — Body length: ${body.length} chars, reading time: ${mins} min`);
+    console.log(`✅ Updated ${updated.slug} — Cover: ${updated.coverImage ? "OK" : "None"}`);
   }
 
-  console.log("All solo pieces updated successfully!");
+  console.log("All solo pieces and thumbnails updated successfully!");
 }
 
 main()
