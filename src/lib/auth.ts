@@ -21,9 +21,13 @@ function secret(): string {
   return value;
 }
 
+import { AdminRole } from "@prisma/client";
+import { hasPermission, Resource, Action } from "./permissions";
+
 export type AccessTokenPayload = {
   sub: string; // AdminUser id
   email: string;
+  role?: AdminRole;
   type: "access";
   exp?: number;
 };
@@ -43,10 +47,11 @@ export async function verifyPassword(plain: string, hash: string) {
   return bcrypt.compare(plain, hash);
 }
 
-export function createAccessToken(userId: string, email: string): string {
+export function createAccessToken(userId: string, email: string, role: AdminRole = "ADMIN"): string {
   const payload: AccessTokenPayload = {
     sub: userId,
     email,
+    role,
     type: "access",
   };
   return jwt.sign(payload, secret(), { expiresIn: ACCESS_TOKEN_EXPIRY });
@@ -82,9 +87,15 @@ export async function createRefreshToken(
 export async function issueAuthCookies(
   userId: string,
   email: string,
-  metadata: { userAgent?: string; ipAddress?: string } = {},
+  metadata: { userAgent?: string; ipAddress?: string; role?: AdminRole } = {},
 ) {
-  const accessToken = createAccessToken(userId, email);
+  let role = metadata.role;
+  if (!role) {
+    const user = await prisma.adminUser.findUnique({ where: { id: userId }, select: { role: true } });
+    role = user?.role || "ADMIN";
+  }
+
+  const accessToken = createAccessToken(userId, email, role);
   const { token: refreshToken } = await createRefreshToken(userId, metadata);
 
   const cookieStore = cookies();
@@ -228,9 +239,17 @@ export function readSession(): { sub: string; email: string } | null {
   return null;
 }
 
-const adminCache = new Map<string, { admin: { id: string; email: string; nameBn: string | null }; expiresAt: number }>();
+export type AuthenticatedAdmin = {
+  id: string;
+  email: string;
+  nameBn: string | null;
+  role: AdminRole;
+  status: string;
+};
 
-export async function requireAdmin() {
+const adminCache = new Map<string, { admin: AuthenticatedAdmin; expiresAt: number }>();
+
+export async function requireAdmin(): Promise<AuthenticatedAdmin | null> {
   const session = readSession();
   if (!session) return null;
 
@@ -243,23 +262,54 @@ export async function requireAdmin() {
   try {
     const admin = await prisma.adminUser.findUnique({
       where: { id: session.sub },
-      select: { id: true, email: true, nameBn: true },
+      select: { id: true, email: true, nameBn: true, role: true, status: true, lastActiveAt: true },
     });
+
     if (admin) {
-      adminCache.set(session.sub, { admin, expiresAt: now + 60_000 });
-      return admin;
+      if (admin.status === "inactive" || admin.status === "suspended") {
+        return null;
+      }
+
+      // Update last active in background
+      prisma.adminUser.update({
+        where: { id: admin.id },
+        data: { lastActiveAt: new Date() },
+      }).catch(() => {});
+
+      const authAdmin: AuthenticatedAdmin = {
+        id: admin.id,
+        email: admin.email,
+        nameBn: admin.nameBn,
+        role: admin.role,
+        status: admin.status,
+      };
+
+      adminCache.set(session.sub, { admin: authAdmin, expiresAt: now + 60_000 });
+      return authAdmin;
     }
+
     if (session.sub && session.email) {
-      return { id: session.sub, email: session.email, nameBn: null };
+      return { id: session.sub, email: session.email, nameBn: null, role: "ADMIN" as AdminRole, status: "active" };
     }
     return null;
   } catch (err) {
     console.error("requireAdmin error:", err);
     if (session.sub && session.email) {
-      return { id: session.sub, email: session.email, nameBn: null };
+      return { id: session.sub, email: session.email, nameBn: null, role: "ADMIN" as AdminRole, status: "active" };
     }
     return null;
   }
+}
+
+export async function requirePermission(resource: Resource, action: Action): Promise<AuthenticatedAdmin | null> {
+  const admin = await requireAdmin();
+  if (!admin) return null;
+
+  if (!hasPermission(admin.role, resource, action)) {
+    return null;
+  }
+
+  return admin;
 }
 
 export {

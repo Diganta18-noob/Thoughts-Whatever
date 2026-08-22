@@ -32,10 +32,22 @@
 | Route Pattern | Rendering Strategy | Key File Path | Auth Guard Required |
 |---------------|-------------------|---------------|---------------------|
 | `/admin/login` | Dynamic | `src/app/admin/login/page.tsx` | Admin Login Page (Public/Guest) |
-| `/admin` | Dynamic | `src/app/admin/(dashboard)/page.tsx` | Overview & Interactive Analytics Dashboard. Admin Only. |
+| `/admin/analytics` | Dynamic | `src/app/admin/(dashboard)/analytics/page.tsx` | Advanced analytics, daily trend & CSV export. Admin Only. |
+| `/admin/engagement` | Dynamic | `src/app/admin/(dashboard)/engagement/page.tsx` | Reading depth curves & completion funnel. Admin Only. |
+| `/admin/geography` | Dynamic | `src/app/admin/(dashboard)/geography/page.tsx` | Geographic audience distribution & regional hubs. Admin Only. |
+| `/admin/goals` | Dynamic | `src/app/admin/(dashboard)/goals/page.tsx` | Editorial targets & KPI tracking. Admin Only. |
+| `/admin/activity` | Dynamic | `src/app/admin/(dashboard)/activity/page.tsx` | Real-time live activity stream. Admin Only. |
+| `/admin/notifications` | Dynamic | `src/app/admin/(dashboard)/notifications/page.tsx` | Operational alerts & notification center. Admin Only. |
+| `/admin/team` | Dynamic | `src/app/admin/(dashboard)/team/page.tsx` | Team, RBAC roles & permission matrix. Admin Only. |
+| `/admin/security` | Dynamic | `src/app/admin/(dashboard)/security/page.tsx` | Security health & session revocation center. Admin Only. |
 | `/admin/pieces` | Dynamic | `src/app/admin/(dashboard)/pieces/page.tsx` | Articles list table (Drafts/Published/Archived). Admin Only. |
 | `/admin/pieces/new` | Dynamic | `src/app/admin/(dashboard)/pieces/new/page.tsx` | Create new article editor page. Admin Only. |
 | `/admin/pieces/[id]` | Dynamic | `src/app/admin/(dashboard)/pieces/[id]/page.tsx` | Edit existing article editor page. Admin Only. |
+| `/admin/pieces/[id]/history` | Dynamic | `src/app/admin/(dashboard)/pieces/[id]/history/page.tsx` | Article revisions, version control & visual diff. Admin Only. |
+| `/admin/media` | Dynamic | `src/app/admin/(dashboard)/media/page.tsx` | Media library with usage tracking. Admin Only. |
+| `/admin/content-health` | Dynamic | `src/app/admin/(dashboard)/content-health/page.tsx` | Content health scoring & recommendations. Admin Only. |
+| `/admin/seo` | Dynamic | `src/app/admin/(dashboard)/seo/page.tsx` | SEO score & broken link scanner. Admin Only. |
+| `/preview/[token]` | Dynamic | `src/app/preview/[token]/page.tsx` | Secure staging preview for review. Non-indexed. |
 | `/admin/series` | Dynamic | `src/app/admin/(dashboard)/series/page.tsx` | Series episode reordering manager. Admin Only. |
 | `/admin/taxonomy` | Dynamic | `src/app/admin/(dashboard)/taxonomy/page.tsx` | Authors, tags, and categories CRUD manager. Admin Only. |
 | `/admin/subscribers` | Dynamic | `src/app/admin/(dashboard)/subscribers/page.tsx` | Newsletter subscribers list & statistics. Admin Only. |
@@ -55,6 +67,11 @@
 | `/api/unsubscribe` | POST | `src/app/api/unsubscribe/route.ts` | Public |
 | `/api/admin/login` | POST | `src/app/api/admin/login/route.ts` | Public |
 | `/api/admin/logout` | POST | `src/app/api/admin/logout/route.ts` | Admin Only |
+| `/api/admin/activity` | GET | `src/app/api/admin/activity/route.ts` | Admin Only |
+| `/api/admin/notifications` | GET / PUT / POST / DELETE | `src/app/api/admin/notifications/route.ts` | Admin Only |
+| `/api/admin/search` | GET | `src/app/api/admin/search/route.ts` | Admin Only |
+| `/api/admin/team` | GET / POST / PUT / DELETE | `src/app/api/admin/team/route.ts` | Admin Only (RBAC checked) |
+| `/api/admin/security` | GET / DELETE | `src/app/api/admin/security/route.ts` | Admin Only (RBAC checked) |
 | `/api/admin/analytics` | GET | `src/app/api/admin/analytics/route.ts` | Admin Only |
 | `/api/admin/pieces` | GET / POST | `src/app/api/admin/pieces/route.ts` | Admin Only |
 | `/api/admin/pieces/[id]` | GET / PUT / DELETE | `src/app/api/admin/pieces/[id]/route.ts` | Admin Only |

@@ -34,6 +34,30 @@ export async function POST(req: Request) {
 
     const userAgent = req.headers.get("user-agent") || undefined;
 
+    // Capture edge geo headers from Vercel / Cloudflare
+    const country =
+      req.headers.get("x-vercel-ip-country") ||
+      req.headers.get("cf-ipcountry") ||
+      req.headers.get("x-country-code") ||
+      null;
+
+    const region =
+      req.headers.get("x-vercel-ip-country-region") ||
+      req.headers.get("x-region") ||
+      null;
+
+    const city =
+      req.headers.get("x-vercel-ip-city") ||
+      req.headers.get("x-city") ||
+      null;
+
+    const eventMetadata = {
+      ...(metadata && typeof metadata === "object" ? metadata : {}),
+      ...(country ? { country } : {}),
+      ...(region ? { region } : {}),
+      ...(city ? { city } : {}),
+    };
+
     await prisma.analyticsEvent.create({
       data: {
         pieceId: typeof pieceId === "string" && pieceId ? pieceId : null,
@@ -41,7 +65,7 @@ export async function POST(req: Request) {
         sessionId,
         referrer: typeof referrer === "string" ? referrer.slice(0, 500) : null,
         userAgent: userAgent ? userAgent.slice(0, 500) : null,
-        metadata: metadata && typeof metadata === "object" ? metadata : undefined,
+        metadata: Object.keys(eventMetadata).length > 0 ? eventMetadata : undefined,
       },
     });
 
@@ -59,4 +83,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
-

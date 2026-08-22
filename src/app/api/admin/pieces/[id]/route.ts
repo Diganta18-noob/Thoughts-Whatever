@@ -40,6 +40,19 @@ export async function PUT(request: Request, props: RouteProps) {
   if (!before) return fail("Piece not found.", 404);
 
   try {
+    // Phase 2: Capture revision snapshot of current piece state before applying updates
+    const { createRevisionSnapshot } = await import("@/lib/revisions");
+    const { requireAdmin } = await import("@/lib/auth");
+    const currentAdmin = await requireAdmin();
+
+    await createRevisionSnapshot(id, {
+      editedBy: currentAdmin?.id,
+      editedByEmail: currentAdmin?.email,
+      editedByName: currentAdmin?.nameBn || undefined,
+      changeSummary: `Update "${body.data.titleBn}"`,
+      status: body.data.status,
+    }).catch((e) => console.error("[Revision] Snapshot error:", e));
+
     const piece = await updatePiece(id, body.data);
     auditPieceAction("update", { id: piece.id, slug: piece.slug, titleBn: body.data.titleBn }).catch(() => {});
     revalidatePiece({
