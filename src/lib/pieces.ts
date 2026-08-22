@@ -177,16 +177,36 @@ export const getPieceBySlug = cache(async (slug: string, kind?: PieceKind) => {
   // Concurrent, not sequential: the prefix read is a lookup on `slug`'s unique
   // index returning at most 512 bytes, so it costs a connection and no
   // measurable latency — against up to 320 KB of base64 it replaces.
-  const [piece, shareImages, coverImages] = await Promise.all([
-    prisma.piece.findFirst({
-      where: { slug, ...PUBLISHED, ...(kind ? { kind } : {}) },
-      select: pieceSelect,
-    }),
+  let piece = await prisma.piece.findFirst({
+    where: { slug, ...PUBLISHED, ...(kind ? { kind } : {}) },
+    select: pieceSelect,
+  });
+
+  // Resilient fallback: support nasal consonant variants (ণ <-> ন)
+  if (!piece) {
+    const altSlug = slug.includes("ণ")
+      ? slug.replace(/ণ/g, "ন")
+      : slug.includes("ন")
+        ? slug.replace(/ন/g, "ণ")
+        : null;
+
+    if (altSlug) {
+      piece = await prisma.piece.findFirst({
+        where: { slug: altSlug, ...PUBLISHED, ...(kind ? { kind } : {}) },
+        select: pieceSelect,
+      });
+      if (piece) {
+        slug = piece.slug;
+      }
+    }
+  }
+
+  if (!piece) return null;
+
+  const [shareImages, coverImages] = await Promise.all([
     publishedBlobPrefixes("ogImage", [slug]),
     publishedBlobPrefixes("coverImage", [slug]),
   ]);
-
-  if (!piece) return null;
 
   const ogImage = usablePrefix(shareImages.get(slug));
   const coverImage = usablePrefix(coverImages.get(slug));
