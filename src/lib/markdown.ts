@@ -6,10 +6,27 @@ import { readingMinutes } from "@/lib/bengali";
  * live the moment it is saved.
  */
 
+/**
+ * Strip any variant of the `— thoughts.whatever` signature from content body,
+ * including dashes (em-dash, en-dash, hyphen, double hyphen), varied spacing,
+ * and trailing whitespace/empty lines.
+ */
+export function stripThoughtsSignature(md: string): string {
+  if (!md) return "";
+  // Match lines or trailing fragments containing dashes + thoughts.whatever (case-insensitive)
+  // Tolerates em-dash (—), en-dash (–), hyphen (-), double-hyphen (--), with or without leading/trailing spaces
+  const signatureRegex = /(?:^|\n)\s*(?:[—–-]{1,2}|―|‒)?\s*thoughts\.whatever\s*(?=\n|$)/gi;
+  return md
+    .replace(signatureRegex, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 /** Strip markdown syntax down to plain text, for excerpts and OG descriptions. */
 export function stripMarkdown(md: string): string {
   if (!md) return "";
-  return md
+  const clean = stripThoughtsSignature(md);
+  return clean
     .replace(/^---[\s\S]*?---/m, "")
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/`([^`]*)`/g, "$1")

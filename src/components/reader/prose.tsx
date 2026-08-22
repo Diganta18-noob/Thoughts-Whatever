@@ -1,8 +1,9 @@
 import { Children, type ReactNode } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { firstGrapheme, splitLeadParagraph } from "@/lib/markdown";
+import { firstGrapheme, splitLeadParagraph, stripThoughtsSignature } from "@/lib/markdown";
 import { cn } from "@/lib/utils";
+import { ArticleSignature } from "@/components/reader/article-signature";
 
 /**
  * The reading surface.
@@ -125,16 +126,23 @@ export function Prose({
   body,
   dropCap = false,
   className,
+  showSignature = true,
 }: {
   body: string;
   dropCap?: boolean;
   className?: string;
+  showSignature?: boolean;
 }) {
+  // Strip manual/stray signatures first to guarantee uniqueness
+  let cleanBody = stripThoughtsSignature(body);
+
   // Strip code fences ```markdown ... ``` or stray leading ## headers if present
-  let cleanBody = body.trim();
   cleanBody = cleanBody.replace(/^```[a-z]*\n?/gi, "").replace(/\n?```$/gi, "").trim();
   cleanBody = cleanBody.replace(/^#{1,3}\s+[^\n]+\n+/, "").trim();
   cleanBody = cleanBody.replace(/^```[a-z]*\n?/gi, "").replace(/\n?```$/gi, "").trim();
+
+  // Re-strip signature in case code fences wrapped it
+  cleanBody = stripThoughtsSignature(cleanBody);
 
   const { lead, rest } = dropCap
     ? splitLeadParagraph(cleanBody)
@@ -152,6 +160,7 @@ export function Prose({
           {rest}
         </Markdown>
       )}
+      {showSignature && <ArticleSignature />}
     </div>
   );
 }
