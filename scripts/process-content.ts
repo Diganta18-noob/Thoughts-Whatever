@@ -481,20 +481,31 @@ async function main() {
         titleEn: epAiMeta.titleEn,
         bodyBn: formattedBody,
         excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
-        coverImage: coverImageUrl,
+        coverImage: coverImageUrl || existingPiece?.coverImage,
         readingMinutes: readingMins,
         featured: true,
         seoDescription: epAiMeta.seoDescription,
-        ogImage: coverImageUrl,
-        publishedAt: new Date(),
+        ogImage: coverImageUrl || existingPiece?.ogImage,
+        publishedAt: existingPiece?.publishedAt || new Date(),
         tags: { connect: tagIds.map((id) => ({ id })) },
-        authors: tagoreAuthor ? { connect: [{ id: tagoreAuthor.id }] } : undefined,
+        authors: existingPiece?.authors ? undefined : (tagoreAuthor ? { connect: [{ id: tagoreAuthor.id }] } : undefined),
       };
 
       if (existingPiece) {
         await prisma.piece.update({
           where: { id: existingPiece.id },
-          data: { ...pieceData, kind: PieceKind.DOCUMENTARY },
+          data: {
+            titleBn,
+            titleEn: epAiMeta.titleEn,
+            bodyBn: formattedBody,
+            excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
+            coverImage: coverImageUrl || existingPiece.coverImage,
+            readingMinutes: readingMins,
+            featured: true,
+            seoDescription: epAiMeta.seoDescription,
+            ogImage: coverImageUrl || existingPiece.ogImage,
+            kind: PieceKind.DOCUMENTARY,
+          },
         });
         console.log(`  🔄 Updated Solo Article: "${titleBn}"`);
       } else {
