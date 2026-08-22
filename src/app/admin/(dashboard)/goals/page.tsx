@@ -300,9 +300,10 @@ export default function GoalsKPITrackingPage() {
                     onChange={(e) => setPeriod(e.target.value)}
                     className="w-full p-2 rounded-sm border border-rule bg-surface text-content focus:outline-none focus:border-accent"
                   >
-                    <option value="monthly">Monthly</option>
-                    <option value="quarterly">Quarterly</option>
-                    <option value="annual">Annual</option>
+                    <option value="cumulative">All-Time Milestone</option>
+                    <option value="monthly">Monthly Target</option>
+                    <option value="quarterly">Quarterly Target</option>
+                    <option value="annual">Annual Target</option>
                   </select>
                 </div>
 

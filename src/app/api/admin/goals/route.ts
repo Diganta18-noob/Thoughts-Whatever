@@ -12,49 +12,48 @@ export async function GET() {
   try {
     let activeGoals = await prisma.goal.findMany({ orderBy: { createdAt: "desc" } });
 
-    // Seed initial editorial KPI goals if none exist yet
+    // Seed realistic initial goals if none exist or if existing goals were empty templates
     if (activeGoals.length === 0) {
       const now = new Date();
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+      const endOfYear = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
 
       await prisma.goal.createMany({
         data: [
           {
-            title: "Monthly Page Views Target",
-            metricKey: "pageviews",
-            targetValue: 10000,
-            currentValue: 0,
-            unit: "count",
-            period: "monthly",
-            startDate: startOfMonth,
-            endDate: endOfMonth,
-            owner: "Editorial Team",
-            status: "ON_TRACK",
-          },
-          {
-            title: "Published Pieces Goal",
+            title: "Total Published Catalog Goal",
             metricKey: "articles_published",
-            targetValue: 20,
+            targetValue: 30,
             currentValue: 0,
             unit: "count",
-            period: "monthly",
-            startDate: startOfMonth,
-            endDate: endOfMonth,
+            period: "cumulative",
+            startDate: new Date(2026, 0, 1),
+            endDate: endOfYear,
             owner: "Lead Editor",
             status: "ON_TRACK",
           },
           {
-            title: "Subscriber Growth Milestone",
-            metricKey: "subscribers",
-            targetValue: 500,
+            title: "Audience Readership Milestone",
+            metricKey: "pageviews",
+            targetValue: 1000,
             currentValue: 0,
             unit: "count",
-            period: "quarterly",
-            startDate: startOfMonth,
-            endDate: new Date(now.getFullYear(), now.getMonth() + 3, 0, 23, 59, 59),
-            owner: "Growth Team",
+            period: "cumulative",
+            startDate: new Date(2026, 0, 1),
+            endDate: endOfYear,
+            owner: "Editorial Team",
             status: "ON_TRACK",
+          },
+          {
+            title: "Newsletter Subscriber Growth",
+            metricKey: "subscribers",
+            targetValue: 100,
+            currentValue: 0,
+            unit: "count",
+            period: "cumulative",
+            startDate: new Date(2026, 0, 1),
+            endDate: endOfYear,
+            owner: "Growth Team",
+            status: "BEHIND",
           },
         ],
       });
@@ -62,29 +61,31 @@ export async function GET() {
       activeGoals = await prisma.goal.findMany({ orderBy: { createdAt: "desc" } });
     }
 
-    // Calculate actual 100% real numbers from PostgreSQL for each goal's time window
+    // Calculate actual real numbers from PostgreSQL
     const calculatedGoals = await Promise.all(
       activeGoals.map(async (g) => {
         let current = 0;
+        const isCumulative = g.period === "cumulative" || g.period === "all" || !g.startDate;
+
         if (g.metricKey === "pageviews") {
           current = await prisma.analyticsEvent.count({
             where: {
               eventType: "view",
-              createdAt: { gte: g.startDate, lte: g.endDate },
+              ...(!isCumulative && g.startDate ? { createdAt: { gte: g.startDate, lte: g.endDate } } : {}),
             },
           });
         } else if (g.metricKey === "articles_published") {
           current = await prisma.piece.count({
             where: {
               status: "PUBLISHED",
-              publishedAt: { gte: g.startDate, lte: g.endDate },
+              ...(!isCumulative && g.startDate ? { publishedAt: { gte: g.startDate, lte: g.endDate } } : {}),
             },
           });
         } else if (g.metricKey === "subscribers") {
           current = await prisma.subscriber.count({
             where: {
               unsubscribedAt: null,
-              createdAt: { gte: g.startDate, lte: g.endDate },
+              ...(!isCumulative && g.startDate ? { createdAt: { gte: g.startDate, lte: g.endDate } } : {}),
             },
           });
         } else {
@@ -93,8 +94,8 @@ export async function GET() {
 
         const progressPct = Math.min(100, Math.round((current / (g.targetValue || 1)) * 100));
         let status = "ON_TRACK";
-        if (progressPct < 50) status = "BEHIND";
-        else if (progressPct < 80) status = "AT_RISK";
+        if (progressPct < 30) status = "BEHIND";
+        else if (progressPct < 75) status = "AT_RISK";
 
         return {
           ...g,
@@ -131,9 +132,9 @@ export async function POST(req: NextRequest) {
         metricKey: metricKey || "pageviews",
         targetValue: parseFloat(targetValue),
         unit: unit || "count",
-        period: period || "monthly",
-        startDate: startDate ? new Date(startDate) : new Date(),
-        endDate: endDate ? new Date(endDate) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        period: period || "cumulative",
+        startDate: startDate ? new Date(startDate) : new Date(2026, 0, 1),
+        endDate: endDate ? new Date(endDate) : new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
         owner: owner || "Editorial Team",
       },
     });
