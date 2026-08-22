@@ -11,18 +11,15 @@ import {
 import { READING_KEY, THEME_KEY, THEME_COOKIE } from "./theme-script";
 
 export type Theme = "cream" | "sepia" | "night";
-export type ReadingFamily = "serif" | "sans";
 
 export type ReadingSettings = {
   size: number; // px
   leading: number;
-  family: ReadingFamily;
 };
 
 export const READING_DEFAULTS: ReadingSettings = {
   size: 19,
   leading: 1.9,
-  family: "serif",
 };
 
 export const SIZE_RANGE = { min: 16, max: 26, step: 1 };
@@ -77,12 +74,6 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
       const root = document.documentElement;
       root.style.setProperty("--reading-size", `${next.size}px`);
       root.style.setProperty("--reading-leading", String(next.leading));
-      root.style.setProperty(
-        "--reading-family",
-        next.family === "sans"
-          ? "var(--font-bengali-sans), sans-serif"
-          : "var(--font-bengali-serif), serif",
-      );
       try {
         localStorage.setItem(READING_KEY, JSON.stringify(next));
       } catch {
@@ -92,7 +83,10 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  const reset = useCallback(() => setReading(READING_DEFAULTS), [setReading]);
+  const reset = useCallback(() => {
+    setTheme("night");
+    setReading(READING_DEFAULTS);
+  }, [setTheme, setReading]);
 
   const value = useMemo(
     () => ({ theme, setTheme, reading, setReading, reset, ready }),

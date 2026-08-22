@@ -54,9 +54,6 @@ const script = `
       var r = JSON.parse(raw);
       if (r.size) root.style.setProperty('--reading-size', r.size + 'px');
       if (r.leading) root.style.setProperty('--reading-leading', String(r.leading));
-      if (r.family === 'sans') {
-        root.style.setProperty('--reading-family', 'var(--font-bengali-sans), sans-serif');
-      }
     }
   } catch (e) {
     /* A reader with storage disabled gets the cream default. Not worth failing over. */
