@@ -1,4 +1,4 @@
-﻿# Thoughts Whatever — Visual Reference Archive
+# Thoughts Whatever — Visual Reference Archive
 
 - **Date:** 2026-08-14
 - **Live Deployment:** [https://thoughts-whatever.vercel.app](https://thoughts-whatever.vercel.app)
@@ -144,25 +144,24 @@
 
 ## 8. Admin Routes
 
-All admin dashboard routes require authenticated session cookies (\	w_access\ / \	w_refresh\). Unauthenticated requests automatically redirect to \/admin/login\.
+All admin dashboard routes captured with active authenticated session:
 
-| ID | Route | Required Auth | Behavior / Destination |
-|---|---|---|---|
-| 080 | \/admin\ | Required | Redirects to \/admin/login\ |
-| 081 | \/admin/pieces\ | Required | Redirects to \/admin/login\ |
-| 082 | \/admin/pieces/new\ | Required | Redirects to \/admin/login\ |
-| 083 | \/admin/pieces/[id]\ | Required | Redirects to \/admin/login\ |
-| 084 | \/admin/series\ | Required | Redirects to \/admin/login\ |
-| 085 | \/admin/prompts\ | Required | Redirects to \/admin/login\ |
-| 086 | \/admin/prompts/new\ | Required | Redirects to \/admin/login\ |
-| 087 | \/admin/taxonomy\ | Required | Redirects to \/admin/login\ |
-| 088 | \/admin/analytics\ | Required | Redirects to \/admin/login\ |
-| 089 | \/admin/audit-log\ | Required | Redirects to \/admin/login\ |
-| 090 | \/admin/subscribers\ | Required | Redirects to \/admin/login\ |
-| 091 | \/admin/system\ | Required | Redirects to \/admin/login\ |
-| 092 | \/admin/transliteration\ | Required | Redirects to \/admin/login\ |
-| 093 | \/admin/import\ | Required | Redirects to \/admin/login\ |
-| 094 | \/admin/settings\ | Required | Redirects to \/admin/login\ |
+| ID | Route | Viewport | Theme | State | Screenshot |
+|---|---|---|---|---|---|
+| 060 | `/admin/login` | Desktop (1440×900) | Light (cream) | READY | [01-admin-login-desktop.png](screenshots/08-admin/01-admin-login-desktop.png) |
+| 080 | `/admin` | Desktop (1440×900) | Light (cream) | READY | [02-admin-overview-desktop.png](screenshots/08-admin/02-admin-overview-desktop.png) |
+| 081 | `/admin/pieces` | Desktop (1440×900) | Light (cream) | READY | [03-admin-pieces-desktop.png](screenshots/08-admin/03-admin-pieces-desktop.png) |
+| 082 | `/admin/pieces/new` | Desktop (1440×900) | Light (cream) | READY | [04-admin-pieces-new-desktop.png](screenshots/08-admin/04-admin-pieces-new-desktop.png) |
+| 084 | `/admin/series` | Desktop (1440×900) | Light (cream) | READY | [05-admin-series-desktop.png](screenshots/08-admin/05-admin-series-desktop.png) |
+| 085 | `/admin/prompts` | Desktop (1440×900) | Light (cream) | READY | [06-admin-prompts-desktop.png](screenshots/08-admin/06-admin-prompts-desktop.png) |
+| 087 | `/admin/taxonomy` | Desktop (1440×900) | Light (cream) | READY | [07-admin-taxonomy-desktop.png](screenshots/08-admin/07-admin-taxonomy-desktop.png) |
+| 088 | `/admin/analytics` | Desktop (1440×900) | Light (cream) | READY | [08-admin-analytics-desktop.png](screenshots/08-admin/08-admin-analytics-desktop.png) |
+| 089 | `/admin/audit-log` | Desktop (1440×900) | Light (cream) | READY | [09-admin-audit-log-desktop.png](screenshots/08-admin/09-admin-audit-log-desktop.png) |
+| 090 | `/admin/subscribers` | Desktop (1440×900) | Light (cream) | READY | [10-admin-subscribers-desktop.png](screenshots/08-admin/10-admin-subscribers-desktop.png) |
+| 091 | `/admin/system` | Desktop (1440×900) | Light (cream) | READY | [11-admin-system-desktop.png](screenshots/08-admin/11-admin-system-desktop.png) |
+| 092 | `/admin/transliteration` | Desktop (1440×900) | Light (cream) | READY | [12-admin-transliteration-desktop.png](screenshots/08-admin/12-admin-transliteration-desktop.png) |
+| 093 | `/admin/import` | Desktop (1440×900) | Light (cream) | READY | [13-admin-import-desktop.png](screenshots/08-admin/13-admin-import-desktop.png) |
+| 094 | `/admin/settings` | Desktop (1440×900) | Light (cream) | READY | [14-admin-settings-desktop.png](screenshots/08-admin/14-admin-settings-desktop.png) |
 
 ---
 

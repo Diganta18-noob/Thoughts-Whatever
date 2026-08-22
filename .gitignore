@@ -21,10 +21,11 @@ next-env.d.ts
 /Thumnail
 /Voice
 
-# Playwright Test Artifacts
+# Playwright Test Artifacts & Screenshots
 /test-results/
 /playwright-report/
 /e2e/.auth/
+/screenshots/
 
 # Obsidian
 .obsidian/
