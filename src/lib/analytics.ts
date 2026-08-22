@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export type Period = "today" | "yesterday" | "7d" | "30d" | "90d" | "all";
 
@@ -30,11 +31,26 @@ export function getStartDate(period: Period = "30d"): Date | undefined {
   return undefined;
 }
 
+const COUNTRY_NAMES: Record<string, string> = {
+  IN: "India",
+  BD: "Bangladesh",
+  US: "United States",
+  GB: "United Kingdom",
+  CA: "Canada",
+  DE: "Germany",
+  AU: "Australia",
+  SG: "Singapore",
+  AE: "United Arab Emirates",
+  MY: "Malaysia",
+  FR: "France",
+  JP: "Japan",
+};
+
 export async function getOverviewStats(period: Period = "30d") {
   const startDate = getStartDate(period);
   const dateFilter = startDate ? { gte: startDate } : undefined;
 
-  const [totalViews, uniqueVisitorsResult, totalArticles, totalSubscribers, totalReelClicks, scrollEvents] = await Promise.all([
+  const [totalViews, uniqueVisitorsResult, totalArticles, totalSubscribers, totalReelClicks, scrollEvents, piecesWithReadingTime] = await Promise.all([
     prisma.analyticsEvent.count({
       where: { eventType: "view", ...(dateFilter ? { createdAt: dateFilter } : {}) },
     }),
@@ -64,16 +80,26 @@ export async function getOverviewStats(period: Period = "30d") {
       },
       _count: { _all: true },
     }),
+    prisma.piece.findMany({
+      where: { status: "PUBLISHED" },
+      select: { readingMinutes: true },
+    }),
   ]);
 
   const uniqueVisitors = Number(uniqueVisitorsResult[0]?.count ?? 0);
   const scrollMap = new Map(scrollEvents.map((s) => [s.eventType, s._count._all]));
 
-  const viewsCount = Math.max(1, totalViews);
-  const completedReads = scrollMap.get("scroll_100") || Math.round(totalViews * 0.45);
-  const completionRate = Math.min(100, Math.round((completedReads / viewsCount) * 100));
-  const avgReadingMinutes = 4.2;
-  const bounceRate = Math.max(15, Math.min(65, Math.round(100 - (scrollMap.get("scroll_25") || totalViews * 0.6) / viewsCount * 100)));
+  const completedReads = scrollMap.get("scroll_100") || 0;
+  const startedReads = scrollMap.get("scroll_25") || 0;
+  const viewsCount = Math.max(0, totalViews);
+
+  const completionRate = viewsCount > 0 ? Math.min(100, Math.round((completedReads / viewsCount) * 100)) : 0;
+  const bounceRate = viewsCount > 0 ? Math.max(0, Math.min(100, Math.round(((viewsCount - startedReads) / viewsCount) * 100))) : 0;
+
+  // Average reading minutes across published catalog
+  const avgReadingMinutes = piecesWithReadingTime.length > 0
+    ? Math.round((piecesWithReadingTime.reduce((sum, p) => sum + (p.readingMinutes || 3), 0) / piecesWithReadingTime.length) * 10) / 10
+    : 4.0;
 
   return {
     totalViews,
@@ -271,66 +297,189 @@ export async function getReadingEngagementMetrics(period: Period = "30d") {
   ]);
 
   const baseViews = Math.max(1, totalViews);
-  const depth25Pct = Math.min(100, Math.round(((scroll25 || baseViews * 0.85) / baseViews) * 100));
-  const depth50Pct = Math.min(100, Math.round(((scroll50 || baseViews * 0.65) / baseViews) * 100));
-  const depth75Pct = Math.min(100, Math.round(((scroll75 || baseViews * 0.48) / baseViews) * 100));
-  const depth100Pct = Math.min(100, Math.round(((scroll100 || baseViews * 0.38) / baseViews) * 100));
+  const depth25Pct = totalViews > 0 ? Math.min(100, Math.round((scroll25 / baseViews) * 100)) : 0;
+  const depth50Pct = totalViews > 0 ? Math.min(100, Math.round((scroll50 / baseViews) * 100)) : 0;
+  const depth75Pct = totalViews > 0 ? Math.min(100, Math.round((scroll75 / baseViews) * 100)) : 0;
+  const depth100Pct = totalViews > 0 ? Math.min(100, Math.round((scroll100 / baseViews) * 100)) : 0;
 
-  const averageReadingTimeSec = 254; // 4m 14s
+  // Average reading time calculated from catalog duration
+  const avgReadingMinutes = topPieces.length > 0
+    ? topPieces.reduce((sum, p) => sum + (p.readingMinutes || 3), 0) / topPieces.length
+    : 4;
+  const averageReadingTimeSec = Math.round(avgReadingMinutes * 60);
 
   return {
     totalViews,
     averageReadingTimeSec,
     depthFunnel: [
-      { label: "Started Reading (0%)", count: totalViews, pct: 100 },
-      { label: "Reached Quarter (25%)", count: scroll25 || Math.round(totalViews * 0.85), pct: depth25Pct },
-      { label: "Reached Midpoint (50%)", count: scroll50 || Math.round(totalViews * 0.65), pct: depth50Pct },
-      { label: "Deep Engagement (75%)", count: scroll75 || Math.round(totalViews * 0.48), pct: depth75Pct },
-      { label: "Completed Article (100%)", count: scroll100 || Math.round(totalViews * 0.38), pct: depth100Pct },
+      { label: "Started Reading (0%)", count: totalViews, pct: totalViews > 0 ? 100 : 0 },
+      { label: "Reached Quarter (25%)", count: scroll25, pct: depth25Pct },
+      { label: "Reached Midpoint (50%)", count: scroll50, pct: depth50Pct },
+      { label: "Deep Engagement (75%)", count: scroll75, pct: depth75Pct },
+      { label: "Completed Article (100%)", count: scroll100, pct: depth100Pct },
     ],
-    topEngagedPieces: topPieces.map((p, idx) => ({
+    topEngagedPieces: topPieces.map((p) => ({
       id: p.id,
       titleBn: p.titleBn,
       slug: p.slug,
       views: p.viewCount,
       avgMinutes: p.readingMinutes || 3,
-      estimatedCompletionRate: Math.max(45, 88 - idx * 5),
+      estimatedCompletionRate: depth100Pct,
     })),
   };
 }
 
 export async function getGeographicMetrics(period: Period = "30d") {
-  // Aggregate country distribution from available referrer/session traffic
-  const countries = [
-    { country: "India", code: "IN", visitors: 4820, pct: 54 },
-    { country: "Bangladesh", code: "BD", visitors: 2640, pct: 30 },
-    { country: "United States", code: "US", visitors: 890, pct: 10 },
-    { country: "United Kingdom", code: "GB", visitors: 310, pct: 3.5 },
-    { country: "Canada", code: "CA", visitors: 160, pct: 1.8 },
-    { country: "Germany", code: "DE", visitors: 65, pct: 0.7 },
-  ];
+  const startDate = getStartDate(period);
 
-  const regions = [
-    { name: "West Bengal, India", visitors: 3940, pct: 44 },
-    { name: "Dhaka, Bangladesh", visitors: 1820, pct: 21 },
-    { name: "Chittagong, Bangladesh", visitors: 580, pct: 7 },
-    { name: "Tripura & Assam, India", visitors: 450, pct: 5 },
-    { name: "California, US", visitors: 320, pct: 4 },
-    { name: "New York, US", visitors: 240, pct: 3 },
-  ];
+  try {
+    // 1. Query raw database counts grouped by actual metadata country
+    const countryRows = startDate
+      ? await prisma.$queryRaw<Array<{ country: string; count: bigint }>>`
+          SELECT
+            COALESCE("metadata"->>'country', 'IN') as country,
+            COUNT(*)::bigint as count
+          FROM "AnalyticsEvent"
+          WHERE "createdAt" >= ${startDate}
+          GROUP BY COALESCE("metadata"->>'country', 'IN')
+          ORDER BY count DESC
+          LIMIT 10
+        `
+      : await prisma.$queryRaw<Array<{ country: string; count: bigint }>>`
+          SELECT
+            COALESCE("metadata"->>'country', 'IN') as country,
+            COUNT(*)::bigint as count
+          FROM "AnalyticsEvent"
+          GROUP BY COALESCE("metadata"->>'country', 'IN')
+          ORDER BY count DESC
+          LIMIT 10
+        `;
 
-  return {
-    totalGeoVisitors: 8885,
-    countries,
-    regions,
-  };
+    // 2. Query regional hubs from actual metadata
+    const regionRows = startDate
+      ? await prisma.$queryRaw<Array<{ region: string; city: string; count: bigint }>>`
+          SELECT
+            COALESCE("metadata"->>'region', 'WB') as region,
+            COALESCE("metadata"->>'city', 'Kolkata') as city,
+            COUNT(*)::bigint as count
+          FROM "AnalyticsEvent"
+          WHERE "createdAt" >= ${startDate}
+          GROUP BY COALESCE("metadata"->>'region', 'WB'), COALESCE("metadata"->>'city', 'Kolkata')
+          ORDER BY count DESC
+          LIMIT 8
+        `
+      : await prisma.$queryRaw<Array<{ region: string; city: string; count: bigint }>>`
+          SELECT
+            COALESCE("metadata"->>'region', 'WB') as region,
+            COALESCE("metadata"->>'city', 'Kolkata') as city,
+            COUNT(*)::bigint as count
+          FROM "AnalyticsEvent"
+          GROUP BY COALESCE("metadata"->>'region', 'WB'), COALESCE("metadata"->>'city', 'Kolkata')
+          ORDER BY count DESC
+          LIMIT 8
+        `;
+
+    const totalGeoVisitors = countryRows.reduce((sum, r) => sum + Number(r.count), 0);
+    const totalCount = Math.max(1, totalGeoVisitors);
+
+    const countries = countryRows.map((r) => {
+      const code = (r.country || "IN").toUpperCase();
+      const name = COUNTRY_NAMES[code] || code;
+      const count = Number(r.count);
+      return {
+        country: name,
+        code,
+        visitors: count,
+        pct: Math.round((count / totalCount) * 100),
+      };
+    });
+
+    const regions = regionRows.map((r) => {
+      const count = Number(r.count);
+      const label = r.city ? `${r.city}, ${r.region}` : r.region || "Primary Hub";
+      return {
+        name: label,
+        visitors: count,
+        pct: Math.round((count / totalCount) * 100),
+      };
+    });
+
+    return {
+      totalGeoVisitors,
+      countries,
+      regions,
+    };
+  } catch (err) {
+    console.error("[GeographicMetrics] Query error:", err);
+    return {
+      totalGeoVisitors: 0,
+      countries: [],
+      regions: [],
+    };
+  }
 }
 
 export async function getTrafficSources(period: Period = "30d") {
-  return [
-    { source: "Direct / Bookmarks", count: 4230, pct: 48 },
-    { source: "Organic Search (Google)", count: 2640, pct: 30 },
-    { source: "Instagram Reels & Stories", count: 1410, pct: 16 },
-    { source: "Newsletter Email Link", count: 520, pct: 6 },
-  ];
+  const startDate = getStartDate(period);
+
+  try {
+    const rows = startDate
+      ? await prisma.$queryRaw<Array<{ referrer: string | null; count: bigint }>>`
+          SELECT
+            "referrer",
+            COUNT(*)::bigint as count
+          FROM "AnalyticsEvent"
+          WHERE "eventType" = 'view'
+            AND "createdAt" >= ${startDate}
+          GROUP BY "referrer"
+          ORDER BY count DESC
+        `
+      : await prisma.$queryRaw<Array<{ referrer: string | null; count: bigint }>>`
+          SELECT
+            "referrer",
+            COUNT(*)::bigint as count
+          FROM "AnalyticsEvent"
+          WHERE "eventType" = 'view'
+          GROUP BY "referrer"
+          ORDER BY count DESC
+        `;
+
+    let directCount = 0;
+    let searchCount = 0;
+    let instagramCount = 0;
+    let emailCount = 0;
+    let otherCount = 0;
+
+    for (const r of rows) {
+      const count = Number(r.count);
+      const ref = (r.referrer || "").toLowerCase();
+
+      if (!ref || ref.includes("localhost") || ref.includes("thoughts-whatever") || ref.includes("thoughts.whatever")) {
+        directCount += count;
+      } else if (ref.includes("google") || ref.includes("bing") || ref.includes("duckduckgo") || ref.includes("search")) {
+        searchCount += count;
+      } else if (ref.includes("instagram") || ref.includes("facebook") || ref.includes("twitter") || ref.includes("t.co")) {
+        instagramCount += count;
+      } else if (ref.includes("mail") || ref.includes("email") || ref.includes("newsletter") || ref.includes("substack")) {
+        emailCount += count;
+      } else {
+        otherCount += count;
+      }
+    }
+
+    const total = Math.max(1, directCount + searchCount + instagramCount + emailCount + otherCount);
+
+    return [
+      { source: "Direct / Internal", count: directCount, pct: Math.round((directCount / total) * 100) },
+      { source: "Organic Search (Google)", count: searchCount, pct: Math.round((searchCount / total) * 100) },
+      { source: "Social (Instagram, Reels)", count: instagramCount, pct: Math.round((instagramCount / total) * 100) },
+      { source: "Newsletter Email Link", count: emailCount, pct: Math.round((emailCount / total) * 100) },
+      { source: "Other External Referrers", count: otherCount, pct: Math.round((otherCount / total) * 100) },
+    ].filter((s) => s.count > 0 || s.source === "Direct / Internal");
+  } catch (err) {
+    console.error("[TrafficSources] Query error:", err);
+    return [
+      { source: "Direct / Internal", count: 0, pct: 100 },
+    ];
+  }
 }
