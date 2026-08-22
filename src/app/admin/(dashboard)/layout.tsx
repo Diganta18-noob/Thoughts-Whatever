@@ -1,12 +1,9 @@
 import { AdminProviders } from "@/components/providers/admin-providers";
 import { QuickAddPromptModal } from "@/components/admin/prompts/quick-add-modal";
-
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
-import { AdminNav } from "@/components/admin/admin-nav";
-import { LogoutButton } from "@/components/admin/logout-button";
-import { AdminHeaderBrand, ViewSiteLink } from "@/components/admin/admin-header-chrome";
+import { AdminLayoutClient } from "@/components/admin/admin-layout-client";
 
 export const metadata: Metadata = {
   title: { default: "Editor", template: "%s — Editor" },
@@ -23,22 +20,13 @@ export default async function AdminLayout({
 
   return (
     <AdminProviders>
-    <div className="min-h-screen bg-surface">
-      <header className="sticky top-0 z-30 border-b border-rule bg-surface/95 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3 sm:px-6">
-          <AdminHeaderBrand />
-          <AdminNav />
-
-          <div className="ml-auto flex items-center gap-4">
-            <ViewSiteLink />
-            <LogoutButton />
-          </div>
-        </div>
-      </header>
-
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">{children}</div>
+      <AdminLayoutClient
+        adminEmail={admin.email}
+        adminRole={admin.role}
+      >
+        {children}
+      </AdminLayoutClient>
       <QuickAddPromptModal />
-    </div>
     </AdminProviders>
   );
 }

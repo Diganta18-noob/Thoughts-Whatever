@@ -474,7 +474,7 @@ async function main() {
       // Check for Tagore author
       const tagoreAuthor = await prisma.author.findFirst({ where: { slug: "রবীন্দ্রনাথ-ঠাকুর" } });
 
-      const existingPiece = await prisma.piece.findUnique({ where: { slug } });
+      const existingPiece = await prisma.piece.findUnique({ where: { slug }, include: { authors: true } });
 
       const pieceData = {
         titleBn,

@@ -198,15 +198,87 @@ model Subscriber {
 
 // ─── Admin ──────────────────────────────────────────────────
 
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  AUTHOR
+  ANALYST
+  VIEWER
+}
+
 model AdminUser {
   id                  String               @id @default(cuid())
   email               String               @unique
   passwordHash        String
   nameBn              String?
+  role                AdminRole            @default(ADMIN)
+  status              String               @default("active") // "active" | "inactive" | "suspended"
+  lastActiveAt        DateTime?
   lastLoginAt         DateTime?
   createdAt           DateTime             @default(now())
   refreshTokens       RefreshToken[]
   passwordResetTokens PasswordResetToken[]
+  notifications       Notification[]
+  activities          Activity[]
+  dashboardLayout     DashboardLayout?
+}
+
+model Permission {
+  id        String    @id @default(cuid())
+  role      AdminRole
+  resource  String    // "content" | "analytics" | "system" | "users" | "security" | "settings"
+  action    String    // "create" | "read" | "update" | "delete" | "export" | "manage"
+  granted   Boolean   @default(true)
+
+  @@unique([role, resource, action])
+  @@index([role])
+}
+
+model Notification {
+  id          String     @id @default(cuid())
+  type        String     // "content_warning" | "system_alert" | "security" | "job_failure" | "seo_issue" | "info"
+  severity    String     @default("info") // "info" | "warning" | "critical"
+  title       String
+  message     String
+  read        Boolean    @default(false)
+  actionUrl   String?
+  metadata    Json?
+  adminUserId String?
+  adminUser   AdminUser? @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  readAt      DateTime?
+
+  @@index([adminUserId, read, createdAt])
+  @@index([severity, createdAt])
+  @@index([createdAt])
+}
+
+model Activity {
+  id         String     @id @default(cuid())
+  type       String     // "article.created" | "article.published" | "backup.completed" | "user.login" etc.
+  actorId    String?
+  actorEmail String?
+  actorName  String?
+  summary    String
+  entityType String?
+  entityId   String?
+  metadata   Json?
+  createdAt  DateTime   @default(now())
+  adminUser  AdminUser? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([type, createdAt])
+  @@index([actorId, createdAt])
+}
+
+model DashboardLayout {
+  id          String    @id @default(cuid())
+  adminUserId String    @unique
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  widgets     Json      // [{ id: "metrics", type: "metrics", position: 0, size: "full", enabled: true }]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model PasswordResetToken {

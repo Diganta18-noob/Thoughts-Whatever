@@ -25,19 +25,32 @@ import { JsonLd, websiteJsonLd, seriesJsonLd } from "@/lib/seo";
 
 export const revalidate = 300;
 
-const DEFAULT_FACETS = {
-  tags: [] as Array<{ slug: string; labelBn: string; kind: string; _count: { pieces: number } }>,
-  authors: [] as Array<{ slug: string; nameBn: string; era: string | null; _count: { pieces: number } }>,
-  series: [] as Array<{ slug: string; titleBn: string }>,
-  years: [] as number[],
+const DEFAULT_FACETS: Awaited<ReturnType<typeof getFilterFacets>> = {
+  tags: [],
+  authors: [],
+  series: [],
+  years: [],
 };
 
 export default async function HomePage() {
-  const [recentPieces = [], series = [], facets = DEFAULT_FACETS] = await Promise.all([
-    getRecentPieces({ take: 20 }),
-    getFeaturedSeries(3),
-    getFilterFacets(),
-  ]).catch(() => [[], [], DEFAULT_FACETS]);
+  let recentPieces: Awaited<ReturnType<typeof getRecentPieces>> = [];
+  let series: Awaited<ReturnType<typeof getFeaturedSeries>> = [];
+  let facets: Awaited<ReturnType<typeof getFilterFacets>> = DEFAULT_FACETS;
+
+  try {
+    const [p, s, f] = await Promise.all([
+      getRecentPieces({ take: 20 }),
+      getFeaturedSeries(3),
+      getFilterFacets(),
+    ]);
+    recentPieces = p;
+    series = s;
+    facets = f;
+  } catch {
+    recentPieces = [];
+    series = [];
+    facets = DEFAULT_FACETS;
+  }
 
   const leadSeries = series?.[0];
   const leadSlugs = new Set(

@@ -12,6 +12,7 @@ import {
 import { AnalyticsDashboard, type AnalyticsData } from "@/components/admin/analytics-dashboard";
 import { AnalyticsSkeleton } from "@/components/admin/analytics-skeleton";
 import { AdminDashboardHeader } from "@/components/admin/dashboard-header";
+import { AdminActivityWidget } from "@/components/admin/activity-widget";
 
 export const dynamic = "force-dynamic";
 
@@ -79,58 +80,66 @@ export default async function AdminHomePage() {
         <AnalyticsDashboard initialData={initialAnalyticsData} />
       </Suspense>
 
-      {/* Recently Edited Section */}
-      <div className="pt-4">
-        <h2 className="label">
-          Recently edited
-        </h2>
-        <ul className="mt-4 divide-y divide-rule border-y border-rule">
-          {recent.map((piece) => (
-            <li
-              key={piece.id}
-              className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3"
-            >
-              <Link
-                href={`/admin/pieces/${piece.id}`}
-                className="font-bengali text-bengali-base text-content transition hover:text-accent"
-                lang="bn"
+      {/* Grid: Recently Edited & Live Activity */}
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 pt-4">
+        {/* Recently Edited Section */}
+        <div>
+          <h2 className="label">
+            Recently edited
+          </h2>
+          <ul className="mt-4 divide-y divide-rule border-y border-rule">
+            {recent.map((piece) => (
+              <li
+                key={piece.id}
+                className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3"
               >
-                {piece.titleBn}
-              </Link>
+                <Link
+                  href={`/admin/pieces/${piece.id}`}
+                  className="font-bengali text-bengali-base text-content transition hover:text-accent"
+                  lang="bn"
+                >
+                  {piece.titleBn}
+                </Link>
 
-              <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint">
-                {KIND_META[piece.kind].labelEn}
-              </span>
-
-              {piece.status !== "PUBLISHED" && (
-                <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-accent">
-                  {piece.status}
+                <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint">
+                  {KIND_META[piece.kind].labelEn}
                 </span>
-              )}
 
-              <span className="ml-auto flex items-center gap-4">
-                <span className="font-bengali text-xs text-content-faint">
-                  {formatBengaliDate(piece.updatedAt)}
-                </span>
-                {piece.status === "PUBLISHED" && (
-                  <Link
-                    href={piecePath(piece.kind, piece.slug)}
-                    target="_blank"
-                    className="font-serif text-xs text-content-soft transition hover:text-accent"
-                  >
-                    View
-                  </Link>
+                {piece.status !== "PUBLISHED" && (
+                  <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-accent">
+                    {piece.status}
+                  </span>
                 )}
-              </span>
-            </li>
-          ))}
 
-          {recent.length === 0 && (
-            <li className="py-6 font-sans text-xs text-content-soft">
-              No pieces created yet.
-            </li>
-          )}
-        </ul>
+                <span className="ml-auto flex items-center gap-4">
+                  <span className="font-bengali text-xs text-content-faint">
+                    {formatBengaliDate(piece.updatedAt)}
+                  </span>
+                  {piece.status === "PUBLISHED" && (
+                    <Link
+                      href={piecePath(piece.kind, piece.slug)}
+                      target="_blank"
+                      className="font-serif text-xs text-content-soft transition hover:text-accent"
+                    >
+                      View
+                    </Link>
+                  )}
+                </span>
+              </li>
+            ))}
+
+            {recent.length === 0 && (
+              <li className="py-6 font-sans text-xs text-content-soft">
+                No pieces created yet.
+              </li>
+            )}
+          </ul>
+        </div>
+
+        {/* Live Activity Stream Widget */}
+        <div>
+          <AdminActivityWidget />
+        </div>
       </div>
     </div>
   );
