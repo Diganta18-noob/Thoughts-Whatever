@@ -262,3 +262,15 @@ Root Cause Report (Confirmed):
 | 12 | Hydration Stuck Skeleton | Framer Motion SSR HTML opacity:0 serialization race | Diagnosed hydration interaction; rolled back heavy client wrapper to preserve sub-second native ISR load speed |
 | 13 | API Architecture Audit | Question regarding multi-endpoint vs consolidated single-API performance | Audited Next.js App Router Server Component direct DB execution vs client REST calls, verifying current architecture is optimal |
 | 14 | Stuck Skeleton Permanent Fix | Framer Motion SSR opacity:0 serialization and ThemeScript hydration mismatches | Added CSS reveal-rescue safety net, cookie-synced ThemeScript, 300ms miss-healing Reveal, 8s DB timeout, and diagnostic logging |
+
+---
+
+## 26. Master Prompt 15 — Advanced Editor's Room Admin Portal Upgrade
+```text
+MASTER PROMPT — Advanced Editor's Room Admin Portal Upgrade
+
+Goal: Transform the existing Editor's Room admin portal into a powerful, professional editorial operating system.
+Scope: 20+ features across 6 phases covering CMS, Analytics, SEO, Editorial Workflow, Team Collaboration, Infrastructure Monitoring, Automation, Security, AI Intelligence, and Data Graphing.
+Design Guardrails: Preserve editorial magazine-inspired aesthetic, warm off-white/cream background, dark charcoal typography, muted rust accent, thin borders, serif headings, uppercase tracking, minimal icons, zero neon/glassmorphism.
+```
+
