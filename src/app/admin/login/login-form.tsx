@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useTranslation } from "@/components/providers/language-provider";
 
 export function LoginForm({ next }: { next: string }) {
@@ -11,6 +11,7 @@ export function LoginForm({ next }: { next: string }) {
   const t = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -88,16 +89,31 @@ export function LoginForm({ next }: { next: string }) {
             {t("admin.login.forgotPassword")}
           </Link>
         </div>
-        <input
-          id="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          data-testid="password-input"
-          className="mt-2 w-full border-b border-rule bg-transparent py-2 font-mono text-sm text-content outline-none transition-colors focus:border-accent"
-        />
+        <div className="relative mt-2">
+          <input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            data-testid="password-input"
+            className="w-full border-b border-rule bg-transparent py-2 pr-9 font-mono text-sm text-content outline-none transition-colors focus:border-accent"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-1 top-1/2 -translate-y-1/2 p-1 text-content-faint transition-colors hover:text-content focus:outline-none"
+            title={showPassword ? "Hide password" : "Show password"}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
+          </button>
+        </div>
       </div>
 
       {error && (
