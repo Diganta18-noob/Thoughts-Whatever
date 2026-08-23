@@ -29,6 +29,11 @@ import {
   ChevronDown,
   ChevronRight,
   X,
+  Clock,
+  AlertTriangle,
+  Code,
+  Download,
+  Cpu,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -70,6 +75,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     name: "Workflow",
     items: [
+      { href: "/admin/jobs", label: "Scheduled Jobs", icon: Clock },
       { href: "/admin/activity", label: "Activity Feed", icon: Activity },
       { href: "/admin/goals", label: "Editorial Goals", icon: Target },
       { href: "/admin/notifications", label: "Notifications", icon: Bell },
@@ -77,20 +83,24 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    name: "Administration",
+    name: "System & Ops",
     items: [
-      { href: "/admin/team", label: "Team & Roles", icon: Users },
+      { href: "/admin/system", label: "Automation Hub", icon: Database },
+      { href: "/admin/system/monitoring", label: "Advanced Monitoring", icon: Cpu },
+      { href: "/admin/incidents", label: "Incident Center", icon: AlertTriangle },
       { href: "/admin/security", label: "Security Center", icon: ShieldCheck },
       { href: "/admin/audit-log", label: "Audit Log", icon: ClipboardList },
-      { href: "/admin/subscribers", label: "Subscribers", icon: Mail },
-      { href: "/admin/transliteration", label: "Transliteration", icon: Languages },
-      { href: "/admin/settings", label: "Settings", icon: Settings },
     ],
   },
   {
-    name: "System",
+    name: "Administration",
     items: [
-      { href: "/admin/system", label: "System & Ops", icon: Database },
+      { href: "/admin/team", label: "Team & Roles", icon: Users },
+      { href: "/admin/developer", label: "API & Webhooks", icon: Code },
+      { href: "/admin/exports", label: "Data Export Center", icon: Download },
+      { href: "/admin/subscribers", label: "Subscribers", icon: Mail },
+      { href: "/admin/transliteration", label: "Transliteration", icon: Languages },
+      { href: "/admin/settings", label: "Settings", icon: Settings },
     ],
   },
 ];

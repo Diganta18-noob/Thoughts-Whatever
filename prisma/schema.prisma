@@ -484,3 +484,158 @@ model Goal {
   @@index([endDate])
 }
 
+// ─── Phase 5: Infrastructure & DevOps ────────────────────────
+
+enum JobStatus {
+  IDLE
+  RUNNING
+  SUCCESS
+  FAILED
+  PAUSED
+}
+
+model ScheduledJob {
+  id          String         @id @default(cuid())
+  name        String         @unique
+  description String?
+  schedule    String         // Cron expression or human interval, e.g. "0 1 * * *"
+  status      JobStatus      @default(IDLE)
+  enabled     Boolean        @default(true)
+  lastRunAt   DateTime?
+  nextRunAt   DateTime?
+  lastStatus  String?        // "SUCCESS" | "FAILED" | "WARNING"
+  lastDurationMs Int?
+  executions  JobExecution[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([status])
+  @@index([enabled])
+}
+
+model JobExecution {
+  id          String       @id @default(cuid())
+  jobId       String
+  job         ScheduledJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  status      String       // "SUCCESS" | "FAILED" | "WARNING" | "RUNNING"
+  durationMs  Int?
+  logs        Json?        // Array of log strings or step objects
+  error       String?
+  startedAt   DateTime     @default(now())
+  completedAt DateTime?
+
+  @@index([jobId, startedAt])
+  @@index([status])
+}
+
+enum IncidentSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+enum IncidentStatus {
+  DETECTED
+  INVESTIGATING
+  RESOLVED
+}
+
+model Incident {
+  id           String           @id @default(cuid())
+  title        String
+  description  String?
+  severity     IncidentSeverity @default(WARNING)
+  status       IncidentStatus   @default(DETECTED)
+  affectedArea String           // "database" | "api" | "storage" | "backups" | "security" | "cron"
+  assignedTo   String?
+  timeline     Json?            // Array of { timestamp, message, author }
+  rootCause    String?
+  resolution   String?
+  detectedAt   DateTime         @default(now())
+  resolvedAt   DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([severity, status])
+  @@index([status])
+  @@index([detectedAt])
+}
+
+model APIKey {
+  id          String    @id @default(cuid())
+  name        String
+  keyPrefix   String    // e.g. "tw_live_abc"
+  keyHash     String    @unique
+  scopes      String[]  // ["content.read", "content.write", "analytics.read", "system.manage"]
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  revoked     Boolean   @default(false)
+  createdBy   String?
+  createdAt   DateTime  @default(now())
+
+  @@index([keyPrefix])
+  @@index([revoked])
+}
+
+model Webhook {
+  id          String            @id @default(cuid())
+  name        String
+  url         String
+  secret      String            // Secret for signing HMAC-SHA256 headers
+  events      String[]          // ["article.created", "article.published", "backup.completed", etc.]
+  active      Boolean           @default(true)
+  deliveries  WebhookDelivery[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([active])
+}
+
+model WebhookDelivery {
+  id           String   @id @default(cuid())
+  webhookId    String
+  webhook      Webhook  @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  event        String
+  payload      Json
+  statusCode   Int?
+  responseBody String?
+  durationMs   Int?
+  status       String   // "SUCCESS" | "FAILED" | "PENDING"
+  createdAt    DateTime @default(now())
+
+  @@index([webhookId, createdAt])
+  @@index([status])
+}
+
+enum ExportFormat {
+  CSV
+  JSON
+}
+
+enum ExportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model ExportJob {
+  id         String       @id @default(cuid())
+  entityType String       // "PIECES" | "ANALYTICS" | "SUBSCRIBERS" | "AUDIT_LOGS" | "SEO_REPORTS" | "MEDIA"
+  format     ExportFormat @default(CSV)
+  status     ExportStatus @default(PENDING)
+  filters    Json?        // { dateRange: "30d", status: "PUBLISHED" }
+  rowCount   Int?
+  sizeBytes  Int?
+  downloadUrl String?
+  error      String?
+  createdById String?
+  createdAt  DateTime     @default(now())
+  completedAt DateTime?
+
+  @@index([entityType])
+  @@index([status])
+  @@index([createdAt])
+}
+
+
