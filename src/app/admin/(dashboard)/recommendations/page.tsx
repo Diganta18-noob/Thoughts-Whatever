@@ -35,12 +35,13 @@ export default function RecommendationsPage() {
       const res = await fetch("/api/admin/recommendations?limit=100");
       const json = await res.json();
       if (json.ok) {
-        setRecommendations(json.recommendations);
+        setRecommendations(json.recommendations || []);
       } else {
-        toast.error("Failed to load recommendations");
+        toast.error(json.error || "Failed to load recommendations");
       }
-    } catch {
-      toast.error("Network error");
+    } catch (err: any) {
+      console.error("Fetch recommendations error:", err);
+      toast.error("Network error while loading recommendations");
     } finally {
       setLoading(false);
     }
