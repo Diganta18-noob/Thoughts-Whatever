@@ -7,6 +7,8 @@ import { bengaliSlug, toBengaliNumber } from "@/lib/bengali";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/components/providers/language-provider";
 import { ImageUpload } from "@/components/admin/image-upload";
+import { toast } from "react-hot-toast";
+import { confirmToast } from "@/lib/confirm-toast";
 
 /**
  * One editor for authors, tags, and series.
@@ -138,17 +140,22 @@ export function TaxonomyManager({
     router.refresh();
   }
 
-  async function remove(row: TaxonomyRow) {
-    if (!window.confirm(t("admin.taxonomy.confirmDelete", { name: row.values[primaryKey] ?? row.slug })))
-      return;
-
-    const res = await fetch(`${endpoint}/${row.id}`, { method: "DELETE" });
-    if (!res.ok) {
-      const data = (await res.json().catch(() => ({}))) as { error?: string };
-      window.alert(data.error || t("admin.taxonomy.deleteFailed"));
-      return;
-    }
-    router.refresh();
+  function remove(row: TaxonomyRow) {
+    const itemName = row.values[primaryKey] ?? row.slug;
+    confirmToast(
+      `Are you sure you want to delete "${itemName}"? Associated pieces will be unlinked.`,
+      async () => {
+        const res = await fetch(`${endpoint}/${row.id}`, { method: "DELETE" });
+        if (!res.ok) {
+          const data = (await res.json().catch(() => ({}))) as { error?: string };
+          toast.error(data.error || t("admin.taxonomy.deleteFailed"));
+          return;
+        }
+        toast.success(`Deleted ${itemName}`);
+        router.refresh();
+      },
+      { title: "Delete Taxonomy Item", confirmLabel: "Delete", variant: "danger" }
+    );
   }
 
   const form = (

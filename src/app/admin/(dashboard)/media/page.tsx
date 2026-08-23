@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { confirmToast } from "@/lib/confirm-toast";
 
 interface MediaItem {
   id: string;
@@ -162,19 +163,7 @@ export default function MediaLibraryPage() {
     }
   };
 
-  const handleDeleteMedia = async (media: MediaItem, force = false) => {
-    if (media.usageCount > 0 && !force) {
-      if (
-        !confirm(
-          `WARNING: This file is currently used in ${media.usageCount} place(s) (e.g. "${media.usages[0]?.entityTitle || "content"}"). Deleting it will result in broken images on live articles. Do you wish to force delete?`
-        )
-      ) {
-        return;
-      }
-    } else {
-      if (!confirm(`Are you sure you want to delete "${media.filename}"?`)) return;
-    }
-
+  const executeDeleteMedia = async (media: MediaItem, force = false) => {
     try {
       const res = await fetch(`/api/admin/media/${media.id}?force=${force ? "true" : "false"}`, {
         method: "DELETE",
@@ -189,6 +178,22 @@ export default function MediaLibraryPage() {
       }
     } catch {
       toast.error("Failed to delete media");
+    }
+  };
+
+  const handleDeleteMedia = (media: MediaItem, force = false) => {
+    if (media.usageCount > 0 && !force) {
+      confirmToast(
+        `WARNING: This file is currently used in ${media.usageCount} place(s) (e.g. "${media.usages[0]?.entityTitle || "content"}"). Deleting it will result in broken images on live articles. Do you wish to force delete?`,
+        () => executeDeleteMedia(media, true),
+        { title: "Force Delete Media", confirmLabel: "Force Delete", variant: "danger" }
+      );
+    } else {
+      confirmToast(
+        `Are you sure you want to delete "${media.filename}"?`,
+        () => executeDeleteMedia(media, force),
+        { title: "Delete Media Asset", confirmLabel: "Delete Asset", variant: "danger" }
+      );
     }
   };
 

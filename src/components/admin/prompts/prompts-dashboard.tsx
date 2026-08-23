@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { PromptCard, PromptItem } from "./prompt-card";
+import { confirmToast } from "@/lib/confirm-toast";
 
 export function PromptsDashboard() {
   const [prompts, setPrompts] = useState<PromptItem[]>([]);
@@ -113,20 +114,25 @@ export function PromptsDashboard() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this prompt?")) return;
-    try {
-      const res = await fetch(`/api/admin/prompts/${id}`, { method: "DELETE" });
-      const json = await res.json();
-      if (json.success) {
-        toast.success("Prompt deleted");
-        fetchPrompts();
-      } else {
-        toast.error("Failed to delete prompt");
-      }
-    } catch {
-      toast.error("Network error deleting prompt");
-    }
+  const handleDelete = (id: string) => {
+    confirmToast(
+      "Are you sure you want to delete this prompt?",
+      async () => {
+        try {
+          const res = await fetch(`/api/admin/prompts/${id}`, { method: "DELETE" });
+          const json = await res.json();
+          if (json.success) {
+            toast.success("Prompt deleted");
+            fetchPrompts();
+          } else {
+            toast.error("Failed to delete prompt");
+          }
+        } catch {
+          toast.error("Network error deleting prompt");
+        }
+      },
+      { title: "Delete Prompt", confirmLabel: "Delete Prompt", variant: "danger" }
+    );
   };
 
   const handleExport = (format: "json" | "markdown") => {

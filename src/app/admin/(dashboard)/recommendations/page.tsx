@@ -20,6 +20,7 @@ import {
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import type { RecommendationItem } from "@/lib/recommendations";
+import { confirmToast } from "@/lib/confirm-toast";
 
 export default function RecommendationsPage() {
   const [recommendations, setRecommendations] = useState<RecommendationItem[]>([]);
@@ -51,27 +52,32 @@ export default function RecommendationsPage() {
     fetchRecommendations();
   }, []);
 
-  const handleRecomputeAll = async () => {
-    if (!confirm("Recompute algorithmic recommendation vectors for all published pieces?")) return;
-    setRecomputing(true);
-    try {
-      const res = await fetch("/api/admin/recommendations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "recompute_all" }),
-      });
-      const json = await res.json();
-      if (json.ok) {
-        toast.success(`Generated recommendations for ${json.count} pieces!`);
-        fetchRecommendations();
-      } else {
-        toast.error(json.error || "Failed to recompute");
-      }
-    } catch {
-      toast.error("Network error");
-    } finally {
-      setRecomputing(false);
-    }
+  const handleRecomputeAll = () => {
+    confirmToast(
+      "Recompute algorithmic recommendation vectors for all published pieces?",
+      async () => {
+        setRecomputing(true);
+        try {
+          const res = await fetch("/api/admin/recommendations", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "recompute_all" }),
+          });
+          const json = await res.json();
+          if (json.ok) {
+            toast.success(`Generated recommendations for ${json.count} pieces!`);
+            fetchRecommendations();
+          } else {
+            toast.error(json.error || "Failed to recompute");
+          }
+        } catch {
+          toast.error("Network error");
+        } finally {
+          setRecomputing(false);
+        }
+      },
+      { title: "Recompute Vectors", confirmLabel: "Recompute" }
+    );
   };
 
   const handleTogglePin = async (item: RecommendationItem) => {

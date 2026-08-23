@@ -18,6 +18,7 @@ import {
 import { toast } from "react-hot-toast";
 import { RevisionDiffViewer } from "@/components/admin/revision-diff-viewer";
 import { cn } from "@/lib/utils";
+import { confirmToast } from "@/lib/confirm-toast";
 
 interface Revision {
   id: string;
@@ -79,33 +80,32 @@ export default function PieceRevisionHistoryPage() {
     if (pieceId) fetchHistory();
   }, [pieceId]);
 
-  const handleRestore = async (revision: Revision) => {
-    if (
-      !confirm(
-        `Are you sure you want to restore "${piece?.titleBn}" to Version ${revision.version}? A new snapshot of the current state will be preserved automatically.`
-      )
-    )
-      return;
-
-    setRestoring(true);
-    try {
-      const res = await fetch(`/api/admin/pieces/${pieceId}/revisions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "restore", revisionId: revision.id }),
-      });
-      const data = await res.json();
-      if (data.ok) {
-        toast.success(`Restored to Version ${revision.version}!`);
-        router.push(`/admin/pieces/${pieceId}`);
-      } else {
-        toast.error(data.error || "Failed to restore revision");
-      }
-    } catch {
-      toast.error("Failed to restore revision");
-    } finally {
-      setRestoring(false);
-    }
+  const handleRestore = (revision: Revision) => {
+    confirmToast(
+      `Are you sure you want to restore "${piece?.titleBn}" to Version ${revision.version}? A new snapshot of the current state will be preserved automatically.`,
+      async () => {
+        setRestoring(true);
+        try {
+          const res = await fetch(`/api/admin/pieces/${pieceId}/revisions`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "restore", revisionId: revision.id }),
+          });
+          const data = await res.json();
+          if (data.ok) {
+            toast.success(`Restored to Version ${revision.version}!`);
+            router.push(`/admin/pieces/${pieceId}`);
+          } else {
+            toast.error(data.error || "Failed to restore revision");
+          }
+        } catch {
+          toast.error("Failed to restore revision");
+        } finally {
+          setRestoring(false);
+        }
+      },
+      { title: `Restore Version ${revision.version}`, confirmLabel: "Restore Snapshot" }
+    );
   };
 
   return (

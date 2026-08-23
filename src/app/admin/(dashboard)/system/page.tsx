@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { AutomationDashboard } from "@/components/admin/automation-dashboard";
+import { confirmToast } from "@/lib/confirm-toast";
 
 export default function SystemHealthPage() {
   const [health, setHealth] = useState<any>(null);
@@ -74,29 +75,33 @@ export default function SystemHealthPage() {
     }
   };
 
-  const handleRestore = async (backupId: string) => {
-    if (!confirm(`Are you sure you want to restore backup ${backupId}? This will overwrite current data.`)) return;
-
-    setIsProcessing(true);
-    setActionMessage(`Restoring backup ${backupId}...`);
-    try {
-      const res = await fetch("/api/admin/restore", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ backupId, scope: "full" }),
-      });
-      const data = await res.json();
-      if (data.ok) {
-        setActionMessage(`Restoration completed successfully!`);
-      } else {
-        setActionMessage(`Restoration failed: ${data.error}`);
-      }
-      fetchData();
-    } catch (err: any) {
-      setActionMessage(`Error: ${err.message}`);
-    } finally {
-      setIsProcessing(false);
-    }
+  const handleRestore = (backupId: string) => {
+    confirmToast(
+      `Are you sure you want to restore backup ${backupId}? This will overwrite current data.`,
+      async () => {
+        setIsProcessing(true);
+        setActionMessage(`Restoring backup ${backupId}...`);
+        try {
+          const res = await fetch("/api/admin/restore", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ backupId, scope: "full" }),
+          });
+          const data = await res.json();
+          if (data.ok) {
+            setActionMessage(`Restoration completed successfully!`);
+          } else {
+            setActionMessage(`Restoration failed: ${data.error}`);
+          }
+          fetchData();
+        } catch (err: any) {
+          setActionMessage(`Error: ${err.message}`);
+        } finally {
+          setIsProcessing(false);
+        }
+      },
+      { title: "Restore Database Backup", confirmLabel: "Restore Backup", variant: "danger" }
+    );
   };
 
   if (loading) {

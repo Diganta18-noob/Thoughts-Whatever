@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { confirmToast } from "@/lib/confirm-toast";
 
 interface APIKeyItem {
   id: string;
@@ -123,18 +124,23 @@ export default function DeveloperAPICenterPage() {
     }
   };
 
-  const handleRevokeKey = async (id: string) => {
-    if (!confirm("Are you sure you want to revoke this API key? Applications using it will immediately lose access.")) return;
-    try {
-      const res = await fetch(`/api/admin/developer/keys?id=${id}`, { method: "DELETE" });
-      const json = await res.json();
-      if (json.ok) {
-        toast.success("API key revoked");
-        fetchData();
-      }
-    } catch {
-      toast.error("Failed to revoke key");
-    }
+  const handleRevokeKey = (id: string) => {
+    confirmToast(
+      "Are you sure you want to revoke this API key? Applications using it will immediately lose access.",
+      async () => {
+        try {
+          const res = await fetch(`/api/admin/developer/keys?id=${id}`, { method: "DELETE" });
+          const json = await res.json();
+          if (json.ok) {
+            toast.success("API key revoked");
+            fetchData();
+          }
+        } catch {
+          toast.error("Failed to revoke key");
+        }
+      },
+      { title: "Revoke API Key", confirmLabel: "Revoke Key", variant: "danger" }
+    );
   };
 
   const handleCreateWebhook = async (e: React.FormEvent) => {

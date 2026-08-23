@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { confirmToast } from "@/lib/confirm-toast";
 
 interface TeamMember {
   id: string;
@@ -145,20 +146,25 @@ export default function TeamManagementPage() {
     }
   };
 
-  const handleDeleteMember = async (id: string, email: string) => {
-    if (!confirm(`Are you sure you want to remove team member ${email}?`)) return;
-    try {
-      const res = await fetch(`/api/admin/team?id=${id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (data.ok) {
-        toast.success("Team member removed");
-        fetchTeam();
-      } else {
-        toast.error(data.message || "Failed to delete");
-      }
-    } catch {
-      toast.error("Action failed");
-    }
+  const handleDeleteMember = (id: string, email: string) => {
+    confirmToast(
+      `Are you sure you want to remove team member ${email}?`,
+      async () => {
+        try {
+          const res = await fetch(`/api/admin/team?id=${id}`, { method: "DELETE" });
+          const data = await res.json();
+          if (data.ok) {
+            toast.success("Team member removed");
+            fetchTeam();
+          } else {
+            toast.error(data.message || "Failed to delete");
+          }
+        } catch {
+          toast.error("Action failed");
+        }
+      },
+      { title: "Remove Team Member", confirmLabel: "Remove Member", variant: "danger" }
+    );
   };
 
   const openEdit = (m: TeamMember) => {

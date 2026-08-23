@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { confirmToast } from "@/lib/confirm-toast";
 
 interface ActiveSession {
   id: string;
@@ -68,33 +69,43 @@ export default function SecurityCenterPage() {
     fetchSecurity();
   }, []);
 
-  const revokeSession = async (sessionId: string) => {
-    if (!confirm("Are you sure you want to revoke this session? The device will be logged out immediately.")) return;
-    try {
-      const res = await fetch(`/api/admin/security?sessionId=${sessionId}`, { method: "DELETE" });
-      const data = await res.json();
-      if (data.ok) {
-        toast.success("Session revoked");
-        setSessions((prev) => prev.filter((s) => s.id !== sessionId));
-        fetchSecurity();
-      }
-    } catch {
-      toast.error("Failed to revoke session");
-    }
+  const revokeSession = (sessionId: string) => {
+    confirmToast(
+      "Are you sure you want to revoke this session? The device will be logged out immediately.",
+      async () => {
+        try {
+          const res = await fetch(`/api/admin/security?sessionId=${sessionId}`, { method: "DELETE" });
+          const data = await res.json();
+          if (data.ok) {
+            toast.success("Session revoked");
+            setSessions((prev) => prev.filter((s) => s.id !== sessionId));
+            fetchSecurity();
+          }
+        } catch {
+          toast.error("Failed to revoke session");
+        }
+      },
+      { title: "Revoke Device Session", confirmLabel: "Revoke", variant: "danger" }
+    );
   };
 
-  const revokeAllSessions = async () => {
-    if (!confirm("Are you sure you want to revoke ALL active sessions across all devices? You will be prompted to log back in.")) return;
-    try {
-      const res = await fetch(`/api/admin/security?all=true`, { method: "DELETE" });
-      const data = await res.json();
-      if (data.ok) {
-        toast.success("All sessions revoked");
-        fetchSecurity();
-      }
-    } catch {
-      toast.error("Action failed");
-    }
+  const revokeAllSessions = () => {
+    confirmToast(
+      "Are you sure you want to revoke ALL active sessions across all devices? You will be prompted to log back in.",
+      async () => {
+        try {
+          const res = await fetch(`/api/admin/security?all=true`, { method: "DELETE" });
+          const data = await res.json();
+          if (data.ok) {
+            toast.success("All sessions revoked");
+            fetchSecurity();
+          }
+        } catch {
+          toast.error("Action failed");
+        }
+      },
+      { title: "Revoke All Sessions", confirmLabel: "Revoke All", variant: "danger" }
+    );
   };
 
   const getDeviceIcon = (ua: string) => {

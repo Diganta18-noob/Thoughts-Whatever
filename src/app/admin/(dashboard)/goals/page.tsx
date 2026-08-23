@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { confirmToast } from "@/lib/confirm-toast";
 
 interface Goal {
   id: string;
@@ -96,19 +97,23 @@ export default function GoalsKPITrackingPage() {
     }
   };
 
-  const handleDeleteGoal = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this goal?")) return;
-
-    try {
-      const res = await fetch(`/api/admin/goals?id=${id}`, { method: "DELETE" });
-      const json = await res.json();
-      if (json.ok) {
-        toast.success("Goal deleted");
-        fetchGoals();
-      }
-    } catch {
-      toast.error("Failed to delete");
-    }
+  const handleDeleteGoal = (id: string) => {
+    confirmToast(
+      "Are you sure you want to delete this editorial goal?",
+      async () => {
+        try {
+          const res = await fetch(`/api/admin/goals?id=${id}`, { method: "DELETE" });
+          const json = await res.json();
+          if (json.ok) {
+            toast.success("Goal deleted");
+            fetchGoals();
+          }
+        } catch {
+          toast.error("Failed to delete");
+        }
+      },
+      { title: "Delete Goal", confirmLabel: "Delete", variant: "danger" }
+    );
   };
 
   return (
