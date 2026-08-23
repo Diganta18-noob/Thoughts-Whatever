@@ -53,19 +53,37 @@ export async function getContentGraphData(options?: {
         tags: { select: { id: true } },
         series: { select: { id: true } },
       },
+    }).catch((err) => {
+      console.warn("[ContentGraph] Piece query error:", err);
+      return [];
     }),
     prisma.series.findMany({
       select: { id: true, titleBn: true, slug: true },
+    }).catch((err) => {
+      console.warn("[ContentGraph] Series query error:", err);
+      return [];
     }),
     prisma.author.findMany({
       select: { id: true, nameBn: true, slug: true, era: true },
+    }).catch((err) => {
+      console.warn("[ContentGraph] Author query error:", err);
+      return [];
     }),
     prisma.tag.findMany({
       select: { id: true, labelBn: true, slug: true, kind: true },
+    }).catch((err) => {
+      console.warn("[ContentGraph] Tag query error:", err);
+      return [];
     }),
-    prisma.contentRecommendation.findMany({
-      where: { excluded: false },
-      take: 80,
+    (prisma.contentRecommendation
+      ? prisma.contentRecommendation.findMany({
+          where: { excluded: false },
+          take: 80,
+        })
+      : Promise.resolve([])
+    ).catch((err) => {
+      console.warn("[ContentGraph] Recommendations query error (table may be syncing):", err);
+      return [];
     }),
   ]);
 

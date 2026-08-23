@@ -51,12 +51,13 @@ export default function ContentGraphPage() {
       const json = await res.json();
       if (json.ok) {
         setData(json);
-        initSimulation(json.nodes, json.links);
+        initSimulation(json.nodes || [], json.links || []);
       } else {
-        toast.error("Failed to load graph");
+        toast.error(json.error || "Failed to load graph");
       }
-    } catch {
-      toast.error("Network error");
+    } catch (err: any) {
+      console.error("Fetch graph error:", err);
+      toast.error("Network error while connecting to graph API");
     } finally {
       setLoading(false);
     }
@@ -419,6 +420,22 @@ export default function ContentGraphPage() {
             onWheel={handleWheel}
             className="w-full h-full cursor-grab active:cursor-grabbing select-none"
           />
+
+          {!loading && data && data.nodes.length === 0 && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-surface/80 backdrop-blur-xs">
+              <Share2 className="h-10 w-10 text-accent mb-3 opacity-80" />
+              <h3 className="font-serif text-base text-content">No Published Content Nodes Yet</h3>
+              <p className="font-sans text-xs text-content-soft mt-1 max-w-sm">
+                Create and publish essays, documentary pieces, and series to see the interactive knowledge graph populate.
+              </p>
+              <Link
+                href="/admin/pieces/new"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-white hover:bg-accent/90 transition"
+              >
+                Create First Piece
+              </Link>
+            </div>
+          )}
 
           {/* Floating Canvas Controls */}
           <div className="absolute bottom-4 right-4 flex items-center gap-1.5 bg-surface/90 backdrop-blur rounded border border-rule p-1 shadow-sm">

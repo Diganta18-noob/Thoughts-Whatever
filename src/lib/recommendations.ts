@@ -186,13 +186,19 @@ export async function getRecommendationsList(params: {
   }
 
   const [recommendations, total] = await Promise.all([
-    prisma.contentRecommendation.findMany({
-      where,
-      orderBy: [{ pinned: "desc" }, { score: "desc" }],
-      skip,
-      take: limit,
-    }),
-    prisma.contentRecommendation.count({ where }),
+    (prisma.contentRecommendation
+      ? prisma.contentRecommendation.findMany({
+          where,
+          orderBy: [{ pinned: "desc" }, { score: "desc" }],
+          skip,
+          take: limit,
+        })
+      : Promise.resolve([])
+    ).catch(() => []),
+    (prisma.contentRecommendation
+      ? prisma.contentRecommendation.count({ where })
+      : Promise.resolve(0)
+    ).catch(() => 0),
   ]);
 
   // Fetch piece metadata in batch
