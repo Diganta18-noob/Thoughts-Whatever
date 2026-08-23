@@ -419,7 +419,7 @@ export default function DeveloperAPICenterPage() {
                     required
                     placeholder="e.g. Analytics Exporter Script"
                     value={keyName}
-                    onChange={(e) => setNewKeyName(e.target.value)}
+                    onChange={(e) => setKeyName(e.target.value)}
                     className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-xs text-content outline-none focus:border-accent"
                   />
                 </div>

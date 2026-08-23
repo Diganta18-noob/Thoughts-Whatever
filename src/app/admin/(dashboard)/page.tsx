@@ -1,22 +1,18 @@
 import { Suspense } from "react";
-import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { formatBengaliDate } from "@/lib/bengali";
-import { KIND_META, piecePath } from "@/lib/nav";
 import {
   getOverviewStats,
   getDailyTrend,
   getTopArticles,
   getSeriesAnalytics,
 } from "@/lib/analytics";
-import { AnalyticsDashboard, type AnalyticsData } from "@/components/admin/analytics-dashboard";
 import { AnalyticsSkeleton } from "@/components/admin/analytics-skeleton";
-import { AdminDashboardHeader } from "@/components/admin/dashboard-header";
-import { AdminActivityWidget } from "@/components/admin/activity-widget";
+import { CustomDashboard } from "@/components/admin/custom-dashboard";
+import type { AnalyticsData } from "@/components/admin/analytics-dashboard";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Overview & Analytics" };
+export const metadata = { title: "Overview & Intelligence" };
 
 function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
   return Promise.race([
@@ -72,75 +68,12 @@ export default async function AdminHomePage() {
   }
 
   return (
-    <div className="space-y-10">
-      <AdminDashboardHeader />
-
-      {/* Interactive Analytics Dashboard with SSR initial data & fallback skeleton */}
-      <Suspense fallback={<AnalyticsSkeleton />}>
-        <AnalyticsDashboard initialData={initialAnalyticsData} />
-      </Suspense>
-
-      {/* Grid: Recently Edited & Live Activity */}
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 pt-4">
-        {/* Recently Edited Section */}
-        <div>
-          <h2 className="label">
-            Recently edited
-          </h2>
-          <ul className="mt-4 divide-y divide-rule border-y border-rule">
-            {recent.map((piece) => (
-              <li
-                key={piece.id}
-                className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3"
-              >
-                <Link
-                  href={`/admin/pieces/${piece.id}`}
-                  className="font-bengali text-bengali-base text-content transition hover:text-accent"
-                  lang="bn"
-                >
-                  {piece.titleBn}
-                </Link>
-
-                <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint">
-                  {KIND_META[piece.kind].labelEn}
-                </span>
-
-                {piece.status !== "PUBLISHED" && (
-                  <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-accent">
-                    {piece.status}
-                  </span>
-                )}
-
-                <span className="ml-auto flex items-center gap-4">
-                  <span className="font-bengali text-xs text-content-faint">
-                    {formatBengaliDate(piece.updatedAt)}
-                  </span>
-                  {piece.status === "PUBLISHED" && (
-                    <Link
-                      href={piecePath(piece.kind, piece.slug)}
-                      target="_blank"
-                      className="font-serif text-xs text-content-soft transition hover:text-accent"
-                    >
-                      View
-                    </Link>
-                  )}
-                </span>
-              </li>
-            ))}
-
-            {recent.length === 0 && (
-              <li className="py-6 font-sans text-xs text-content-soft">
-                No pieces created yet.
-              </li>
-            )}
-          </ul>
-        </div>
-
-        {/* Live Activity Stream Widget */}
-        <div>
-          <AdminActivityWidget />
-        </div>
-      </div>
-    </div>
+    <Suspense fallback={<AnalyticsSkeleton />}>
+      <CustomDashboard
+        initialAnalyticsData={initialAnalyticsData}
+        recentPieces={recent}
+      />
+    </Suspense>
   );
 }
+

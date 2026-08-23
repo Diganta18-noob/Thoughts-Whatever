@@ -638,4 +638,36 @@ model ExportJob {
   @@index([createdAt])
 }
 
+// ─── Phase 4: Intelligence & Relationships ───────────────────
+
+model ContentRecommendation {
+  id            String   @id @default(cuid())
+  pieceId       String
+  recommendedId String
+  score         Float    @default(0)
+  reason        String   // "same_taxonomy" | "similar_keywords" | "same_series" | "reader_behavior"
+  pinned        Boolean  @default(false)
+  excluded      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([pieceId, recommendedId])
+  @@index([pieceId, score])
+  @@index([recommendedId])
+}
+
+model ContentRelationship {
+  id        String   @id @default(cuid())
+  sourceId  String
+  targetId  String
+  type      String   // "tag_shared" | "series" | "author" | "recommendation" | "manual"
+  weight    Float    @default(1)
+  createdAt DateTime @default(now())
+
+  @@unique([sourceId, targetId, type])
+  @@index([sourceId])
+  @@index([targetId])
+}
+
+
 

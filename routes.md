@@ -44,6 +44,9 @@
 | `/admin/pieces/new` | Dynamic | `src/app/admin/(dashboard)/pieces/new/page.tsx` | Create new article editor page. Admin Only. |
 | `/admin/pieces/[id]` | Dynamic | `src/app/admin/(dashboard)/pieces/[id]/page.tsx` | Edit existing article editor page. Admin Only. |
 | `/admin/pieces/[id]/history` | Dynamic | `src/app/admin/(dashboard)/pieces/[id]/history/page.tsx` | Article revisions, version control & visual diff. Admin Only. |
+| `/admin/editorial-intelligence` | Dynamic | `src/app/admin/(dashboard)/editorial-intelligence/page.tsx` | Algorithmic topic velocity, content gaps & publishing window optimizer. Admin Only. |
+| `/admin/recommendations` | Dynamic | `src/app/admin/(dashboard)/recommendations/page.tsx` | Smart recommendation vectors, pinning & exclusion manager. Admin Only. |
+| `/admin/content-graph` | Dynamic | `src/app/admin/(dashboard)/content-graph/page.tsx` | Interactive force-directed topology relationship graph. Admin Only. |
 | `/admin/media` | Dynamic | `src/app/admin/(dashboard)/media/page.tsx` | Media library with usage tracking. Admin Only. |
 | `/admin/content-health` | Dynamic | `src/app/admin/(dashboard)/content-health/page.tsx` | Content health scoring & recommendations. Admin Only. |
 | `/admin/seo` | Dynamic | `src/app/admin/(dashboard)/seo/page.tsx` | SEO score & broken link scanner. Admin Only. |

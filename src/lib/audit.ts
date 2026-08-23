@@ -182,3 +182,6 @@ export function auditSystemAction(
     metadata: extra?.metadata,
   });
 }
+
+export const createAuditLog = logAuditEvent;
+

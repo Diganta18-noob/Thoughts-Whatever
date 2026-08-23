@@ -34,6 +34,9 @@ import {
   Code,
   Download,
   Cpu,
+  Share2,
+  Compass,
+  Lightbulb,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -65,6 +68,9 @@ const NAV_GROUPS: NavGroup[] = [
   {
     name: "Intelligence",
     items: [
+      { href: "/admin/editorial-intelligence", label: "Editorial Intelligence", icon: Compass, badge: "AI" },
+      { href: "/admin/content-graph", label: "Content Graph", icon: Share2 },
+      { href: "/admin/recommendations", label: "Recommendations", icon: Sparkles },
       { href: "/admin/analytics", label: "Analytics", icon: BarChart2 },
       { href: "/admin/engagement", label: "Reading & Engagement", icon: BookOpen },
       { href: "/admin/geography", label: "Audience Geography", icon: Globe },
