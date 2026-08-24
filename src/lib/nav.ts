@@ -40,6 +40,7 @@ export const PRIMARY_NAV: NavItem[] = [
 
 export const SECONDARY_NAV: NavItem[] = [
   { href: "/series", labelEn: "Series", labelBn: "ধারাবাহিক" },
+  { href: "/resource/bangla-sahityer-timeline", labelEn: "Timeline", labelBn: "টাইমলাইন" },
   { href: "/letter", labelEn: "Letter", labelBn: "চিঠি" },
   { href: "/about", labelEn: "About", labelBn: "পরিচয়" },
 ];

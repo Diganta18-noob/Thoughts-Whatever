@@ -65,6 +65,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: url("/writing"), lastModified: newest, changeFrequency: "daily", priority: 0.9 },
     { url: url("/blog"), lastModified: newest, changeFrequency: "weekly", priority: 0.9 },
     { url: url("/documentary"), lastModified: newest, changeFrequency: "weekly", priority: 0.9 },
+    { url: url("/resource/bangla-sahityer-timeline"), lastModified: newest, changeFrequency: "weekly", priority: 0.9 },
     { url: url("/archive"), lastModified: newest, changeFrequency: "weekly", priority: 0.8 },
     { url: url("/series"), lastModified: newest, changeFrequency: "weekly", priority: 0.7 },
     { url: url("/letter"), lastModified: newest, changeFrequency: "monthly", priority: 0.5 },

@@ -1,0 +1,973 @@
+"use client";
+
+import React, { useState, useMemo } from "react";
+import Link from "next/link";
+import {
+  Search,
+  BookOpen,
+  Calendar,
+  Layers,
+  Sparkles,
+  ArrowRight,
+  Filter,
+  CheckCircle2,
+  ChevronDown,
+  ExternalLink,
+  History,
+  Bookmark,
+  Share2,
+} from "lucide-react";
+
+export type TimelineItem = {
+  id: string;
+  year: string;
+  exactYear: number;
+  eraId: string;
+  eraNameBn: string;
+  titleBn: string;
+  titleEn?: string;
+  authorBn: string;
+  authorEn?: string;
+  category: "novel" | "poetry" | "drama" | "essay_journal" | "movement";
+  categoryLabelBn: string;
+  significanceBn: string;
+  historicalContextBn: string;
+  twLink?: string;
+  twLinkLabelBn?: string;
+  keyPointsBn: string[];
+  featured?: boolean;
+};
+
+export const TIMELINE_ERAS = [
+  {
+    id: "all",
+    nameBn: "সব যুগ",
+    range: "১৮০০ — ২০২৫",
+    descBn: "বাংলা সাহিত্যের ২২৫ বছরের সমগ্র পথচলা",
+  },
+  {
+    id: "prose_dawn",
+    nameBn: "গদ্যের সূচনা ও ফোর্ট উইলিয়াম",
+    range: "১৮০০ — ১৮৫০",
+    descBn: "মুদ্রণ বিপ্লব, পাঠ্যপুস্তক রচনা, রামমোহন রায়ের প্রবন্ধ ও সমাজসংস্কার",
+  },
+  {
+    id: "renaissance",
+    nameBn: "বঙ্গীয় নবজাগরণ ও মহাকাব্য",
+    range: "১৮৫০ — ১৯০০",
+    descBn: "মধুসূদন ও বঙ্কিমচন্দ্রের আবির্ভাব, নীলদর্পণ, অমিত্রাক্ষর ছন্দ ও প্রথম আধুনিক উপন্যাস",
+  },
+  {
+    id: "tagore_era",
+    nameBn: "রবীন্দ্র যুগ ও বিশ্বসাহিত্য",
+    range: "১৯০০ — ১৯৪১",
+    descBn: "গীতাঞ্জলি ও নোবেল বিজয়, মনস্তাত্ত্বিক উপন্যাস, নজরুল ও কল্লোল যুগের আধুনিকতা",
+  },
+  {
+    id: "post_war",
+    nameBn: "যুদ্ধোত্তর, দেশভাগ ও বাস্তববাদ",
+    range: "১৯৪১ — ১৯৭০",
+    descBn: "মানিক-জীবনানন্দ-তারাশঙ্কর, ৪৭-এর দেশভাগ, তেভাগা আন্দোলন ও গণসাহিত্য",
+  },
+  {
+    id: "contemporary",
+    nameBn: "সমকালীন ও ডিজিটাল যুগ",
+    range: "১৯৭০ — বর্তমান",
+    descBn: "মুক্তিযুদ্ধ, মহাশ্বেতা দেবী, সুনীল-শীর্ষেন্দু যুগ এবং ডিজিটাল সাহিত্যের বিকাশ",
+  },
+];
+
+export const CATEGORIES = [
+  { id: "all", labelBn: "সকল ধারা" },
+  { id: "novel", labelBn: "উপন্যাস" },
+  { id: "poetry", labelBn: "কবিতা ও মহাকাব্য" },
+  { id: "drama", labelBn: "নাটক" },
+  { id: "essay_journal", labelBn: "সাময়িকপত্র ও প্রবন্ধ" },
+  { id: "movement", labelBn: "আন্দোলন ও যুগবদল" },
+];
+
+export const TIMELINE_DATA: TimelineItem[] = [
+  {
+    id: "fort-william-1800",
+    year: "১৮০০",
+    exactYear: 1800,
+    eraId: "prose_dawn",
+    eraNameBn: "গদ্যের সূচনা (১৮০০–১৮৫০)",
+    titleBn: "ফোর্ট উইলিয়াম কলেজ ও বাংলা মুদ্রণ গদ্যের সূচনা",
+    titleEn: "Establishment of Fort William College & Bengali Printed Prose",
+    authorBn: "উইলিয়াম কেরি, রামরাম বসু, মৃত্যুঞ্জয় বিদ্যালঙ্কার",
+    category: "essay_journal",
+    categoryLabelBn: "গদ্য ও ভাষা",
+    significanceBn:
+      "বাংলা সাহিত্যের হাজার বছরের পদ্য-ঐতিহ্য ভেঙে প্রথম প্রাতিষ্ঠানিক মুদ্রিত বাংলা গদ্যভাষার জন্ম।",
+    historicalContextBn:
+      "ব্রিটিশ সিভিলিয়ানদের দেশীয় ভাষা শেখানোর উদ্দেশ্যে প্রতিষ্ঠিত হয় ফোর্ট উইলিয়াম কলেজ। পণ্ডিত ও মুন্সিদের পাঠ্যবই লেখার মাধ্যমে আধুনিক বাংলা গদ্যের ব্যাকরণিক কাঠামো গড়ে ওঠে।",
+    keyPointsBn: [
+      "রামরাম বসুর 'প্রতাপাদিত্য চরিত্র' (১৮০১) — প্রথম বাংলা মৌলিক গদ্যগ্রন্থ",
+      "শ্রীরামপুর প্রেস থেকে বাংলা টাইপফেস ও গ্রন্থের ব্যাপক মুদ্রণ",
+      "মৌখিক কথ্যরীতি থেকে সাধুভাষার প্রাতিষ্ঠানিক রূপায়ন",
+    ],
+    featured: true,
+  },
+  {
+    id: "rammohun-atmiya-1815",
+    year: "১৮১৫",
+    exactYear: 1815,
+    eraId: "prose_dawn",
+    eraNameBn: "গদ্যের সূচনা (১৮০০–১৮৫০)",
+    titleBn: "রাজা রামমোহন রায় ও 'আত্মীয় সভা' — যুক্তিবাদী প্রবন্ধের উন্মেষ",
+    titleEn: "Raja Ram Mohan Roy & Rationalist Prose",
+    authorBn: "রাজা রামমোহন রায়",
+    category: "essay_journal",
+    categoryLabelBn: "সাময়িকপত্র ও প্রবন্ধ",
+    significanceBn:
+      "বেদান্ত অনুবাদ ও সতীদাহ প্রথা বিরোধী পুস্তিকার মাধ্যমে বাংলা ভাষায় বিতর্ক ও মননশীল প্রবন্ধ সাহিত্যের সূচনা।",
+    historicalContextBn:
+      "ঊনবিংশ শতকের আধুনিক জ্ঞানালোক ও ধর্মীয় সংস্কারের পটভূমিতে রামমোহন প্রথম বাংলা সাময়িকপত্র 'সম্বাদ কৌমুদী' (১৮২১) প্রকাশ করেন।",
+    keyPointsBn: [
+      "যুক্তিবাদ ও তুলনামূলক ধর্মতত্ত্বের বাংলা ভাষার প্রথম প্রকাশ",
+      "বাংলা সাংবাদিকতা ও গণমত গঠনের পথপ্রদর্শক",
+    ],
+  },
+  {
+    id: "alaler-gharer-dulal-1858",
+    year: "১৮৫৮",
+    exactYear: 1858,
+    eraId: "renaissance",
+    eraNameBn: "বঙ্গীয় নবজাগরণ (১৮৫০–১৯০০)",
+    titleBn: "'আলালের ঘরের দুলাল' — প্রথম কথ্য গদ্য উপন্যাসিকা",
+    titleEn: "Alaler Gharer Dulal by Peary Chand Mitra",
+    authorBn: "প্যারীচাঁদ মিত্র (ছদ্মনাম: টেকচাঁদ ঠাকুর)",
+    category: "novel",
+    categoryLabelBn: "উপন্যাস",
+    significanceBn:
+      "সংস্কৃতঘেঁষা গুরুগম্ভীর সাধুভাষার বিরুদ্ধে দাঁড়িয়ে প্রথম সাধারণ কলকাতার চলিত কথ্য ভাষায় সামাজিক ব্যঙ্গচিত্র রচনা।",
+    historicalContextBn:
+      "কলকাতার নতুন ধনিক বাবু সংস্কৃতির অন্ধ অনুকরণ ও অবক্ষয়কে ব্যঙ্গ করে রচিত। এটি 'আলালী ভাষা' নামে বাংলা সাহিত্যে স্বতন্ত্র ভাষাভঙ্গি প্রতিষ্ঠা করে।",
+    keyPointsBn: [
+      "মতিরলাল ও ঠকচাচা চরিত্রের কালজয়ী রূপায়ন",
+      "বাংলা সাহিত্যে প্রথম সামাজিক বাস্তবতার প্রত্যক্ষ প্রবেশ",
+    ],
+  },
+  {
+    id: "nildarpan-1860",
+    year: "১৮৬০",
+    exactYear: 1860,
+    eraId: "renaissance",
+    eraNameBn: "বঙ্গীয় নবজাগরণ (১৮৫০–১৯০০)",
+    titleBn: "'নীলদর্পণ' নাটক ও নীল বিদ্রোহের প্রতিবাদ",
+    titleEn: "Nil Darpan by Dinabandhu Mitra",
+    authorBn: "দীনবন্ধু মিত্র",
+    category: "drama",
+    categoryLabelBn: "নাটক",
+    significanceBn:
+      "বাংলা সাহিত্যের প্রথম রাজনৈতিক ও সামাজিক প্রতিবাদী নাটক, যা গোটা বাংলায় আলোড়ন সৃষ্টি করে এবং ব্রিটিশ নীলকরদের বিরুদ্ধে গণজাগরণ ঘটায়।",
+    historicalContextBn:
+      "১৮৫৯-৬০ সালের নদীয়া ও যশোরের নীল বিদ্রোহের পটভূমিতে রচিত। রেভারেন্ড জেমস লং এটি ইংরেজিতে অনুবাদ করায় এবং মাইকেল মধুসূদন দত্ত অনুবাদের সাথে যুক্ত থাকায় লং সাহেবের কারাদণ্ড হয়।",
+    keyPointsBn: [
+      "তোরাপ ও ক্ষেত্রমণি চরিত্রের মাধ্যমে কৃষক ও নারীর অদম্য সাহসিকতা",
+      "১৮৭২ সালে জাতীয় নাট্যশালার উদ্বোধনী মঞ্চনাটক",
+      "ঔপনিবেশিক শোষণের বিরুদ্ধে সাহিত্যের শক্তিশালী হাতিয়ার",
+    ],
+    twLink: "/series/নীলদর্পণ",
+    twLinkLabelBn: "নীলদর্পণ ৩ পর্বের সম্পূর্ণ তথ্যচিত্র দেখুন",
+    featured: true,
+  },
+  {
+    id: "meghnadbadh-1861",
+    year: "১৮৬১",
+    exactYear: 1861,
+    eraId: "renaissance",
+    eraNameBn: "বঙ্গীয় নবজাগরণ (১৮৫০–১৯০০)",
+    titleBn: "'মেঘনাদবধ কাব্য' — বাংলা সাহিত্যের প্রথম আধুনিক মহাকাব্য",
+    titleEn: "Meghnadbadh Kavya by Michael Madhusudan Datta",
+    authorBn: "মাইকেল মধুসূদন দত্ত",
+    category: "poetry",
+    categoryLabelBn: "কবিতা ও মহাকাব্য",
+    significanceBn:
+      "পয়ার ছন্দের বন্ধন ভেঙে অমিত্রাক্ষর ছন্দের (Blank Verse) বিপ্লবী আবিষ্কার এবং রাবণের মতো ঐতিহ্যবাহী খলনায়ককে আধুনিক মানবতাবাদী নায়করূপে উপস্থাপন।",
+    historicalContextBn:
+      "মিল্টন, হোমার ও বাল্মীকির মেলবন্ধনে মধুসূদন বাংলা কাব্যে ব্যক্তিস্বাতন্ত্র্য ও ঔপনিবেশিকতাবিরোধী স্বাধীনতাবোধের নবযুগ সূচনা করেন।",
+    keyPointsBn: [
+      "নয়টি সর্গে রচিত প্রথম সার্থক বাংলা মহাকাব্য",
+      "অমিত্রাক্ষর ছন্দের ধ্বনিঝঙ্কার ও পাশ্চাত্য মহাকাব্যিক রীতির প্রয়োগ",
+      "রাবণ ও মেঘনাদের দেশপ্রেম এবং প্রমিলা চরিত্রের তেজস্বিতা",
+    ],
+    twLink: "/series/মেঘনাদবধ-কাব্য",
+    twLinkLabelBn: "মেঘনাদবধ কাব্য ৬ পর্বের পূর্ণাঙ্গ তথ্যচিত্র দেখুন",
+    featured: true,
+  },
+  {
+    id: "durgeshnandini-1865",
+    year: "১৮৬৫",
+    exactYear: 1865,
+    eraId: "renaissance",
+    eraNameBn: "বঙ্গীয় নবজাগরণ (১৮৫০–১৯০০)",
+    titleBn: "'দুর্গেশনন্দিনী' — প্রথম পূর্ণাঙ্গ সার্থক বাংলা রোমান্স উপন্যাস",
+    titleEn: "Durgeshnandini by Bankim Chandra Chattopadhyay",
+    authorBn: "বঙ্কিমচন্দ্র চট্টোপাধ্যায়",
+    category: "novel",
+    categoryLabelBn: "উপন্যাস",
+    significanceBn:
+      "বাংলা ঔপন্যাসিক সাহিত্যের রাজকীয় সূচনা। স্কটের রোমান্টিক ঐতিহাসিক রীতির সাথে বাংলা ভাষার অপরূপ সৌন্দর্যের মেলবন্ধন।",
+    historicalContextBn:
+      "মোগল-পাঠান যুদ্ধের পটভূমিতে রচিত জগৎসিংহ, তিলোত্তমা ও আয়েষার ত্রিকোণ প্রেমের অমর কাহিনী। আয়েষার 'বন্দী আমায় মার্জ্জনা কর' বাংলা সাহিত্যের চিরস্মরণীয় উক্তি।",
+    keyPointsBn: [
+      "বাংলা উপন্যাসের রাজপথ নির্মাতা বঙ্কিমচন্দ্রের আত্মপ্রকাশ",
+      "আয়েষা চরিত্রের মহত্ত্ব ও আত্মত্যাগের অবিস্মরণীয় রূপ",
+    ],
+  },
+  {
+    id: "kapalkundala-1866",
+    year: "১৮৬৬",
+    exactYear: 1866,
+    eraId: "renaissance",
+    eraNameBn: "বঙ্গীয় নবজাগরণ (১৮৫০–১৯০০)",
+    titleBn: "'কপালকুণ্ডলা' — প্রকৃতি ও মানুষের রহস্যময় দ্বন্দ্ব",
+    titleEn: "Kapalkundala by Bankim Chandra",
+    authorBn: "বঙ্কিমচন্দ্র চট্টোপাধ্যায়",
+    category: "novel",
+    categoryLabelBn: "উপন্যাস",
+    significanceBn:
+      "অরণ্যপালিতা নারী ও সভ্য সমাজের টানাপোড়েন নিয়ে লেখা বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ রহস্য-রোমান্টিক ক্লাসিক।",
+    historicalContextBn:
+      "হিজলির সমুদ্র উপকূল ও কাপালিকের তান্ত্রিক পরিমণ্ডলে নবকুমার ও কপালকুণ্ডলার নিয়তি-তাড়িত মিলনের গল্প। 'পথিক, তুমি পথ হারাইয়াছ?' সাহিত্যের অমর সংলাপ।",
+    keyPointsBn: [
+      "প্রকৃতি-কন্যা কপালকুণ্ডলার নাগরিক সমাজ ও সংসারে অসংলগ্নতা",
+      "প্রেম, রহস্য ও ট্র্যাজেডির অবিস্মরণীয় সংমিশ্রণ",
+    ],
+    twLink: "/writing/কপালকুণ্ডলা",
+    twLinkLabelBn: "কপালকুণ্ডলা রচনা পাঠ করুন",
+  },
+  {
+    id: "bangadarshan-1872",
+    year: "১৮৭২",
+    exactYear: 1872,
+    eraId: "renaissance",
+    eraNameBn: "বঙ্গীয় নবজাগরণ (১৮৫০–১৯০০)",
+    titleBn: "'বঙ্গদর্শন' পত্রিকা প্রকাশ ও আধুনিক বাঙালি মনন নির্মাণ",
+    titleEn: "Bangadarshan Literary Magazine by Bankim",
+    authorBn: "বঙ্কিমচন্দ্র চট্টোপাধ্যায়",
+    category: "essay_journal",
+    categoryLabelBn: "সাময়িকপত্র ও প্রবন্ধ",
+    significanceBn:
+      "বাঙালির চিন্তাজগতে নবজাগরণের প্রধান বাতিঘর। উপন্যাস, বিজ্ঞান, সমাজতত্ত্ব ও সাহিত্য সমালোচনার এক ঐতিহাসিক প্ল্যাটফর্ম।",
+    historicalContextBn:
+      "রবীন্দ্রনাথ লিখেছিলেন—'বঙ্গদর্শন যেন আষাঢ়ের প্রথম মেঘের মতো আসিয়া দেখা দিল।' এই পত্রিকাতেই প্রথম বিষবৃক্ষ, চন্দ্রশেখর ও অন্যান্য ক্লাসিক উপন্যাস ধারাবাহিকভাবে প্রকাশিত হয়।",
+    keyPointsBn: [
+      "বিজ্ঞান ও সমাজতাত্ত্বিক চিন্তার বাংলা ভাষায় প্রথম ব্যাপক বিস্তার",
+      "বাংলা সাহিত্যালোচনার আধুনিক মানদণ্ড প্রতিষ্ঠা",
+    ],
+  },
+  {
+    id: "anandamath-1882",
+    year: "১৮৮২",
+    exactYear: 1882,
+    eraId: "renaissance",
+    eraNameBn: "বঙ্গীয় নবজাগরণ (১৮৫০–১৯০০)",
+    titleBn: "'আনন্দমঠ' ও 'বন্দে মাতরম্' — জাতীয়তাবাদের উদগাতা",
+    titleEn: "Anandamath & Vande Mataram by Bankim Chandra",
+    authorBn: "বঙ্কিমচন্দ্র চট্টোপাধ্যায়",
+    category: "novel",
+    categoryLabelBn: "উপন্যাস",
+    significanceBn:
+      "ভারতীয় স্বাধীনতা আন্দোলনের মূল মন্ত্র 'বন্দে মাতরম্' গানের উৎস এবং সন্ন্যাসী বিদ্রোহের পটভূমিতে দেশমাতৃকার দেবীরূপ কল্পনা।",
+    historicalContextBn:
+      "১৭৭০ সালের ছিয়াত্তরের মন্বন্তর ও সন্ন্যাসী বিদ্রোহের পটভূমিতে রচিত। ব্রিটিশ সরকার একাধিকবার এই গ্রন্থের প্রচার ও বন্দে মাতরম্ ধ্বনি নিষিদ্ধ করার চেষ্টা করে।",
+    keyPointsBn: [
+      "সন্তান দল, সত্যানন্দ ও ভবানন্দের আত্মোৎসর্গের আখ্যান",
+      "সাহিত্যের মধ্য দিয়ে জাতীয়তাবাদী রাজনৈতিক চেতনার বিশ্বজয়ী বিস্তার",
+    ],
+    twLink: "/series/আনন্দমঠ",
+    twLinkLabelBn: "আনন্দমঠ ৩ পর্বের তথ্যচিত্র সিরিজ দেখুন",
+    featured: true,
+  },
+  {
+    id: "chokher-bali-1903",
+    year: "১৯০৩",
+    exactYear: 1903,
+    eraId: "tagore_era",
+    eraNameBn: "রবীন্দ্র যুগ (১৯০০–১৯৪১)",
+    titleBn: "'চোখের বালি' — প্রথম সার্থক মনস্তাত্ত্বিক উপন্যাস",
+    titleEn: "Chokher Bali by Rabindranath Tagore",
+    authorBn: "রবীন্দ্রনাথ ঠাকুর",
+    category: "novel",
+    categoryLabelBn: "উপন্যাস",
+    significanceBn:
+      "ঘটনাপ্রধান আখ্যান থেকে সরে এসে চরিত্রদের জটিল মনের গহনে আলো ফেলে বাংলা উপন্যাসে আধুনিকতার যুগ সূচনা।",
+    historicalContextBn:
+      "রবীন্দ্রনাথ নিজেই বলেছিলেন—'চোখের বালি উপন্যাসের বিষয় হচ্ছে মনের ভিতরের ঘূর্ণিপাক।' বিধবা বিনোদিনীর আত্মমর্যাদা, আকাঙ্ক্ষা ও মহেন্দ্র-আশালতা-বিহারীর মনস্তাত্ত্বিক টানাপোড়েন।",
+    keyPointsBn: [
+      "বাংলা সাহিত্যের প্রথম বিদ্রোহী ও তীব্র আত্মসচেতন নারী চরিত্র 'বিনোদিনী'",
+      "প্রেম, ঈর্ষা, বৈধব্য ও সমাজবিধির অভূতপূর্ব মনস্তাত্ত্বিক বিশ্লেষণ",
+    ],
+    twLink: "/series/চোখের-বালি",
+    twLinkLabelBn: "চোখের বালি ৩ পর্বের পূর্ণাঙ্গ বিশ্লেষণ দেখুন",
+    featured: true,
+  },
+  {
+    id: "khudiram-swadeshi-1908",
+    year: "১৯০৮",
+    exactYear: 1908,
+    eraId: "tagore_era",
+    eraNameBn: "রবীন্দ্র যুগ (১৯০০–১৯৪১)",
+    titleBn: "ক্ষুদিরাম বসু ও বিপ্লবোত্তর বাংলা স্বদেশী সাহিত্য",
+    titleEn: "Khudiram Bose & Revolutionary Literature",
+    authorBn: "ঐতিহাসিক প্রেক্ষিত ও লোকসঙ্গীত ('একবার বিদায় দে মা')",
+    category: "movement",
+    categoryLabelBn: "আন্দোলন ও যুগবদল",
+    significanceBn:
+      "কনিষ্ঠ বিপ্লবী ক্ষুদিরামের ফাঁসি বাংলার সাহিত্য, লোকগাথা ও জাতীয় চেতনায় এক অভূতপূর্ব অগ্নিস্ফুলিঙ্গ তৈরি করে।",
+    historicalContextBn:
+      "মুজাফফরপুর কিংসফোর্ড হত্যা চেষ্টা ও ১৯০৮ সালের ১১ আগস্ট ক্ষুদিরামের ফাঁসি। চারণকবি মুকুন্দদাস থেকে শুরু করে তৎকালীন সাহিত্যিকরা এই আত্মত্যাগকে গানে ও কবিতায় অমর করেন।",
+    keyPointsBn: [
+      "পীতাম্বর দাসের রচিত কালজয়ী গান 'একবার বিদায় দে মা ঘুরে আসি'",
+      "সাহিত্য ও স্বাধীনতা সংগ্রামের অবিচ্ছেদ্য যুগলবন্দী",
+    ],
+    twLink: "/documentary/ক্ষুদিরাম-বসু",
+    twLinkLabelBn: "ক্ষুদিরাম বসু বিশেষ তথ্যচিত্র দেখুন",
+  },
+  {
+    id: "gitanjali-nobel-1913",
+    year: "১৯১৩",
+    exactYear: 1913,
+    eraId: "tagore_era",
+    eraNameBn: "রবীন্দ্র যুগ (১৯০০–১৯৪১)",
+    titleBn: "'গীতাঞ্জলি' ও সাহিত্যে রবীন্দ্রনাথের নোবেল পুরস্কার জয়",
+    titleEn: "Gitanjali & Nobel Prize in Literature",
+    authorBn: "রবীন্দ্রনাথ ঠাকুর",
+    category: "poetry",
+    categoryLabelBn: "কবিতা ও মহাকাব্য",
+    significanceBn:
+      "এশিয়ার প্রথম নোবেল বিজয়। বাংলা সাহিত্য ও প্রাচ্য আধ্যাত্মিক দর্শন আন্তর্জাতিক অঙ্গনে বিশ্বমানের স্বীকৃতি লাভ করে।",
+    historicalContextBn:
+      "১৯১০ সালে মূল গীতাঞ্জলি এবং ১৯১২ সালে ডব্লিউ বি ইয়েটস-এর ভূমিকাসহ 'Song Offerings' প্রকাশের পর ১৯১৩ সালে সাহিত্যে নোবেল প্রাপ্তি।",
+    keyPointsBn: [
+      "মানুষ ও ঈশ্বরের অন্তরঙ্গ সম্পর্কের আধ্যাত্মিক উদযাপন",
+      "বিশ্বদরবারে বাংলা ভাষা ও ভারতীয় সাহিত্যের প্রবেশদ্বার উন্মুক্তকরণ",
+    ],
+    twLink: "/authors/রবীন্দ্রনাথ-ঠাকুর",
+    twLinkLabelBn: "রবীন্দ্রনাথ ঠাকুর লেখক সংগ্রহ ও রচনাবলী",
+    featured: true,
+  },
+  {
+    id: "ghare-baire-1916",
+    year: "১৯১৬",
+    exactYear: 1916,
+    eraId: "tagore_era",
+    eraNameBn: "রবীন্দ্র যুগ (১৯০০–১৯৪১)",
+    titleBn: "'ঘরে বাইরে' — জাতীয়তাবাদ বনাম মানবতাবোধের সংঘাত",
+    titleEn: "Ghare Baire by Rabindranath Tagore",
+    authorBn: "রবীন্দ্রনাথ ঠাকুর",
+    category: "novel",
+    categoryLabelBn: "উপন্যাস",
+    significanceBn:
+      "স্বদেশী আন্দোলনের উগ্র জাতীয়তাবাদের বিপরীতে সর্বজনীন মানবতাবোধ ও নারীমুক্তির এক আন্তর্জাতিক মাপকাঠির উপন্যাস।",
+    historicalContextBn:
+      "বঙ্গভঙ্গ আন্দোলনের তীব্র রাজনৈতিক পটভূমিতে নিখিলেশ, বিমলা ও সন্দীপের আত্মকথনমূলক রীতির মাধ্যমে লিখিত। সত্যজিৎ রায় এই উপন্যাসের উপর ভিত্তি করে কালজয়ী চলচ্চিত্র নির্মাণ করেন।",
+    keyPointsBn: [
+      "প্রথম পুরুষে তিন প্রধান চরিত্রের আত্মকথন রীতি (Diary / Confessional mode)",
+      "অন্ধ দেশপ্রেমের বিপদ বনাম নৈতিক সত্যের জয়গান",
+    ],
+    twLink: "/documentary/ঘরে-বাইরে",
+    twLinkLabelBn: "ঘরে বাইরে তথ্যচিত্র বিশ্লেষণ দেখুন",
+  },
+  {
+    id: "bidrohi-nazrul-1922",
+    year: "১৯২২",
+    exactYear: 1922,
+    eraId: "tagore_era",
+    eraNameBn: "রবীন্দ্র যুগ (১৯০০–১৯৪১)",
+    titleBn: "'অগ্নিবীণা' ও 'বিদ্রোহী' কবিতা — কাজী নজরুল ইসলামের বিপ্লব",
+    titleEn: "Agnibeena & The Rebel Poem by Kazi Nazrul Islam",
+    authorBn: "কাজী নজরুল ইসলাম",
+    category: "poetry",
+    categoryLabelBn: "কবিতা ও মহাকাব্য",
+    significanceBn:
+      "রবীন্দ্র প্রভাববলয়ের বাইরে দাঁড়িয়ে বজ্রনির্ঘোষ দ্রোহ, সাম্প্রদায়িক সম্প্রীতি ও সাম্যবাদের সম্পূর্ণ নতুন কণ্ঠস্বরের উত্থান।",
+    historicalContextBn:
+      "'বিজলী' পত্রিকায় 'বিদ্রোহী' কবিতা প্রকাশের সাথে সাথে বাংলার যুবসমাজে বিদ্যুতের মতো আলোড়ন তৈরি হয়। প্রথম কাব্যগ্রন্থ 'অগ্নিবীণা' ব্রিটিশ রাজের রক্তচক্ষু উপেক্ষা করে বিপুল বিক্রি হয়।",
+    keyPointsBn: [
+      "'আমি চির উন্নত শির' — ঔপনিবেশিক মানসিকতার বিরুদ্ধে চরম আঘাত",
+      "আরবি-ফারসি ও খাঁটি বাংলা শব্দের তেজোদৃপ্ত যুগলবন্দী",
+    ],
+    twLink: "/authors/কাজী-নজরুল-ইসলাম",
+    twLinkLabelBn: "কাজী নজরুল ইসলাম লেখক সংগ্রহ",
+  },
+  {
+    id: "kallol-era-1923",
+    year: "১৯২৩",
+    exactYear: 1923,
+    eraId: "tagore_era",
+    eraNameBn: "রবীন্দ্র যুগ (১৯০০–১৯৪১)",
+    titleBn: "'কল্লোল' পত্রিকা প্রকাশ ও আধুনিকতাবাদী আন্দোলন",
+    titleEn: "Kallol Movement & Modernist Bengali Literature",
+    authorBn: "বুদ্ধদেব বসু, অচিন্ত্যকুমার সেনগুপ্ত, প্রেমেন্দ্র মিত্র, শৈলজানন্দ",
+    category: "movement",
+    categoryLabelBn: "আন্দোলন ও যুগবদল",
+    significanceBn:
+      "রবীন্দ্র রোমান্টিকতার বিপরীতে বস্তিবাসী, নিঃস্ব মানুষ ও অবদমিত কামনার বাস্তবসম্মত আধুনিকতাবাদী বাংলা সাহিত্যের জন্ম।",
+    historicalContextBn:
+      "প্রথম বিশ্বযুদ্ধোত্তর নৈরাশ্য ও ফ্রয়েড-মার্ক্সের ভাবাদর্শে প্রভাবিত হয়ে তরুণ সাহিত্যিকরা বাংলা সাহিত্যের ভাব ও ভাষা পুরোপুরি বদলে দেন।",
+    keyPointsBn: [
+      "আধুনিক নাগরিক জীবনের ক্লান্তি, হতাশা ও তীব্র বাস্তবতার প্রকাশ",
+      "মধ্যবিত্ত ও নিম্নবিত্ত জীবনের নগ্ন সত্যের অকপট রূপায়ন",
+    ],
+  },
+  {
+    id: "raktakarabi-1924",
+    year: "১৯২৪",
+    exactYear: 1924,
+    eraId: "tagore_era",
+    eraNameBn: "রবীন্দ্র যুগ (১৯০০–১৯৪১)",
+    titleBn: "'রক্তকরবী' — পুঁজিবাদী শোষণ ও যান্ত্রিকতার বিরুদ্ধে রূপক নাটক",
+    titleEn: "Raktakarabi (Red Oleanders) by Tagore",
+    authorBn: "রবীন্দ্রনাথ ঠাকুর",
+    category: "drama",
+    categoryLabelBn: "নাটক",
+    significanceBn:
+      "যক্ষপুরীর অন্ধ খনিশ্রম ও ব্যক্তিস্বাধীনতার দলনের বিরুদ্ধে নন্দিনীর প্রাণের স্পর্শে জাগরণের রূপক নাটক।",
+    historicalContextBn:
+      "শিল্পায়ন ও ধনলোলুপ ব্যবস্থার বিরুদ্ধে রচিত এক অনন্য কালজয়ী নাটক, যা আজকের বিশ্বায়িত যুগেও সমান প্রাসঙ্গিক।",
+    keyPointsBn: [
+      "নন্দিনী চরিত্রের মধ্য দিয়ে প্রকৃতির সৌন্দর্য ও প্রাণের মুক্ত শক্তির প্রতীক",
+      "রাজা ও সর্দারদের ক্ষমতার অন্ধজাল ধ্বংসের রূপক",
+    ],
+    twLink: "/documentary/রক্তকরবী",
+    twLinkLabelBn: "রক্তকরবী তথ্যচিত্র পাঠ ও পর্যালোচনা",
+  },
+  {
+    id: "pather-panchali-1928",
+    year: "১৯২৮",
+    exactYear: 1928,
+    eraId: "tagore_era",
+    eraNameBn: "রবীন্দ্র যুগ (১৯০০–১৯৪১)",
+    titleBn: "'পথের পাঁচালী' — প্রকৃতির কোল ঘেঁষে বাংলার চিরায়ত মহাকাব্য",
+    titleEn: "Pather Panchali by Bibhutibhushan Bandyopadhyay",
+    authorBn: "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
+    category: "novel",
+    categoryLabelBn: "উপন্যাস",
+    significanceBn:
+      "গ্রামবাংলার নিসর্গ, দরিদ্রের নিষ্পাপ শৈশব ও জীবনের গভীর সুন্দরের অমর আখ্যান। সত্যজিৎ রায়ের চলচ্চিত্রে যার বিশ্বজয়।",
+    historicalContextBn:
+      "নিশ্চিন্দিপুর গ্রামের অপু ও দুর্গার স্বপ্ন, কাশবন ও রেলগাড়ি দেখার আকুতি দিয়ে রচিত এক শান্ত, গভীর জীবনদর্শন।",
+    keyPointsBn: [
+      "অপু, দুর্গা ও ইন্দির ঠাকরুণের অমলিন চরিত্রায়ণ",
+      "প্রকৃতি ও মানবজীবনের একাত্মতার রূপকথা",
+    ],
+  },
+  {
+    id: "dhusar-pandulipi-1936",
+    year: "১৯৩৬",
+    exactYear: 1936,
+    eraId: "post_war",
+    eraNameBn: "যুদ্ধোত্তর ও দেশভাগ পর্ব (১৯৪১–১৯৭০)",
+    titleBn: "'ধূসর পাণ্ডুলিপি' ও জীবনানন্দ দাশের নির্জনতার পরাবাস্তব",
+    titleEn: "Dhusar Pandulipi & Jibanananda Das's Surrealism",
+    authorBn: "জীবনানন্দ দাশ",
+    category: "poetry",
+    categoryLabelBn: "কবিতা ও মহাকাব্য",
+    significanceBn:
+      "বাংলা কবিতায় পরাবাস্তববাদ, প্রকৃতির অদ্ভুত মায়া এবং রূপসী বাংলার চিরায়ত রূপমুগ্ধতার এক নিঃসঙ্গ জাদুকরী কণ্ঠস্বর।",
+    historicalContextBn:
+      "রবীন্দ্রনাথ জীবনানন্দকে বলেছিলেন 'চিত্ররূপময় কবি'। বনলতা সেন ও ধূসর পাণ্ডুলিপির মাধ্যমে আধুনিক বাংলা কবিতা আন্তর্জাতিক স্তরের মেটাফোর অর্জন করে।",
+    keyPointsBn: [
+      "হাজার বছরের ইতিহাস ও অন্ধকারের পটভূমিতে রূপসী বাংলার চিত্রায়ন",
+      "নির্জনতা ও অস্তিত্ববাদী চেতনার অনুপম রূপক",
+    ],
+    twLink: "/authors/জীবনানন্দ-দাশ",
+    twLinkLabelBn: "জীবনানন্দ দাশ লেখক পরিচিতি ও রচনা সংগ্রহ",
+  },
+  {
+    id: "padma-nadir-majhi-1936",
+    year: "১৯৩৬",
+    exactYear: 1936,
+    eraId: "post_war",
+    eraNameBn: "যুদ্ধোত্তর ও দেশভাগ পর্ব (১৯৪১–১৯৭০)",
+    titleBn: "'পদ্মা নদীর মাঝি' — প্রমত্তা নদীর বুকে শ্রমজীবী মানুষের জীবনসংগ্রাম",
+    titleEn: "Padma Nadir Majhi by Manik Bandyopadhyay",
+    authorBn: "মানিক বন্দ্যোপাধ্যায়",
+    category: "novel",
+    categoryLabelBn: "উপন্যাস",
+    significanceBn:
+      "রোমান্টিক ভাবালুতা বর্জিত খাঁটি বস্তুনিষ্ঠ সমাজবাস্তবতা এবং প্রমত্তা পদ্মার মৎস্যজীবী জেলে সম্প্রদায়ের রূঢ় জীবনের দলিল।",
+    historicalContextBn:
+      "কেতুপুর গ্রামের জেলে কুবের, পঙ্গু স্ত্রী মালা, দুঃসাহসী কপিলা এবং হোসেন মিয়ার ময়নাদ্বীপের কাল্পনিক ইউটোপিয়ার গল্প।",
+    keyPointsBn: [
+      "বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ আঞ্চলিক ও বাস্তববাদী উপন্যাস",
+      "অর্থনৈতিক শোষণ ও জৈবিক প্রবৃত্তির দ্বন্দ্বের গভীর বিশ্লেষণ",
+    ],
+    twLink: "/documentary/পদ্মা-নদীর-মাঝি",
+    twLinkLabelBn: "পদ্মা নদীর মাঝি তথ্যচিত্র ও বিশ্লেষণ দেখুন",
+    featured: true,
+  },
+  {
+    id: "ganadevata-1942",
+    year: "১৯৪২",
+    exactYear: 1942,
+    eraId: "post_war",
+    eraNameBn: "যুদ্ধোত্তর ও দেশভাগ পর্ব (১৯৪১–১৯৭০)",
+    titleBn: "'গণদেবতা' ও 'পঞ্চগ্রাম' — রাঢ় বাংলার সমাজবদল ও ভাঙনের মহাকাব্য",
+    titleEn: "Ganadevata by Tarasankar Bandyopadhyay",
+    authorBn: "তারাশঙ্কর বন্দ্যোপাধ্যায়",
+    category: "novel",
+    categoryLabelBn: "উপন্যাস",
+    significanceBn:
+      "সামন্ততান্ত্রিক গ্রামীণ কাঠামো ভেঙে আধুনিক অর্থনীতির প্রবেশের সময় হাজার বছরের বাংলার গ্রামসমাজের ঐতিহাসিক রূপান্তরের দলিল।",
+    historicalContextBn:
+      "শিবকালিপুর গ্রামের কামার, ছুতোর, বায়েনদের জীবনসংগ্রাম ও দেবু পণ্ডিতের জননায়ক হয়ে ওঠার গল্প। জ্ঞানপীঠ পুরস্কার বিজয়ী উপন্যাস।",
+    keyPointsBn: [
+      "গ্রামবাংলার গোষ্ঠীচেতনা ও সামাজিক রূপান্তরের নিখুঁত চিত্র",
+      "মাটির কাছাকাছি মানুষের সুখ-দুঃখের মহাকাব্যিক ব্যাপ্তি",
+    ],
+  },
+  {
+    id: "partition-literature-1947",
+    year: "১৯৪৭",
+    exactYear: 1947,
+    eraId: "post_war",
+    eraNameBn: "যুদ্ধোত্তর ও দেশভাগ পর্ব (১৯৪১–১৯৭০)",
+    titleBn: "দেশভাগ, দাঙ্গা ও উদ্বাস্তু সাহিত্য (Partition Literature)",
+    titleEn: "Partition of Bengal & Refugee Literature",
+    authorBn: "জ্যোতিরিন্দ্র নন্দী, নরেন্দ্রনাথ মিত্র, সুনীল গঙ্গোপাধ্যায়, হাসান আজিজুল হক",
+    category: "movement",
+    categoryLabelBn: "আন্দোলন ও যুগবদল",
+    significanceBn:
+      "বাঙালির ইতিহাসে সবচেয়ে বড় ট্র্যাজেডি — শেকড়ছেঁড়া মানুষের কান্না, শিয়ালদহ স্টেশনের উদ্বাস্তু শিবির ও মনস্তাত্ত্বিক ক্ষত সাহিত্যের প্রধানতম বিষয় হয়ে ওঠে।",
+    historicalContextBn:
+      "১৯৪৭ সালে বাংলা দ্বিখণ্ডিত হওয়ার পর কোটি কোটি মানুষের ভিটেমাটি হারানোর বেদনা এবং সাম্প্রদায়িক দাঙ্গার রক্তাক্ত পটভূমিতে রচিত শত শত কালজয়ী ছোটগল্প ও উপন্যাস।",
+    keyPointsBn: [
+      "উদ্বাস্তু জীবনের সংগ্রাম ও আত্মমর্যাদা রক্ষার লড়াই",
+      "বাংলা উপন্যাসে সীমান্তের কাঁটাতার ও স্মৃতিকাতরতার বিস্তার",
+    ],
+  },
+  {
+    id: "hungry-generation-1961",
+    year: "১৯৬১",
+    exactYear: 1961,
+    eraId: "post_war",
+    eraNameBn: "যুদ্ধোত্তর ও দেশভাগ পর্ব (১৯৪১–১৯৭০)",
+    titleBn: "হাংরি আন্দোলন (The Hungryalist Movement) ও প্রাতিষ্ঠানিক বিরোধিতা",
+    titleEn: "The Hungry Generation Movement",
+    authorBn: "মলয় রায়চৌধুরী, শক্তি চট্টোপাধ্যায়, সমীর রায়চৌধুরী, দেবী রায়",
+    category: "movement",
+    categoryLabelBn: "আন্দোলন ও যুগবদল",
+    significanceBn:
+      "বাংলা সাহিত্যের প্রথম প্রতিষ্ঠানবিরোধী অ্যাভান্ট-গার্ড (Avant-garde) আন্দোলন, যা সব রকম প্রথা ও শালীনতাবোধকে প্রশ্নের মুখে দাঁড় করায়।",
+    historicalContextBn:
+      "মেনিফেস্টো বিলি, পোস্টার ও ক্ষোভের মাধ্যমে সাহিত্যের চেনা পরিমণ্ডল কাঁপিয়ে দেওয়া এক উত্তাল সাহিত্য আন্দোলন।",
+    keyPointsBn: [
+      "কবিতা ও জীবনের দূরত্ব মুছে ফেলার চরম প্রচেষ্টা",
+      "ঔপনিবেশিক শিষ্টাচারের বিরুদ্ধে রুখে দাঁড়ানো সাহিত্য বিপ্লব",
+    ],
+  },
+  {
+    id: "liberation-war-1971",
+    year: "১৯৭১",
+    exactYear: 1971,
+    eraId: "contemporary",
+    eraNameBn: "সমকালীন ও সাম্প্রতিক (১৯৭০–বর্তমান)",
+    titleBn: "বাংলাদেশের মুক্তিযুদ্ধ ও বাংলা সাহিত্যের নবদিগন্ত",
+    titleEn: "1971 Liberation War & Bengali Literature",
+    authorBn: "শামসুর রাহমান, হাসান আজিজুল হক, সৈয়দ শামসুল হক, হুমায়ূন আহমেদ",
+    category: "movement",
+    categoryLabelBn: "আন্দোলন ও যুগবদল",
+    significanceBn:
+      "বাঙালি জাতির আত্মপরিচয় ও সশস্ত্র মুক্তিসংগ্রামের অভূতপূর্ব বীরত্বগাথা ও আত্মত্যাগের অবিস্মরণীয় সাহিত্যরূপ।",
+    historicalContextBn:
+      "এক সাগর রক্তের বিনিময়ে স্বাধীন বাংলাদেশের জন্ম সাহিত্যের বিষয়বস্তুকে আন্তর্জাতিক পরিমণ্ডলে পৌঁছে দেয়।",
+    keyPointsBn: [
+      "স্বাধীনতার গান, কবিতা ও যুদ্ধক্ষেত্রের বাস্তব অভিজ্ঞতার উপন্যাস",
+      "দুই বাংলার সাহিত্যিক আদান-প্রদান ও সম্মিলিত অহংকার",
+    ],
+  },
+  {
+    id: "shei-samoy-1981",
+    year: "১৯৮১",
+    exactYear: 1981,
+    eraId: "contemporary",
+    eraNameBn: "সমকালীন ও সাম্প্রতিক (১৯৭০–বর্তমান)",
+    titleBn: "'সেই সময়' ও 'প্রথম আলো' — ঊনবিংশ শতকের ইতিহাস পুনর্নির্মাণ",
+    titleEn: "Shei Samoy by Sunil Gangopadhyay",
+    authorBn: "সুনীল গঙ্গোপাধ্যায়",
+    category: "novel",
+    categoryLabelBn: "উপন্যাস",
+    significanceBn:
+      "কালীপ্রসন্ন সিংহ, মাইকেল, বিদ্যাসাগর ও ডিরোজিওর নবজাগরণের কলকাতাকে কেন্দ্র করে রচিত বাংলা সাহিত্যের অন্যতম জনপ্রিয় ঐতিহাসিক উপন্যাস।",
+    historicalContextBn:
+      "আনন্দ পুরস্কার ও সাহিত্য অকাদেমি প্রাপ্ত এই উপন্যাস ঊনবিংশ শতকের বাংলার রূপান্তরকে সাধারণ পাঠকের কাছে রোমাঞ্চকর করে তোলে।",
+    keyPointsBn: [
+      "নবীনকুমার চরিত্রের মধ্য দিয়ে কলকাতার বাবু সংস্কৃতির জীবন্ত ছবি",
+      "ইতিহাস ও কথাসাহিত্যের অনবদ্য মেলবন্ধন",
+    ],
+  },
+  {
+    id: "hajar-churashir-maa-1974",
+    year: "১৯৭৪",
+    exactYear: 1974,
+    eraId: "contemporary",
+    eraNameBn: "সমকালীন ও সাম্প্রতিক (১৯৭০–বর্তমান)",
+    titleBn: "'হাজার চুরাশির মা' ও মহাশ্বেতা দেবীর প্রান্তিক মানুষের কথাসাহিত্য",
+    titleEn: "Hajar Churashir Maa by Mahasweta Devi",
+    authorBn: "মহাশ্বেতা দেবী",
+    category: "novel",
+    categoryLabelBn: "উপন্যাস",
+    significanceBn:
+      "নকশালবাড়ি আন্দোলনের পটভূমিতে এক মায়ের দৃষ্টিতে রাজনৈতিক হত্যা ও নাগরিক ভণ্ডামির তীব্রতম উন্মোচন।",
+    historicalContextBn:
+      "১০৮৪ নম্বর মর্গের লাশের পরিচয় খুঁজতে গিয়ে সুজাতা নামক উচ্চবিত্ত মায়ের নিজস্ব সত্তা ও প্রতিবাদী রূপের আবিষ্কার। মহাশ্বেতা দেবীর আদিবাসী ও প্রান্তিক মানুষের অধিকারের লড়াই সাহিত্যের নতুন মানদণ্ড তৈরি করে।",
+    keyPointsBn: [
+      "মা ও পুত্রের আদর্শিক বন্ধনের করুণ আখ্যান",
+      "জ্ঞানপীঠ ও ম্যাগসেসে পুরস্কারে ভূষিত সাহিত্য সাধনা",
+    ],
+    featured: true,
+  },
+  {
+    id: "digital-era-2025",
+    year: "২০২০–২০২৫",
+    exactYear: 2025,
+    eraId: "contemporary",
+    eraNameBn: "সমকালীন ও সাম্প্রতিক (১৯৭০–বর্তমান)",
+    titleBn: "ডিজিটাল যুগ, সাহিত্য তথ্যচিত্র ও বিশ্বায়ন",
+    titleEn: "The Digital Era & Modern Literary Documentaries",
+    authorBn: "Thoughts Whatever ও আধুনিক গবেষকসমাজ",
+    category: "movement",
+    categoryLabelBn: "আন্দোলন ও যুগবদল",
+    significanceBn:
+      "প্রিন্ট মিডিয়ার সীমাবদ্ধতা পেরিয়ে ওয়েবজিন, তথ্যচিত্র ও সোশ্যাল মিডিয়ার মাধ্যমে তরুণ প্রজন্মের কাছে বাংলা ক্লাসিকসের নতুনভাবে উপস্থাপন।",
+    historicalContextBn:
+      "ইনস্টাগ্রাম রিল, পডকাস্ট ও ডিজিটাল আর্কাইভের মাধ্যমে বাংলা সাহিত্যের গভীর পাঠ ও ঐতিহাসিক প্রেক্ষাপট বিশ্বজুড়ে ছড়িয়ে পড়ছে।",
+    keyPointsBn: [
+      "তথ্যচিত্র ও ভিজ্যুয়াল ন্যারেটিভের মেলবন্ধন",
+      "প্রবাসী বাঙালি ও নতুন প্রজন্মের কাছে বাংলা সাহিত্যের সহজলভ্যতা",
+    ],
+    twLink: "/archive",
+    twLinkLabelBn: "Thoughts Whatever সম্পূর্ণ সংগ্রহশালা দেখুন",
+    featured: true,
+  },
+];
+
+export const TIMELINE_FAQS = [
+  {
+    question: "বাংলা সাহিত্যের যুগবিভাগ কীভাবে করা হয়?",
+    answer:
+      "বাংলা সাহিত্যের ইতিহাসকে মূলত তিনটি প্রধান যুগে ভাগ করা হয়: ১. প্রাচীন যুগ (৯৫০/১০০০–১২০০ খ্রিস্টাব্দ, চর্যাপদের যুগ); ২. মধ্যযুগ (১২০০–১৮০০ খ্রিস্টাব্দ, শ্রীকৃষ্ণকীর্তন, মঙ্গলকাব্য, বৈষ্ণব পদাবলী ও অনুবাদ সাহিত্যের যুগ); ৩. আধুনিক যুগ (১৮০০ খ্রিস্টাব্দ থেকে বর্তমান, ফোর্ট উইলিয়াম কলেজ ও বঙ্গীয় নবজাগরণের মাধ্যমে যার সূচনা)। আধুনিক যুগকে আবার গদ্য সূচনা, রবীন্দ্র যুগ, কল্লোল যুগ, যুদ্ধোত্তর ও সমকালীন যুগে বিভক্ত করা হয়।",
+  },
+  {
+    question: "বাংলা সাহিত্যের প্রথম উপন্যাস কোনটি?",
+    answer:
+      "বাংলা সাহিত্যের প্রথম উপন্যাসিকা হিসেবে প্যারীচাঁদ মিত্রের (টেকচাঁদ ঠাকুর) 'আলালের ঘরের দুলাল' (১৮৫৮) স্বীকৃত। তবে পাশ্চাত্য উপন্যাসের সমস্ত লক্ষণযুক্ত প্রথম সার্থক ও পূর্ণাঙ্গ বাংলা উপন্যাস হলো বঙ্কিমচন্দ্র চট্টোপাধ্যায়ের 'দুর্গেশনন্দিনী' (১৮৬৫)।",
+  },
+  {
+    question: "অমিত্রাক্ষর ছন্দ কে প্রথম বাংলা সাহিত্যে প্রবর্তন করেন?",
+    answer:
+      "মাইকেল মধুসূদন দত্ত ১৮৬০ সালে 'পদ্মাবতী' নাটকে এবং ১৮৬১ সালে তাঁর কালজয়ী মহাকাব্য 'মেঘনাদবধ কাব্য'-এ প্রথম অমিত্রাক্ষর ছন্দের (Blank Verse) সফল প্রয়োগ করেন। এটি বাংলা পদ্যের প্রচলিত চৌদ্দমাত্রার পয়ারের অন্ত্যমিল ভেঙে ভাবপ্রবাহকে মুক্ত করেছিল।",
+  },
+  {
+    question: "চোখের বালি উপন্যাসটিকে কেন প্রথম মনস্তাত্ত্বিক উপন্যাস বলা হয়?",
+    answer:
+      "১৯০৩ সালে প্রকাশিত রবীন্দ্রনাথ ঠাকুরের 'চোখের বালি'-তে ঘটনার চটক বা রোমাঞ্চের পরিবর্তে চরিত্রদের অন্তর্জগতের সূক্ষ্ম মানসিক দ্বন্দ্ব, অবদমিত কামনা, ঈর্ষা ও আত্মমর্যাদাবোধকে মূল উপজীব্য করা হয়। বিনোদিনী ও মহেন্দ্রের জটিল মানসিক টানাপোড়েনের বিশ্লেষণের কারণে এটি বাংলা সাহিত্যের প্রথম সার্থক মনস্তাত্ত্বিক উপন্যাস।",
+  },
+  {
+    question: "নীলদর্পণ নাটকটির ঐতিহাসিক গুরুত্ব কী?",
+    answer:
+      "১৮৬০ সালে দীনবন্ধু মিত্র রচিত 'নীলদর্পণ' নাটকটি ব্রিটিশ নীলকর সাহেবদের দ্বারা বাংলার কৃষকদের উপর অমানুষিক নির্যাতনের বাস্তব চিত্র তুলে ধরে। এটি ১৮৫৯-৬০ সালের নীল বিদ্রোহে গভীর প্রভাব ফেলে এবং ১৮৭২ সালে বাংলায় প্রথম সাধারণ টিকিট কেটে নাটক দেখার জাতীয় নাট্যশালার দ্বার উন্মোচন করে।",
+  },
+  {
+    question: "বাংলা সাহিত্যে প্রথম নোবেল পুরস্কার কবে ও কে অর্জন করেন?",
+    answer:
+      "১৯১৩ সালে রবীন্দ্রনাথ ঠাকুর তাঁর বিখ্যাত কাব্যগ্রন্থ 'গীতাঞ্জলি'র (Song Offerings) ইংরেজি অনুবাদের জন্য সাহিত্যে নোবেল পুরস্কার অর্জন করেন। তিনি ছিলেন সাহিত্যে নোবেলজয়ী প্রথম অ-ইউরোপীয় ও প্রথম এশীয় ব্যক্তিত্ব।",
+  },
+];
+
+export function TimelineInteractive() {
+  const [selectedEra, setSelectedEra] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [expandedId, setExpandedId] = useState<string | null>("meghnadbadh-1861");
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+  const filteredItems = useMemo(() => {
+    return TIMELINE_DATA.filter((item) => {
+      const matchesEra = selectedEra === "all" || item.eraId === selectedEra;
+      const matchesCategory =
+        selectedCategory === "all" || item.category === selectedCategory;
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        item.titleBn.toLowerCase().includes(q) ||
+        (item.titleEn && item.titleEn.toLowerCase().includes(q)) ||
+        item.authorBn.toLowerCase().includes(q) ||
+        item.significanceBn.toLowerCase().includes(q) ||
+        item.year.includes(q);
+
+      return matchesEra && matchesCategory && matchesSearch;
+    });
+  }, [selectedEra, selectedCategory, searchQuery]);
+
+  return (
+    <div className="space-y-12">
+      {/* ── Filter Bar & Controls ────────────────────────── */}
+      <section className="sticky top-16 z-20 rounded-xl border border-rule/80 bg-surface/95 p-4 shadow-sm backdrop-blur transition-all">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          {/* Search Box */}
+          <div className="relative flex-1">
+            <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-content-faint" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="লেখক, বইয়ের নাম বা সাল খুঁজুন (যেমন: রবীন্দ্রনাথ, ১৮৬১, নীলদর্পণ)..."
+              className="w-full rounded-md border border-rule bg-surface-raised/60 py-2.5 pl-10 pr-4 font-bengali text-sm text-content placeholder:text-content-faint focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent transition"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-xs text-content-faint hover:text-content"
+              >
+                মুছুন
+              </button>
+            )}
+          </div>
+
+          {/* Category Dropdown/Pills */}
+          <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`rounded-md px-3 py-1.5 font-bengali text-xs transition ${
+                  selectedCategory === cat.id
+                    ? "bg-accent text-surface font-semibold shadow-xs"
+                    : "border border-rule bg-surface-raised/40 text-content-soft hover:border-accent/40 hover:text-content"
+                }`}
+              >
+                {cat.labelBn}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Eras Horizontal Selector */}
+        <div className="mt-4 flex gap-2 overflow-x-auto border-t border-rule/60 pt-3 scrollbar-thin">
+          {TIMELINE_ERAS.map((era) => {
+            const isSelected = selectedEra === era.id;
+            return (
+              <button
+                key={era.id}
+                onClick={() => setSelectedEra(era.id)}
+                className={`group flex shrink-0 items-center gap-2 rounded-lg px-3.5 py-2 text-left transition ${
+                  isSelected
+                    ? "border border-accent/60 bg-accent/10 text-accent font-medium shadow-xs"
+                    : "border border-rule/60 bg-surface-raised/20 text-content-soft hover:border-accent/40 hover:text-content"
+                }`}
+              >
+                <div className="min-w-0">
+                  <div className="font-bengali text-xs font-medium">
+                    {era.nameBn}
+                  </div>
+                  <div className="font-mono text-[0.65rem] text-content-faint group-hover:text-content-soft">
+                    {era.range}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ── Active Filters Summary ───────────────────────── */}
+      <div className="flex items-center justify-between text-xs font-mono text-content-faint">
+        <div>
+          পাওয়া গেছে:{" "}
+          <span className="font-semibold text-content">
+            {filteredItems.length}
+          </span>{" "}
+          টি যুগান্তকারী ঘটনা
+        </div>
+        {(selectedEra !== "all" ||
+          selectedCategory !== "all" ||
+          searchQuery) && (
+          <button
+            onClick={() => {
+              setSelectedEra("all");
+              setSelectedCategory("all");
+              setSearchQuery("");
+            }}
+            className="text-accent underline hover:opacity-80 transition"
+          >
+            সব ফিল্টার রিসেট করুন
+          </button>
+        )}
+      </div>
+
+      {/* ── Timeline Road / Milestones ───────────────────── */}
+      <div className="relative border-l-2 border-accent/30 pl-4 sm:pl-8 space-y-10 ml-3 sm:ml-6">
+        {filteredItems.map((item, idx) => {
+          const isExpanded = expandedId === item.id;
+          return (
+            <div key={item.id} className="relative group">
+              {/* Timeline Marker Dot */}
+              <div
+                className={`absolute -left-[23px] sm:-left-[39px] top-6 flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full border-2 transition ${
+                  item.featured
+                    ? "border-accent bg-accent text-surface shadow-md"
+                    : "border-rule/80 bg-surface text-content-faint group-hover:border-accent group-hover:text-accent"
+                }`}
+              >
+                <Sparkles className="h-3 w-3" />
+              </div>
+
+              {/* Card Body */}
+              <div
+                className={`rounded-xl border transition-all duration-200 ${
+                  isExpanded
+                    ? "border-accent/60 bg-surface-raised/60 shadow-md ring-1 ring-accent/20"
+                    : "border-rule/80 bg-surface-raised/30 hover:border-accent/40 hover:bg-surface-raised/50"
+                } p-5 sm:p-7`}
+              >
+                {/* Header info */}
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-rule/50 pb-3">
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex items-center rounded-md bg-accent/15 px-3 py-1 font-mono text-sm font-bold text-accent">
+                      {item.year}
+                    </span>
+                    <span className="font-bengali text-xs text-content-faint font-medium">
+                      {item.eraNameBn}
+                    </span>
+                  </div>
+                  <span className="rounded-full border border-rule/80 px-2.5 py-0.5 font-bengali text-[0.7rem] text-content-soft">
+                    {item.categoryLabelBn}
+                  </span>
+                </div>
+
+                {/* Main Title & Author */}
+                <div className="mt-3 cursor-pointer" onClick={() => setExpandedId(isExpanded ? null : item.id)}>
+                  <h3 className="font-bengali text-xl font-semibold leading-snug text-content group-hover:text-accent sm:text-2xl transition-colors">
+                    {item.titleBn}
+                  </h3>
+                  <div className="mt-1 font-bengali text-sm font-medium text-accent/90">
+                    লেখক / রূপকার: {item.authorBn}
+                  </div>
+                  <p className="mt-3 font-bengali text-base leading-relaxed text-content-soft">
+                    {item.significanceBn}
+                  </p>
+                </div>
+
+                {/* Expandable Deep Dive Section */}
+                {isExpanded && (
+                  <div className="mt-5 space-y-4 border-t border-rule/60 pt-4 animate-in fade-in duration-200">
+                    <div>
+                      <h4 className="flex items-center gap-2 font-bengali text-xs font-bold uppercase tracking-wider text-content-faint">
+                        <History className="h-3.5 w-3.5 text-accent" />
+                        ঐতিহাসিক পটভূমি ও প্রেক্ষাপট:
+                      </h4>
+                      <p className="mt-1.5 font-bengali text-sm leading-relaxed text-content">
+                        {item.historicalContextBn}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-bengali text-xs font-bold uppercase tracking-wider text-content-faint">
+                        মূল প্রভাব ও উল্লেখযোগ্য বৈশিষ্ট্য:
+                      </h4>
+                      <ul className="mt-2 space-y-1.5 font-bengali text-sm text-content-soft">
+                        {item.keyPointsBn.map((point, pIdx) => (
+                          <li key={pIdx} className="flex items-start gap-2">
+                            <CheckCircle2 className="h-4 w-4 shrink-0 text-accent/80 mt-0.5" />
+                            <span>{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Internal Link to Thoughts Whatever companion piece */}
+                    {item.twLink && (
+                      <div className="mt-5 rounded-lg border border-accent/30 bg-accent/5 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <div className="min-w-0">
+                          <div className="font-mono text-[0.6875rem] uppercase tracking-wider text-accent font-semibold">
+                            Thoughts Whatever গভীর বিশ্লেষণ
+                          </div>
+                          <div className="font-bengali text-sm font-medium text-content">
+                            {item.twLinkLabelBn || "সম্পূর্ণ তথ্যচিত্র ও পাঠ-পর্যালোচনা দেখুন"}
+                          </div>
+                        </div>
+                        <Link
+                          href={item.twLink}
+                          className="inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-2 font-bengali text-xs font-semibold text-surface transition hover:opacity-90 shrink-0 shadow-xs"
+                        >
+                          <span>পড়ুন ও দেখুন</span>
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Card Footer toggle */}
+                <div className="mt-4 flex items-center justify-between pt-2">
+                  <button
+                    onClick={() => setExpandedId(isExpanded ? null : item.id)}
+                    className="inline-flex items-center gap-1 font-bengali text-xs font-medium text-accent hover:underline"
+                  >
+                    <span>{isExpanded ? "সংক্ষিপ্ত করুন" : "বিস্তারিত প্রেক্ষাপট দেখুন"}</span>
+                    <ChevronDown
+                      className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                        isExpanded ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  <span className="font-mono text-[0.6875rem] text-content-faint">
+                    #{idx + 1}
+                  </span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── FAQ Section Accordion ────────────────────────── */}
+      <section className="mt-20 rounded-2xl border border-rule/80 bg-surface-raised/40 p-6 sm:p-10">
+        <div className="max-w-measure-wide">
+          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-accent font-semibold">
+            <BookOpen className="h-4 w-4" />
+            <span>সচরাচর জিজ্ঞাসা ও প্রশ্নোত্তর</span>
+          </div>
+          <h2 className="mt-2 font-bengali text-2xl font-bold text-content sm:text-3xl">
+            বাংলা সাহিত্যের ইতিহাস নিয়ে গুরুত্বপূর্ণ প্রশ্নোত্তর
+          </h2>
+          <p className="mt-2 font-bengali text-sm text-content-soft">
+            বিশ্ববিদ্যালয়, প্রতিযোগিতামূলক পরীক্ষা (WBCS) এবং বাংলা সাহিত্যের অনুরাগীদের জন্য বিশদ ব্যাখ্যা।
+          </p>
+
+          <div className="mt-8 divide-y divide-rule/60">
+            {TIMELINE_FAQS.map((faq, fIdx) => {
+              const isOpen = openFaqIndex === fIdx;
+              return (
+                <div key={fIdx} className="py-4">
+                  <button
+                    onClick={() => setOpenFaqIndex(isOpen ? null : fIdx)}
+                    className="flex w-full items-center justify-between gap-4 text-left font-bengali text-lg font-medium text-content hover:text-accent transition-colors"
+                  >
+                    <span>{faq.question}</span>
+                    <ChevronDown
+                      className={`h-5 w-5 shrink-0 text-content-faint transition-transform duration-200 ${
+                        isOpen ? "rotate-180 text-accent" : ""
+                      }`}
+                    />
+                  </button>
+                  {isOpen && (
+                    <p className="mt-3 font-bengali text-base leading-relaxed text-content-soft animate-in fade-in duration-200">
+                      {faq.answer}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
