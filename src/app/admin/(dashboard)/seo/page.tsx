@@ -135,15 +135,24 @@ export default function SEOScannerPage() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={handleRunScan}
-          disabled={scanning}
-          className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-white hover:bg-accent/90 transition disabled:opacity-50"
-        >
-          <RefreshCw className={cn("h-4 w-4", scanning && "animate-spin")} />
-          {scanning ? "Scanning Articles..." : "Run SEO Audit Now"}
-        </button>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/admin/seo/outreach"
+            className="inline-flex items-center gap-1.5 rounded-sm border border-accent/40 bg-accent/10 px-3.5 py-2 font-sans text-xs font-semibold text-accent hover:bg-accent hover:text-white transition"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>Backlink & Outreach Hub</span>
+          </Link>
+          <button
+            type="button"
+            onClick={handleRunScan}
+            disabled={scanning}
+            className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-white hover:bg-accent/90 transition disabled:opacity-50"
+          >
+            <RefreshCw className={cn("h-4 w-4", scanning && "animate-spin")} />
+            {scanning ? "Scanning Articles..." : "Run SEO Audit Now"}
+          </button>
+        </div>
       </div>
 
       {loading ? (
