@@ -3,12 +3,14 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 import { useReducedMotion } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export function SmoothScroll() {
   const reduced = useReducedMotion();
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || pathname?.startsWith("/admin")) return;
 
     const lenis = new Lenis({
       duration: 1.05,
@@ -26,7 +28,7 @@ export function SmoothScroll() {
       cancelAnimationFrame(frame);
       lenis.destroy();
     };
-  }, [reduced]);
+  }, [reduced, pathname]);
 
   return null;
 }

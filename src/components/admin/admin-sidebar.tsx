@@ -129,6 +129,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
 
   return (
     <aside
+      data-lenis-prevent
       className={cn(
         "flex h-full max-h-full min-h-0 flex-col overflow-hidden border-r border-rule bg-surface/90 backdrop-blur w-64 select-none",
         className
@@ -151,7 +152,10 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
       )}
 
       {/* Navigation Links Scrollable */}
-      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-4 space-y-6 scrollbar-thin">
+      <div
+        data-lenis-prevent
+        className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-4 space-y-6 scrollbar-thin"
+      >
         {NAV_GROUPS.map((group) => {
           const isCollapsed = !!collapsedGroups[group.name];
 
