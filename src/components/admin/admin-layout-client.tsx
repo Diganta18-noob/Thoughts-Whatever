@@ -39,9 +39,9 @@ export function AdminLayoutClient({
       </header>
 
       {/* Main Workspace with Sidebar */}
-      <div className="flex flex-1 relative">
+      <div className="flex flex-1 relative min-h-0">
         {/* Desktop Sticky Sidebar */}
-        <div className="hidden lg:block shrink-0 sticky top-14 h-[calc(100vh-3.5rem)]">
+        <div className="hidden lg:block shrink-0 sticky top-14 h-[calc(100vh-3.5rem)] max-h-[calc(100vh-3.5rem)] overflow-hidden">
           <AdminSidebar />
         </div>
 
@@ -52,7 +52,7 @@ export function AdminLayoutClient({
               className="fixed inset-0 bg-content/40 backdrop-blur-xs"
               onClick={() => setMobileMenuOpen(false)}
             />
-            <div className="relative z-10 w-72 max-w-[85vw] h-full shadow-2xl animate-fade-up">
+            <div className="relative z-10 w-72 max-w-[85vw] h-full max-h-full overflow-hidden shadow-2xl animate-fade-up">
               <AdminSidebar onClose={() => setMobileMenuOpen(false)} />
             </div>
           </div>

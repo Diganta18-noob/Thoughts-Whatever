@@ -130,13 +130,13 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
   return (
     <aside
       className={cn(
-        "flex h-full flex-col border-r border-rule bg-surface/90 backdrop-blur w-64 select-none",
+        "flex h-full max-h-full min-h-0 flex-col overflow-hidden border-r border-rule bg-surface/90 backdrop-blur w-64 select-none",
         className
       )}
     >
       {/* Sidebar Header on mobile with close button */}
       {onClose && (
-        <div className="flex items-center justify-between border-b border-rule p-4 lg:hidden">
+        <div className="flex shrink-0 items-center justify-between border-b border-rule p-4 lg:hidden">
           <span className="font-serif text-sm font-semibold tracking-wide text-content">
             Navigation Menu
           </span>
@@ -151,7 +151,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
       )}
 
       {/* Navigation Links Scrollable */}
-      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-4 space-y-6 scrollbar-thin">
         {NAV_GROUPS.map((group) => {
           const isCollapsed = !!collapsedGroups[group.name];
 
@@ -216,7 +216,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
       </div>
 
       {/* Sidebar Footer */}
-      <div className="border-t border-rule p-3 font-mono text-[10px] text-content-faint text-center">
+      <div className="shrink-0 border-t border-rule p-3 font-mono text-[10px] text-content-faint text-center">
         Editor&apos;s Room OS &bull; v2.0
       </div>
     </aside>
