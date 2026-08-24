@@ -219,38 +219,42 @@ export function seriesJsonLd(series: {
   }[];
 }) {
   const url = absoluteUrl(`/series/${series.slug}`);
+  const image = absoluteCoverUrl("series", series.slug, series.coverImage) ?? undefined;
 
   return {
     "@context": "https://schema.org",
     "@type": "CreativeWorkSeries",
     name: series.titleBn,
+    headline: series.titleBn,
     description: series.descriptionBn || undefined,
     url,
-    inLanguage: "bn",
-    image: absoluteCoverUrl("series", series.slug, series.coverImage) ?? undefined,
-    numberOfEpisodes: series.pieces.length,
+    inLanguage: "bn-IN",
+    image,
     publisher: {
       "@type": "Organization",
       name: siteConfig.name,
       url: siteConfig.url,
+      logo: {
+        "@type": "ImageObject",
+        url: absoluteUrl("/brand/logo-full.svg"),
+      },
       sameAs: [siteConfig.instagram].filter(Boolean),
     },
-    hasPart: {
-      "@type": "ItemList",
-      itemListOrder: "https://schema.org/ItemListOrderAscending",
-      numberOfItems: series.pieces.length,
-      itemListElement: series.pieces.map((piece, i) => ({
-        "@type": "ListItem",
-        position: piece.seriesOrder ?? i + 1,
-        item: {
-          "@type": "Article",
-          name: piece.titleBn,
-          url: absoluteUrl(piecePath(piece.kind, piece.slug)),
-          inLanguage: "bn",
-          datePublished: toIsoString(piece.publishedAt),
-        },
-      })),
-    },
+    hasPart: series.pieces.map((piece, i) => ({
+      "@type": "Article",
+      position: piece.seriesOrder ?? i + 1,
+      name: piece.titleBn,
+      headline: piece.titleBn,
+      url: absoluteUrl(piecePath(piece.kind, piece.slug)),
+      inLanguage: "bn-IN",
+      datePublished: toIsoString(piece.publishedAt),
+      author: {
+        "@type": "Organization",
+        name: siteConfig.name,
+        url: siteConfig.url,
+      },
+      image,
+    })),
   };
 }
 
