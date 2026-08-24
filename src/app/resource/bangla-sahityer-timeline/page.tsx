@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  TimelineInteractive,
-  TIMELINE_FAQS,
-} from "@/components/resource/timeline-interactive";
+import { TimelineInteractive } from "@/components/resource/timeline-interactive";
+import { TIMELINE_FAQS } from "@/lib/timeline-data";
 import { JsonLd, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
 import { absoluteUrl, siteConfig } from "@/lib/utils";
 import {
