@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/page-header";
 import { ArticleCard } from "@/components/pieces/article-card";
-import { JsonLd } from "@/lib/seo";
+import { JsonLd, authorPersonJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { getAuthorBySlug } from "@/lib/pieces";
 import { prisma } from "@/lib/prisma";
 import { T } from "@/components/i18n/t";
@@ -54,7 +54,7 @@ export async function generateMetadata(props: RouteProps): Promise<Metadata> {
     return {
       title: author.nameBn,
       description,
-      alternates: { canonical: `/authors/${author.slug}` },
+      alternates: { canonical: absoluteUrl(`/authors/${author.slug}`) },
       openGraph: {
         type: "profile",
         title: author.nameBn,
@@ -83,16 +83,12 @@ export default async function AuthorPage(props: RouteProps) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+      <JsonLd data={authorPersonJsonLd(author)} />
       <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "Person",
-          name: author.nameBn,
-          alternateName: author.nameEn || undefined,
-          description: author.bioBn || undefined,
-          image: author.portrait || undefined,
-          url: absoluteUrl(`/authors/${author.slug}`),
-        }}
+        data={breadcrumbJsonLd([
+          { name: "লেখক", path: "/archive" },
+          { name: author.nameBn, path: `/authors/${author.slug}` },
+        ])}
       />
 
       <header className="border-b border-rule pb-8 pt-12 sm:pt-16">

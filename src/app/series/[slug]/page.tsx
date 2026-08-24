@@ -7,7 +7,8 @@ import { piecePath } from "@/lib/nav";
 import { Count, LocalDate, Num, Reading } from "@/components/i18n/values";
 import { EditorialImage } from "@/components/pieces/editorial-image";
 import { Play, BookOpen, Layers } from "lucide-react";
-import { withTimeout } from "@/lib/utils";
+import { absoluteUrl, withTimeout } from "@/lib/utils";
+import { JsonLd, seriesJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -45,7 +46,7 @@ export async function generateMetadata(props: RouteProps): Promise<Metadata> {
     return {
       title: `${series.titleBn} — সিরিজ`,
       description: series.descBn ?? undefined,
-      alternates: { canonical: `/series/${series.slug}` },
+      alternates: { canonical: absoluteUrl(`/series/${series.slug}`) },
     };
   } catch {
     return { title: "পাওয়া গেল না" };
@@ -68,6 +69,21 @@ export default async function SeriesPage(props: RouteProps) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+      <JsonLd
+        data={seriesJsonLd({
+          slug: series.slug,
+          titleBn: series.titleBn,
+          descriptionBn: series.descBn,
+          coverImage: series.coverImage,
+          pieces: series.pieces,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "ধারাবাহিক", path: "/series" },
+          { name: series.titleBn, path: `/series/${series.slug}` },
+        ])}
+      />
       <SeriesTracker
         seriesId={series.id}
         seriesName={series.titleBn}

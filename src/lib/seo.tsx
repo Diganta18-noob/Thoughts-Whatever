@@ -80,16 +80,26 @@ export function articleJsonLd(piece: SeoPiece) {
     alternativeHeadline: piece.titleEn || piece.subtitleBn || undefined,
     description:
       piece.seoDescription || piece.dekBn || piece.excerptBn || undefined,
-    inLanguage: "bn",
+    inLanguage: "bn-IN",
     image: shareImage(piece),
     datePublished: toIsoString(piece.publishedAt),
     dateModified: toIsoString(piece.updatedAt ?? piece.publishedAt),
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
-    author: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
+    author: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: siteConfig.url,
+      sameAs: [siteConfig.instagram].filter(Boolean),
+    },
     publisher: {
       "@type": "Organization",
       name: siteConfig.name,
       url: siteConfig.url,
+      logo: {
+        "@type": "ImageObject",
+        url: absoluteUrl("/brand/logo-full.svg"),
+      },
+      sameAs: [siteConfig.instagram].filter(Boolean),
     },
     about: piece.authors?.map((a) => ({ "@type": "Person", name: a.nameBn })),
     keywords: piece.tags?.map((t) => t.labelBn).join(", ") || undefined,
@@ -112,19 +122,37 @@ export function breadcrumbJsonLd(
   };
 }
 
+export function organizationJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: siteConfig.name,
+    alternateName: [siteConfig.nameEn, "t.w"],
+    url: siteConfig.url,
+    logo: absoluteUrl("/brand/logo-full.svg"),
+    sameAs: [siteConfig.instagram].filter(Boolean),
+    description: siteConfig.tagline,
+  };
+}
+
 export function websiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: siteConfig.name,
-    alternateName: siteConfig.nameEn,
+    alternateName: [siteConfig.nameEn, "t.w"],
     url: siteConfig.url,
     description: siteConfig.tagline,
-    inLanguage: "bn",
+    inLanguage: ["bn", "en"],
     publisher: {
       "@type": "Organization",
       name: siteConfig.name,
       url: siteConfig.url,
+      logo: {
+        "@type": "ImageObject",
+        url: absoluteUrl("/brand/logo-full.svg"),
+      },
+      sameAs: [siteConfig.instagram].filter(Boolean),
     },
     potentialAction: {
       "@type": "SearchAction",
@@ -134,6 +162,46 @@ export function websiteJsonLd() {
       },
       "query-input": "required name=search_term_string",
     },
+  };
+}
+
+export function authorPersonJsonLd(author: {
+  slug: string;
+  nameBn: string;
+  nameEn?: string | null;
+  bioBn?: string | null;
+  portrait?: string | null;
+  era?: string | null;
+}) {
+  const url = absoluteUrl(`/authors/${author.slug}`);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: author.nameBn,
+    alternateName: author.nameEn || undefined,
+    description: author.bioBn || undefined,
+    image: author.portrait || undefined,
+    url,
+    mainEntityOfPage: {
+      "@type": "ProfilePage",
+      "@id": url,
+    },
+  };
+}
+
+export function faqJsonLd(faqs: { question: string; answer: string }[]) {
+  if (!faqs || faqs.length === 0) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
   };
 }
 
@@ -165,6 +233,7 @@ export function seriesJsonLd(series: {
       "@type": "Organization",
       name: siteConfig.name,
       url: siteConfig.url,
+      sameAs: [siteConfig.instagram].filter(Boolean),
     },
     hasPart: {
       "@type": "ItemList",
@@ -204,6 +273,7 @@ export function itemListJsonLd(
 }
 
 export function JsonLd({ data }: { data: unknown }) {
+  if (!data) return null;
   return (
     <script
       type="application/ld+json"
@@ -213,3 +283,4 @@ export function JsonLd({ data }: { data: unknown }) {
     />
   );
 }
+

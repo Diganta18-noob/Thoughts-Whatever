@@ -16,6 +16,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { PublicChrome } from "@/components/layout/public-chrome";
 import { siteConfig, absoluteUrl } from "@/lib/utils";
+import { JsonLd, websiteJsonLd, organizationJsonLd } from "@/lib/seo";
 
 /* ─── Type ────────────────────────────────────────────────────
    Real weights are loaded for every face that is ever set bold.
@@ -154,6 +155,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <ThemeScript />
+        <JsonLd data={websiteJsonLd()} />
+        <JsonLd data={organizationJsonLd()} />
       </head>
       <body className="flex min-h-screen flex-col">
         <a

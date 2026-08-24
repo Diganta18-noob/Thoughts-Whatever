@@ -41,7 +41,7 @@ export default async function StagingPreviewPage({ params }: PreviewPageProps) {
           <ShieldAlert className="h-10 w-10 text-rose-600 mx-auto" />
           <h1 className="font-serif text-xl text-content">Invalid Preview Link</h1>
           <p className="text-xs text-content-soft">
-            This staging preview link is either invalid or has been revoked. Please request a fresh preview link from the Editor's Room.
+            This staging preview link is either invalid or has been revoked. Please request a fresh preview link from the Editor&apos;s Room.
           </p>
           <Link
             href="/admin/pieces"
