@@ -8,7 +8,9 @@ import { Count, LocalDate, Num, Reading } from "@/components/i18n/values";
 import { EditorialImage } from "@/components/pieces/editorial-image";
 import { Play, BookOpen, Layers } from "lucide-react";
 import { absoluteUrl, withTimeout } from "@/lib/utils";
-import { JsonLd, seriesJsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { JsonLd, seriesJsonLd, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
+import { SERIES_ENHANCEMENTS } from "@/lib/series-enhancements";
+import { SeriesEnhancementsView } from "@/components/series/series-enhancements-view";
 
 export const revalidate = 300;
 
@@ -36,17 +38,33 @@ type RouteProps = {
 export async function generateMetadata(props: RouteProps): Promise<Metadata> {
   const params = await props?.params;
   const rawSlug = params?.slug || "";
+  const decoded = decodeSlug(rawSlug);
   try {
     const series = await withTimeout(
-      getSeriesBySlug(decodeSlug(rawSlug)),
+      getSeriesBySlug(decoded),
       null,
       8000,
     );
     if (!series) return { title: "পাওয়া গেল না" };
+
+    const enhancement = SERIES_ENHANCEMENTS[decoded] || SERIES_ENHANCEMENTS[series.slug];
+    const description =
+      series.descBn ||
+      (enhancement
+        ? `${series.titleBn} — ${enhancement.englishTitle}. সম্পূর্ণ তথ্যচিত্র, চরিত্র বিশ্লেষণ ও ঐতিহাসিক পটভূমি।`
+        : undefined);
+
     return {
-      title: `${series.titleBn} — সিরিজ`,
-      description: series.descBn ?? undefined,
+      title: `${series.titleBn} — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ`,
+      description,
       alternates: { canonical: absoluteUrl(`/series/${series.slug}`) },
+      openGraph: {
+        type: "article",
+        title: `${series.titleBn} — Thoughts Whatever`,
+        description,
+        url: absoluteUrl(`/series/${series.slug}`),
+        siteName: "Thoughts Whatever",
+      },
     };
   } catch {
     return { title: "পাওয়া গেল না" };
@@ -58,8 +76,11 @@ import { SeriesTracker } from "@/components/analytics/series-tracker";
 export default async function SeriesPage(props: RouteProps) {
   const params = await props?.params;
   const rawSlug = params?.slug || "";
-  const series = await getSeriesBySlug(decodeSlug(rawSlug));
+  const decoded = decodeSlug(rawSlug);
+  const series = await getSeriesBySlug(decoded);
   if (!series) notFound();
+
+  const enhancement = SERIES_ENHANCEMENTS[decoded] || SERIES_ENHANCEMENTS[series.slug] || null;
 
   const totalReadingMinutes = series.pieces.reduce(
     (acc, p) => acc + (p.readingMinutes || 0),
@@ -84,6 +105,7 @@ export default async function SeriesPage(props: RouteProps) {
           { name: series.titleBn, path: `/series/${series.slug}` },
         ])}
       />
+      {enhancement && <JsonLd data={faqJsonLd(enhancement.faqs)} />}
       <SeriesTracker
         seriesId={series.id}
         seriesName={series.titleBn}
@@ -188,6 +210,9 @@ export default async function SeriesPage(props: RouteProps) {
           ))}
         </ol>
       </div>
+
+      {/* Deep-dive Historical & Critical Enhancements */}
+      {enhancement && <SeriesEnhancementsView enhancement={enhancement} />}
     </div>
   );
 }
