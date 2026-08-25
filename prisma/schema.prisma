@@ -308,6 +308,9 @@ model Subscriber {
 enum AdminRole {
   SUPER_ADMIN
   ADMIN
+  SEO_MANAGER
+  CONTENT_WRITER
+  OUTREACH_MANAGER
   EDITOR
   AUTHOR
   ANALYST
@@ -669,5 +672,659 @@ model ContentRelationship {
   @@index([targetId])
 }
 
+// ═══════════════════════════════════════════════════════════════
+// ─── SEO Growth Engine (Organic Backlinks & SEO Automation) ────
+// ═══════════════════════════════════════════════════════════════
 
+model Website {
+  id              String   @id @default(cuid())
+  name            String
+  domain          String   @unique
+  homepageUrl     String
+  niche           String   // e.g. "Technology, AI, Literature, Development"
+  targetCountry   String   @default("US") // e.g. "US", "IN", "GLOBAL"
+  targetLanguage  String   @default("en") // e.g. "en", "bn"
+  gscConnected    Boolean  @default(false)
+  gaConnected     Boolean  @default(false)
+  isDefault       Boolean  @default(false)
+  favicon         String?
+  settings        Json?    // Optional custom website configuration
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
+  integrations          WebsiteIntegration[]
+  pages                 WebsitePage[]
+  keywords              Keyword[]
+  backlinkOpportunities BacklinkOpportunity[]
+  competitors           Competitor[]
+  brokenLinks           BrokenLinkOpportunity[]
+  brandMentions         BrandMention[]
+  campaigns             OutreachCampaign[]
+  monitoredBacklinks    MonitoredBacklink[]
+  contentAssets         ContentAsset[]
+  contentBriefs         ContentBrief[]
+  internalLinks         InternalLinkSuggestion[]
+  seoIssues             TechnicalSEOIssue[]
+  tasks                 SEOTask[]
+  reports               SEOReport[]
+  aiConversations       AIChatConversation[]
+
+  @@index([domain])
+  @@index([isDefault])
+  @@index([createdAt])
+}
+
+enum IntegrationProvider {
+  GOOGLE_SEARCH_CONSOLE
+  GOOGLE_ANALYTICS
+  AHREFS
+  SEMRUSH
+  MOZ
+  DATAFORSEO
+  OPENAI
+  RESEND
+  SMTP
+}
+
+enum IntegrationStatus {
+  CONNECTED
+  DISCONNECTED
+  ERROR
+  REQUIRES_CONFIG
+}
+
+model WebsiteIntegration {
+  id          String              @id @default(cuid())
+  websiteId   String
+  website     Website             @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  provider    IntegrationProvider
+  status      IntegrationStatus   @default(DISCONNECTED)
+  config      Json?               // Store encrypted/safe metadata or tokens
+  lastSyncAt  DateTime?
+  error       String?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@unique([websiteId, provider])
+  @@index([websiteId])
+  @@index([provider])
+}
+
+model WebsitePage {
+  id                 String   @id @default(cuid())
+  websiteId          String
+  website            Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  url                String
+  path               String
+  title              String?
+  statusCode         Int      @default(200)
+  wordCount          Int      @default(0)
+  internalLinksCount Int      @default(0)
+  externalLinksCount Int      @default(0)
+  organicTraffic     Int      @default(0)
+  lastCrawledAt      DateTime?
+  status             String   @default("ACTIVE") // "ACTIVE" | "REDIRECT" | "404" | "ARCHIVED"
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([websiteId, url])
+  @@index([websiteId, path])
+  @@index([status])
+}
+
+enum SearchIntent {
+  INFORMATIONAL
+  COMMERCIAL
+  TRANSACTIONAL
+  NAVIGATIONAL
+}
+
+model Keyword {
+  id               String       @id @default(cuid())
+  websiteId        String
+  website          Website      @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  keyword          String
+  targetUrl        String?
+  country          String       @default("US")
+  searchEngine     String       @default("google")
+  currentPosition  Float?
+  previousPosition Float?
+  bestPosition     Float?
+  searchVolume     Int          @default(0)
+  difficulty       Int          @default(0) // 0-100
+  intent           SearchIntent @default(INFORMATIONAL)
+  tags             String[]
+  status           String       @default("TRACKING") // "TRACKING" | "PAUSED" | "OPPORTUNITY"
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  rankings         KeywordRanking[]
+
+  @@unique([websiteId, keyword, country, searchEngine])
+  @@index([websiteId, currentPosition])
+  @@index([difficulty])
+}
+
+model KeywordRanking {
+  id        String   @id @default(cuid())
+  keywordId String
+  keyword   Keyword  @relation(fields: [keywordId], references: [id], onDelete: Cascade)
+  position  Float
+  url       String?
+  recordedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  @@index([keywordId, recordedAt])
+}
+
+enum OpportunityType {
+  RESOURCE_PAGE
+  GUEST_POST
+  BROKEN_LINK
+  UNLINKED_BRAND_MENTION
+  COMPETITOR_BACKLINK
+  PODCAST
+  INTERVIEW
+  DIGITAL_PR
+  DIRECTORY
+  COMMUNITY
+  PARTNERSHIP
+  SCHOLARSHIP
+  TOOL_LISTING
+}
+
+enum OpportunityStatus {
+  NEW
+  RESEARCHING
+  QUALIFIED
+  CONTACT_FOUND
+  READY_FOR_OUTREACH
+  CONTACTED
+  FOLLOW_UP_1
+  FOLLOW_UP_2
+  REPLIED
+  NEGOTIATING
+  WON
+  REJECTED
+  LOST
+  ARCHIVED
+}
+
+enum PriorityLevel {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum AIRecommendation {
+  PURSUE
+  MAYBE
+  SKIP
+}
+
+model BacklinkOpportunity {
+  id                String            @id @default(cuid())
+  websiteId         String
+  website           Website           @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteName       String
+  domain            String
+  url               String
+  opportunityType   OpportunityType   @default(RESOURCE_PAGE)
+  contactName       String?
+  contactEmail      String?
+  domainAuthority   Int               @default(0) // 0-100
+  domainRating      Int               @default(0) // 0-100 (Ahrefs style DR)
+  trafficEstimate   Int               @default(0)
+  spamScore         Int               @default(0) // 0-100
+  topicalRelevance  Int               @default(0) // 0-100
+  country           String            @default("US")
+  language          String            @default("en")
+  status            OpportunityStatus @default(NEW)
+  priority          PriorityLevel     @default(MEDIUM)
+  overallScore      Int               @default(0) // 0-100 calculated score
+  aiRecommendation  AIRecommendation  @default(MAYBE)
+  aiReasoning       String?
+  suggestedAngle    String?
+  targetContentUrl  String?
+  notes             String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  contacts          OpportunityContact[]
+  campaignProspects CampaignProspect[]
+
+  @@index([websiteId, status])
+  @@index([websiteId, overallScore])
+  @@index([domain])
+  @@index([opportunityType])
+}
+
+model OpportunityContact {
+  id            String              @id @default(cuid())
+  opportunityId String
+  opportunity   BacklinkOpportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  name          String
+  email         String?
+  role          String?             // e.g. "Editor", "Author", "Founder", "Content Lead"
+  linkedinUrl   String?
+  twitterUrl    String?
+  status        String              @default("ACTIVE")
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@index([opportunityId])
+}
+
+model Competitor {
+  id                    String             @id @default(cuid())
+  websiteId             String
+  website               Website            @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  name                  String
+  domain                String
+  organicTraffic        Int                @default(0)
+  backlinksCount        Int                @default(0)
+  referringDomainsCount Int                @default(0)
+  topKeywordsCount      Int                @default(0)
+  notes                 String?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+
+  metrics               CompetitorMetric[]
+
+  @@unique([websiteId, domain])
+  @@index([websiteId])
+}
+
+model CompetitorMetric {
+  id                    String     @id @default(cuid())
+  competitorId          String
+  competitor            Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  organicTraffic        Int        @default(0)
+  backlinksCount        Int        @default(0)
+  referringDomainsCount Int        @default(0)
+  recordedAt            DateTime   @default(now())
+  createdAt             DateTime   @default(now())
+
+  @@index([competitorId, recordedAt])
+}
+
+enum BrokenLinkStatus {
+  NEW
+  DRAFTED
+  CONTACTED
+  RESOLVED
+  IGNORED
+}
+
+model BrokenLinkOpportunity {
+  id                       String           @id @default(cuid())
+  websiteId                String
+  website                  Website          @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  sourceWebsite            String
+  sourcePageUrl            String
+  brokenLinkUrl            String
+  brokenAnchorText         String?
+  topic                    String?
+  suggestedReplacementPage String?
+  status                   BrokenLinkStatus @default(NEW)
+  notes                    String?
+  createdAt                DateTime         @default(now())
+  updatedAt                DateTime         @updatedAt
+
+  @@index([websiteId, status])
+  @@index([sourceWebsite])
+}
+
+enum MentionLinkStatus {
+  LINKED
+  UNLINKED
+  PENDING
+  CONTACTED
+  CONVERTED
+}
+
+model BrandMention {
+  id            String            @id @default(cuid())
+  websiteId     String
+  website       Website           @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  mentionSource String
+  pageUrl       String
+  mentionText   String
+  author        String?
+  publication   String?
+  dateFound     DateTime          @default(now())
+  linkStatus    MentionLinkStatus @default(UNLINKED)
+  notes         String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([websiteId, linkStatus])
+}
+
+enum CampaignType {
+  GUEST_POST
+  RESOURCE_LINK
+  BROKEN_LINK
+  BRAND_MENTION
+  DIGITAL_PR
+  PARTNERSHIP
+  LINKABLE_ASSET_PROMOTION
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+model OutreachCampaign {
+  id               String             @id @default(cuid())
+  websiteId        String
+  website          Website            @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  name             String
+  objective        String?
+  targetContentUrl String?
+  targetAudience   String?
+  campaignType     CampaignType       @default(GUEST_POST)
+  status           CampaignStatus     @default(DRAFT)
+  startDate        DateTime           @default(now())
+  endDate          DateTime?
+  autoFollowUp     Boolean            @default(false)
+  settings         Json?              // { followUpDays: [5, 12, 20], requiresApproval: true }
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  prospects        CampaignProspect[]
+
+  @@index([websiteId, status])
+}
+
+enum ProspectStage {
+  PROSPECT
+  QUALIFIED
+  CONTACT_FOUND
+  EMAIL_DRAFTED
+  SENT
+  FOLLOW_UP
+  REPLIED
+  NEGOTIATION
+  LINK_ACQUIRED
+  REJECTED
+}
+
+model CampaignProspect {
+  id             String               @id @default(cuid())
+  campaignId     String
+  campaign       OutreachCampaign     @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  opportunityId  String?
+  opportunity    BacklinkOpportunity? @relation(fields: [opportunityId], references: [id], onDelete: SetNull)
+  contactName    String?
+  contactEmail   String?
+  websiteDomain  String
+  targetUrl      String?
+  stage          ProspectStage        @default(PROSPECT)
+  emailSubject   String?
+  emailBody      String?
+  approvalStatus String               @default("DRAFT") // "DRAFT" | "APPROVED" | "REJECTED"
+  lastSentAt     DateTime?
+  nextFollowUpAt DateTime?
+  notes          String?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  messages       OutreachMessage[]
+
+  @@index([campaignId, stage])
+  @@index([websiteDomain])
+}
+
+model OutreachMessage {
+  id          String           @id @default(cuid())
+  prospectId  String
+  prospect    CampaignProspect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
+  stepNumber  Int              @default(0) // 0: Initial, 1: Follow-up 1, etc.
+  type        String           @default("INITIAL") // "INITIAL" | "FOLLOW_UP_1" | "FOLLOW_UP_2" | "FINAL"
+  subject     String
+  body        String
+  sentAt      DateTime?
+  deliveredAt DateTime?
+  openedAt    DateTime?
+  repliedAt   DateTime?
+  status      String           @default("DRAFT") // "DRAFT" | "QUEUED" | "SENT" | "FAILED"
+  createdAt   DateTime         @default(now())
+
+  @@index([prospectId, stepNumber])
+}
+
+enum BacklinkStatus {
+  ACTIVE
+  LOST
+  REDIRECTED
+  NOFOLLOW
+  ERROR
+}
+
+enum BacklinkRiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model MonitoredBacklink {
+  id              String            @id @default(cuid())
+  websiteId       String
+  website         Website           @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  referringDomain String
+  sourceUrl       String
+  targetUrl       String
+  anchorText      String
+  linkType        String            @default("EDITORIAL") // "EDITORIAL" | "GUEST_POST" | "RESOURCE" | "DIRECTORY"
+  isFollow        Boolean           @default(true)
+  status          BacklinkStatus    @default(ACTIVE)
+  riskLevel       BacklinkRiskLevel @default(LOW)
+  domainAuthority Int               @default(0)
+  trafficEstimate Int               @default(0)
+  firstDetectedAt DateTime          @default(now())
+  lastCheckedAt   DateTime          @default(now())
+  notes           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  checks          BacklinkCheck[]
+
+  @@unique([websiteId, sourceUrl, targetUrl])
+  @@index([websiteId, status])
+  @@index([websiteId, riskLevel])
+  @@index([referringDomain])
+  @@index([lastCheckedAt])
+}
+
+model BacklinkCheck {
+  id            String            @id @default(cuid())
+  backlinkId    String
+  backlink      MonitoredBacklink @relation(fields: [backlinkId], references: [id], onDelete: Cascade)
+  statusCode    Int               @default(200)
+  foundOnPage   Boolean           @default(true)
+  anchorMatched Boolean           @default(true)
+  isFollow      Boolean           @default(true)
+  checkedAt     DateTime          @default(now())
+  message       String?
+  createdAt     DateTime          @default(now())
+
+  @@index([backlinkId, checkedAt])
+}
+
+enum ContentAssetType {
+  ULTIMATE_GUIDE
+  ORIGINAL_RESEARCH
+  STATISTICS_PAGE
+  FREE_TOOL
+  CALCULATOR
+  TEMPLATE
+  CHECKLIST
+  CASE_STUDY
+  INDUSTRY_REPORT
+  COMPARISON
+  INTERACTIVE_TOOL
+  DATA_VIZ
+  INFOGRAPHIC
+}
+
+model ContentAsset {
+  id                    String           @id @default(cuid())
+  websiteId             String
+  website               Website          @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  title                 String
+  assetType             ContentAssetType @default(ULTIMATE_GUIDE)
+  targetKeyword         String
+  searchIntent          SearchIntent     @default(INFORMATIONAL)
+  targetAudience        String?
+  linkAttractionReason  String?
+  potentialLinkSources  String[]
+  uniqueAngle           String?
+  contentOutline        Json?            // Structured section outlines
+  requiredResearch      String?
+  estimatedDifficulty   String           @default("Medium") // "Low" | "Medium" | "High"
+  status                String           @default("IDEA") // "IDEA" | "PLANNED" | "IN_PROGRESS" | "PUBLISHED" | "PROMOTED"
+  assetUrl              String?
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  @@index([websiteId, status])
+  @@index([assetType])
+}
+
+model ContentBrief {
+  id                         String   @id @default(cuid())
+  websiteId                  String
+  website                    Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  title                      String
+  primaryKeyword             String
+  secondaryKeywords          String[]
+  targetAudience             String?
+  searchIntent               SearchIntent @default(INFORMATIONAL)
+  seoTitle                   String
+  metaDescription            String
+  urlSlug                    String
+  h1                         String
+  outlineStructure           Json     // Structured headings H2/H3
+  keywordPlacementSuggestions Json?
+  faq                        Json?    // Array of { question, answerSummary }
+  internalLinkingSuggestions Json?    // Array of { pageUrl, anchor }
+  externalSources            Json?    // High authority citation recommendations
+  wordCountEstimate          Int      @default(1500)
+  schemaRecommendation       String?
+  status                     String   @default("DRAFT") // "DRAFT" | "APPROVED" | "IN_WRITING" | "COMPLETED"
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+
+  @@index([websiteId, status])
+}
+
+model InternalLinkSuggestion {
+  id             String        @id @default(cuid())
+  websiteId      String
+  website        Website       @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  sourcePageUrl  String
+  targetPageUrl  String
+  suggestedAnchor String
+  contextText    String?
+  priority       PriorityLevel @default(MEDIUM)
+  status         String        @default("PENDING") // "PENDING" | "APPROVED" | "REJECTED" | "IMPLEMENTED"
+  notes          String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([websiteId, status])
+}
+
+enum IssueSeverity {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+  PASSED
+}
+
+model TechnicalSEOIssue {
+  id             String        @id @default(cuid())
+  websiteId      String
+  website        Website       @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  issueType      String        // e.g. "BROKEN_LINK", "MISSING_H1", "MISSING_ALT", "SLOW_LCP", "NO_CANONICAL"
+  title          String
+  description    String
+  affectedUrl    String
+  whyItMatters   String?
+  recommendedFix String
+  severity       IssueSeverity @default(MEDIUM)
+  status         String        @default("OPEN") // "OPEN" | "IN_PROGRESS" | "RESOLVED" | "IGNORED"
+  lastDetectedAt DateTime      @default(now())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([websiteId, severity, status])
+  @@index([affectedUrl])
+}
+
+model SEOTask {
+  id          String        @id @default(cuid())
+  websiteId   String
+  website     Website       @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  category    String        @default("CONTENT") // "CONTENT" | "TECHNICAL_SEO" | "BACKLINKS" | "OUTREACH" | "RESEARCH"
+  priority    PriorityLevel @default(MEDIUM)
+  status      String        @default("TODO") // "TODO" | "IN_PROGRESS" | "REVIEW" | "COMPLETED"
+  assignedTo  String?
+  dueDate     DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([websiteId, status])
+  @@index([category])
+}
+
+model SEOReport {
+  id              String   @id @default(cuid())
+  websiteId       String
+  website         Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  title           String
+  period          String   @default("WEEKLY") // "WEEKLY" | "MONTHLY" | "QUARTERLY" | "CUSTOM"
+  startDate       DateTime
+  endDate         DateTime
+  metrics         Json     // Snapshot of traffic, keywords, backlinks, referrers
+  summary         String?
+  recommendations Json?
+  generatedAt     DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  @@index([websiteId, period])
+  @@index([generatedAt])
+}
+
+model AIChatConversation {
+  id        String            @id @default(cuid())
+  websiteId String
+  website   Website           @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  title     String            @default("New SEO Discussion")
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  messages  AIChatMessage[]
+
+  @@index([websiteId, createdAt])
+}
+
+model AIChatMessage {
+  id             String             @id @default(cuid())
+  conversationId String
+  conversation   AIChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String             // "user" | "assistant" | "system"
+  content        String
+  metadata       Json?              // e.g. linked entities { entityType: "opportunity", entityId: "xyz" }
+  createdAt      DateTime           @default(now())
+
+  @@index([conversationId, createdAt])
+}

@@ -68,6 +68,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     name: "Intelligence",
     items: [
+      { href: "/admin/seo-engine", label: "SEO Growth Engine", icon: SearchCheck, badge: "PRO" },
       { href: "/admin/editorial-intelligence", label: "Editorial Intelligence", icon: Compass, badge: "AI" },
       { href: "/admin/content-graph", label: "Content Graph", icon: Share2 },
       { href: "/admin/recommendations", label: "Recommendations", icon: Sparkles },

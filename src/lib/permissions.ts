@@ -12,7 +12,18 @@ export type Resource =
   | "export"
   | "notifications"
   | "activity"
-  | "jobs";
+  | "jobs"
+  | "websites"
+  | "seo_strategy"
+  | "keywords"
+  | "backlinks"
+  | "competitors"
+  | "outreach"
+  | "campaigns"
+  | "content_briefs"
+  | "audits"
+  | "tasks"
+  | "reports";
 
 export type Action =
   | "create"
@@ -38,7 +49,22 @@ export const ROLE_LABELS: Record<AdminRole, { labelBn: string; labelEn: string; 
   ADMIN: {
     labelBn: "প্রশাসক",
     labelEn: "Admin",
-    description: "Management access to content, analytics, settings, and team members.",
+    description: "Management access to websites, content, analytics, campaigns, settings, and team members.",
+  },
+  SEO_MANAGER: {
+    labelBn: "এসইও ম্যানেজার",
+    labelEn: "SEO Manager",
+    description: "Manage SEO strategy, keyword tracking, backlink opportunities, competitors, and technical audits.",
+  },
+  CONTENT_WRITER: {
+    labelBn: "বিষয়বস্তু লেখক",
+    labelEn: "Content Writer",
+    description: "Access content strategy, linkable assets, content briefs, articles, and internal linking suggestions.",
+  },
+  OUTREACH_MANAGER: {
+    labelBn: "আউটরিচ ম্যানেজার",
+    labelEn: "Outreach Manager",
+    description: "Manage backlink prospects, contacts, outreach campaigns, email drafts, and follow-up sequences.",
   },
   EDITOR: {
     labelBn: "সম্পাদক",
@@ -53,12 +79,12 @@ export const ROLE_LABELS: Record<AdminRole, { labelBn: string; labelEn: string; 
   ANALYST: {
     labelBn: "বিশ্লেষক",
     labelEn: "Analyst",
-    description: "Access to analytics dashboards, engagement intelligence, and data exports.",
+    description: "Access to analytics dashboards, engagement intelligence, SEO metrics, and data exports.",
   },
   VIEWER: {
     labelBn: "দর্শক",
     labelEn: "Viewer",
-    description: "Read-only access to published content and basic metrics.",
+    description: "Read-only access to published content, backlinks, and basic metrics.",
   },
 };
 
@@ -76,6 +102,17 @@ const ROLE_PERMISSIONS: Record<AdminRole, Array<{ resource: Resource; actions: A
     { resource: "notifications", actions: ["read", "update", "delete", "manage"] },
     { resource: "activity", actions: ["read", "export", "manage"] },
     { resource: "jobs", actions: ["read", "update", "manage"] },
+    { resource: "websites", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "seo_strategy", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "keywords", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "backlinks", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "competitors", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "outreach", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "campaigns", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "content_briefs", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "audits", actions: ["read", "scan", "manage"] },
+    { resource: "tasks", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "reports", actions: ["create", "read", "export", "manage"] },
   ],
   ADMIN: [
     { resource: "content", actions: ["create", "read", "update", "delete", "publish", "export", "manage"] },
@@ -90,6 +127,44 @@ const ROLE_PERMISSIONS: Record<AdminRole, Array<{ resource: Resource; actions: A
     { resource: "notifications", actions: ["read", "update", "delete"] },
     { resource: "activity", actions: ["read", "export"] },
     { resource: "jobs", actions: ["read", "update"] },
+    { resource: "websites", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "seo_strategy", actions: ["create", "read", "update", "manage"] },
+    { resource: "keywords", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "backlinks", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "competitors", actions: ["create", "read", "update", "manage"] },
+    { resource: "outreach", actions: ["create", "read", "update", "manage"] },
+    { resource: "campaigns", actions: ["create", "read", "update", "manage"] },
+    { resource: "content_briefs", actions: ["create", "read", "update", "manage"] },
+    { resource: "audits", actions: ["read", "scan", "manage"] },
+    { resource: "tasks", actions: ["create", "read", "update", "manage"] },
+    { resource: "reports", actions: ["create", "read", "export", "manage"] },
+  ],
+  SEO_MANAGER: [
+    { resource: "websites", actions: ["read", "update"] },
+    { resource: "seo", actions: ["read", "scan", "manage"] },
+    { resource: "seo_strategy", actions: ["create", "read", "update", "manage"] },
+    { resource: "keywords", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "backlinks", actions: ["create", "read", "update", "delete", "manage"] },
+    { resource: "competitors", actions: ["create", "read", "update", "manage"] },
+    { resource: "audits", actions: ["read", "scan", "manage"] },
+    { resource: "tasks", actions: ["create", "read", "update", "manage"] },
+    { resource: "reports", actions: ["create", "read", "export"] },
+    { resource: "analytics", actions: ["read", "export"] },
+    { resource: "content_briefs", actions: ["create", "read", "update"] },
+  ],
+  CONTENT_WRITER: [
+    { resource: "content", actions: ["create", "read", "update"] },
+    { resource: "content_briefs", actions: ["create", "read", "update"] },
+    { resource: "seo_strategy", actions: ["read"] },
+    { resource: "keywords", actions: ["read"] },
+    { resource: "tasks", actions: ["read", "update"] },
+  ],
+  OUTREACH_MANAGER: [
+    { resource: "outreach", actions: ["create", "read", "update", "manage"] },
+    { resource: "campaigns", actions: ["create", "read", "update", "manage"] },
+    { resource: "backlinks", actions: ["read", "update"] },
+    { resource: "tasks", actions: ["create", "read", "update"] },
+    { resource: "reports", actions: ["read"] },
   ],
   EDITOR: [
     { resource: "content", actions: ["create", "read", "update", "publish", "delete", "export"] },
@@ -110,6 +185,9 @@ const ROLE_PERMISSIONS: Record<AdminRole, Array<{ resource: Resource; actions: A
     { resource: "analytics", actions: ["read", "export", "manage"] },
     { resource: "content", actions: ["read"] },
     { resource: "seo", actions: ["read"] },
+    { resource: "backlinks", actions: ["read"] },
+    { resource: "keywords", actions: ["read"] },
+    { resource: "reports", actions: ["create", "read", "export"] },
     { resource: "export", actions: ["create", "read", "export"] },
     { resource: "activity", actions: ["read"] },
     { resource: "notifications", actions: ["read"] },
@@ -117,6 +195,10 @@ const ROLE_PERMISSIONS: Record<AdminRole, Array<{ resource: Resource; actions: A
   VIEWER: [
     { resource: "content", actions: ["read"] },
     { resource: "analytics", actions: ["read"] },
+    { resource: "seo", actions: ["read"] },
+    { resource: "backlinks", actions: ["read"] },
+    { resource: "keywords", actions: ["read"] },
+    { resource: "reports", actions: ["read"] },
     { resource: "activity", actions: ["read"] },
     { resource: "notifications", actions: ["read"] },
   ],
@@ -146,25 +228,34 @@ export function getPermissionsMatrix(): Array<{
   action: Action;
   roles: Record<AdminRole, boolean>;
 }> {
-  const allRoles: AdminRole[] = ["SUPER_ADMIN", "ADMIN", "EDITOR", "AUTHOR", "ANALYST", "VIEWER"];
+  const allRoles: AdminRole[] = [
+    "SUPER_ADMIN",
+    "ADMIN",
+    "SEO_MANAGER",
+    "CONTENT_WRITER",
+    "OUTREACH_MANAGER",
+    "EDITOR",
+    "AUTHOR",
+    "ANALYST",
+    "VIEWER",
+  ];
   const matrix: Array<{ resource: Resource; action: Action; roles: Record<AdminRole, boolean> }> = [];
 
   const checkList: Array<{ resource: Resource; action: Action }> = [
-    { resource: "content", action: "create" },
-    { resource: "content", action: "update" },
+    { resource: "websites", action: "manage" },
+    { resource: "seo_strategy", action: "manage" },
+    { resource: "keywords", action: "manage" },
+    { resource: "backlinks", action: "manage" },
+    { resource: "competitors", action: "manage" },
+    { resource: "outreach", action: "manage" },
+    { resource: "campaigns", action: "manage" },
+    { resource: "content_briefs", action: "manage" },
+    { resource: "audits", action: "scan" },
+    { resource: "tasks", action: "manage" },
+    { resource: "reports", action: "export" },
     { resource: "content", action: "publish" },
-    { resource: "content", action: "delete" },
-    { resource: "media", action: "create" },
-    { resource: "media", action: "delete" },
-    { resource: "analytics", action: "read" },
-    { resource: "analytics", action: "export" },
-    { resource: "seo", action: "scan" },
-    { resource: "users", action: "create" },
     { resource: "users", action: "manage" },
     { resource: "security", action: "manage" },
-    { resource: "system", action: "manage" },
-    { resource: "jobs", action: "manage" },
-    { resource: "settings", action: "update" },
   ];
 
   for (const item of checkList) {
@@ -181,3 +272,4 @@ export function getPermissionsMatrix(): Array<{
 
   return matrix;
 }
+
