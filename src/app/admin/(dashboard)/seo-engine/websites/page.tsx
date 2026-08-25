@@ -230,10 +230,10 @@ export default function WebsitesManagementPage() {
                 <div className="mt-4 grid grid-cols-3 gap-2 rounded-lg bg-surface-raised/40 p-2 text-center text-xs">
                   <div>
                     <span className="block font-mono text-sm font-bold text-content">
-                      {w._count?.monitoredBacklinks || 0}
+                      {w.activeBacklinksCount ?? 0}
                     </span>
                     <span className="font-mono text-[9px] uppercase tracking-wider text-content-faint">
-                      Backlinks
+                      {w.lostBacklinksCount && w.lostBacklinksCount > 0 ? `${w.lostBacklinksCount} Lost` : "Active Links"}
                     </span>
                   </div>
                   <div>
