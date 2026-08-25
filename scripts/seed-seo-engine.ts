@@ -15,8 +15,8 @@ async function main() {
       targetCountry: "IN",
       targetLanguage: "en",
       isDefault: true,
-      gscConnected: true,
-      gaConnected: true,
+      gscConnected: false,
+      gaConnected: false,
     },
     create: {
       name: "Thoughts Whatever",
@@ -26,8 +26,8 @@ async function main() {
       targetCountry: "IN",
       targetLanguage: "en",
       isDefault: true,
-      gscConnected: true,
-      gaConnected: true,
+      gscConnected: false,
+      gaConnected: false,
     },
   });
 

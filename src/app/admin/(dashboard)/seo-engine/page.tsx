@@ -108,7 +108,7 @@ export default function SEODashboardOverviewPage() {
       value: stats?.estimatedTraffic !== null && stats?.estimatedTraffic !== undefined
         ? stats.estimatedTraffic.toLocaleString()
         : "Not Connected",
-      subtext: data?.dataSources.traffic || "Requires Google Analytics / GSC",
+      subtext: stats?.estimatedTraffic ? `Calculated from ${stats.totalKeywords} Tracked Keywords` : "Requires Google Search Console",
       sourceTag: data?.dataSources.isLiveTrafficVerified ? "Verified (GA/GSC)" : stats?.estimatedTraffic ? "SERP Estimated" : "Disconnected",
       icon: TrendingUp,
       color: "text-emerald-500",
@@ -128,7 +128,7 @@ export default function SEODashboardOverviewPage() {
     {
       title: "Referring Domains",
       value: stats ? stats.totalReferringDomains : 0,
-      subtext: "Unique Root Domains",
+      subtext: stats ? `${stats.totalReferringDomains} Unique Root Domains` : "0 Domains",
       sourceTag: "Database Verified",
       icon: Network,
       color: "text-cyan-500",
@@ -138,7 +138,7 @@ export default function SEODashboardOverviewPage() {
     {
       title: "New Backlinks (30d)",
       value: stats ? `+${stats.newBacklinks30d}` : "+0",
-      subtext: "First Detected in Past 30 Days",
+      subtext: "Detected in Past 30 Days",
       sourceTag: "Database Verified",
       icon: PlusCircle,
       color: "text-emerald-600 dark:text-emerald-400",
@@ -158,7 +158,7 @@ export default function SEODashboardOverviewPage() {
     {
       title: "Active Campaigns",
       value: stats ? stats.activeCampaignsCount : 0,
-      subtext: stats ? `${stats.qualifiedOpportunitiesCount} Prospects Qualified` : "0 Campaigns",
+      subtext: stats ? `${stats.qualifiedOpportunitiesCount} Qualified Prospects` : "0 Active Campaigns",
       sourceTag: "Outreach CRM",
       icon: Send,
       color: "text-purple-500",
@@ -168,7 +168,7 @@ export default function SEODashboardOverviewPage() {
     {
       title: "Avg Keyword Position",
       value: stats?.avgKeywordPosition ? `#${stats.avgKeywordPosition}` : "No Data",
-      subtext: stats ? `${stats.totalKeywords} Tracked Keywords` : "Add keywords to track",
+      subtext: stats ? `Across ${stats.totalKeywords} Tracked Keywords` : "Add keywords to track",
       sourceTag: "Database Rank Tracker",
       icon: Target,
       color: "text-indigo-500",
@@ -253,12 +253,16 @@ export default function SEODashboardOverviewPage() {
                 </div>
               </div>
 
-              <div className="mt-3 pt-2 border-t border-rule/60 text-xs">
-                <div className="flex items-center justify-between text-content-soft font-mono text-[10px]">
-                  <span className="truncate max-w-[140px]">{card.subtext}</span>
-                  <span className="rounded bg-surface-raised px-1 py-0.2 text-[9px] text-content-faint">
+              <div className="mt-3 pt-2 border-t border-rule/60 space-y-1">
+                <div className="text-content-soft font-mono text-[11px] truncate">
+                  {card.subtext}
+                </div>
+                <div className="flex items-center justify-between pt-0.5">
+                  <span className="inline-flex items-center gap-1 rounded bg-surface-raised/80 px-1.5 py-0.5 font-mono text-[9px] font-medium text-content-faint border border-rule/50">
+                    <Database className="h-2.5 w-2.5 text-accent" />
                     {card.sourceTag}
                   </span>
+                  <ChevronRight className="h-3 w-3 text-content-faint opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </div>
             </Link>
