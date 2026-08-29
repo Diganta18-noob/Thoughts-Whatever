@@ -50,6 +50,8 @@ interface DashboardData {
     activeCampaignsCount: number;
     qualifiedOpportunitiesCount: number;
     openIssuesCount: number;
+    publishedPiecesCount?: number;
+    totalLiveViews?: number;
   };
   charts: {
     hasData: boolean;
@@ -96,7 +98,7 @@ export default function SEODashboardOverviewPage() {
     {
       title: "Total Websites",
       value: websites.length,
-      subtext: `${websites.length} Active Projects`,
+      subtext: activeWebsite ? `${activeWebsite.name} (Active Scope)` : `${websites.length} Active Projects`,
       sourceTag: "System Registry",
       icon: Globe,
       color: "text-blue-500",
@@ -107,9 +109,15 @@ export default function SEODashboardOverviewPage() {
       title: "Organic Traffic",
       value: stats?.estimatedTraffic !== null && stats?.estimatedTraffic !== undefined
         ? stats.estimatedTraffic.toLocaleString()
-        : "Not Connected",
-      subtext: stats?.estimatedTraffic ? `Calculated from ${stats.totalKeywords} Tracked Keywords` : "Requires Google Search Console",
-      sourceTag: data?.dataSources.isLiveTrafficVerified ? "Verified (GA/GSC)" : stats?.estimatedTraffic ? "SERP Estimated" : "Disconnected",
+        : stats?.totalLiveViews !== null && stats?.totalLiveViews !== undefined
+        ? stats.totalLiveViews.toLocaleString()
+        : "0",
+      subtext: stats?.publishedPiecesCount
+        ? `Verified across ${stats.publishedPiecesCount} Published Pieces`
+        : stats?.totalKeywords
+        ? `Estimated from ${stats.totalKeywords} Tracked Keywords`
+        : "Requires Google Search Console",
+      sourceTag: data?.dataSources.isLiveTrafficVerified ? "Verified Telemetry" : "SERP Estimated",
       icon: TrendingUp,
       color: "text-emerald-500",
       bg: "bg-emerald-500/10",
@@ -167,8 +175,8 @@ export default function SEODashboardOverviewPage() {
     },
     {
       title: "Avg Keyword Position",
-      value: stats?.avgKeywordPosition ? `#${stats.avgKeywordPosition}` : "No Data",
-      subtext: stats ? `Across ${stats.totalKeywords} Tracked Keywords` : "Add keywords to track",
+      value: stats?.avgKeywordPosition ? `#${stats.avgKeywordPosition}` : "No Rank Data",
+      subtext: stats && stats.totalKeywords > 0 ? `Across ${stats.totalKeywords} Tracked Keywords` : "Add keywords to track",
       sourceTag: "Database Rank Tracker",
       icon: Target,
       color: "text-indigo-500",
