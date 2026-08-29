@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+import { toast, confirmToast } from "@/lib/toast";
+
 export default function WebsitesManagementPage() {
   const { websites, activeWebsiteId, setActiveWebsiteId, refreshWebsites, isLoading } = useSEOWebsite();
   const [modalOpen, setModalOpen] = useState(false);
@@ -82,6 +84,7 @@ export default function WebsitesManagementPage() {
           const err = await res.json();
           throw new Error(err.error || "Failed to update website");
         }
+        toast.success(`"${formData.name}" updated successfully.`);
       } else {
         const res = await fetch("/api/admin/seo-engine/websites", {
           method: "POST",
@@ -92,33 +95,43 @@ export default function WebsitesManagementPage() {
           const err = await res.json();
           throw new Error(err.error || "Failed to create website");
         }
+        toast.success(`"${formData.name}" added successfully.`);
       }
       await refreshWebsites();
       setModalOpen(false);
     } catch (err: any) {
       setErrorMessage(err.message);
+      toast.error(err.message || "Failed to save website");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"? All associated SEO tracking data will be removed.`)) {
-      return;
-    }
-
-    try {
-      const res = await fetch(`/api/admin/seo-engine/websites/${id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Failed to delete website");
+  const handleDelete = (id: string, name: string) => {
+    confirmToast(
+      `This will remove all associated SEO data for "${name}".`,
+      async () => {
+        try {
+          const res = await fetch(`/api/admin/seo-engine/websites/${id}`, {
+            method: "DELETE",
+          });
+          if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || `Failed to delete "${name}".`);
+          }
+          await refreshWebsites();
+          toast.success(`"${name}" deleted successfully.`);
+        } catch (err: any) {
+          toast.error(err.message || `Failed to delete "${name}".`);
+        }
+      },
+      {
+        title: `Delete "${name}"?`,
+        confirmLabel: "Delete",
+        cancelLabel: "Cancel",
+        variant: "danger",
       }
-      await refreshWebsites();
-    } catch (err: any) {
-      alert(err.message);
-    }
+    );
   };
 
   return (

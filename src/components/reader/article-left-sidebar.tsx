@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { BookmarkButton } from "@/components/reader/bookmark-button";
 import { cn } from "@/lib/utils";
+import { toast } from "@/lib/toast";
 
 export interface ArticleLeftSidebarProps {
   headings: { id: string; text: string; level: number }[];
@@ -33,7 +34,7 @@ export function ArticleLeftSidebar({
           <h4 className="label text-[0.6875rem] uppercase tracking-widest text-content-faint">
             On This Page
           </h4>
-          <nav className="space-y-1.5 border-l border-rule/60 pl-3 text-xs">
+          <nav className="space-y-1">
             {headings.map((h) => (
               <a
                 key={h.id}
@@ -47,40 +48,45 @@ export function ArticleLeftSidebar({
                     window.history.replaceState(null, "", `#${h.id}`);
                   }
                 }}
-                className="block text-content-soft transition hover:text-accent font-bengali line-clamp-1 py-0.5"
-                lang="bn"
+                className={cn(
+                  "block truncate text-[0.8125rem] text-content-soft transition hover:text-accent font-sans",
+                  h.level === 3 && "pl-3 text-xs text-content-faint"
+                )}
+                title={h.text}
               >
                 {h.text}
               </a>
             ))}
-
           </nav>
         </div>
       )}
 
-      {/* 2. Series Progress Editorial Widget */}
-      {seriesTitleBn && (
-        <div className="rounded-md border border-rule/40 bg-surface-raised/20 p-4 space-y-2.5">
-          <h4 className="label text-[0.625rem] uppercase tracking-widest text-content-faint">
-            Series Progress
-          </h4>
-          <div className="font-bengali text-xs font-medium text-content" lang="bn">
+      {/* 2. Series Episode Tracker (if applicable) */}
+      {seriesTitleBn && seriesSlug && (
+        <div className="space-y-3 rounded-lg border border-rule/60 bg-surface-raised/30 p-3.5">
+          <span className="font-mono text-[10px] uppercase text-accent font-bold tracking-wider">
+            Series Hub
+          </span>
+          <h4 className="font-serif text-sm font-semibold text-content line-clamp-2">
             {seriesTitleBn}
+          </h4>
+          <div className="flex items-center justify-between text-xs text-content-soft font-mono">
+            <span>
+              Part {currentEpisode} of {totalEpisodes}
+            </span>
           </div>
-          <div className="text-[0.75rem] text-content-soft font-sans flex justify-between items-center">
-            <span>Episode</span>
-            <span className="font-mono text-content">{currentEpisode} / {totalEpisodes}</span>
-          </div>
-          <div className="h-1 w-full overflow-hidden rounded-full bg-rule/40">
+          <div className="h-1 w-full bg-rule/50 rounded-full overflow-hidden">
             <div
-              className="h-full bg-accent/90 transition-all duration-500"
-              style={{ width: `${(currentEpisode / totalEpisodes) * 100}%` }}
+              className="h-full bg-accent transition-all duration-300"
+              style={{
+                width: `${Math.min(100, Math.round((currentEpisode / totalEpisodes) * 100))}%`,
+              }}
             />
           </div>
           {seriesSlug && (
             <Link
               href={`/series/${seriesSlug}`}
-              className="group inline-flex items-center gap-1 text-[0.75rem] text-accent hover:opacity-85 transition pt-1"
+              className="group flex items-center justify-between pt-1 font-mono text-[11px] text-accent hover:underline"
             >
               <span>View Series</span>
               <span className="group-hover:translate-x-0.5 transition-transform">→</span>
@@ -100,7 +106,7 @@ export function ArticleLeftSidebar({
             onClick={() => {
               if (navigator.clipboard) {
                 navigator.clipboard.writeText(window.location.href);
-                alert("Link copied to clipboard!");
+                toast.success("Link copied to clipboard!");
               }
             }}
             title="Copy Link"

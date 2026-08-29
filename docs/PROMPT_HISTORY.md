@@ -274,3 +274,22 @@ Scope: 20+ features across 6 phases covering CMS, Analytics, SEO, Editorial Work
 Design Guardrails: Preserve editorial magazine-inspired aesthetic, warm off-white/cream background, dark charcoal typography, muted rust accent, thin borders, serif headings, uppercase tracking, minimal icons, zero neon/glassmorphism.
 ```
 
+---
+
+## 27. Master Prompt 16 — Global Toast Notification System Refactoring
+```text
+MASTER UI REQUIREMENT — GLOBAL TOAST NOTIFICATION SYSTEM
+
+You must refactor the ENTIRE application so that ALL user-facing alert,
+notification, success, error, warning, info, confirmation, and status
+messages use the application's Toast Notification system.
+
+1. ABSOLUTELY NO BROWSER ALERTS (alert, confirm, prompt, window.*)
+2. NO SWEETALERT / MODAL ALERTS
+3. EVERYTHING SHOULD USE TOASTS (success, error, warning, info, confirm)
+4. CENTRALIZED TOAST API (react-hot-toast + custom extension)
+5. DESTRUCTIVE ACTIONS use non-blocking toast confirmation flow with Cancel / Delete actions
+6. SINGLE GLOBAL TOAST PROVIDER at Root Layout level
+```
+
+

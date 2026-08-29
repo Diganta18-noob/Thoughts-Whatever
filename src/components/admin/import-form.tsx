@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Loader2, Upload, FileSpreadsheet, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "@/components/providers/language-provider";
+import { toast } from "@/lib/toast";
 
 interface ParsedRow {
   kind?: "RACHANA" | "BLOG" | "DOCUMENTARY";
@@ -92,6 +93,7 @@ export function ImportForm() {
     if (parsedRows.length === 0 || importing) return;
     setImporting(true);
     setResultMessage("");
+    toast.loading(`Importing ${parsedRows.length} articles...`, { id: "import-toast" });
 
     try {
       const res = await fetch("/api/admin/import", {
@@ -101,14 +103,20 @@ export function ImportForm() {
       });
       const data = await res.json();
       if (res.ok && data.ok) {
-        setResultMessage(t("admin.import.success", { count: data.importedCount }));
+        const msg = t("admin.import.success", { count: data.importedCount });
+        setResultMessage(msg);
+        toast.success(msg, { id: "import-toast" });
         setRawCSV("");
         setParsedRows([]);
       } else {
-        setResultMessage(data.error || t("letter.msg.failed"));
+        const err = data.error || t("letter.msg.failed");
+        setResultMessage(err);
+        toast.error(err, { id: "import-toast" });
       }
     } catch {
-      setResultMessage(t("letter.msg.network"));
+      const err = t("letter.msg.network");
+      setResultMessage(err);
+      toast.error(err, { id: "import-toast" });
     } finally {
       setImporting(false);
     }

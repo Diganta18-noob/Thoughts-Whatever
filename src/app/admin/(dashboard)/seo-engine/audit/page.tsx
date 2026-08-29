@@ -19,6 +19,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "@/lib/toast";
 import type { SiteAuditSummary, AuditIssue } from "@/lib/seo-engine/audit-scanner";
 
 export default function TechnicalSEOAuditPage() {
@@ -42,6 +43,7 @@ export default function TechnicalSEOAuditPage() {
       }
     } catch (err) {
       console.error("Failed to load site audit:", err);
+      toast.error("Failed to load site audit data");
     } finally {
       setLoading(false);
     }
@@ -55,6 +57,7 @@ export default function TechnicalSEOAuditPage() {
     if (!activeWebsiteId || scanning) return;
     try {
       setScanning(true);
+      toast.loading("Running comprehensive technical site audit...", { id: "audit-run" });
       const res = await fetch("/api/admin/seo-engine/audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,9 +66,14 @@ export default function TechnicalSEOAuditPage() {
       if (res.ok) {
         const json = await res.json();
         setAudit(json.audit);
+        toast.success(`Audit completed! Health score: ${json.audit?.healthScore || 100}/100`, { id: "audit-run" });
+      } else {
+        const err = await res.json().catch(() => ({}));
+        toast.error(err.error || "Audit scan failed", { id: "audit-run" });
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Audit run error:", err);
+      toast.error(err.message || "Network error during site audit", { id: "audit-run" });
     } finally {
       setScanning(false);
     }
@@ -88,9 +96,13 @@ export default function TechnicalSEOAuditPage() {
         if (selectedIssue && selectedIssue.id === issueId) {
           setSelectedIssue({ ...selectedIssue, status: newStatus });
         }
+        toast.success(`Issue marked as ${newStatus.replace("_", " ").toLowerCase()}`);
+      } else {
+        toast.error("Failed to update issue status");
       }
     } catch (err) {
       console.error("Failed to update issue status:", err);
+      toast.error("Network error updating issue");
     }
   };
 

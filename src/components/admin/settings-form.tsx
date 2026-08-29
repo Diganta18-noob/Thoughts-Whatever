@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Loader2, Download, Key, UserPlus, Globe } from "lucide-react";
 import { useLanguage, useTranslation } from "@/components/providers/language-provider";
+import { toast } from "@/lib/toast";
 
 interface AdminUserItem {
   id: string;
@@ -48,14 +49,20 @@ export function SettingsForm({ adminUsers, currentAdminEmail }: SettingsFormProp
       });
       const data = await res.json();
       if (res.ok && data.ok) {
-        setPasswordNotice(t("admin.settings.passwordSuccess"));
+        const msg = t("admin.settings.passwordSuccess");
+        setPasswordNotice(msg);
+        toast.success(msg);
         setCurrentPassword("");
         setNewPassword("");
       } else {
-        setPasswordNotice(data.error || t("admin.settings.passwordError"));
+        const err = data.error || t("admin.settings.passwordError");
+        setPasswordNotice(err);
+        toast.error(err);
       }
     } catch {
-      setPasswordNotice(t("letter.msg.network"));
+      const err = t("letter.msg.network");
+      setPasswordNotice(err);
+      toast.error(err);
     } finally {
       setPasswordBusy(false);
     }
@@ -79,15 +86,21 @@ export function SettingsForm({ adminUsers, currentAdminEmail }: SettingsFormProp
       });
       const data = await res.json();
       if (res.ok && data.ok) {
-        setAdminNotice(t("admin.settings.addAdminSuccess"));
+        const msg = t("admin.settings.addAdminSuccess");
+        setAdminNotice(msg);
+        toast.success(msg);
         setNewAdminEmail("");
         setNewAdminName("");
         setNewAdminPassword("");
       } else {
-        setAdminNotice(data.error || t("admin.settings.addAdminError"));
+        const err = data.error || t("admin.settings.addAdminError");
+        setAdminNotice(err);
+        toast.error(err);
       }
     } catch {
-      setAdminNotice(t("letter.msg.network"));
+      const err = t("letter.msg.network");
+      setAdminNotice(err);
+      toast.error(err);
     } finally {
       setAdminBusy(false);
     }
