@@ -27,7 +27,7 @@ async function runMasterPipeline() {
   let newOrChangedCount = 0;
   const filesToTrack: string[] = [];
 
-  // Check Series Content
+  // Check Series Content in contextDir
   if (fs.existsSync(contextDir)) {
     const seriesFolders = fs.readdirSync(contextDir, { withFileTypes: true }).filter((d) => d.isDirectory());
     for (const folder of seriesFolders) {
@@ -35,6 +35,26 @@ async function runMasterPipeline() {
       const files = fs.readdirSync(folderPath).filter((f) => (f.endsWith(".txt") || f.endsWith(".md")) && !f.endsWith(".social.md"));
       for (const f of files) {
         const fullPath = path.join(folderPath, f);
+        filesToTrack.push(fullPath);
+        if (isForce || hasFileChanged(fullPath, manifest)) {
+          newOrChangedCount++;
+        }
+      }
+    }
+  }
+
+  // Check any additional series folders at root of Content/
+  const ignoredRootDirs = new Set(["context", "thumnail", "thumbnail", "docs", "solo", "archive", "temp"]);
+  const rootDirs = fs
+    .readdirSync(path.join(process.cwd(), "Content"), { withFileTypes: true })
+    .filter((d) => d.isDirectory() && !ignoredRootDirs.has(d.name.toLowerCase()));
+
+  for (const rDir of rootDirs) {
+    const rPath = path.join(process.cwd(), "Content", rDir.name);
+    const files = fs.readdirSync(rPath).filter((f) => (f.endsWith(".txt") || f.endsWith(".md")) && !f.endsWith(".social.md"));
+    for (const f of files) {
+      const fullPath = path.join(rPath, f);
+      if (!filesToTrack.includes(fullPath)) {
         filesToTrack.push(fullPath);
         if (isForce || hasFileChanged(fullPath, manifest)) {
           newOrChangedCount++;

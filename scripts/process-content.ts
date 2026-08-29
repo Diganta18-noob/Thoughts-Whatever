@@ -35,11 +35,12 @@ if (cloudName && apiKey && apiSecret) {
  * Compress image using sharp (1600px width max WebP) then upload to Cloudinary CDN.
  * Fallback to lightweight WebP Data URI if Cloudinary is unavailable.
  */
-async function uploadImage(imagePath: string, folderName = "thoughts-whatever"): Promise<string | null> {
+async function uploadImage(imagePath: string, folderName = "thoughts-whatever"): Promise<{ url: string; width: number; height: number } | null> {
   if (!fs.existsSync(imagePath)) return null;
 
   try {
     const rawBuffer = fs.readFileSync(imagePath);
+    const metadata = await sharp(rawBuffer).metadata();
     // Compress to optimized WebP buffer first
     const optimizedBuffer = await sharp(rawBuffer)
       .resize({ width: 1600, withoutEnlargement: true })
@@ -55,13 +56,21 @@ async function uploadImage(imagePath: string, folderName = "thoughts-whatever"):
           folder: folderName,
           transformation: [{ width: 1600, crop: "limit" }, { quality: "auto:good" }, { fetch_format: "auto" }],
         });
-        return result.secure_url;
+        return {
+          url: result.secure_url,
+          width: result.width || metadata.width || 1200,
+          height: result.height || metadata.height || 630,
+        };
       } catch (err) {
         console.warn("  ⚠️ Cloudinary upload failed, using optimized WebP Data URI fallback:", err);
       }
     }
 
-    return dataUri;
+    return {
+      url: dataUri,
+      width: metadata.width || 1200,
+      height: metadata.height || 630,
+    };
   } catch (err) {
     console.error("  ❌ Failed processing image with sharp:", err);
     return null;
@@ -125,7 +134,18 @@ async function findAuthorForSeries(seriesTitle: string) {
     return await prisma.author.findFirst({ where: { slug: "রবীন্দ্রনাথ-ঠাকুর" } });
   }
   if (title.includes("আনন্দমঠ") || title.includes("anandamath")) {
-    return await prisma.author.findFirst({ where: { slug: "বঙ্কিমচন্দ্র-চট্টোপাধ্যায়" } });
+    let author = await prisma.author.findFirst({ where: { slug: "বঙ্কিমচন্দ্র-চট্টোপাধ্যায়" } });
+    if (!author) {
+      author = await prisma.author.create({
+        data: {
+          nameBn: "বঙ্কিমচন্দ্র চট্টোপাধ্যায়",
+          nameEn: "Bankim Chandra Chattopadhyay",
+          slug: "বঙ্কিমচন্দ্র-চট্টোপাধ্যায়",
+          bioBn: "বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ ঔপন্যাসিক ও আধুনিক বাংলা সাহিত্যের পথিকৃৎ।",
+        },
+      });
+    }
+    return author;
   }
   if (title.includes("নীলদর্পণ") || title.includes("nildarpan") || title.includes("dinabandhu") || title.includes("দীনবন্ধু")) {
     let author = await prisma.author.findFirst({ where: { slug: "দীনবন্ধু-মিত্র" } });
@@ -155,8 +175,111 @@ async function findAuthorForSeries(seriesTitle: string) {
     }
     return author;
   }
-  if (title.includes("crime") || title.includes("dostoevsky")) {
-    return await prisma.author.findFirst({ where: { slug: "fyodor-dostoevsky" } });
+  if (title.includes("পথের দাবী") || title.includes("pather dabi") || title.includes("শরৎচন্দ্র") || title.includes("sarat")) {
+    let author = await prisma.author.findFirst({ where: { slug: "শরৎচন্দ্র-চট্টোপাধ্যায়" } });
+    if (!author) {
+      author = await prisma.author.create({
+        data: {
+          nameBn: "শরৎচন্দ্র চট্টোপাধ্যায়",
+          nameEn: "Sarat Chandra Chattopadhyay",
+          slug: "শরৎচন্দ্র-চট্টোপাধ্যায়",
+          bioBn: "বাংলা কথাসাহিত্যের অপরাজেয় কথাশিল্পী ও কালজয়ী ঔপন্যাসিক।",
+        },
+      });
+    }
+    return author;
+  }
+  if (title.includes("crime") || title.includes("dostoevsky") || title.includes("punishment")) {
+    let author = await prisma.author.findFirst({ where: { slug: "fyodor-dostoevsky" } });
+    if (!author) {
+      author = await prisma.author.create({
+        data: {
+          nameBn: "ফিওদর দস্তয়েভস্কি",
+          nameEn: "Fyodor Dostoevsky",
+          slug: "fyodor-dostoevsky",
+          bioBn: "Russian novelist, short story writer, essayist, and philosopher.",
+        },
+      });
+    }
+    return author;
+  }
+  return null;
+}
+
+async function findAuthorForSolo(titleBn: string) {
+  const t = titleBn.toLowerCase();
+  if (t.includes("ঘরে-বাইরে") || t.includes("রক্তকরবী")) {
+    return await prisma.author.findFirst({ where: { slug: "রবীন্দ্রনাথ-ঠাকুর" } });
+  }
+  if (t.includes("কপালকুন্ডলা") || t.includes("কপালকুণ্ডলা")) {
+    let a = await prisma.author.findFirst({ where: { slug: "বঙ্কিমচন্দ্র-চট্টোপাধ্যায়" } });
+    if (!a) {
+      a = await prisma.author.create({
+        data: {
+          nameBn: "বঙ্কিমচন্দ্র চট্টোপাধ্যায়",
+          nameEn: "Bankim Chandra Chattopadhyay",
+          slug: "বঙ্কিমচন্দ্র-চট্টোপাধ্যায়",
+          bioBn: "বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ ঔপন্যাসিক ও আধুনিক বাংলা সাহিত্যের পথিকৃৎ।",
+        },
+      });
+    }
+    return a;
+  }
+  if (t.includes("দেবী")) {
+    let a = await prisma.author.findFirst({ where: { slug: "শরৎচন্দ্র-চট্টোপাধ্যায়" } });
+    if (!a) {
+      a = await prisma.author.create({
+        data: {
+          nameBn: "শরৎচন্দ্র চট্টোপাধ্যায়",
+          nameEn: "Sarat Chandra Chattopadhyay",
+          slug: "শরৎচন্দ্র-চট্টোপাধ্যায়",
+          bioBn: "বাংলা কথাসাহিত্যের অপরাজেয় কথাশিল্পী ও কালজয়ী ঔপন্যাসিক।",
+        },
+      });
+    }
+    return a;
+  }
+  if (t.includes("পদ্মা নদীর মাঝি")) {
+    let a = await prisma.author.findFirst({ where: { slug: "মানিক-বন্দ্যোপাধ্যায়" } });
+    if (!a) {
+      a = await prisma.author.create({
+        data: {
+          nameBn: "মানিক বন্দ্যোপাধ্যায়",
+          nameEn: "Manik Bandyopadhyay",
+          slug: "মানিক-বন্দ্যোপাধ্যায়",
+          bioBn: "আধুনিক বাংলা কথাসাহিত্যের অন্যতম প্রধান ঔপন্যাসিক ও বাস্তববাদী কথাসাহিত্যিক।",
+        },
+      });
+    }
+    return a;
+  }
+  if (t.includes("frankenstein") || t.includes("ফ্রাঙ্কেনস্টাইন")) {
+    let a = await prisma.author.findFirst({ where: { slug: "mary-shelley" } });
+    if (!a) {
+      a = await prisma.author.create({
+        data: {
+          nameBn: "মেরি শেলি",
+          nameEn: "Mary Shelley",
+          slug: "mary-shelley",
+          bioBn: "English novelist best known for her iconic Gothic masterpiece Frankenstein.",
+        },
+      });
+    }
+    return a;
+  }
+  if (t.includes("ক্ষুদিরাম")) {
+    let a = await prisma.author.findFirst({ where: { slug: "পীতাম্বর-দাস" } });
+    if (!a) {
+      a = await prisma.author.create({
+        data: {
+          nameBn: "পীতাম্বর দাস",
+          nameEn: "Pitambar Das",
+          slug: "পীতাম্বর-দাস",
+          bioBn: "কালজয়ী দেশাত্মবোধক গান 'একবার বিদায় দে মা ঘুরে আসি'-র রচয়িতা ও চারণকবি।",
+        },
+      });
+    }
+    return a;
   }
   return null;
 }
@@ -173,18 +296,37 @@ async function main() {
     process.exit(1);
   }
 
-  const seriesFolders = fs
-    .readdirSync(contextBaseDir, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
+  const seriesFolderSet = new Set<string>();
+  if (fs.existsSync(contextBaseDir)) {
+    fs.readdirSync(contextBaseDir, { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .forEach((d) => seriesFolderSet.add(d.name));
+  }
+
+  const ignoredRootDirs = new Set(["context", "thumnail", "thumbnail", "docs", "solo", "archive", "temp"]);
+  const rootDirs = fs
+    .readdirSync(contentBaseDir, { withFileTypes: true })
+    .filter((d) => d.isDirectory() && !ignoredRootDirs.has(d.name.toLowerCase()));
+
+  for (const rDir of rootDirs) {
+    const matched = Array.from(seriesFolderSet).find((f) => f.toLowerCase() === rDir.name.toLowerCase());
+    if (!matched) {
+      seriesFolderSet.add(rDir.name);
+    }
+  }
+
+  const seriesFolders = Array.from(seriesFolderSet);
 
   if (seriesFolders.length === 0) {
-    console.log("ℹ️ No series folders found inside Content/context/");
+    console.log("ℹ️ No series folders found inside Content/context/ or Content/");
     process.exit(0);
   }
 
   for (const folderName of seriesFolders) {
-    const contextSeriesDir = path.join(contextBaseDir, folderName);
+    const contextSeriesDir = fs.existsSync(path.join(contextBaseDir, folderName))
+      ? path.join(contextBaseDir, folderName)
+      : path.join(contentBaseDir, folderName);
+
     let thumbnailSeriesDir = path.join(thumbnailBaseDir, folderName);
     if (!fs.existsSync(thumbnailSeriesDir)) {
       const cleanName = folderName.replace(/\s*-\s*[^\n]+$/i, "").replace(/\s*Series\s*$/i, "").trim();
@@ -227,7 +369,7 @@ async function main() {
       const seriesCoverPath = findThumbnail(thumbnailSeriesDir, cleanSeriesTitle) ||
         findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} 1`) ||
         findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} cover`);
-      const seriesCoverUrl = seriesCoverPath ? await uploadImage(seriesCoverPath, "series-covers") : null;
+      const seriesCover = seriesCoverPath ? await uploadImage(seriesCoverPath, "series-covers") : null;
 
       series = await prisma.series.create({
         data: {
@@ -235,7 +377,7 @@ async function main() {
           titleBn: cleanSeriesTitle,
           titleEn: seriesAiMeta.titleEn,
           descBn: seriesAiMeta.descBn,
-          coverImage: seriesCoverUrl,
+          coverImage: seriesCover?.url,
         },
       });
       console.log(`  ✅ Series Created: ID ${series.id} (slug: ${series.slug})`);
@@ -246,11 +388,11 @@ async function main() {
           findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} 1`) ||
           findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} cover`);
         if (seriesCoverPath) {
-          const seriesCoverUrl = await uploadImage(seriesCoverPath, "series-covers");
-          if (seriesCoverUrl) {
+          const seriesCover = await uploadImage(seriesCoverPath, "series-covers");
+          if (seriesCover) {
             series = await prisma.series.update({
               where: { id: series.id },
-              data: { coverImage: seriesCoverUrl },
+              data: { coverImage: seriesCover.url },
             });
             console.log(`  🖼️ Updated Series cover image for ${series.titleBn}`);
           }
@@ -274,11 +416,11 @@ async function main() {
 
       console.log(`  🎨 STEP 2: Inspecting & Locating Thumbnail...`);
       const thumbnailPath = findThumbnail(thumbnailSeriesDir, fileBaseName);
-      let coverImageUrl: string | null = null;
+      let coverImageRes: { url: string; width: number; height: number } | null = null;
 
       if (thumbnailPath) {
         console.log(`    Found thumbnail: ${path.basename(thumbnailPath)}`);
-        coverImageUrl = await uploadImage(thumbnailPath, `episodes/${seriesSlug}`);
+        coverImageRes = await uploadImage(thumbnailPath, `episodes/${seriesSlug}`);
       } else {
         console.warn(`    ⚠️ Thumbnail not found for ${fileBaseName} in ${thumbnailSeriesDir}`);
       }
@@ -357,11 +499,13 @@ async function main() {
             titleEn: epAiMeta.titleEn,
             bodyBn: formattedBody,
             excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
-            coverImage: coverImageUrl || existingPiece.coverImage,
+            coverImage: coverImageRes?.url || existingPiece.coverImage,
+            coverImageWidth: coverImageRes?.width || existingPiece.coverImageWidth,
+            coverImageHeight: coverImageRes?.height || existingPiece.coverImageHeight,
             readingMinutes: readingMins,
             featured: true, // Show on landing page
             seoDescription: epAiMeta.seoDescription,
-            ogImage: coverImageUrl || existingPiece.coverImage,
+            ogImage: coverImageRes?.url || existingPiece.ogImage,
             publishedAt: existingPiece.publishedAt || publishedAt,
             seriesId: series.id,
             seriesOrder: episodeNumber,
@@ -380,11 +524,13 @@ async function main() {
             titleEn: epAiMeta.titleEn,
             bodyBn: formattedBody,
             excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
-            coverImage: coverImageUrl,
+            coverImage: coverImageRes?.url,
+            coverImageWidth: coverImageRes?.width,
+            coverImageHeight: coverImageRes?.height,
             readingMinutes: readingMins,
             featured: true, // Show on landing page
             seoDescription: epAiMeta.seoDescription,
-            ogImage: coverImageUrl,
+            ogImage: coverImageRes?.url,
             publishedAt,
             seriesId: series.id,
             seriesOrder: episodeNumber,
@@ -454,7 +600,7 @@ async function main() {
       const epAiMeta = await generateEpisodeMetadata(titleBn, titleBn, formattedBody, 1);
 
       const coverPath = findThumbnail(soloThumbnailDir, titleBn);
-      const coverImageUrl = coverPath ? await uploadImage(coverPath, "piece-covers") : null;
+      const coverImageRes = coverPath ? await uploadImage(coverPath, "piece-covers") : null;
 
       const readingMins = readingMinutes(formattedBody);
 
@@ -471,9 +617,7 @@ async function main() {
         }
       }
 
-      // Check for Tagore author
-      const tagoreAuthor = await prisma.author.findFirst({ where: { slug: "রবীন্দ্রনাথ-ঠাকুর" } });
-
+      const soloAuthor = await findAuthorForSolo(titleBn);
       const existingPiece = await prisma.piece.findUnique({ where: { slug }, include: { authors: true } });
 
       const pieceData = {
@@ -481,14 +625,16 @@ async function main() {
         titleEn: epAiMeta.titleEn,
         bodyBn: formattedBody,
         excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
-        coverImage: coverImageUrl || existingPiece?.coverImage,
+        coverImage: coverImageRes?.url || existingPiece?.coverImage,
+        coverImageWidth: coverImageRes?.width || existingPiece?.coverImageWidth,
+        coverImageHeight: coverImageRes?.height || existingPiece?.coverImageHeight,
         readingMinutes: readingMins,
         featured: true,
         seoDescription: epAiMeta.seoDescription,
-        ogImage: coverImageUrl || existingPiece?.ogImage,
+        ogImage: coverImageRes?.url || existingPiece?.ogImage,
         publishedAt: existingPiece?.publishedAt || new Date(),
         tags: { connect: tagIds.map((id) => ({ id })) },
-        authors: existingPiece?.authors ? undefined : (tagoreAuthor ? { connect: [{ id: tagoreAuthor.id }] } : undefined),
+        authors: soloAuthor ? { connect: [{ id: soloAuthor.id }] } : undefined,
       };
 
       if (existingPiece) {
@@ -499,12 +645,15 @@ async function main() {
             titleEn: epAiMeta.titleEn,
             bodyBn: formattedBody,
             excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
-            coverImage: coverImageUrl || existingPiece.coverImage,
+            coverImage: coverImageRes?.url || existingPiece.coverImage,
+            coverImageWidth: coverImageRes?.width || existingPiece.coverImageWidth,
+            coverImageHeight: coverImageRes?.height || existingPiece.coverImageHeight,
             readingMinutes: readingMins,
             featured: true,
             seoDescription: epAiMeta.seoDescription,
-            ogImage: coverImageUrl || existingPiece.ogImage,
+            ogImage: coverImageRes?.url || existingPiece.ogImage,
             kind: PieceKind.DOCUMENTARY,
+            authors: soloAuthor ? { set: [{ id: soloAuthor.id }] } : undefined,
           },
         });
         console.log(`  🔄 Updated Solo Article: "${titleBn}"`);
