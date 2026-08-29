@@ -31,6 +31,46 @@ if (cloudName && apiKey && apiSecret) {
   });
 }
 
+const KNOWN_REEL_METADATA: Record<string, { reelUrl: string; publishedAt: string }> = {
+  // Pather Dabi
+  "পথের-দাবি-1": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcB46f2uwfN/", publishedAt: "2026-08-14T00:00:00.000Z" },
+  "পথের-দাবী-1": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcB46f2uwfN/", publishedAt: "2026-08-14T00:00:00.000Z" },
+  "পথের-দাবি-2": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcD08q1gNlp/", publishedAt: "2026-08-15T00:00:00.000Z" },
+  "পথের-দাবী-2": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcD08q1gNlp/", publishedAt: "2026-08-15T00:00:00.000Z" },
+  "পথের-দাবি-3": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcGXn3NA0OL/", publishedAt: "2026-08-16T00:00:00.000Z" },
+  "পথের-দাবী-3": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcGXn3NA0OL/", publishedAt: "2026-08-16T00:00:00.000Z" },
+
+  // Nildarpan
+  "নীলদর্পণ-1": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Dbvu34ShwC4/", publishedAt: "2026-08-07T00:00:00.000Z" },
+  "নীলদর্পণ-2": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Dbx9lAngmrd/", publishedAt: "2026-08-08T00:00:00.000Z" },
+  "নীলদর্পণ-3": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db0OSW4AlG5/", publishedAt: "2026-08-09T00:00:00.000Z" },
+
+  // Chokher Bali
+  "চোখের-বালি-1": { reelUrl: "https://www.instagram.com/reel/DbdTwFZg-lO/", publishedAt: "2026-07-31T00:00:00.000Z" },
+  "চোখের-বালি-2": { reelUrl: "https://www.instagram.com/reel/DbfnmrGgT9r/", publishedAt: "2026-08-01T00:00:00.000Z" },
+  "চোখের-বালি-3": { reelUrl: "https://www.instagram.com/reel/DbisO90A4Ue/", publishedAt: "2026-08-02T00:00:00.000Z" },
+
+  // Anandamath
+  "আনন্দমঠ-1": { reelUrl: "https://www.instagram.com/reel/DbLdluTAjdQ/", publishedAt: "2026-07-24T00:00:00.000Z" },
+  "আনন্দমঠ-2": { reelUrl: "https://www.instagram.com/reel/DbN0VN-A5CQ/", publishedAt: "2026-07-25T00:00:00.000Z" },
+  "আনন্দমঠ-3": { reelUrl: "https://www.instagram.com/reel/DbQbrhnAzSq/", publishedAt: "2026-07-26T00:00:00.000Z" },
+
+  // Crime and Punishment
+  "crime-and-punishment-1": { reelUrl: "https://www.instagram.com/reel/DbEI_jtTXwB/", publishedAt: "2026-07-21T00:00:00.000Z" },
+  "crime-and-punishment-2": { reelUrl: "https://www.instagram.com/reel/DbEsky0TM4x/", publishedAt: "2026-07-22T00:00:00.000Z" },
+  "crime-and-punishment-3": { reelUrl: "https://www.instagram.com/reel/DbFdwblgEXF/", publishedAt: "2026-07-22T00:00:00.000Z" },
+
+  // Solos
+  "রক্তকরবী": { reelUrl: "https://www.instagram.com/reel/DbDwCbkgfYw/", publishedAt: "2026-07-21T00:00:00.000Z" },
+  "দেবী": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DbTEHQPA5u3/", publishedAt: "2026-07-27T00:00:00.000Z" },
+  "ঘরে-বাইরে": { reelUrl: "https://www.instagram.com/reel/DbVdKYygFzu/", publishedAt: "2026-07-28T00:00:00.000Z" },
+  "কপালকুণ্ডলা": { reelUrl: "https://www.instagram.com/reel/DbYKScqAyXg/", publishedAt: "2026-07-29T00:00:00.000Z" },
+  "কপালকুন্ডলা": { reelUrl: "https://www.instagram.com/reel/DbYKScqAyXg/", publishedAt: "2026-07-29T00:00:00.000Z" },
+  "পদ্মা-নদীর-মাঝি": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DbnWzEngeuK/", publishedAt: "2026-08-04T00:00:00.000Z" },
+  "frankenstein": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Dbqe-LmACcl/", publishedAt: "2026-08-05T00:00:00.000Z" },
+  "ক্ষুদিরাম-বসু": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db5q8YKAjQc/", publishedAt: "2026-08-11T00:00:00.000Z" },
+};
+
 /**
  * Compress image using sharp (1600px width max WebP) then upload to Cloudinary CDN.
  * Fallback to lightweight WebP Data URI if Cloudinary is unavailable.
@@ -472,7 +512,6 @@ async function main() {
       }
 
       const author = await findAuthorForSeries(cleanSeriesTitle);
-      const publishedAt = new Date();
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://thoughts-whatever.vercel.app";
       const fullUrl = `${baseUrl}/writing/${pieceSlug}`;
 
@@ -485,6 +524,10 @@ async function main() {
           ],
         },
       });
+
+      const known = KNOWN_REEL_METADATA[pieceSlug] || KNOWN_REEL_METADATA[formattedTitleBn] || KNOWN_REEL_METADATA[fileBaseName];
+      const reelUrl = known?.reelUrl || existingPiece?.reelUrl;
+      const targetPublishedAt = known ? new Date(known.publishedAt) : (existingPiece?.publishedAt || new Date());
 
       let piece;
       if (existingPiece) {
@@ -506,7 +549,8 @@ async function main() {
             featured: true, // Show on landing page
             seoDescription: epAiMeta.seoDescription,
             ogImage: coverImageRes?.url || existingPiece.ogImage,
-            publishedAt: existingPiece.publishedAt || publishedAt,
+            reelUrl,
+            publishedAt: targetPublishedAt,
             seriesId: series.id,
             seriesOrder: episodeNumber,
             tags: { set: tagIds.map((id) => ({ id })) },
@@ -531,7 +575,8 @@ async function main() {
             featured: true, // Show on landing page
             seoDescription: epAiMeta.seoDescription,
             ogImage: coverImageRes?.url,
-            publishedAt,
+            reelUrl,
+            publishedAt: targetPublishedAt,
             seriesId: series.id,
             seriesOrder: episodeNumber,
             tags: { connect: tagIds.map((id) => ({ id })) },
@@ -620,6 +665,10 @@ async function main() {
       const soloAuthor = await findAuthorForSolo(titleBn);
       const existingPiece = await prisma.piece.findUnique({ where: { slug }, include: { authors: true } });
 
+      const knownSolo = KNOWN_REEL_METADATA[slug] || KNOWN_REEL_METADATA[titleBn];
+      const soloReelUrl = knownSolo?.reelUrl || existingPiece?.reelUrl;
+      const soloPublishedAt = knownSolo ? new Date(knownSolo.publishedAt) : (existingPiece?.publishedAt || new Date());
+
       const pieceData = {
         titleBn,
         titleEn: epAiMeta.titleEn,
@@ -632,7 +681,8 @@ async function main() {
         featured: true,
         seoDescription: epAiMeta.seoDescription,
         ogImage: coverImageRes?.url || existingPiece?.ogImage,
-        publishedAt: existingPiece?.publishedAt || new Date(),
+        reelUrl: soloReelUrl,
+        publishedAt: soloPublishedAt,
         tags: { connect: tagIds.map((id) => ({ id })) },
         authors: soloAuthor ? { connect: [{ id: soloAuthor.id }] } : undefined,
       };
@@ -652,6 +702,8 @@ async function main() {
             featured: true,
             seoDescription: epAiMeta.seoDescription,
             ogImage: coverImageRes?.url || existingPiece.ogImage,
+            reelUrl: soloReelUrl,
+            publishedAt: soloPublishedAt,
             kind: PieceKind.DOCUMENTARY,
             authors: soloAuthor ? { set: [{ id: soloAuthor.id }] } : undefined,
           },

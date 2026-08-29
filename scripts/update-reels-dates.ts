@@ -239,6 +239,39 @@ async function main() {
       reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db5q8YKAjQc/",
       authorName: "পীতাম্বর দাস",
     },
+
+    // 19. পথের দাবি - পর্ব-১ (August 14)
+    {
+      match: (p: any) =>
+        (p.slug.includes("pather-dabi") || p.slug.includes("পথের-দাবি") || p.slug.includes("পথের-দাবী") || p.titleBn.includes("পথের দাবি") || p.titleBn.includes("পথের দাবী")) &&
+        (p.seriesOrder === 1 || p.slug.endsWith("1") || (!p.seriesOrder && !p.slug.includes("2") && !p.slug.includes("3") && !p.slug.includes("পর্ব"))),
+      titleBn: "পথের দাবি | পর্ব-১",
+      publishedAt: new Date("2026-08-14T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcB46f2uwfN/",
+      authorName: "শরৎচন্দ্র চট্টোপাধ্যায়",
+    },
+
+    // 20. পথের দাবি - পর্ব -২ (August 15)
+    {
+      match: (p: any) =>
+        (p.slug.includes("pather-dabi") || p.slug.includes("পথের-দাবি") || p.slug.includes("পথের-দাবী") || p.titleBn.includes("পথের দাবি") || p.titleBn.includes("পথের দাবী")) &&
+        (p.seriesOrder === 2 || p.slug.endsWith("2") || p.titleBn.includes("পর্ব - ২") || p.titleBn.includes("পর্ব-২") || p.titleBn.includes("পর্ব -২")),
+      titleBn: "পথের দাবি | পর্ব-২",
+      publishedAt: new Date("2026-08-15T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcD08q1gNlp/",
+      authorName: "শরৎচন্দ্র চট্টোপাধ্যায়",
+    },
+
+    // 21. পথের দাবী অন্তিম পর্ব (August 16)
+    {
+      match: (p: any) =>
+        (p.slug.includes("pather-dabi") || p.slug.includes("পথের-দাবি") || p.slug.includes("পথের-দাবী") || p.titleBn.includes("পথের দাবি") || p.titleBn.includes("পথের দাবী")) &&
+        (p.seriesOrder === 3 || p.slug.endsWith("3") || p.titleBn.includes("অন্তিম") || p.slug.includes("final") || p.slug.includes("last")),
+      titleBn: "পথের দাবী | অন্তিম পর্ব",
+      publishedAt: new Date("2026-08-16T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcGXn3NA0OL/",
+      authorName: "শরৎচন্দ্র চট্টোপাধ্যায়",
+    },
   ];
 
   console.log("\n=======================================================");
