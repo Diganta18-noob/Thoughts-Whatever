@@ -158,12 +158,12 @@ function SupportingEditorialItem({
         {/* Narrative Details */}
         <div className="mt-4 flex-1 flex flex-col justify-between">
           <div>
-            <h4
+            <h3
               className="font-bengali text-lg sm:text-xl font-medium leading-snug text-content tracking-tight transition-colors duration-200 group-hover:text-accent line-clamp-2"
               lang="bn"
             >
               {piece.titleBn}
-            </h4>
+            </h3>
 
             {piece.dekBn && (
               <p

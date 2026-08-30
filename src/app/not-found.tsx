@@ -1,13 +1,21 @@
 import Link from "next/link";
-import { PRIMARY_NAV } from "@/lib/nav";
+import { PRIMARY_NAV, SECONDARY_NAV } from "@/lib/nav";
 import { T } from "@/components/i18n/t";
 import { NavLabel } from "@/components/i18n/nav-label";
 
 export default function NotFound() {
+  const recoveryLinks = [
+    { href: "/", labelEn: "Home", labelBn: "মূল পাতা" },
+    ...PRIMARY_NAV,
+    ...SECONDARY_NAV,
+    { href: "/sitemap.xml", labelEn: "Sitemap", labelBn: "সাইটম্যাপ" },
+    { href: "/llms.txt", labelEn: "Agent Guide (llms.txt)", labelBn: "এজেন্ট গাইড" },
+  ];
+
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-measure text-center">
-        <T k="notFound.code" className="label" bnClassName="font-bengali-sans" />
+        <span className="label font-bengali-sans text-accent font-semibold tracking-widest">404</span>
         <T
           as="h1"
           k="notFound.title"
@@ -21,8 +29,12 @@ export default function NotFound() {
           bnClassName="font-bengali"
         />
 
-        <nav className="mt-9 flex flex-wrap justify-center gap-2">
-          {PRIMARY_NAV.map((item) => (
+        <div className="mt-8 text-xs text-content-faint">
+          <p>The requested page does not exist. Useful places to continue / দরকারী লিঙ্ক:</p>
+        </div>
+
+        <nav aria-label="Recovery navigation" className="mt-6 flex flex-wrap justify-center gap-2">
+          {recoveryLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}

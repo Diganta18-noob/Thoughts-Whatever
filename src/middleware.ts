@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { negotiateContentType, isContentNegotiablePath } from "@/lib/content-negotiation";
 
 const ACCESS_COOKIE_NAME = "tw_access";
 const REFRESH_COOKIE_NAME = "tw_refresh";
@@ -82,58 +83,110 @@ export async function middleware(request: NextRequest) {
   const isAdminRoute = pathname.startsWith("/admin");
   const isAdminApiRoute = pathname.startsWith("/api/admin");
 
-  if (!isAdminRoute && !isAdminApiRoute) {
+  if (isAdminRoute || isAdminApiRoute) {
+    const accessToken = request.cookies.get(ACCESS_COOKIE_NAME)?.value;
+    const refreshToken = request.cookies.get(REFRESH_COOKIE_NAME)?.value;
+    const legacyToken = request.cookies.get(LEGACY_COOKIE_NAME)?.value;
+
+    if (!accessToken && !refreshToken && !legacyToken) {
+      if (isAdminApiRoute) {
+        return NextResponse.json(
+          { ok: false, error: "unauthorized", code: 401 },
+          { status: 401 }
+        );
+      }
+
+      const loginUrl = new URL("/admin/login", request.url);
+      if (isSafeInternalPath(pathname)) {
+        loginUrl.searchParams.set("from", pathname);
+      }
+      return NextResponse.redirect(loginUrl);
+    }
+
+    const secret = process.env.AUTH_SECRET || "";
+    let isValid = false;
+
+    if (accessToken && (await verifyJwtHs256(accessToken, secret))) {
+      isValid = true;
+    } else if (refreshToken && (await verifyJwtHs256(refreshToken, secret))) {
+      isValid = true;
+    } else if (legacyToken && (await verifyJwtHs256(legacyToken, secret))) {
+      isValid = true;
+    }
+
+    if (!isValid) {
+      if (isAdminApiRoute) {
+        return NextResponse.json(
+          { ok: false, error: "unauthorized", code: 401 },
+          { status: 401 }
+        );
+      }
+
+      const loginUrl = new URL("/admin/login", request.url);
+      if (isSafeInternalPath(pathname)) {
+        loginUrl.searchParams.set("from", pathname);
+      }
+      return NextResponse.redirect(loginUrl);
+    }
+
     return NextResponse.next();
   }
 
-  const accessToken = request.cookies.get(ACCESS_COOKIE_NAME)?.value;
-  const refreshToken = request.cookies.get(REFRESH_COOKIE_NAME)?.value;
-  const legacyToken = request.cookies.get(LEGACY_COOKIE_NAME)?.value;
+  // 3. Skip RSC and Next.js internal flight requests
+  const isRsc =
+    request.headers.get("rsc") === "1" ||
+    request.headers.has("next-router-state-tree") ||
+    request.headers.has("next-router-prefetch") ||
+    request.nextUrl.searchParams.has("_rsc");
 
-  if (!accessToken && !refreshToken && !legacyToken) {
-    if (isAdminApiRoute) {
-      return NextResponse.json(
-        { ok: false, error: "unauthorized", code: 401 },
-        { status: 401 }
+  if (isRsc) {
+    return NextResponse.next();
+  }
+
+  // 4. Content Negotiation for public canonical routes
+  if (isContentNegotiablePath(pathname)) {
+    const acceptHeader = request.headers.get("accept");
+    const negotiated = negotiateContentType(acceptHeader);
+
+    if (negotiated === "markdown") {
+      const rewriteUrl = new URL("/api/markdown-negotiate", request.url);
+      rewriteUrl.searchParams.set("path", pathname);
+      const response = NextResponse.rewrite(rewriteUrl);
+      response.headers.set("Vary", "Accept");
+      return response;
+    }
+
+    if (negotiated === "not_acceptable") {
+      return new NextResponse(
+        "406 Not Acceptable: The requested representation is not supported. Supported formats: text/html, text/markdown.",
+        {
+          status: 406,
+          headers: {
+            "Content-Type": "text/plain; charset=utf-8",
+            "Vary": "Accept",
+          },
+        }
       );
     }
 
-    const loginUrl = new URL("/admin/login", request.url);
-    if (isSafeInternalPath(pathname)) {
-      loginUrl.searchParams.set("from", pathname);
-    }
-    return NextResponse.redirect(loginUrl);
-  }
-
-  const secret = process.env.AUTH_SECRET || "";
-  let isValid = false;
-
-  if (accessToken && (await verifyJwtHs256(accessToken, secret))) {
-    isValid = true;
-  } else if (refreshToken && (await verifyJwtHs256(refreshToken, secret))) {
-    isValid = true;
-  } else if (legacyToken && (await verifyJwtHs256(legacyToken, secret))) {
-    isValid = true;
-  }
-
-  if (!isValid) {
-    if (isAdminApiRoute) {
-      return NextResponse.json(
-        { ok: false, error: "unauthorized", code: 401 },
-        { status: 401 }
-      );
-    }
-
-    const loginUrl = new URL("/admin/login", request.url);
-    if (isSafeInternalPath(pathname)) {
-      loginUrl.searchParams.set("from", pathname);
-    }
-    return NextResponse.redirect(loginUrl);
+    // Default HTML presentation
+    const response = NextResponse.next();
+    response.headers.set("Vary", "Accept");
+    return response;
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: [
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - static extensions (.svg, .png, .jpg, .jpeg, .gif, .webp, .avif, .ico, .css, .js, .map, .txt, .xml, .webmanifest)
+     */
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|css|js|map|txt|xml|webmanifest)$).*)",
+  ],
 };

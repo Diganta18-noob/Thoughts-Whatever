@@ -127,11 +127,27 @@ export function organizationJsonLd() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: siteConfig.name,
-    alternateName: [siteConfig.nameEn, "t.w"],
+    alternateName: [siteConfig.nameEn, "Thoughts Whatever", "t.w"],
     url: siteConfig.url,
     logo: absoluteUrl("/brand/logo-full.svg"),
+    image: absoluteUrl("/brand/logo-full.svg"),
     sameAs: [siteConfig.instagram].filter(Boolean),
-    description: siteConfig.tagline,
+    description: `${siteConfig.tagline} — ${siteConfig.taglineEn}. An independent publication and archive dedicated to Bengali literature, close reading, and historical documentary.`,
+    knowsAbout: [
+      "Bengali literature",
+      "বাংলা সাহিত্য",
+      "Rabindranath Tagore",
+      "Jibanananda Das",
+      "Kazi Nazrul Islam",
+      "Literary close reading",
+      "Documentary essays",
+    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "editorial inquiry",
+      url: absoluteUrl("/contact"),
+      availableLanguage: ["Bengali", "English", "bn", "en"],
+    },
   };
 }
 
@@ -140,20 +156,11 @@ export function websiteJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: siteConfig.name,
-    alternateName: [siteConfig.nameEn, "t.w"],
+    alternateName: [siteConfig.nameEn, "Thoughts Whatever", "t.w"],
     url: siteConfig.url,
-    description: siteConfig.tagline,
+    description: `${siteConfig.tagline} — ${siteConfig.taglineEn}`,
     inLanguage: ["bn", "en"],
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      url: siteConfig.url,
-      logo: {
-        "@type": "ImageObject",
-        url: absoluteUrl("/brand/logo-full.svg"),
-      },
-      sameAs: [siteConfig.instagram].filter(Boolean),
-    },
+    publisher: organizationJsonLd(),
     potentialAction: {
       "@type": "SearchAction",
       target: {

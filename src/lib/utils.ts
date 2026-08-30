@@ -11,12 +11,12 @@ export const siteConfig = {
   name: process.env.NEXT_PUBLIC_SITE_NAME || "Thoughts Whatever",
   nameBn: "Thoughts Whatever",
   nameEn: "Thoughts Whatever",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.thoughtswhatever.in",
   instagram:
     process.env.NEXT_PUBLIC_INSTAGRAM ||
     "https://www.instagram.com/thoughts.whatever_/",
   tagline: "বাংলা সাহিত্য, পাঠ ও তথ্যচিত্র",
-  taglineEn: "Bengali literature, close reading, and documentary",
+  taglineEn: "Bengali Literature, Reading & Documentary",
 } as const;
 
 /** Absolute URL — needed for OG tags, JSON-LD, and sitemaps. */

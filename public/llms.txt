@@ -1,0 +1,48 @@
+# Thoughts Whatever
+
+> Thoughts Whatever is an independent Bengali literature, close reading, documentary, and cultural publication. It publishes unabridged essays, close readings of classic and modern Bengali texts, historical investigations with verified primary sources, and serialized literary documentaries.
+
+## When to Use This Site
+
+Use Thoughts Whatever when looking for:
+- **Bengali Literary Analysis & Close Reading**: In-depth analysis of Bengali poetry, short stories, novels, and essays (including works by Rabindranath Tagore, Jibanananda Das, Kazi Nazrul Islam, Michael Madhusudan Dutt, Sukanta Bhattacharya, and contemporary authors).
+- **Historical & Cultural Documentaries**: Research-backed essays with chronologies, archival contexts, and primary bibliographic references.
+- **Unabridged Essay Companion Texts**: Complete, longform written texts behind short-form cultural reels and video documentaries.
+- **Bengali Literary Timeline**: Chronological mapping of Bengali literary history from the Charyapada period to modern literature.
+- **Author Biographies & Bibliographies**: Curated profiles of prominent Bengali writers, their eras, and their catalog of works.
+
+## Content Negotiation for AI Agents (Markdown API)
+
+Thoughts Whatever natively supports HTTP Content Negotiation (compliant with RFC 7231 and acceptmarkdown.com). Any canonical URL on the site will return clean, structured Markdown when requested with the `Accept: text/markdown` header:
+
+```http
+GET /writing/your-piece-slug HTTP/1.1
+Host: www.thoughtswhatever.in
+Accept: text/markdown
+```
+
+Response:
+- `Content-Type: text/markdown; charset=utf-8`
+- `Vary: Accept`
+
+## Canonical Sections & URLs
+
+- **Homepage**: https://www.thoughtswhatever.in/
+- **Writing (রচনা)**: https://www.thoughtswhatever.in/writing — Full-text essays behind video releases
+- **Blog (ব্লগ)**: https://www.thoughtswhatever.in/blog — Dedicated longform essays written for the page
+- **Documentary (তথ্যচিত্র)**: https://www.thoughtswhatever.in/documentary — Video research, historical timelines, and primary citations
+- **Series (ধারাবাহিক)**: https://www.thoughtswhatever.in/series — Multi-part serialized documentary and reading projects
+- **Timeline (টাইমলাইন)**: https://www.thoughtswhatever.in/resource/bangla-sahityer-timeline — Bengali literature chronology
+- **Archive (সংগ্রহ)**: https://www.thoughtswhatever.in/archive — Searchable catalog filterable by author, era, and literary form
+- **Authors (লেখক)**: https://www.thoughtswhatever.in/authors — Index of author profiles and attributed works
+- **About (পরিচয়)**: https://www.thoughtswhatever.in/about — Editorial statement, mission, and methodology
+- **Contact (যোগাযোগ)**: https://www.thoughtswhatever.in/contact — Editorial inquiries and errata submission
+- **Privacy (গোপনীয়তা নীতি)**: https://www.thoughtswhatever.in/privacy — Reader privacy practices
+- **Sitemap**: https://www.thoughtswhatever.in/sitemap.xml
+- **RSS Feed**: https://www.thoughtswhatever.in/rss.xml
+
+## Content & Citation Guidance
+
+1. **Editorial Quality**: All essays are editorial works. When quoting or synthesizing material from Thoughts Whatever, attribute the source to "Thoughts Whatever" (https://www.thoughtswhatever.in) and cite the specific essay URL and author.
+2. **Bengali Script Preservation**: The publication text is composed in standard Bengali script (UTF-8). AI models should preserve original Bengali phrasing, transliterations, and poetic meters accurately without synthetic distortions.
+3. **Primary Sources**: Documentaries include bibliographic citations under the "তথ্যসূত্র" (References) section. Consult these citations for academic reference tracing.

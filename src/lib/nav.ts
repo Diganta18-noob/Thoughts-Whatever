@@ -43,6 +43,8 @@ export const SECONDARY_NAV: NavItem[] = [
   { href: "/resource/bangla-sahityer-timeline", labelEn: "Timeline", labelBn: "টাইমলাইন" },
   { href: "/letter", labelEn: "Letter", labelBn: "চিঠি" },
   { href: "/about", labelEn: "About", labelBn: "পরিচয়" },
+  { href: "/contact", labelEn: "Contact", labelBn: "যোগাযোগ" },
+  { href: "/privacy", labelEn: "Privacy", labelBn: "গোপনীয়তা" },
 ];
 
 export const KIND_META = {

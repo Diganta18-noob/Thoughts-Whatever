@@ -70,6 +70,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: url("/series"), lastModified: newest, changeFrequency: "weekly", priority: 0.7 },
     { url: url("/letter"), lastModified: newest, changeFrequency: "monthly", priority: 0.5 },
     { url: url("/about"), lastModified: newest, changeFrequency: "monthly", priority: 0.5 },
+    { url: url("/contact"), lastModified: newest, changeFrequency: "monthly", priority: 0.5 },
+    { url: url("/privacy"), lastModified: newest, changeFrequency: "monthly", priority: 0.5 },
   ];
 
   const pieceRoutes: MetadataRoute.Sitemap = pieces.map((piece) => ({

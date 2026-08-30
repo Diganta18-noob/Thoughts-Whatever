@@ -67,9 +67,13 @@ const nextConfig = {
         ],
       },
       {
-        // Cache directives for public content only, never for /api or /admin routes
+        // Cache directives & content negotiation headers for public content only, never for /api or /admin routes
         source: "/:path((?!api|admin).*)",
         headers: [
+          {
+            key: "Vary",
+            value: "Accept",
+          },
           {
             key: "Cache-Control",
             value: "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
