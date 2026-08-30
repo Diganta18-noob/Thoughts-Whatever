@@ -105,8 +105,8 @@ export const metadata: Metadata = {
     locale: "bn_IN",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
-    description: "রিলের পিছনের সম্পূর্ণ লেখা, ব্লগ ও তথ্যচিত্র।",
+    title: `${siteConfig.name} — ${siteConfig.taglineEn}`,
+    description: "বাংলা সাহিত্য নিয়ে পূর্ণাঙ্গ লেখা, পাঠ-পর্যালোচনা ও তথ্যচিত্র। রিলের পিছনের সম্পূর্ণ রচনা ও গবেষণাপত্র।",
     images: [
       {
         url: absoluteUrl("/brand/logo-full.svg"),

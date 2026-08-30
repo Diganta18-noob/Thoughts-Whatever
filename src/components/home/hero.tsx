@@ -53,8 +53,17 @@ export function Hero() {
           className="mt-6 font-display text-[clamp(2.25rem,7vw,7.5rem)] whitespace-nowrap leading-none text-content tracking-tight max-w-full"
         />
 
+        <Reveal delay={0.35}>
+          <p
+            className="mt-6 max-w-2xl text-sm sm:text-base text-content-soft leading-relaxed font-bengali"
+            lang="bn"
+          >
+            বাংলা সাহিত্য নিয়ে পূর্ণাঙ্গ লেখা, পাঠ-পর্যালোচনা ও তথ্যচিত্র। রিলের পিছনের সম্পূর্ণ রচনা ও গবেষণাপত্র।
+          </p>
+        </Reveal>
+
         <Reveal delay={0.65}>
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-x-3 gap-y-4">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-4">
             {resumeHref && lastRead && (
               <Magnetic>
                 <Link

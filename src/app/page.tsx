@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { Hero } from "@/components/home/hero";
 import { FeaturedSeriesHero } from "@/components/home/featured-series-hero";
 import { FeaturedSeries } from "@/components/home/featured-series";
@@ -11,17 +10,12 @@ import { Authors } from "@/components/home/authors";
 import { Quote } from "@/components/home/quote";
 import { LetterBlock } from "@/components/newsletter/letter-block";
 import {
-  HeroCardSkeleton,
-  SeriesGridSkeleton,
-  EpisodesSkeleton,
-} from "@/components/home/section-skeletons";
-import {
   getFeaturedSeries,
   getRecentPieces,
   getFilterFacets,
 } from "@/lib/pieces";
 import { extractPullQuotes } from "@/lib/markdown";
-import { JsonLd, websiteJsonLd, seriesJsonLd } from "@/lib/seo";
+import { JsonLd, seriesJsonLd } from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -125,7 +119,6 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
-      <JsonLd data={websiteJsonLd()} />
       {leadSeries && <JsonLd data={seriesJsonLd(leadSeries)} />}
 
       <Hero />
@@ -134,29 +127,23 @@ export default async function HomePage() {
         {/* Featured Card (Top) */}
         {primaryGlimpsePiece && (
           <section className="pt-2">
-            <Suspense fallback={<HeroCardSkeleton />}>
-              <FeaturedSeriesHero
-                piece={primaryGlimpsePiece}
-                totalEpisodesInSeries={6}
-                currentEpisodeNumber={6}
-                seriesTitleBn={primaryGlimpsePiece.seriesOrder ? "মেঘনাদবধ কাব্য" : undefined}
-              />
-            </Suspense>
+            <FeaturedSeriesHero
+              piece={primaryGlimpsePiece}
+              totalEpisodesInSeries={6}
+              currentEpisodeNumber={6}
+              seriesTitleBn={primaryGlimpsePiece.seriesOrder ? "মেঘনাদবধ কাব্য" : undefined}
+            />
           </section>
         )}
 
         {/* Latest Episodes 4-Card Grid */}
         {latestEpisodes.length > 0 && (
-          <Suspense fallback={<EpisodesSkeleton />}>
-            <LatestEpisodes pieces={latestEpisodes} />
-          </Suspense>
+          <LatestEpisodes pieces={latestEpisodes} />
         )}
 
         {/* Series Section */}
         {series.length > 0 && (
-          <Suspense fallback={<SeriesGridSkeleton />}>
-            <FeaturedSeries series={series} />
-          </Suspense>
+          <FeaturedSeries series={series} />
         )}
 
         {/* Featured Longform Writing */}
