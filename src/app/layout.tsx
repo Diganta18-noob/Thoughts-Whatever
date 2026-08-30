@@ -72,12 +72,13 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — ${siteConfig.taglineEn}`,
+    default: `${siteConfig.name} — ${siteConfig.tagline}`,
     template: `%s — ${siteConfig.name}`,
   },
   description:
-    "বাংলা সাহিত্য নিয়ে পূর্ণাঙ্গ লেখা, পাঠ-পর্যালোচনা ও তথ্যচিত্র। রিলের পিছনের সম্পূর্ণ রচনা এখানে।",
+    "Thoughts Whatever — বাংলা সাহিত্য নিয়ে পূর্ণাঙ্গ রচনা, পাঠ-পর্যালোচনা ও গবেষণাধর্মী তথ্যচিত্রের একটি মুক্ত ডিজিটাল প্ল্যাটফর্ম ও আর্কাইভ।",
   keywords: [
+    "Thoughts Whatever",
     "বাংলা সাহিত্য",
     "বাংলা প্রবন্ধ",
     "রবীন্দ্রনাথ",
@@ -86,6 +87,7 @@ export const metadata: Metadata = {
     "বাংলা কবিতা",
     "তথ্যচিত্র",
     "Bengali literature",
+    "Bengali literature essays",
   ],
   authors: [{ name: siteConfig.nameEn, url: siteConfig.url }],
   alternates: {
@@ -104,8 +106,9 @@ export const metadata: Metadata = {
     locale: "bn_IN",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    title: `${siteConfig.name} — ${siteConfig.taglineEn}`,
-    description: "বাংলা সাহিত্য নিয়ে পূর্ণাঙ্গ লেখা, পাঠ-পর্যালোচনা ও তথ্যচিত্র। রিলের পিছনের সম্পূর্ণ রচনা ও গবেষণাপত্র।",
+    title: `${siteConfig.name} — ${siteConfig.tagline}`,
+    description:
+      "Thoughts Whatever — বাংলা সাহিত্য নিয়ে পূর্ণাঙ্গ রচনা, পাঠ-পর্যালোচনা ও গবেষণাধর্মী তথ্যচিত্রের একটি মুক্ত ডিজিটাল প্ল্যাটফর্ম ও আর্কাইভ।",
     images: [
       {
         url: absoluteUrl("/brand/logo-full.svg"),

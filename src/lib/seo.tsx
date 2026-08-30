@@ -85,6 +85,11 @@ export function articleJsonLd(piece: SeoPiece) {
     datePublished: toIsoString(piece.publishedAt),
     dateModified: toIsoString(piece.updatedAt ?? piece.publishedAt),
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": `${siteConfig.url}/#website`,
+      name: siteConfig.name,
+    },
     author:
       piece.authors && piece.authors.length > 0
         ? piece.authors.map((a) => ({
@@ -94,12 +99,14 @@ export function articleJsonLd(piece: SeoPiece) {
           }))
         : {
             "@type": "Organization",
+            "@id": `${siteConfig.url}/#organization`,
             name: siteConfig.name,
             url: siteConfig.url,
             sameAs: [siteConfig.instagram].filter(Boolean),
           },
     publisher: {
       "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
       name: siteConfig.name,
       url: siteConfig.url,
       logo: {
@@ -133,6 +140,7 @@ export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${siteConfig.url}/#organization`,
     name: siteConfig.name,
     alternateName: [siteConfig.nameEn, "Thoughts Whatever", "t.w"],
     url: siteConfig.url,
@@ -162,6 +170,7 @@ export function websiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${siteConfig.url}/#website`,
     name: siteConfig.name,
     alternateName: [siteConfig.nameEn, "Thoughts Whatever", "t.w"],
     url: siteConfig.url,
@@ -175,6 +184,47 @@ export function websiteJsonLd() {
         urlTemplate: absoluteUrl("/archive?q={search_term_string}"),
       },
       "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+export function homeWebPageJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${siteConfig.url}/#webpage`,
+    url: `${siteConfig.url}/`,
+    name: `${siteConfig.name} — ${siteConfig.tagline}`,
+    description: "বাংলা সাহিত্য নিয়ে পূর্ণাঙ্গ লেখা, পাঠ-পর্যালোচনা ও তথ্যচিত্র। রিলের পিছনের সম্পূর্ণ রচনা ও গবেষণাপত্র।",
+    inLanguage: "bn-IN",
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": `${siteConfig.url}/#website`,
+    },
+    about: {
+      "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
+    },
+  };
+}
+
+export function aboutPageJsonLd() {
+  const url = absoluteUrl("/about");
+  return {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "@id": `${url}#webpage`,
+    url,
+    name: `পরিচয় (About) — ${siteConfig.name}`,
+    description: `${siteConfig.name} — বাংলা সাহিত্য, পাঠ ও তথ্যচিত্র নিয়ে একটি স্বাধীন ডিজিটাল পত্রিকা ও আর্কাইভ।`,
+    inLanguage: "bn-IN",
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": `${siteConfig.url}/#website`,
+    },
+    mainEntity: {
+      "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
     },
   };
 }

@@ -127,28 +127,29 @@ export async function autoSavePrompts(): Promise<{ scanned: number; newSaved: nu
 
   // Sync to database if DATABASE_URL is available
   try {
-    for (const item of extracted) {
-      // Check if prompt already exists by text match
-      const existing = await prisma.promptLog.findFirst({
-        where: {
-          text: item.cleanText,
-        },
-      });
+    const existingLogs = await prisma.promptLog.findMany({
+      select: { text: true },
+    });
+    const existingTextSet = new Set(existingLogs.map((p) => p.text));
 
-      if (!existing) {
-        await prisma.promptLog.create({
-          data: {
-            text: item.cleanText,
-            summary: item.summary,
-            source: "antigravity",
-            category: item.category,
-            status: "done",
-            tags: ["auto-saved", item.category, item.conversationId.slice(0, 8)],
-            notes: `Auto-saved from conversation ${item.conversationId} on ${item.timestamp.toISOString()}`,
-          },
-        });
-        newSavedCount++;
-      }
+    const newPrompts = extracted.filter((item) => !existingTextSet.has(item.cleanText));
+
+    if (newPrompts.length > 0) {
+      const dataToInsert = newPrompts.map((item) => ({
+        text: item.cleanText,
+        summary: item.summary,
+        source: "antigravity",
+        category: item.category,
+        status: "done",
+        tags: ["auto-saved", item.category, item.conversationId.slice(0, 8)],
+        notes: `Auto-saved from conversation ${item.conversationId} on ${item.timestamp.toISOString()}`,
+      }));
+
+      await prisma.promptLog.createMany({
+        data: dataToInsert,
+        skipDuplicates: true,
+      });
+      newSavedCount = dataToInsert.length;
     }
     console.log(`💾 Saved ${newSavedCount} new prompts into database PromptLog.`);
   } catch (dbErr) {

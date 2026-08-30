@@ -262,6 +262,9 @@ Root Cause Report (Confirmed):
 | 12 | Hydration Stuck Skeleton | Framer Motion SSR HTML opacity:0 serialization race | Diagnosed hydration interaction; rolled back heavy client wrapper to preserve sub-second native ISR load speed |
 | 13 | API Architecture Audit | Question regarding multi-endpoint vs consolidated single-API performance | Audited Next.js App Router Server Component direct DB execution vs client REST calls, verifying current architecture is optimal |
 | 14 | Stuck Skeleton Permanent Fix | Framer Motion SSR opacity:0 serialization and ThemeScript hydration mismatches | Added CSS reveal-rescue safety net, cookie-synced ThemeScript, 300ms miss-healing Reveal, 8s DB timeout, and diagnostic logging |
+| 15 | Advanced Editor's Room Admin Portal Upgrade | Editorial OS required across CMS, Analytics, SEO, and Workflow | Built 20+ features across 6 phases with editorial aesthetics and schema tools |
+| 16 | Global Toast Notification System Refactoring | Mixed browser alerts and notifications across modules | Centralized custom toast notification system with destructive confirmations |
+| 17 | Brand Search & Entity Optimization ("Thoughts Whatever") | Domain indexed on page 14 via /blog with generic brand disambiguation | Established unified Schema.org entity graph (Org, WebSite, WebPage, About, Blog), reinforced canonicals, and strengthened homepage brand authority |
 
 ---
 
@@ -276,20 +279,22 @@ Design Guardrails: Preserve editorial magazine-inspired aesthetic, warm off-whit
 
 ---
 
-## 27. Master Prompt 16 — Global Toast Notification System Refactoring
+## 28. Master Prompt 17 — Brand Ranking & Entity Search Optimization ("Thoughts Whatever")
 ```text
-MASTER UI REQUIREMENT — GLOBAL TOAST NOTIFICATION SYSTEM
+MASTER TASK — MOVE “THOUGHTS WHATEVER” FROM GOOGLE PAGE 14
+TO PAGE 1–5 FOR THE BRAND QUERY
 
-You must refactor the ENTIRE application so that ALL user-facing alert,
-notification, success, error, warning, info, confirmation, and status
-messages use the application's Toast Notification system.
+TARGET WEBSITE:
+https://www.thoughtswhatever.in
 
-1. ABSOLUTELY NO BROWSER ALERTS (alert, confirm, prompt, window.*)
-2. NO SWEETALERT / MODAL ALERTS
-3. EVERYTHING SHOULD USE TOASTS (success, error, warning, info, confirm)
-4. CENTRALIZED TOAST API (react-hot-toast + custom extension)
-5. DESTRUCTIVE ACTIONS use non-blocking toast confirmation flow with Cancel / Delete actions
-6. SINGLE GLOBAL TOAST PROVIDER at Root Layout level
+PRIMARY BRAND:
+Thoughts Whatever
+
+OBJECTIVE:
+Elevate official domain visibility from page 14 towards page 1-5 by establishing clear entity graph (Organization -> WebSite -> WebPage/CollectionPage -> Article), refining canonical metadata, enhancing About page authority, and strengthening homepage identity.
 ```
+
+---
+
 
 

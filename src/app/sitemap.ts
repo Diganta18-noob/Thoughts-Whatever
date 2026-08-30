@@ -34,8 +34,6 @@ function pieceUrl(kind: keyof typeof KIND_META, slug: string) {
  * dropping `force-dynamic` (accepting build-time database access, as CI already
  * provides `DATABASE_URL`) or moving this to a route handler that can set
  * `s-maxage` the way `/rss.xml` does. Neither is urgent at 27 URLs.
- *
- * Note also that `public/sitemap.xml` currently shadows this route entirely.
  */
 export const dynamic = "force-dynamic";
 

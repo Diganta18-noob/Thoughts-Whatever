@@ -5,13 +5,15 @@ import { LetterBlock } from "@/components/newsletter/letter-block";
 import { T } from "@/components/i18n/t";
 import { getRecentPieces, countPieces } from "@/lib/pieces";
 import { Count } from "@/components/i18n/values";
+import { JsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { absoluteUrl, siteConfig } from "@/lib/utils";
 
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "ব্লগ",
+  title: "ব্লগ — Thoughts Whatever",
   description:
-    "ফিডের জন্য নয়, পড়ার জন্য লেখা — বাংলা সাহিত্য, পাঠ ও চিন্তা নিয়ে দীর্ঘ লেখা।",
+    "Thoughts Whatever ব্লগ ও পাঠ বিভাগ — বাংলা সাহিত্য, চিন্তাভাবনা ও দীর্ঘ প্রবন্ধ সংকলন।",
   alternates: { canonical: "/blog" },
 };
 
@@ -21,8 +23,29 @@ export default async function BlogPage() {
     countPieces("BLOG"),
   ]);
 
+  const blogJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${siteConfig.url}/blog#webpage`,
+    url: absoluteUrl("/blog"),
+    name: "ব্লগ — Thoughts Whatever",
+    description: "Thoughts Whatever ব্লগ ও পাঠ বিভাগ — বাংলা সাহিত্য, চিন্তাভাবনা ও দীর্ঘ প্রবন্ধ সংকলন।",
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": `${siteConfig.url}/#website`,
+      name: siteConfig.name,
+    },
+  };
+
+  const breadcrumbs = [
+    { name: "মূলপাতা (Home)", path: "/" },
+    { name: "ব্লগ (Blog)", path: "/blog" },
+  ];
+
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+      <JsonLd data={blogJsonLd} />
+      <JsonLd data={breadcrumbJsonLd(breadcrumbs)} />
       <PageHeader
         labelEn="Blog"
         titleBn="ব্লগ"

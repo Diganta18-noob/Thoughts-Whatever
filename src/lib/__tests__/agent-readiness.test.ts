@@ -25,7 +25,7 @@ jest.mock("@/lib/prisma", () => ({
 
 import { parseAcceptHeader, negotiateContentType, isContentNegotiablePath } from "@/lib/content-negotiation";
 import { render404Markdown, renderPageMarkdown, renderHomeMarkdown } from "@/lib/markdown-renderer";
-import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
+import { organizationJsonLd, websiteJsonLd, homeWebPageJsonLd, aboutPageJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/utils";
 
 describe("Phase 3: Content Negotiation (RFC 7231 & acceptmarkdown.com)", () => {
@@ -151,5 +151,19 @@ describe("Phase 5 & 7: Organization & WebSite JSON-LD Schema", () => {
     expect(site.publisher).toBeDefined();
     expect(site.publisher["@type"]).toBe("Organization");
     expect(site.potentialAction).toBeDefined();
+  });
+
+  it("generates CollectionPage and AboutPage entity graphs connected to WebSite and Organization", () => {
+    const home = homeWebPageJsonLd();
+    expect(home["@context"]).toBe("https://schema.org");
+    expect(home["@type"]).toBe("CollectionPage");
+    expect(home.isPartOf["@id"]).toContain("#website");
+    expect(home.about["@id"]).toContain("#organization");
+
+    const about = aboutPageJsonLd();
+    expect(about["@context"]).toBe("https://schema.org");
+    expect(about["@type"]).toBe("AboutPage");
+    expect(about.isPartOf["@id"]).toContain("#website");
+    expect(about.mainEntity["@id"]).toContain("#organization");
   });
 });

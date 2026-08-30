@@ -15,7 +15,7 @@ import {
   getFilterFacets,
 } from "@/lib/pieces";
 import { extractPullQuotes } from "@/lib/markdown";
-import { JsonLd, seriesJsonLd } from "@/lib/seo";
+import { JsonLd, seriesJsonLd, homeWebPageJsonLd } from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -119,6 +119,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
+      <JsonLd data={homeWebPageJsonLd()} />
       {leadSeries && <JsonLd data={seriesJsonLd(leadSeries)} />}
 
       <Hero />
