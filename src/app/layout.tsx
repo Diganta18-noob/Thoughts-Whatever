@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { cookies } from "next/headers";
 import {
   Noto_Serif_Bengali,
   Hind_Siliguri,
@@ -35,7 +34,7 @@ const bengaliSerif = Noto_Serif_Bengali({
 // Bengali sans — captions, labels, UI written in Bangla.
 const bengaliSans = Hind_Siliguri({
   subsets: ["bengali", "latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-bengali-sans",
   fallback: ["SolaimanLipi", "Kalpurush", "sans-serif"],
@@ -128,21 +127,15 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const cookieStore = cookies();
-  const rawTheme = cookieStore.get("tw_theme")?.value;
-  const theme = rawTheme === "night" || rawTheme === "sepia" ? rawTheme : "cream";
-  const rawLang = cookieStore.get("tw_lang")?.value;
-  const lang = rawLang === "bn" ? "bn" : "en";
-
   return (
-    // lang follows the *interface* locale, not the content. ThemeScript
-    // and cookies guarantee the SSR value matches the client preference.
+    // lang defaults to "bn" on SSR. ThemeScript
+    // and cookies guarantee the client preference is applied before paint.
     // Bengali prose is not affected — every Bengali region carries its
     // own lang="bn" (see prose.tsx, article-view.tsx, piece-card.tsx),
     // so screen readers still switch voice.
     <html
-      lang={lang}
-      data-theme={theme}
+      lang="bn"
+      data-theme="cream"
       suppressHydrationWarning
       className={[
         bengaliSerif.variable,

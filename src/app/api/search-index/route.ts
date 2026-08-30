@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { PUBLISHED } from "@/lib/pieces";
 import { bengaliSearchKey } from "@/lib/bengali";
-import { deriveExcerpt } from "@/lib/markdown";
 
 /**
  * The whole search index as one JSON payload.
@@ -31,7 +30,6 @@ export async function GET() {
         titleEn: true,
         dekBn: true,
         excerptBn: true,
-        bodyBn: true,
         readingMinutes: true,
         tags: { select: { labelBn: true } },
         authors: { select: { nameBn: true } },
@@ -48,8 +46,7 @@ export async function GET() {
         kind: piece.kind,
         titleBn: piece.titleBn,
         titleEn: piece.titleEn,
-        excerptBn:
-          piece.dekBn || piece.excerptBn || deriveExcerpt(piece.bodyBn, 150),
+        excerptBn: piece.dekBn || piece.excerptBn || "",
         tagsText,
         authorsText,
         readingMinutes: piece.readingMinutes,
@@ -61,7 +58,8 @@ export async function GET() {
 
     return NextResponse.json(docs, {
       headers: {
-        "Cache-Control": "public, max-age=60, s-maxage=300, stale-while-revalidate=3600",
+        "Cache-Control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "CDN-Cache-Control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
       },
     });
   } catch (err) {

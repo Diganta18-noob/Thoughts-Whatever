@@ -370,6 +370,20 @@ export const getAuthorBySlug = cache(async (slug: string) => {
   );
 });
 
+export const getAuthorsList = cache(async () => {
+  return prisma.author.findMany({
+    where: { pieces: { some: PUBLISHED } },
+    select: {
+      slug: true,
+      nameBn: true,
+      nameEn: true,
+      era: true,
+      _count: { select: { pieces: { where: PUBLISHED } } },
+    },
+    orderBy: { nameBn: "asc" },
+  });
+});
+
 function withSeriesCovers<
   T extends {
     slug: string;
@@ -385,6 +399,7 @@ function withSeriesCovers<
 
 export const getSeriesList = cache(async () => {
   const rows = await prisma.series.findMany({
+    where: { pieces: { some: PUBLISHED } },
     select: {
       ...seriesSelect,
       pieces: {

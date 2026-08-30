@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/page-header";
-import { getFilterFacets } from "@/lib/pieces";
+import { getAuthorsList } from "@/lib/pieces";
 import { T } from "@/components/i18n/t";
 import { Count, Num } from "@/components/i18n/values";
 
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AuthorsPage() {
-  const { authors } = await getFilterFacets();
+  const authors = await getAuthorsList();
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">

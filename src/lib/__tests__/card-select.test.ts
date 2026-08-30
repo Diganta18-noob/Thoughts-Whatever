@@ -44,4 +44,9 @@ describe("cardSelect", () => {
   it("does not select the bodyBn blob either", () => {
     expect("bodyBn" in cardSelect).toBe(false);
   });
+
+  it("exports getAuthorsList for optimized authors querying", () => {
+    const { getAuthorsList } = require("@/lib/pieces") as typeof import("@/lib/pieces");
+    expect(typeof getAuthorsList).toBe("function");
+  });
 });

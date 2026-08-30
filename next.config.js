@@ -11,7 +11,15 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "framer-motion", "date-fns"],
+    optimizePackageImports: [
+      "lucide-react",
+      "framer-motion",
+      "date-fns",
+      "clsx",
+      "tailwind-merge",
+      "react-markdown",
+      "lenis",
+    ],
     serverComponentsExternalPackages: ["archiver", "@aws-sdk/client-s3", "cloudinary", "@prisma/client", "prisma"],
   },
   images: {
@@ -32,6 +40,30 @@ const nextConfig = {
   },
   async headers() {
     return [
+      {
+        // Immutable caching for hashed static next chunks
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        // Public brand assets & static media
+        source: "/(brand|icons)/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400",
+          },
+          {
+            key: "CDN-Cache-Control",
+            value: "public, max-age=604800, s-maxage=604800, stale-while-revalidate=86400",
+          },
+        ],
+      },
       {
         // Everything, cover route included.
         source: "/:path*",
