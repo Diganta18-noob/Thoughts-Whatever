@@ -7,11 +7,19 @@ export function cn(...inputs: ClassValue[]) {
 
 import { getSiteName } from "./transliterate";
 
+function getCanonicalSiteUrl(): string {
+  const envUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"))) {
+    return envUrl.replace(/\/$/, "");
+  }
+  return "https://www.thoughtswhatever.in";
+}
+
 export const siteConfig = {
   name: process.env.NEXT_PUBLIC_SITE_NAME || "Thoughts Whatever",
   nameBn: "Thoughts Whatever",
   nameEn: "Thoughts Whatever",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.thoughtswhatever.in",
+  url: getCanonicalSiteUrl(),
   instagram:
     process.env.NEXT_PUBLIC_INSTAGRAM ||
     "https://www.instagram.com/thoughts.whatever_/",

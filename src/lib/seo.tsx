@@ -85,12 +85,19 @@ export function articleJsonLd(piece: SeoPiece) {
     datePublished: toIsoString(piece.publishedAt),
     dateModified: toIsoString(piece.updatedAt ?? piece.publishedAt),
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
-    author: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      url: siteConfig.url,
-      sameAs: [siteConfig.instagram].filter(Boolean),
-    },
+    author:
+      piece.authors && piece.authors.length > 0
+        ? piece.authors.map((a) => ({
+            "@type": "Person",
+            name: a.nameBn,
+            ...((a as any).slug ? { url: absoluteUrl(`/authors/${(a as any).slug}`) } : {}),
+          }))
+        : {
+            "@type": "Organization",
+            name: siteConfig.name,
+            url: siteConfig.url,
+            sameAs: [siteConfig.instagram].filter(Boolean),
+          },
     publisher: {
       "@type": "Organization",
       name: siteConfig.name,
