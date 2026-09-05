@@ -406,4 +406,15 @@ i dont want any ai to be use for perticular this thing
 
 ---
 
+## 38. Master Prompt 26 — Rename Chitta Jetha Bhayshunyo Landscape Thumbnail
+```text
+D:\Antigravity\thoughts-whatever\Content\Thumnail Landscape\Solo chnage the name of the thumnail 
+```
+
+OBJECTIVE:
+Inspect newly added landscape image `e1d846f3-28f1-4310-a174-905537c7eba1.png` in `Content/Thumnail Landscape/Solo`, identify as Rabindranath Tagore's "চিত্ত যেথা ভয়শূন্য", and rename to `চিত্ত যেথা ভয় শুন্য - Landscape.png`.
+
+---
+
+
 
