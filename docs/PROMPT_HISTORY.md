@@ -429,6 +429,20 @@ Inspect newly added landscape images in `Content/Thumnail Landscape/আনন্
 
 ---
 
+## 40. Master Prompt 28 — Chokher Bali Landscape Thumbnails Organization
+```text
+D:\Antigravity\thoughts-whatever\Content\Thumnail Landscape\চোখের বালি rename the landscape thumnail as per the thumnail folder
+```
+
+OBJECTIVE:
+Inspect newly added landscape images in `Content/Thumnail Landscape/চোখের বালি`, identify episode numbers from visual cues ("চোখের বালি", "পর্ব - ২", "অন্তিম পর্ব"), and rename them matching the portrait thumbnail convention in `Content/Thumnail/চোখের বালি`:
+- `462ffff4-0bf9-4d2e-905c-84436b9778ff.png` (Episode 1) -> `চোখের বালি - Landscape.png`
+- `bb4ac7dd-455e-4c1d-9205-b1a607bfa5c5.png` ("পর্ব - ২") -> `চোখের বালি  পর্ব-২ - Landscape.png`
+- `1815db0a-a309-494a-a1c4-e9f0e707c978.png` ("অন্তিম পর্ব") -> `চোখের বালি   অন্তিম পর্ব - Landscape.png`
+
+---
+
+
 
 
 
