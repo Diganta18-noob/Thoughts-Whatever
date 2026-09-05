@@ -442,6 +442,20 @@ Inspect newly added landscape images in `Content/Thumnail Landscape/চোখে
 
 ---
 
+## 41. Master Prompt 29 — Nildarpan Landscape Thumbnails Organization
+```text
+D:\Antigravity\thoughts-whatever\Content\Thumnail Landscape\নীলদর্পণ rename the landscape thumnail as per the thumnail folder
+```
+
+OBJECTIVE:
+Inspect newly added landscape images in `Content/Thumnail Landscape/নীলদর্পণ`, identify episode numbers from visual cues ("নীলদর্পণ", "দ্বিতীয় পর্ব", "অন্তিম পর্ব"), and rename them matching the portrait thumbnail convention in `Content/Thumnail/নীলদর্পণ`:
+- `8731af7b-9dea-478c-b108-302d823b286c.png` (Episode 1) -> `নীলদর্পণ - Landscape.png`
+- `3055f9e5-7d22-4f2f-a11d-124e8ae2d78b.png` ("দ্বিতীয় পর্ব") -> `নীলদর্পণ পর্ব - ২ - Landscape.png`
+- `1cd04b1d-4ef5-4a1b-9679-df8cdfd695f0.png` ("অন্তিম পর্ব") -> `নীলদর্পণ অন্তিম পর্ব - Landscape.png`
+
+---
+
+
 
 
 
