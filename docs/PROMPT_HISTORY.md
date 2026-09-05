@@ -416,5 +416,19 @@ Inspect newly added landscape image `e1d846f3-28f1-4310-a174-905537c7eba1.png` i
 
 ---
 
+## 39. Master Prompt 27 — Anandamath Landscape Thumbnails Organization
+```text
+D:\Antigravity\thoughts-whatever\Content\Thumnail Landscape\আনন্দমঠ rename the landscape thumnail as per the thumnail folder
+```
+
+OBJECTIVE:
+Inspect newly added landscape images in `Content/Thumnail Landscape/আনন্দমঠ`, identify episode numbers from visual cues ("প্রথম পর্ব", "দ্বিতীয় পর্ব", "শেষ পর্ব"), and rename them matching the portrait thumbnail convention in `Content/Thumnail/আনন্দমঠ`:
+- `efdb5092-e147-4d2d-8677-bf3a196e7a46.png` ("প্রথম পর্ব") -> `আনন্দমঠ 1 - Landscape.png`
+- `58b2a6e8-be66-46e2-801f-c0599e045f3d.png` ("দ্বিতীয় পর্ব") -> `আনন্দমঠ 2 - Landscape.png`
+- `6f5f300d-04bd-4adf-b0cc-8a7bc3384758.png` ("শেষ পর্ব") -> `আনন্দমঠ 3 - Landscape.png`
+
+---
+
+
 
 
