@@ -94,7 +94,7 @@ async function runMasterPipeline() {
   console.log("\n=======================================================");
   console.log("STEP 1: Processing Content & Syncing Database");
   console.log("=======================================================");
-  await processContent();
+  await processContent({ force: isForce });
 
   // Update hash manifest for all processed files
   for (const f of filesToTrack) {

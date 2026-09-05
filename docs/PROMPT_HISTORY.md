@@ -296,5 +296,114 @@ Elevate official domain visibility from page 14 towards page 1-5 by establishing
 
 ---
 
+## 29. Master Prompt 18 — Knowledge Graph Database Persistence (Graphify Sync)
+```text
+STORE GRAPHIFY KNOWLEDGE GRAPH IN POSTGRESQL DATABASE
+
+OBJECTIVE:
+Persist full Graphify knowledge graph outputs (KnowledgeGraph snapshot, KnowledgeGraphNode, and KnowledgeGraphEdge models) into Supabase PostgreSQL for persistent querying, relational analysis, and automated synchronization via `npm run save-graphify`.
+```
+
+---
+
+## 30. Master Prompt 19 — Landscape Master Format Image Generation
+```text
+LANDSCAPE MASTER FORMAT (16:10 / 16:9) THUMBNAIL EXPANSION
+
+OBJECTIVE:
+Generate landscape versions of existing portrait thumbnails for website sections (Hero section and Series Title images). Intelligently outpaint canvas (extending left and right environments) while preserving central subject, faces, objects, original lighting, color grading, and Bengali typography. Save outputs in a separate dedicated landscape directory preserving original filenames. Provide a demo image first for user approval.
+```
+
+---
+
+## 31. Master Prompt 20 — Crime and Punishment Landscape Renaming & Folder Mirroring
+```text
+CRIME AND PUNISHMENT LANDSCAPE RENAMING & FOLDER STRUCTURE MIRRORING
+
+OBJECTIVE:
+Inspect generated landscape images in `Content/Thumnail Landscape/Crime and punishment` and rename them matching original thumbnail conventions:
+- 254e70c8-a5f8-4e68-99d8-57bfe672aa56.png -> Crime and punishment 1.PNG
+- dee7058c-2dfe-4d8b-9ca5-4d774fb6d0fa.png -> Crime and punishment 2.PNG
+- ChatGPT Image Sep 5, 2026, 02_49_27 PM.png -> Crime and punishment 3.PNG
+
+Mirror all thumbnail category directories from `Content/Thumnail` into `Content/Thumnail Landscape`:
+- Solo, আনন্দমঠ, চোখের বালি, নীলদর্পণ, পথের দাবী, মেঘনাদবধ কাব্য  Series.
+```
+
+---
+
+## 32. Master Prompt 21 — Unique Identifier Suffix for Landscape Thumbnails
+```text
+LANDSCAPE THUMBNAIL UNIQUE IDENTIFIER SUFFIX
+
+OBJECTIVE:
+To prevent naming collisions and visual confusion between portrait and landscape images across File Explorer and website components, append a distinct unique suffix (` - Landscape`) to all landscape thumbnail filenames in `Content/Thumnail Landscape/`:
+- `Crime and punishment 1 - Landscape.PNG`
+- `Crime and punishment 2 - Landscape.PNG`
+- `Crime and punishment 3 - Landscape.PNG`
+- `চোখের বালি - Landscape.PNG`
+```
+
+---
+
+## 33. Master Prompt 22 — Solo Landscape Images Inspection, Renaming & Folder Sorting
+```text
+SOLO LANDSCAPE IMAGES INSPECTION, RENAMING & SORTING
+
+OBJECTIVE:
+Inspect newly pasted landscape images in `Content/Thumnail Landscape`, identify each novel/series title from visual content, rename them with the ` - Landscape` suffix matching original thumbnail conventions, and move them into their designated subfolder (`Content/Thumnail Landscape/Solo`):
+- 150b9cbc-a82d-4c87-9c56-33f7d51ebcbb.png -> Solo/Frankenstein - Landscape.PNG
+- 5116a4e2-e527-41c0-8cb5-32b29c4f614b.png -> Solo/ঘরে-বাইরে - Landscape.PNG
+- 5339affe-7c9d-45db-b8e4-b24a554f1a67.png -> Solo/দেবী - Landscape.PNG
+- ba74597d-6e00-4318-a21b-b04b6467f4d8.png -> Solo/কপালকুন্ডলা - Landscape.PNG
+- deea88b0-8eea-41a3-904f-bb6e4dea4b6f.png -> Solo/ক্ষুদিরাম বসু - Landscape.png
+```
+
+---
+
+## 34. Master Prompt 23 — Revised Frankenstein & Kapalkundala Landscape Organization
+```text
+REVISED FRANKENSTEIN & KAPALKUNDALA LANDSCAPE IMAGES SORTING & RENAMING
+
+OBJECTIVE:
+Inspect newly pasted landscape images in `Content/Thumnail Landscape`, identify revised compositions:
+- 0390b983-8203-45c0-8e20-3ff0249dcb27.png -> Frankenstein (Mary Shelley) revised composition
+- 1ef40fc2-0cda-44e8-a944-365cdb69dcf3.png -> কপালকুণ্ডলা (Bankimchandra) full quote & enhanced composition
+
+Organize into `Content/Thumnail Landscape/Solo/` with the standard ` - Landscape.PNG` convention while retaining previous revisions as `(v1)`.
+```
+
+---
+
+## 35. Master Prompt 24 — Roktokorobi & Padma Nadir Majhi Landscape Organization
+```text
+ROKTOKOROBI & PADMA NADIR MAJHI LANDSCAPE IMAGES SORTING & RENAMING
+
+OBJECTIVE:
+Inspect newly pasted landscape images in `Content/Thumnail Landscape`, identify titles:
+- 981d49d2-8e88-4216-8c33-7145f4f1223f.png -> রক্তকরবী (Rabindranath Tagore)
+- eceec847-1eb3-4746-8ae2-d6b88edcf254.png -> পদ্মা নদীর মাঝি (Manik Bandopadhyay)
+
+Organize into `Content/Thumnail Landscape/Solo/` with the standard ` - Landscape.PNG` convention, completing the full Solo collection (7 of 7 titles).
+```
+
+---
+
+## 36. Master Prompt 25 — Content Upload Pipeline: চিত্ত যেথা ভয় শুন্য (রবীন্দ্রনাথ ঠাকুর)
+```text
+চিত্ত যেথা ভয় শুন্য
+______রবীন্দ্রনাথ ঠাকুর  date [August 12](https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/)
+
+i  have update the context folder now start the content upload pipeline with date and instragram link
+```
+
+---
+
+## 37. Elimination of External AI Dependency from Content Pipeline
+```text
+i dont want any ai to be use for perticular this thing
+```
+
+---
 
 

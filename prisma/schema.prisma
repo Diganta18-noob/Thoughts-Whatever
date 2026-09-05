@@ -1328,3 +1328,72 @@ model AIChatMessage {
 
   @@index([conversationId, createdAt])
 }
+
+// ═══════════════════════════════════════════════════════════════
+// ─── Code & Content Knowledge Graph (Graphify Persistence) ─────
+// ═══════════════════════════════════════════════════════════════
+
+model KnowledgeGraph {
+  id               String   @id @default(cuid())
+  version          String   @default("1.0.0")
+  root             String   @default(".")
+  nodesCount       Int
+  edgesCount       Int
+  communitiesCount Int
+  labels           Json     // Community labels mapping
+  godNodes         Json     // God nodes (core abstractions)
+  surprises        Json     // Surprising connections
+  graphData        Json     // Full graph nodes, edges, and communities
+  reportMarkdown   String   // GRAPH_REPORT.md full markdown
+  tokenCost        Json?    // { input: number, output: number }
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  nodes            KnowledgeGraphNode[]
+  edges            KnowledgeGraphEdge[]
+
+  @@index([createdAt])
+}
+
+model KnowledgeGraphNode {
+  id             String         @id @default(cuid())
+  graphId        String
+  graph          KnowledgeGraph @relation(fields: [graphId], references: [id], onDelete: Cascade)
+  nodeId         String         // Original node identifier (e.g., src_components_...)
+  label          String         // Human-readable node label
+  category       String?        // Code, Component, Type, Hook, etc.
+  communityId    Int?           // Community index
+  communityName  String?        // Community name label
+  degree         Int            @default(0)
+  sourceFile     String?
+  sourceLocation String?
+  metadata       Json?
+  createdAt      DateTime       @default(now())
+
+  outgoingEdges  KnowledgeGraphEdge[] @relation("SourceNode")
+  incomingEdges  KnowledgeGraphEdge[] @relation("TargetNode")
+
+  @@unique([graphId, nodeId])
+  @@index([graphId, communityId])
+  @@index([label])
+}
+
+model KnowledgeGraphEdge {
+  id          String              @id @default(cuid())
+  graphId     String
+  graph       KnowledgeGraph      @relation(fields: [graphId], references: [id], onDelete: Cascade)
+  sourceNodeId String
+  targetNodeId String
+  sourceNode  KnowledgeGraphNode? @relation("SourceNode", fields: [graphId, sourceNodeId], references: [graphId, nodeId], onDelete: Cascade)
+  targetNode  KnowledgeGraphNode? @relation("TargetNode", fields: [graphId, targetNodeId], references: [graphId, nodeId], onDelete: Cascade)
+  relation    String              @default("references")
+  confidence  String              @default("EXTRACTED")
+  weight      Float               @default(1.0)
+  metadata    Json?
+  createdAt   DateTime            @default(now())
+
+  @@index([graphId])
+  @@index([sourceNodeId])
+  @@index([targetNodeId])
+}
+

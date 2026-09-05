@@ -1,24 +1,6 @@
-import OpenAI from "openai";
 import dotenv from "dotenv";
 
 dotenv.config();
-
-const apiKey = process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
-
-if (!apiKey) {
-  console.warn("⚠️ Warning: No OPENROUTER_API_KEY or OPENAI_API_KEY set in environment.");
-}
-
-const openai = new OpenAI({
-  baseURL: process.env.OPENROUTER_API_KEY ? "https://openrouter.ai/api/v1" : undefined,
-  apiKey: apiKey || "dummy-key",
-  defaultHeaders: {
-    "HTTP-Referer": "https://thoughts-whatever.vercel.app",
-    "X-Title": "Thoughts Whatever",
-  },
-});
-
-const DEFAULT_MODEL = "openai/gpt-4o-mini";
 
 export interface SeriesMeta {
   titleEn: string;
@@ -66,9 +48,9 @@ export interface SocialCaptions {
 }
 
 /**
- * Format raw Bengali article text into premium markdown formatting.
+ * Format raw Bengali article text into clean markdown formatting.
  * Preserves the original Bengali writing word-for-word, improving spacing, punctuation,
- * paragraphing, blockquotes, citations, emphasis, headings, and pull quotes.
+ * paragraphing, and preserving pull quotes.
  */
 export function cleanMarkdownBody(text: string, title?: string): string {
   let cleaned = text.trim();
@@ -85,102 +67,34 @@ export function cleanMarkdownBody(text: string, title?: string): string {
   return cleaned.trim();
 }
 
+/**
+ * Deterministic, offline formatting for Bengali article body.
+ * Preserves 100% of the author's words without calling external AI APIs.
+ */
 export async function formatArticleBody(rawContent: string, title: string): Promise<string> {
-  const prompt = `You are an expert Bengali literature editor and visual layout designer for 'Thoughts Whatever'.
+  const normalized = rawContent
+    .replace(/\r\n/g, "\n")
+    .replace(/\s*l\s*/g, "। ")
+    .replace(/\s*L\s*/g, "। ")
+    .replace(/।([^\s\n"”'’])/g, "। $1")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 
-Your task is to transform raw Bengali article text into premium, publishing-ready Markdown.
-
-STRICT RULES:
-1. ALWAYS preserve the exact original Bengali writing and language. Do NOT rewrite, paraphrase, translate, or remove sentences unless fixing clear typos/spacing issues.
-2. Fix Bengali spacing, punctuation, quotes (e.g. replacing 'l' or 'L' used mistakenly as dandi '।', fixing missing spaces after punctuation).
-3. Format into clear, readable paragraphs with appropriate blank lines (\n\n).
-4. Use Markdown blockquotes (> ...) for pull quotes or literary quotes.
-5. Do NOT include top-level Markdown headers (do NOT add ## Title or # Title) and do NOT wrap output in markdown code fences (\`\`\`markdown). Output raw markdown directly.
-
-Raw Article Title: ${title}
-Raw Article Text:
-${rawContent}
-`;
-
-  try {
-    const response = await openai.chat.completions.create({
-      model: DEFAULT_MODEL,
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.3,
-      max_tokens: 1500,
-    });
-
-    const result = response.choices[0]?.message?.content?.trim();
-    if (result) return cleanMarkdownBody(result, title);
-  } catch (err) {
-    console.error("AI formatting error, falling back to clean raw text:", err);
-  }
-
-  // Fallback cleanup if AI fails
-  return cleanMarkdownBody(
-    rawContent
-      .replace(/\s*l\s*/g, "। ")
-      .replace(/\s*L\s*/g, "। ")
-      .replace(/।([^\s])/g, "। $1")
-      .replace(/\n{3,}/g, "\n\n"),
-    title,
-  );
+  return cleanMarkdownBody(normalized, title);
 }
 
 /**
- * Generate metadata for a new or existing Series.
+ * Deterministic, offline metadata generation for a series.
  */
 export async function generateSeriesMetadata(seriesName: string, sampleContent: string): Promise<SeriesMeta> {
-  const prompt = `You are the Chief Content Editor for 'Thoughts Whatever' (Bengali Literature & Documentary publication).
-
-Given the series title and a sample of content, generate comprehensive series metadata.
-
-Series Title: ${seriesName}
-Content Sample: ${sampleContent.slice(0, 800)}
-
-Return ONLY valid JSON matching this schema:
-{
-  "titleEn": "English title translation/transliteration",
-  "descBn": "Concise Bengali description (1-2 sentences)",
-  "longDescBn": "Detailed Bengali description (3-4 sentences)",
-  "seoDescription": "English SEO description for search engines",
-  "heroDescription": "Evocative Bengali hero section intro line",
-  "bannerTitle": "Bengali banner title",
-  "subtitle": "Bengali subtitle",
-  "tags": ["Bengali tag 1", "Bengali tag 2"],
-  "englishTags": ["English tag 1", "English tag 2"],
-  "readingLevel": "General Reader / Advanced / Academic",
-  "estimatedDuration": "Total estimated reading time (e.g. '৩০ মিনিট')",
-  "category": "Literature / Essay / Poetry / Archive / Criticism / Documentary / History",
-  "colorTheme": "Warm Sepia / Midnight Blue / Deep Crimson / Amber",
-  "icon": "book-open / feather / scroll / compass"
-}`;
-
-  try {
-    const response = await openai.chat.completions.create({
-      model: DEFAULT_MODEL,
-      messages: [{ role: "user", content: prompt }],
-      response_format: { type: "json_object" },
-      temperature: 0.4,
-      max_tokens: 1000,
-    });
-
-    const content = response.choices[0]?.message?.content;
-    if (content) {
-      return JSON.parse(content) as SeriesMeta;
-    }
-  } catch (err) {
-    console.error("Error generating series metadata:", err);
-  }
-
   return {
     titleEn: seriesName,
-    descBn: `${seriesName} বিষয়ে একটি ধারাবাহিক বিশ্লেষণ ও আলোচনা।`,
-    longDescBn: `${seriesName} ধারাবাহিকে বাংলা সাহিত্য ও ইতিহাসের আলোয় বিশেষ বিশ্লেষণ प्रस्तुत করা হয়েছে।`,
-    seoDescription: `Explore the complete series on ${seriesName} on Thoughts Whatever.`,
-    heroDescription: `${seriesName} — সাহিত্যের নতুন আলোয়।`,
+    descBn: `${seriesName} বিষয়ে একটি বিশেষ সাহিত্যিক ধারাবাহিক ও বিশ্লেষণ।`,
+    longDescBn: `${seriesName} ধারাবাহিকে মূল সাহিত্যপাঠ ও গভীর ভাবার্থ উপস্থাপন করা হয়েছে।`,
+    seoDescription: `Read the complete literary series on ${seriesName} on Thoughts Whatever.`,
+    heroDescription: `${seriesName} — সাহিত্যের নিবিড় আলোয়।`,
     bannerTitle: seriesName,
-    subtitle: "ধারাবাহিক পাঠ ও পুনঃপাঠ",
+    subtitle: "ধারাবাহিক সাহিত্যপাঠ ও আলোচনা",
     tags: ["বাংলা সাহিত্য", "ধারাবাহিক", "বিশ্লেষণ"],
     englishTags: ["Bengali Literature", "Series", "Analysis"],
     readingLevel: "General Reader",
@@ -192,7 +106,8 @@ Return ONLY valid JSON matching this schema:
 }
 
 /**
- * Generate metadata for an Episode (Piece).
+ * Deterministic, offline metadata generation for an episode/article.
+ * Derives quotes, excerpts, and SEO descriptions directly from the source text.
  */
 export async function generateEpisodeMetadata(
   seriesName: string,
@@ -200,74 +115,38 @@ export async function generateEpisodeMetadata(
   formattedBody: string,
   episodeNumber: number
 ): Promise<EpisodeMeta> {
-  const prompt = `You are an SEO Specialist, UX Writer, and Metadata Manager for 'Thoughts Whatever'.
+  const clean = formattedBody.replace(/^[>#\s]+/gm, "").trim();
+  const firstPara = clean.split("\n\n")[0] || clean;
+  const excerpt = firstPara.length > 200 ? firstPara.slice(0, 197).trim() + "..." : firstPara;
 
-Analyze this episode of the series "${seriesName}".
-
-Episode Number: ${episodeNumber}
-Episode Title: ${episodeTitle}
-Body Preview:
-${formattedBody.slice(0, 1000)}
-
-Return ONLY valid JSON matching this schema:
-{
-  "titleEn": "English translation or transliteration of the title",
-  "slug": "english-slug-for-url-e-g-meghnad-badh-kabya-1",
-  "readingTimeMinutes": 5,
-  "excerpt": "Compelling 1-2 sentence Bengali excerpt of the article",
-  "summary": "Detailed 3-4 sentence Bengali summary of key points",
-  "shortDescription": "Single line summary in Bengali",
-  "quote": "Most impactful direct quote from the text in Bengali",
-  "highlightedQuote": "A striking standalone literary line or pull quote in Bengali",
-  "seoMetaTitle": "SEO Meta Title in English or Bilingual (max 60 chars)",
-  "seoDescription": "English SEO Meta Description (140-160 chars)",
-  "openGraphDescription": "Engaging OpenGraph summary for social sharing (English/Bengali)",
-  "twitterDescription": "Twitter summary card description (English)",
-  "keywords": ["Keyword 1", "Keyword 2", "Keyword 3"],
-  "bengaliTags": ["মধুসূদন", "মেঘনাদ", "রামায়ণ", "বাংলা সাহিত্য"],
-  "englishTags": ["Michael Madhusudan Dutt", "Meghnad", "Ramayana", "Bengali Literature"],
-  "category": "Writing / Poetry / Literature / Archive / Essay / Documentary / Criticism"
-}`;
-
-  try {
-    const response = await openai.chat.completions.create({
-      model: DEFAULT_MODEL,
-      messages: [{ role: "user", content: prompt }],
-      response_format: { type: "json_object" },
-      temperature: 0.4,
-      max_tokens: 1200,
-    });
-
-    const content = response.choices[0]?.message?.content;
-    if (content) {
-      return JSON.parse(content) as EpisodeMeta;
-    }
-  } catch (err) {
-    console.error("Error generating episode metadata:", err);
-  }
+  const sentences = clean
+    .split(/[।?!]/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 10);
+  const quote = sentences[0] || episodeTitle;
 
   return {
     titleEn: episodeTitle,
     slug: `episode-${episodeNumber}`,
-    readingTimeMinutes: 4,
-    excerpt: formattedBody.slice(0, 150) + "...",
-    summary: formattedBody.slice(0, 300) + "...",
+    readingTimeMinutes: Math.max(1, Math.ceil(clean.split(/\s+/).length / 130)),
+    excerpt,
+    summary: excerpt,
     shortDescription: episodeTitle,
-    quote: "ঘরের শত্রু বিভীষণ",
-    highlightedQuote: "এই কাব্য ইতিহাসের পাতায় রুদ্ধ কণ্ঠস্বরের।",
+    quote,
+    highlightedQuote: quote,
     seoMetaTitle: `${episodeTitle} | Thoughts Whatever`,
-    seoDescription: `Read ${episodeTitle} - part of ${seriesName} on Thoughts Whatever.`,
-    openGraphDescription: `Explore ${episodeTitle} on Thoughts Whatever.`,
-    twitterDescription: `Read ${episodeTitle} on Thoughts Whatever.`,
-    keywords: [seriesName, episodeTitle, "Bengali Literature"],
+    seoDescription: `${episodeTitle} — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।`,
+    openGraphDescription: excerpt,
+    twitterDescription: excerpt,
+    keywords: [seriesName, episodeTitle, "বাংলা সাহিত্য", "Bengali Literature"],
     bengaliTags: ["বাংলা সাহিত্য", "বিশ্লেষণ"],
     englishTags: ["Bengali Literature", "Analysis"],
-    category: "Writing",
+    category: "Literature",
   };
 }
 
 /**
- * Generate social media captions for multiple platforms (Instagram, Facebook, LinkedIn, Twitter thread, YouTube).
+ * Deterministic, offline social media caption generation.
  */
 export async function generateSocialCaptions(
   seriesName: string,
@@ -276,57 +155,18 @@ export async function generateSocialCaptions(
   quote: string,
   url: string
 ): Promise<SocialCaptions> {
-  const prompt = `You are the Social Media Strategist for 'Thoughts Whatever' (https://thoughts-whatever.vercel.app).
-
-Generate engaging social media captions and posts for an episode of a literary series.
-
-Series: ${seriesName}
-Episode: ${episodeTitle}
-Quote: ${quote}
-Excerpt: ${excerpt}
-URL: ${url}
-
-Return ONLY valid JSON matching this schema:
-{
-  "instagram": "Instagram caption with line breaks, emojis, literary tone, and hashtags",
-  "facebook": "Engaging Facebook post in Bengali with link call-to-action",
-  "linkedin": "Professional LinkedIn post focusing on literary analysis, cultural heritage, and critical thinking",
-  "twitterThread": [
-    "Tweet 1 (hook with quote + emoji)",
-    "Tweet 2 (core premise / context)",
-    "Tweet 3 (link to full piece + CTA)"
-  ],
-  "youtubeDescription": "YouTube video / reel description with timestamp hints, summary, and links",
-  "shortDescription": "One-line catchy preview for stories/status"
-}`;
-
-  try {
-    const response = await openai.chat.completions.create({
-      model: DEFAULT_MODEL,
-      messages: [{ role: "user", content: prompt }],
-      response_format: { type: "json_object" },
-      temperature: 0.5,
-      max_tokens: 1200,
-    });
-
-    const content = response.choices[0]?.message?.content;
-    if (content) {
-      return JSON.parse(content) as SocialCaptions;
-    }
-  } catch (err) {
-    console.error("Error generating social captions:", err);
-  }
+  const cleanQuote = quote ? `"${quote}"\n\n` : "";
 
   return {
-    instagram: `✨ ${episodeTitle}\n\n"${quote}"\n\n${excerpt}\n\n🔗 সম্পূর্ণ লেখাটি পড়ুন বায়োর লিংকে:\n${url}\n\n#ThoughtsWhatever #বাংলাসাহিত্য #${seriesName.replace(/\s+/g, "")}`,
-    facebook: `📖 ${seriesName}: ${episodeTitle}\n\n"${quote}"\n\n${excerpt}\n\nপড়ুন পুরো লেখাটি: ${url}`,
-    linkedin: `Exploring Bengali Literature: ${episodeTitle} (${seriesName})\n\n"${quote}"\n\nRead the full piece here: ${url}`,
+    instagram: `✨ ${episodeTitle}\n\n${cleanQuote}${excerpt}\n\n🔗 সম্পূর্ণ লেখাটি পড়ুন বায়োর লিংকে:\n${url}\n\n#ThoughtsWhatever #বাংলাসাহিত্য #${seriesName.replace(/\s+/g, "")}`,
+    facebook: `📖 ${seriesName}: ${episodeTitle}\n\n${cleanQuote}${excerpt}\n\nপড়ুন পুরো লেখাটি: ${url}`,
+    linkedin: `Exploring Bengali Literature: ${episodeTitle} (${seriesName})\n\n${cleanQuote}Read the full piece here: ${url}`,
     twitterThread: [
-      `📌 "${quote}"\n\n${episodeTitle} — ${seriesName}`,
+      `📌 ${quote || episodeTitle}\n\n${episodeTitle} — ${seriesName}`,
       `${excerpt}`,
       `🔗 Read the full piece on Thoughts Whatever:\n${url}`,
     ],
-    youtubeDescription: `${episodeTitle} | ${seriesName}\n\n"${quote}"\n\nRead full article: ${url}`,
+    youtubeDescription: `${episodeTitle} | ${seriesName}\n\n${cleanQuote}Read full article: ${url}`,
     shortDescription: `${episodeTitle} — ${seriesName}`,
   };
 }

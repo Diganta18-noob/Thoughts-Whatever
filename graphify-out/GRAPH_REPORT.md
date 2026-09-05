@@ -1,0 +1,692 @@
+# Graph Report - .  (2026-08-30)
+
+## Corpus Check
+- Large corpus: 526 files ╖ ~308,460 words. Semantic extraction will be expensive (many Claude tokens). Consider running on a subfolder.
+
+## Summary
+- 641 nodes · 12 edges · 629 communities (3 shown, 626 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
+- Token cost: 0 input · 0 output
+
+## Community Hubs (Navigation)
+- Module: alsofeaturedstackedprops
+- Documentary & Series Automation
+- Module: articleheroprops
+- Module: themeclassification
+- Admin & Analytics Portal
+- Module: coverimageframeprops
+- Reading & Piece Components
+- System Maintenance & Backup
+- Module: cleanmarkdownbody
+- Documentary & Series Automation
+- Module: formatarticlebody
+- Documentary & Series Automation
+- Documentary & Series Automation
+- Module: generatesocialcaptions
+- Documentary & Series Automation
+- Module: socialcaptions
+- Module: computefilehash
+- Module: contentmanifest
+- Module: hasfilechanged
+- Module: loadmanifest
+- Module: savemanifest
+- Module: updatefilehash
+- Module: printoutputsummary
+- Module: qualityreport
+- Module: runqualitycheck
+- Module: savesocialcaptions
+- Documentary & Series Automation
+- Module: characterentity
+- Module: classifythemes
+- Module: extractentities
+- Module: glossaryentry
+- Module: locationentity
+- Module: quoteentity
+- Module: referenceentry
+- Module: themeentry
+- Module: timelineentry
+- Module: assembledocument
+- Module: autosaveprompts
+- Module: automatchandsyncreels
+- Module: reelfeeditem
+- Module: aboutpage
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Module: get
+- Module: get
+- Module: get
+- Module: get
+- Module: get
+- Module: post
+- Module: get
+- Module: post
+- Module: post
+- Authentication & Security
+- Authentication & Security
+- Reading & Piece Components
+- Module: generatemetadata
+- Module: generatestaticparams
+- Module: bookmarkspage
+- Module: contactpage
+- Module: documentarylayout
+- Reading & Piece Components
+- Module: generatemetadata
+- Module: generatestaticparams
+- Module: forgotpasswordredirect
+- Module: globalerror
+- Module: rootlayout
+- Module: letterpage
+- Module: get
+- Module: loginredirect
+- Module: privacypage
+- Module: resetpasswordredirect
+- Module: banglasahityertimelinepage
+- Module: robots
+- Module: get
+- Documentary & Series Automation
+- Documentary & Series Automation
+- Module: sitemap
+- Authentication & Security
+- Module: generatemetadata
+- Module: generatestaticparams
+- Reading & Piece Components
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Module: fadein
+- Module: brandloading
+- Module: logosize
+- Module: logotheme
+- Module: logovariant
+- Authentication & Security
+- Module: homeheroprops
+- Module: quote
+- Module: sectionerror
+- Reading & Piece Components
+- Module: navlabel
+- Module: publicchrome
+- Module: coverimageframe
+- Module: parallax
+- Module: reveal
+- Module: stagger
+- Module: staggeritem
+- Module: smoothscroll
+- Module: splittext
+- Module: letterblock
+- Reading & Piece Components
+- Reading & Piece Components
+- Reading & Piece Components
+- Reading & Piece Components
+- Reading & Piece Components
+- Reading & Piece Components
+- Reading & Piece Components
+- Admin & Analytics Portal
+- Module: audioprovider
+- Module: track
+- Module: useaudio
+- Module: bookmark
+- Module: bookmarksprovider
+- Module: usebookmarks
+- Module: appproviders
+- Module: languageprovider
+- Module: uselanguagesafe
+- Module: usetranslation
+- Module: lenisprovider
+- Module: posthogprovider
+- Module: progressentry
+- Module: progressinput
+- Module: progressprovider
+- Module: useprogress
+- Module: readingprovider
+- Module: readingsettings
+- Module: theme
+- Module: themescript
+- Module: articleleftsidebarprops
+- Module: articlesignature
+- Module: printbutton
+- Module: progresssubject
+- Module: reelctaprops
+- Documentary & Series Automation
+- Module: matchdocs
+- Module: searchdoc
+- Module: usesearchindex
+- Module: bengalitext
+- Module: englishtext
+- SEO & Entity Graph
+- Module: transliteratetext
+- Module: transliteratewrapper
+- Module: transliterationprovider
+- Module: usetransliterationcontext
+- Module: usebengalionly
+- Module: usebilingualtext
+- Module: useenglishonly
+- SEO & Entity Graph
+- Module: usesitename
+- Module: usetransliterate
+- SEO & Entity Graph
+- SEO & Entity Graph
+- Module: getrecentactivities
+- Module: logactivity
+- Module: logactivityinput
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Admin & Analytics Portal
+- Authentication & Security
+- Module: auditloginput
+- Reading & Piece Components
+- Documentary & Series Automation
+- Module: auditseverity
+- Module: auditsystemaction
+- Module: createauditlog
+- Module: logauditevent
+- Authentication & Security
+- Admin & Analytics Portal
+- Authentication & Security
+- Authentication & Security
+- Authentication & Security
+- Authentication & Security
+- Authentication & Security
+- Authentication & Security
+- Authentication & Security
+- Admin & Analytics Portal
+- Authentication & Security
+- Authentication & Security
+- Authentication & Security
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- Module: auditperformance
+- Authentication & Security
+- Admin & Analytics Portal
+- Module: runhealthcheck
+- Module: senddailyproductionreportemail
+- Module: logcategory
+- Module: readlatestlogs
+- Module: rotatelogs
+- Module: writelog
+- Module: getlastpipelinereport
+- Module: getlatestpipelinereport
+- Module: ispipelinerunning
+- Module: runmasterpipeline
+- Module: initproductionscheduler
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- Admin & Analytics Portal
+- System Maintenance & Backup
+- Module: brokenlinksresult
+- Module: contentintegrityresult
+- Module: healthcheckresult
+- Module: performanceauditresult
+- Module: pipelinereport
+- Module: pipelinestepstatus
+- Authentication & Security
+- Module: steplog
+- Module: bengaliincludes
+- Module: bengalisearchkey
+- Module: bengalislug
+- Module: countbengaliwords
+- Module: formatbengalidate
+- Module: formatbengaliduration
+- Module: formatbengaliweekday
+- Module: formatdualdate
+- Module: formatreadingtime
+- Module: normalizebengali
+- Module: readingminutes
+- Module: tobangladate
+- Module: tobengalinumber
+- Module: tolatinnumber
+- Module: publishedblobprefixes
+- Module: usableprefix
+- Module: getbuildtimeslugs
+- Module: confirmtoastoptions
+- Module: contentgraphdata
+- Module: getcontentgraphdata
+- Module: graphlink
+- Module: graphnode
+- Module: articlehealthissue
+- Module: articlehealthreport
+- Module: calculatecontenthealth
+- Module: contenthealthsummary
+- Reading & Piece Components
+- Module: iscontentnegotiablepath
+- Module: negotiatecontenttype
+- Module: negotiatedtype
+- Module: parseacceptheader
+- Module: parsedmediatype
+- Module: coverresolution
+- Module: resolvecover
+- Module: resolveremotetarget
+- Module: articlelengthinsight
+- Module: contentgap
+- Module: editorialintelligencedata
+- Module: geteditorialintelligencedata
+- Module: publishingtimeinsight
+- Documentary & Series Automation
+- Reading & Piece Components
+- Module: topicinsight
+- Module: formaterrormessage
+- Module: cleanmixedtranscription
+- Module: getgroqclient
+- Reading & Piece Components
+- Reading & Piece Components
+- Module: bn
+- Module: dictionary
+- Module: en
+- Module: translationkey
+- Module: formatdate
+- Module: formatdualdate
+- Module: formatduration
+- Module: formatnumber
+- Module: formatreading
+- Module: formatweekday
+- Module: toisostring
+- Module: islocale
+- Module: locale
+- Module: localemeta
+- Module: translationparams
+- Module: analyzeimage
+- Module: imagemeta
+- Module: imageorientation
+- Module: probeimagedimensions
+- Module: absolutecoverurl
+- Module: absoluteimageurl
+- Module: covermime
+- Module: coversrc
+- Module: isoptimizable
+- Module: normalizemime
+- Module: gettransporter
+- Module: sendmail
+- Module: sendmailoptions
+- Module: sendpasswordresetemail
+- Module: deriveexcerpt
+- Reading & Piece Components
+- Module: extractheadings
+- Module: extractpullquotes
+- Module: firstgrapheme
+- Module: formatmarkdownbody
+- Module: heading
+- Module: pullquote
+- Module: render404markdown
+- Module: renderarticlemarkdown
+- Module: renderhomemarkdown
+- Module: renderpagemarkdown
+- Module: splitleadparagraph
+- Module: stripmarkdown
+- Module: stripthoughtssignature
+- Module: createmediarecord
+- Module: deletemediarecord
+- Module: getmediadetails
+- Module: getmedialist
+- Module: getmediaparams
+- Module: syncallmediausage
+- Module: updatemediametadata
+- Module: uploadmediabuffer
+- Module: navitem
+- Reading & Piece Components
+- Reading & Piece Components
+- Module: createnotification
+- Module: createnotificationinput
+- Module: deletenotification
+- Module: getnotifications
+- Module: markallnotificationsasread
+- Module: marknotificationasread
+- Module: notificationseverity
+- Module: notificationtype
+- Module: getopenaiclient
+- Module: consumeresettoken
+- Module: createresettoken
+- Module: hashresettoken
+- Module: tokenverificationresult
+- Module: action
+- Module: getpermissionsmatrix
+- Module: haspermission
+- Module: permissioncheck
+- Module: resource
+- Reading & Piece Components
+- Reading & Piece Components
+- Module: initposthog
+- Module: getposthogserverclient
+- Module: prisma
+- Module: getclientip
+- Module: ratelimit
+- Module: ratelimitoptions
+- Module: ratelimitresult
+- Reading & Piece Components
+- Module: getrecommendationslist
+- Module: recommendationitem
+- Module: recomputeallrecommendations
+- Module: createrevisionoptions
+- Module: createrevisionsnapshot
+- Reading & Piece Components
+- Module: getrevisionbyid
+- Reading & Piece Components
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- Reading & Piece Components
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- SEO & Entity Graph
+- Documentary & Series Automation
+- SEO & Entity Graph
+- Documentary & Series Automation
+- Documentary & Series Automation
+- Module: addreviewcomment
+- Module: generatepreviewtoken
+- Reading & Piece Components
+- Module: reviewcomment
+- Module: updatereviewstatus
+- Module: automationreportdata
+- Module: getliveautomationstate
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- Module: checkhealth
+- Module: systemhealthstatus
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- System Maintenance & Backup
+- Module: sendnotificationemail
+- System Maintenance & Backup
+- Module: initscheduler
+- Module: timelineitem
+- Module: eventpayload
+- Module: trackevent
+- Module: trackreelclick
+- Module: engineerror
+- Module: eventaction
+- Module: resilienttranscribe
+- Module: transcriptionevent
+- Module: transcriptionresult
+- Module: geterrordetails
+- Module: autotransliterate
+- Module: banglatoenglish
+- Module: englishtobangla
+- Module: getsitename
+- Module: hasbengalitransliterabletext
+- Module: hasenglishtransliterabletext
+- Module: tobilingualtext
+- Module: toenglishslug
+- SEO & Entity Graph
+- Module: absoluteurl
+- Module: cn
+- Module: instagramshortcode
+- Module: withtimeout
+- Module: youtubeid
+- Module: flattenissues
+- Reading & Piece Components
+- Module: promptinput
+- Module: promptupdate
+- Module: issafeinternalpath
+- Module: middleware
+- Module: cloudinaryconfig
+- Module: uploadresponse
+
+## God Nodes (most connected - your core abstractions)
+1. `PieceCardData` - 3 edges
+2. `EpisodeData` - 2 edges
+3. `FullPiece` - 2 edges
+4. `EpisodeAnalysis` - 1 edges
+5. `EpisodeEntities` - 1 edges
+6. `ThemeClassification` - 1 edges
+7. `SeriesData` - 1 edges
+8. `AnalyticsData` - 1 edges
+9. `TopArticleItem` - 1 edges
+10. `AlsoFeaturedStackedProps` - 1 edges
+
+## Surprising Connections (you probably didn't know these)
+- `EpisodeData` --references--> `EpisodeAnalysis`  [EXTRACTED]
+  scripts/docs-assembler.ts → scripts/docs-ai.ts
+- `EpisodeData` --references--> `EpisodeEntities`  [EXTRACTED]
+  scripts/docs-assembler.ts → scripts/docs-ai.ts
+- `SeriesData` --references--> `ThemeClassification`  [EXTRACTED]
+  scripts/docs-assembler.ts → scripts/docs-ai.ts
+- `AnalyticsData` --references--> `TopArticleItem`  [EXTRACTED]
+  src/components/admin/analytics-dashboard.tsx → src/components/admin/top-articles-table.tsx
+- `AlsoFeaturedStackedProps` --references--> `PieceCardData`  [EXTRACTED]
+  src/components/home/also-featured-stacked.tsx → src/components/pieces/piece-card.tsx
+
+## Import Cycles
+- None detected.
+
+## Communities (629 total, 626 thin omitted)
+
+### Community 0 - "Module: alsofeaturedstackedprops"
+Cohesion: 0.50
+Nodes (4): AlsoFeaturedStackedProps, FeaturedSeriesHeroProps, PieceCardData, EpisodeCarouselProps
+
+### Community 1 - "Documentary & Series Automation"
+Cohesion: 0.67
+Nodes (3): EpisodeAnalysis, EpisodeEntities, EpisodeData
+
+### Community 2 - "Module: articleheroprops"
+Cohesion: 0.67
+Nodes (3): ArticleHeroProps, ArticleRightSidebarProps, FullPiece
+
+## Knowledge Gaps
+- **638 isolated node(s):** `SeriesMeta`, `EpisodeMeta`, `SocialCaptions`, `cleanMarkdownBody`, `formatArticleBody` (+633 more)
+  These have ≤1 connection - possible missing edges or undocumented components.
+- **626 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+
+## Suggested Questions
+_Questions this graph is uniquely positioned to answer:_
+
+- **What connects `SeriesMeta`, `EpisodeMeta`, `SocialCaptions` to the rest of the system?**
+  _638 weakly-connected nodes found - possible documentation gaps or missing edges._

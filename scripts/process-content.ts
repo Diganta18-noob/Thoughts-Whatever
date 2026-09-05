@@ -69,6 +69,12 @@ const KNOWN_REEL_METADATA: Record<string, { reelUrl: string; publishedAt: string
   "পদ্মা-নদীর-মাঝি": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DbnWzEngeuK/", publishedAt: "2026-08-04T00:00:00.000Z" },
   "frankenstein": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Dbqe-LmACcl/", publishedAt: "2026-08-05T00:00:00.000Z" },
   "ক্ষুদিরাম-বসু": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db5q8YKAjQc/", publishedAt: "2026-08-11T00:00:00.000Z" },
+  "চিত্ত-যেথা-ভয়-শুন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
+  "চিত্ত-যেথা-ভয়-শূন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
+  "চিত্ত-যেথা-ভয়-শুন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
+  "চিত্ত-যেথা-ভয়-শূন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
+  "চিত্ত যেথা ভয় শুন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
+  "চিত্ত যেথা ভয় শূন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
 };
 
 /**
@@ -248,7 +254,7 @@ async function findAuthorForSeries(seriesTitle: string) {
 
 async function findAuthorForSolo(titleBn: string) {
   const t = titleBn.toLowerCase();
-  if (t.includes("ঘরে-বাইরে") || t.includes("রক্তকরবী")) {
+  if (t.includes("ঘরে-বাইরে") || t.includes("রক্তকরবী") || t.includes("চিত্ত")) {
     return await prisma.author.findFirst({ where: { slug: "রবীন্দ্রনাথ-ঠাকুর" } });
   }
   if (t.includes("কপালকুন্ডলা") || t.includes("কপালকুণ্ডলা")) {
@@ -324,8 +330,9 @@ async function findAuthorForSolo(titleBn: string) {
   return null;
 }
 
-async function main() {
+async function main(options?: { force?: boolean }) {
   console.log("🚀 Thoughts Whatever — Content Automation Engine Starting...\n");
+  const isForce = options?.force ?? process.argv.includes("--force");
 
   const contentBaseDir = path.join(process.cwd(), "Content");
   const contextBaseDir = path.join(contentBaseDir, "context");
@@ -451,6 +458,53 @@ async function main() {
       const fileBaseName = path.basename(file, path.extname(file));
       const episodeNumber = extractEpisodeNumber(fileBaseName);
 
+      // Generate standard SEO URL slug & Clean Title
+      let pieceSlug = `${seriesSlug}-${episodeNumber}`;
+      let formattedTitleBn = fileBaseName.trim();
+      if (episodeNumber === 1 && !formattedTitleBn.includes("|") && !formattedTitleBn.includes("পর্ব") && !/\d/.test(formattedTitleBn)) {
+        formattedTitleBn = cleanSeriesTitle;
+      } else if (episodeNumber === 2 && !formattedTitleBn.includes("|") && !/\d/.test(formattedTitleBn)) {
+        formattedTitleBn = `${cleanSeriesTitle} | পর্ব-২`;
+      } else if (episodeNumber === 3 && formattedTitleBn.includes("অন্তিম")) {
+        formattedTitleBn = `${cleanSeriesTitle} | অন্তিম পর্ব`;
+      }
+
+      // Check if piece already exists by slug or (seriesId + seriesOrder)
+      let existingPiece = await prisma.piece.findFirst({
+        where: {
+          OR: [
+            { slug: pieceSlug },
+            { AND: [{ seriesId: series.id }, { seriesOrder: episodeNumber }] },
+          ],
+        },
+      });
+
+      const known = KNOWN_REEL_METADATA[pieceSlug] || KNOWN_REEL_METADATA[formattedTitleBn] || KNOWN_REEL_METADATA[fileBaseName];
+      const reelUrl = known?.reelUrl || existingPiece?.reelUrl;
+      const targetPublishedAt = known ? new Date(known.publishedAt) : (existingPiece?.publishedAt || new Date());
+
+      if (existingPiece && !isForce) {
+        console.log(`  ℹ️ Episode #${episodeNumber} already exists (${existingPiece.slug}). Updating metadata if needed...`);
+        let coverUrl = existingPiece.coverImage;
+        if (!coverUrl) {
+          const thumbnailPath = findThumbnail(thumbnailSeriesDir, fileBaseName);
+          if (thumbnailPath) {
+            const uploaded = await uploadImage(thumbnailPath, `episodes/${seriesSlug}`);
+            if (uploaded) coverUrl = uploaded.url;
+          }
+        }
+        await prisma.piece.update({
+          where: { id: existingPiece.id },
+          data: {
+            reelUrl,
+            publishedAt: targetPublishedAt,
+            coverImage: coverUrl,
+            ogImage: coverUrl || existingPiece.ogImage,
+          },
+        });
+        continue;
+      }
+
       console.log(`\n  📝 STEP 1: Reading Context File: "${file}"...`);
       const rawText = fs.readFileSync(filePath, "utf-8");
 
@@ -500,34 +554,9 @@ async function main() {
         tagIds.push(tag.id);
       }
 
-      // Generate standard SEO URL slug & Clean Title
-      let pieceSlug = `${seriesSlug}-${episodeNumber}`;
-      let formattedTitleBn = fileBaseName.trim();
-      if (episodeNumber === 1 && !formattedTitleBn.includes("|") && !formattedTitleBn.includes("পর্ব") && !/\d/.test(formattedTitleBn)) {
-        formattedTitleBn = cleanSeriesTitle;
-      } else if (episodeNumber === 2 && !formattedTitleBn.includes("|") && !/\d/.test(formattedTitleBn)) {
-        formattedTitleBn = `${cleanSeriesTitle} | পর্ব-২`;
-      } else if (episodeNumber === 3 && formattedTitleBn.includes("অন্তিম")) {
-        formattedTitleBn = `${cleanSeriesTitle} | অন্তিম পর্ব`;
-      }
-
       const author = await findAuthorForSeries(cleanSeriesTitle);
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://thoughts-whatever.vercel.app";
       const fullUrl = `${baseUrl}/writing/${pieceSlug}`;
-
-      // Check if piece already exists by slug or (seriesId + seriesOrder)
-      let existingPiece = await prisma.piece.findFirst({
-        where: {
-          OR: [
-            { slug: pieceSlug },
-            { AND: [{ seriesId: series.id }, { seriesOrder: episodeNumber }] },
-          ],
-        },
-      });
-
-      const known = KNOWN_REEL_METADATA[pieceSlug] || KNOWN_REEL_METADATA[formattedTitleBn] || KNOWN_REEL_METADATA[fileBaseName];
-      const reelUrl = known?.reelUrl || existingPiece?.reelUrl;
-      const targetPublishedAt = known ? new Date(known.publishedAt) : (existingPiece?.publishedAt || new Date());
 
       let piece;
       if (existingPiece) {
@@ -638,6 +667,33 @@ async function main() {
       const titleBn = path.basename(file, path.extname(file));
       const slug = bengaliSlug(titleBn);
 
+      const existingPiece = await prisma.piece.findUnique({ where: { slug }, include: { authors: true } });
+      const knownSolo = KNOWN_REEL_METADATA[slug] || KNOWN_REEL_METADATA[titleBn];
+      const soloReelUrl = knownSolo?.reelUrl || existingPiece?.reelUrl;
+      const soloPublishedAt = knownSolo ? new Date(knownSolo.publishedAt) : (existingPiece?.publishedAt || new Date());
+
+      if (existingPiece && !isForce) {
+        console.log(`  ℹ️ Solo Article "${titleBn}" (${slug}) already exists. Updating metadata if needed...`);
+        let coverUrl = existingPiece.coverImage;
+        if (!coverUrl) {
+          const coverPath = findThumbnail(soloThumbnailDir, titleBn);
+          if (coverPath) {
+            const uploaded = await uploadImage(coverPath, "piece-covers");
+            if (uploaded) coverUrl = uploaded.url;
+          }
+        }
+        await prisma.piece.update({
+          where: { id: existingPiece.id },
+          data: {
+            reelUrl: soloReelUrl,
+            publishedAt: soloPublishedAt,
+            coverImage: coverUrl,
+            ogImage: coverUrl || existingPiece.ogImage,
+          },
+        });
+        continue;
+      }
+
       console.log(`\n📄 Processing Solo Article: "${file}" -> Title: "${titleBn}" (slug: ${slug})`);
 
       const rawContent = fs.readFileSync(filePath, "utf-8");
@@ -663,11 +719,6 @@ async function main() {
       }
 
       const soloAuthor = await findAuthorForSolo(titleBn);
-      const existingPiece = await prisma.piece.findUnique({ where: { slug }, include: { authors: true } });
-
-      const knownSolo = KNOWN_REEL_METADATA[slug] || KNOWN_REEL_METADATA[titleBn];
-      const soloReelUrl = knownSolo?.reelUrl || existingPiece?.reelUrl;
-      const soloPublishedAt = knownSolo ? new Date(knownSolo.publishedAt) : (existingPiece?.publishedAt || new Date());
 
       const pieceData = {
         titleBn,
@@ -719,6 +770,24 @@ async function main() {
           },
         });
         console.log(`  ✨ Created Solo Article: "${titleBn}"`);
+      }
+
+      // Generate & Save Social Captions
+      console.log(`  📱 Generating Social Media Captions for "${titleBn}"...`);
+      try {
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://thoughts-whatever.vercel.app";
+        const fullUrl = `${baseUrl}/writing/${slug}`;
+        const socialCaptions = await generateSocialCaptions(
+          "Solo",
+          titleBn,
+          epAiMeta.excerpt,
+          epAiMeta.quote,
+          fullUrl
+        );
+        const socialFile = saveSocialCaptions(filePath, socialCaptions, titleBn, "Solo");
+        console.log(`    Saved captions to: ${path.basename(socialFile)}`);
+      } catch (err) {
+        console.warn("  ⚠️ Could not generate social captions:", err);
       }
     }
   }

@@ -240,7 +240,20 @@ async function main() {
       authorName: "পীতাম্বর দাস",
     },
 
-    // 19. পথের দাবি - পর্ব-১ (August 14)
+    // 19. চিত্ত যেথা ভয় শুন্য - রবীন্দ্রনাথ ঠাকুর (August 12)
+    {
+      match: (p: any) =>
+        p.slug === "চিত্ত-যেথা-ভয়-শুন্য" ||
+        p.slug === "চিত্ত-যেথা-ভয়-শূন্য" ||
+        p.slug.includes("চিত্ত") ||
+        p.titleBn.includes("চিত্ত"),
+      titleBn: "চিত্ত যেথা ভয় শুন্য",
+      publishedAt: new Date("2026-08-12T00:00:00.000Z"),
+      reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/",
+      authorName: "রবীন্দ্রনাথ ঠাকুর",
+    },
+
+    // 20. পথের দাবি - পর্ব-১ (August 14)
     {
       match: (p: any) =>
         (p.slug.includes("pather-dabi") || p.slug.includes("পথের-দাবি") || p.slug.includes("পথের-দাবী") || p.titleBn.includes("পথের দাবি") || p.titleBn.includes("পথের দাবী")) &&
@@ -251,7 +264,7 @@ async function main() {
       authorName: "শরৎচন্দ্র চট্টোপাধ্যায়",
     },
 
-    // 20. পথের দাবি - পর্ব -২ (August 15)
+    // 21. পথের দাবি - পর্ব -২ (August 15)
     {
       match: (p: any) =>
         (p.slug.includes("pather-dabi") || p.slug.includes("পথের-দাবি") || p.slug.includes("পথের-দাবী") || p.titleBn.includes("পথের দাবি") || p.titleBn.includes("পথের দাবী")) &&
@@ -262,7 +275,7 @@ async function main() {
       authorName: "শরৎচন্দ্র চট্টোপাধ্যায়",
     },
 
-    // 21. পথের দাবী অন্তিম পর্ব (August 16)
+    // 22. পথের দাবী অন্তিম পর্ব (August 16)
     {
       match: (p: any) =>
         (p.slug.includes("pather-dabi") || p.slug.includes("পথের-দাবি") || p.slug.includes("পথের-দাবী") || p.titleBn.includes("পথের দাবি") || p.titleBn.includes("পথের দাবী")) &&
