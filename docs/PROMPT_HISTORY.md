@@ -486,3 +486,27 @@ OBJECTIVE:
 Implement end-to-end 3-tier visual asset system across PostgreSQL database schema (`Piece.thumbnailImage`, `Series.bannerImage`), data fetching layer (`pieces.ts`), image resolution helpers (`images.ts`), UI components (`LatestEpisodes`, `FeaturedWriting`, `SeriesHeroBanner`), admin CMS editor & APIs, and editorial documentation (`IMAGE-ASSET-SYSTEM.md`).
 
 ---
+
+## 44. Master Prompt 32 — Premium Editorial Cinematic Hero Slider
+```text
+MASTER PROMPT — Premium Editorial Cinematic Hero Slider
+PROJECT: thoughts.whatever (thoughtswhatever.in)
+
+CORE PHILOSOPHY:
+Criterion Collection / HBO documentary / high-end editorial journalism.
+Cinematic, dark, minimal, intelligent, story-focused.
+
+STRUCTURE:
+- Desktop 2.1:1 container (40-45% Left Content Area + 55-60% Right Visual Area).
+- Dedicated 16:9 landscape artwork with seamless horizontal gradient mask blending edge-to-edge into website dark background.
+- Typography: Eyebrow "FEATURED STORY", large Bengali title, category/date/reading-time metadata, 2-3 lines description, minimal editorial CTA button.
+- Editorial timeline navigation: 01 ━━━━━━━ 02 ─────── 03 ─────── 04 with animated progress line, PREV/NEXT buttons, keyboard and touch swipe controls.
+- Fade + subtle Ken Burns zoom transition (no mechanical horizontal sliding).
+- Mobile stacked layout with top landscape artwork and responsive editorial content below.
+- Branch: feature/cinematic-hero-slider
+```
+
+OBJECTIVE:
+Build `FeaturedHeroSlider`, `FeaturedHeroSlide`, and `FeaturedHeroNavigation` in `src/components/home/featured-hero/` and integrate into `src/app/page.tsx`, replacing the static single featured card on the `feature/cinematic-hero-slider` branch.
+
+---

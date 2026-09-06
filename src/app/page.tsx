@@ -1,5 +1,5 @@
 import { Hero } from "@/components/home/hero";
-import { FeaturedSeriesHero } from "@/components/home/featured-series-hero";
+import { FeaturedHeroSlider } from "@/components/home/featured-hero";
 import { FeaturedSeries } from "@/components/home/featured-series";
 import { LatestEpisodes } from "@/components/home/latest-episodes";
 import { FeaturedWriting } from "@/components/home/featured-writing";
@@ -51,8 +51,12 @@ export default async function HomePage() {
     leadSeries?.pieces ? (leadSeries.pieces as Array<{ slug: string }>).map((p) => p.slug) : []
   );
 
-  // Primary hero content glimpse (latest uploaded piece)
-  const primaryGlimpsePiece = recentPieces[0] ?? null;
+  // Curate top 4 featured pieces for the Cinematic Hero Slider (prioritizing landscape artwork)
+  const heroFeaturedCandidates = recentPieces.filter((p) => p.featured && p.thumbnailImage);
+  const heroSliderPieces =
+    heroFeaturedCandidates.length >= 3
+      ? heroFeaturedCandidates.slice(0, 4)
+      : recentPieces.slice(0, 4);
 
   // Latest episodes & featured writing
   const filteredRecent = recentPieces.filter((p) => !leadSlugs.has(p.slug));
@@ -125,15 +129,10 @@ export default async function HomePage() {
       <Hero />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 space-y-16">
-        {/* Featured Card (Top) */}
-        {primaryGlimpsePiece && (
+        {/* Featured Cinematic Hero Slider */}
+        {heroSliderPieces.length > 0 && (
           <section className="pt-2">
-            <FeaturedSeriesHero
-              piece={primaryGlimpsePiece}
-              totalEpisodesInSeries={6}
-              currentEpisodeNumber={6}
-              seriesTitleBn={primaryGlimpsePiece.seriesOrder ? "মেঘনাদবধ কাব্য" : undefined}
-            />
+            <FeaturedHeroSlider pieces={heroSliderPieces} />
           </section>
         )}
 
