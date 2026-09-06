@@ -51,6 +51,7 @@ model Piece {
   coverImage       String?
   coverImageWidth  Int?
   coverImageHeight Int?
+  thumbnailImage   String? // 16:9 episode/article card thumbnail
   reelUrl          String? // https://www.instagram.com/reel/XXXX/
   videoUrl         String? // YouTube / Vimeo, for documentary pieces
   audioUrl         String? // আবৃত্তি — reuse of the reel voiceover
@@ -254,6 +255,7 @@ model Series {
   coverImage       String?
   coverImageWidth  Int?
   coverImageHeight Int?
+  bannerImage      String? // 21:9 cinematic series key art
 
   pieces Piece[]
 

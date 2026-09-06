@@ -5,8 +5,7 @@ import type { Metadata } from "next";
 import { getSeriesBySlug, getSeriesList } from "@/lib/pieces";
 import { piecePath } from "@/lib/nav";
 import { Count, LocalDate, Num, Reading } from "@/components/i18n/values";
-import { EditorialImage } from "@/components/pieces/editorial-image";
-import { Play, BookOpen, Layers } from "lucide-react";
+import { SeriesHeroBanner } from "@/components/series/series-hero-banner";
 import { absoluteUrl, withTimeout } from "@/lib/utils";
 import { JsonLd, seriesJsonLd, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
 import { SERIES_ENHANCEMENTS } from "@/lib/series-enhancements";
@@ -113,59 +112,16 @@ export default async function SeriesPage(props: RouteProps) {
       />
 
       {/* Series Hero Section */}
-      <div className="my-8 rounded-xl border border-rule/80 bg-surface-raised/40 p-6 sm:p-10 shadow-sm backdrop-blur">
-        <div className="grid gap-8 md:grid-cols-[1.5fr_2.5fr] md:items-center">
-          {/* No placeholder branch: `withSeriesCovers` runs every series through
-              `coverSrc`, so `coverImage` is always a URL. A series with no image
-              gets a 404 from `/api/cover`, and `FillImage`'s `onError` renders
-              the "Image Unavailable" box — the one place that decision can
-              actually be made. */}
-          <EditorialImage
-            src={series.coverImage}
-            alt={series.titleBn}
-            width={series.coverImageWidth}
-            height={series.coverImageHeight}
-            priority
-            aspectRatioOverride="aspect-[4/3]"
-            className="rounded-lg shadow-md"
-          />
-
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-accent">
-              <Layers className="h-3.5 w-3.5" />
-              <span>সিরিজ</span>
-            </div>
-
-            <h1 className="font-bengali text-3xl font-semibold leading-tight text-content sm:text-4xl">
-              {series.titleBn}
-            </h1>
-
-            {series.descBn && (
-              <p className="font-bengali text-base leading-relaxed text-content-soft">
-                {series.descBn}
-              </p>
-            )}
-
-            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-content-faint pt-2 border-t border-rule/50">
-              <Count k="series.parts" value={series.pieces.length} />
-              <span>·</span>
-              <Reading minutes={totalReadingMinutes} />
-            </div>
-
-            {firstPiece && (
-              <div className="pt-4">
-                <Link
-                  href={piecePath(firstPiece.kind, firstPiece.slug)}
-                  className="inline-flex items-center gap-2 rounded-md bg-accent px-5 py-2.5 font-bengali text-sm font-medium text-surface shadow transition hover:opacity-90"
-                >
-                  <Play className="h-4 w-4 fill-current" />
-                  <span>প্রথম পর্ব থেকে শুরু করুন</span>
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      <SeriesHeroBanner
+        slug={series.slug}
+        titleBn={series.titleBn}
+        descBn={series.descBn}
+        bannerImage={series.bannerImage}
+        coverImage={series.coverImage}
+        pieceCount={series.pieces.length}
+        totalReadingMinutes={totalReadingMinutes}
+        firstPieceHref={firstPiece ? piecePath(firstPiece.kind, firstPiece.slug) : null}
+      />
 
       {/* Episode Grid & Reading Order */}
       <div className="mx-auto max-w-measure-wide py-6">

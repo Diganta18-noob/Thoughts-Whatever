@@ -54,6 +54,7 @@ export const cardSelect = {
   excerptBn: true,
   coverImageWidth: true,
   coverImageHeight: true,
+  thumbnailImage: true, // 16:9 episode/article card thumbnail
   readingMinutes: true,
   featured: true,
   publishedAt: true,
@@ -64,6 +65,7 @@ export const cardSelect = {
 
 export type CardPiece = Prisma.PieceGetPayload<{ select: typeof cardSelect }> & {
   coverImage: string;
+  thumbnailImage?: string | null;
 };
 
 /**
@@ -84,6 +86,7 @@ const seriesSelect = {
   descBn: true,
   coverImageWidth: true,
   coverImageHeight: true,
+  bannerImage: true, // 21:9 cinematic series key art
 } satisfies Prisma.SeriesSelect;
 
 const byNewest: Prisma.PieceOrderByWithRelationInput = { createdAt: "desc" };
@@ -145,6 +148,7 @@ const pieceSelect = {
   excerptBn: true,
   coverImageWidth: true,
   coverImageHeight: true,
+  thumbnailImage: true,
   reelUrl: true,
   videoUrl: true,
   audioUrl: true,

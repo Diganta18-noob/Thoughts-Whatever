@@ -46,7 +46,8 @@ export function TaxonomyClient({
     { key: "titleBn", labelEn: "Title (Bengali)", primary: true, placeholderBn: t("admin.taxonomy.placeholderSeriesTitle") },
     { key: "titleEn", labelEn: "Title (English)", mono: true },
     { key: "descBn", labelEn: "Description", type: "textarea", placeholderBn: t("admin.taxonomy.placeholderSeriesDesc") },
-    { key: "coverImage", labelEn: "Cover", mono: true, placeholderBn: "/covers/….jpg" },
+    { key: "coverImage", labelEn: "Cover Poster (9:16)", mono: true, placeholderBn: "https://res.cloudinary.com/…" },
+    { key: "bannerImage", labelEn: "Banner Key Art (21:9)", mono: true, placeholderBn: "https://res.cloudinary.com/…" },
   ];
 
   return (

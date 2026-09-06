@@ -9,8 +9,15 @@ import type { CardPiece } from "@/lib/pieces";
 import { motion } from "framer-motion";
 import { CoverImageFrame } from "@/components/media/cover-image-frame";
 import { useCardHover } from "@/lib/hooks/use-card-hover";
+import { thumbnailSrc } from "@/lib/images";
 
-function FeaturedHeroSpread({ piece }: { piece: CardPiece }) {
+function FeaturedHeroSpread({
+  piece,
+  priority = false,
+}: {
+  piece: CardPiece;
+  priority?: boolean;
+}) {
   const { locale, isBn } = useLanguage();
   const href = piecePath(piece.kind, piece.slug);
   const meta = KIND_META[piece.kind];
@@ -27,20 +34,19 @@ function FeaturedHeroSpread({ piece }: { piece: CardPiece }) {
         {/* Left: 7 Columns Cinematic Artwork (58%) */}
         <div className="lg:col-span-7">
           <Link href={href} className="block overflow-hidden rounded-sm bg-surface-raised/20">
-            {piece.coverImage && (
-              <div className="relative aspect-[16/10] w-full overflow-hidden">
-                <CoverImageFrame
-                  owner="piece"
-                  slug={piece.slug}
-                  coverImage={piece.coverImage}
-                  aspect="aspect-[16/10]"
-                  rounded="rounded-sm"
-                  sizes="(max-width: 1024px) 100vw, 60vw"
-                  scale={1.03}
-                  overlay
-                />
-              </div>
-            )}
+            <div className="relative aspect-[16/10] w-full overflow-hidden">
+              <CoverImageFrame
+                owner="piece"
+                slug={piece.slug}
+                coverImage={thumbnailSrc(piece.slug, piece.thumbnailImage, piece.coverImage)}
+                aspect="aspect-[16/10]"
+                rounded="rounded-sm"
+                sizes="(max-width: 1024px) 100vw, 60vw"
+                scale={1.03}
+                priority={priority}
+                overlay
+              />
+            </div>
           </Link>
         </div>
 
@@ -139,21 +145,19 @@ function SupportingEditorialItem({
           </time>
         </div>
 
-        {/* 16:10 Cinematic Artwork */}
-        {piece.coverImage && (
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm bg-surface-raised/20">
-            <CoverImageFrame
-              owner="piece"
-              slug={piece.slug}
-              coverImage={piece.coverImage}
-              aspect="aspect-[16/10]"
-              rounded="rounded-sm"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              scale={1.03}
-              overlay
-            />
-          </div>
-        )}
+        {/* 16:9 Cinematic Artwork */}
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm bg-surface-raised/20">
+          <CoverImageFrame
+            owner="piece"
+            slug={piece.slug}
+            coverImage={thumbnailSrc(piece.slug, piece.thumbnailImage, piece.coverImage)}
+            aspect="aspect-[16/9]"
+            rounded="rounded-sm"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            scale={1.03}
+            overlay
+          />
+        </div>
 
         {/* Narrative Details */}
         <div className="mt-4 flex-1 flex flex-col justify-between">
@@ -194,7 +198,13 @@ function SupportingEditorialItem({
   );
 }
 
-export function FeaturedWriting({ pieces }: { pieces: CardPiece[] }) {
+export function FeaturedWriting({
+  pieces,
+  leadPriority = false,
+}: {
+  pieces: CardPiece[];
+  leadPriority?: boolean;
+}) {
   const { isBn, t } = useLanguage();
 
   if (!pieces.length) return null;
@@ -229,7 +239,7 @@ export function FeaturedWriting({ pieces }: { pieces: CardPiece[] }) {
       {lead && (
         <div className="mb-12">
           <Reveal delay={0.1}>
-            <FeaturedHeroSpread piece={lead} />
+            <FeaturedHeroSpread piece={lead} priority={leadPriority} />
           </Reveal>
         </div>
       )}

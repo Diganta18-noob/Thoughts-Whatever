@@ -23,6 +23,40 @@ export function coverSrc(
   return value;
 }
 
+/**
+ * Returns the 16:9 thumbnail for a piece.
+ * Falls back to coverSrc (the /api/cover proxy) when no dedicated
+ * thumbnail has been uploaded. This means every existing piece works
+ * correctly before any new assets are created.
+ */
+export function thumbnailSrc(
+  slug: string,
+  thumbnailImage?: string | null,
+  coverImage?: string | null,
+): string {
+  if (thumbnailImage?.trim()) {
+    const val = thumbnailImage.trim();
+    if (!val.startsWith("data:")) return val;
+  }
+  return coverSrc("piece", slug, coverImage);
+}
+
+/**
+ * Returns the 21:9 banner for a series.
+ * Falls back to the series cover proxy.
+ */
+export function bannerSrc(
+  slug: string,
+  bannerImage?: string | null,
+  coverImage?: string | null,
+): string {
+  if (bannerImage?.trim()) {
+    const val = bannerImage.trim();
+    if (!val.startsWith("data:")) return val;
+  }
+  return coverSrc("series", slug, coverImage);
+}
+
 function absolutize(src: string): string {
   return src.startsWith("/") ? absoluteUrl(src) : src;
 }

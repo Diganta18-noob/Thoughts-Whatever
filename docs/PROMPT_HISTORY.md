@@ -463,4 +463,26 @@ i have change on eimage in the thumbnail on the last photo names পথের �
 OBJECTIVE:
 Upload newly updated thumbnail image `Content/Thumnail/পথের দাবী/পথের দাবী অন্তিম পর্ব .png` to Cloudinary CDN under folder `episodes/পথের-দাবী` and update PostgreSQL database piece record for `পথের-দাবী-3` (`cmtevwu070006kjms77me3i89`) with the new CDN `coverImage` URL, `ogImage`, and dimensions.
 
+## 43. Master Prompt 31 — 3-Tier Image Asset Hierarchy System
+```text
+Implementation Plan — 3-Tier Image Asset Hierarchy System
+What the audit found (exact current state):
+Homepage hero card: FeaturedSeriesHero -> 3:4 portrait (coverImage)
+Homepage featured writing: FeaturedHeroSpread -> 16:10 landscape (needs thumbnailImage)
+Homepage latest stories: SupportingEditorialItem -> 16:9 landscape (needs thumbnailImage)
+Homepage latest episodes: EpisodeCard -> 16:9 landscape slot (needs thumbnailImage)
+Series index cards: SeriesCard -> 3:4 portrait (series.coverImage)
+Series detail hero: SeriesHeroBanner -> 21:9 cinematic key art (series.bannerImage)
+
+ASSET TYPE         FIELD NAME       RATIO    WHERE USED
+────────────────────────────────────────────────────────────────────
+Poster / Identity  coverImage       9:16     Series cards, FeaturedSeriesHero, ArticleCard split/hero, social OG
+Episode Thumbnail  thumbnailImage   16:9     LatestEpisodes grid, SupportingEditorialItem, ArchiveCards, RelatedPieces cards
+Series Key Art     bannerImage      21:9     Series detail page hero ONLY
+────────────────────────────────────────────────────────────────────
+```
+
+OBJECTIVE:
+Implement end-to-end 3-tier visual asset system across PostgreSQL database schema (`Piece.thumbnailImage`, `Series.bannerImage`), data fetching layer (`pieces.ts`), image resolution helpers (`images.ts`), UI components (`LatestEpisodes`, `FeaturedWriting`, `SeriesHeroBanner`), admin CMS editor & APIs, and editorial documentation (`IMAGE-ASSET-SYSTEM.md`).
+
 ---

@@ -166,13 +166,13 @@ export function TaxonomyManager({
             {field.labelEn}
           </span>
           <div className="mt-1.5">
-            {field.key === "coverImage" ? (
+            {field.key === "coverImage" || field.key === "bannerImage" ? (
               <ImageUpload
                 value={draft[field.key] ?? ""}
                 onChange={(url) => setField(field.key, url)}
                 label={field.labelEn}
                 folder="series"
-                aspectRatio={16 / 9}
+                aspectRatio={field.key === "bannerImage" ? 21 / 9 : 16 / 9}
               />
             ) : field.type === "textarea" ? (
               <textarea

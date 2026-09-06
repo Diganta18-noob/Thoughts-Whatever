@@ -87,6 +87,7 @@ export const pieceInputSchema = z.object({
   coverImage: optionalUrl,
   coverImageWidth: z.coerce.number().int().positive().nullable().optional(),
   coverImageHeight: z.coerce.number().int().positive().nullable().optional(),
+  thumbnailImage: optionalUrl,
   reelUrl: optionalUrl,
   videoUrl: optionalUrl,
   audioUrl: optionalUrl,
@@ -143,6 +144,7 @@ export const seriesInputSchema = z.object({
   titleEn: optionalText,
   descBn: optionalText,
   coverImage: optionalUrl,
+  bannerImage: optionalUrl,
 });
 
 export const loginSchema = z.object({

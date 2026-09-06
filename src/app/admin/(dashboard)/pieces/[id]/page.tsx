@@ -48,6 +48,7 @@ export default async function EditPiecePage(props: PageProps) {
     coverImage: piece.coverImage ?? "",
     coverImageWidth: piece.coverImageWidth,
     coverImageHeight: piece.coverImageHeight,
+    thumbnailImage: piece.thumbnailImage ?? "",
     reelUrl: piece.reelUrl ?? "",
     videoUrl: piece.videoUrl ?? "",
     audioUrl: piece.audioUrl ?? "",

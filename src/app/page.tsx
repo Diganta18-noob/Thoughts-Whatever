@@ -148,7 +148,7 @@ export default async function HomePage() {
         )}
 
         {/* Featured Longform Writing */}
-        {featuredWriting.length > 0 && <FeaturedWriting pieces={featuredWriting} />}
+        {featuredWriting.length > 0 && <FeaturedWriting pieces={featuredWriting} leadPriority={false} />}
         <Categories kinds={kinds} forms={formTags} />
         {timeline.length > 0 && <Timeline entries={timeline} />}
         <ArchiveTeaser years={facets.years ?? []} />

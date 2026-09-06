@@ -50,6 +50,7 @@ export type EditorPiece = {
   coverImage: string;
   coverImageWidth?: number | null;
   coverImageHeight?: number | null;
+  thumbnailImage?: string;
   reelUrl: string;
   videoUrl: string;
   audioUrl: string;
@@ -78,6 +79,7 @@ export const EMPTY_PIECE: EditorPiece = {
   bodyBn: "",
   excerptBn: "",
   coverImage: "",
+  thumbnailImage: "",
   reelUrl: "",
   videoUrl: "",
   audioUrl: "",
@@ -229,6 +231,7 @@ export function PieceEditor({
     coverImage: initial?.coverImage ?? "",
     coverImageWidth: (initial as any)?.coverImageWidth ?? null,
     coverImageHeight: (initial as any)?.coverImageHeight ?? null,
+    thumbnailImage: (initial as any)?.thumbnailImage ?? "",
     reelUrl: initial?.reelUrl ?? "",
     videoUrl: initial?.videoUrl ?? "",
     audioUrl: initial?.audioUrl ?? "",
@@ -746,9 +749,22 @@ export function PieceEditor({
                 if (meta?.width) set("coverImageWidth", meta.width);
                 if (meta?.height) set("coverImageHeight", meta.height);
               }}
-              label="Cover Image"
+              label="Cover Image (9:16)"
               folder="covers"
             />
+
+            <div>
+              <ImageUpload
+                value={form.thumbnailImage ?? ""}
+                onChange={(url) => set("thumbnailImage", url)}
+                label="Thumbnail (16:9)"
+                folder="thumbnails"
+                aspectRatio={16 / 9}
+              />
+              <p className="mt-1 font-mono text-[0.6875rem] text-content-faint">
+                Recommended: 1920×1080px (16:9). If not set, the cover poster will be used in card slots.
+              </p>
+            </div>
 
             <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_90px]">
               <Field

@@ -30,6 +30,9 @@ function scalarData(input: PieceInput) {
     readingMinutes: derived.readingMinutes,
 
     coverImage: input.coverImage ?? null,
+    coverImageWidth: input.coverImageWidth ?? null,
+    coverImageHeight: input.coverImageHeight ?? null,
+    thumbnailImage: input.thumbnailImage ?? null,
     reelUrl: input.reelUrl ?? null,
     videoUrl: input.videoUrl ?? null,
     audioUrl: input.audioUrl ?? null,

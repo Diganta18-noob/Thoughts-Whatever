@@ -9,8 +9,9 @@ import type { CardPiece } from "@/lib/pieces";
 import { motion } from "framer-motion";
 import { CoverImageFrame } from "@/components/media/cover-image-frame";
 import { useCardHover } from "@/lib/hooks/use-card-hover";
+import { thumbnailSrc } from "@/lib/images";
 
-function EpisodeCard({ piece }: { piece: CardPiece }) {
+function EpisodeCard({ piece, index }: { piece: CardPiece; index: number }) {
   const { locale, isBn } = useLanguage();
   const href = piecePath(piece.kind, piece.slug);
   const meta = KIND_META[piece.kind];
@@ -22,20 +23,19 @@ function EpisodeCard({ piece }: { piece: CardPiece }) {
       {...cardMotionProps}
     >
       <Link href={href} className="block flex-1 flex flex-col">
-        {/* 3:4 Portrait Book Poster Artwork */}
-        {piece.coverImage && (
-          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-surface-raised/40 shadow-inner">
-            <CoverImageFrame
-              owner="piece"
-              slug={piece.slug}
-              coverImage={piece.coverImage}
-              aspect="aspect-[3/4]"
-              rounded="rounded-lg"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-              overlay
-            />
-          </div>
-        )}
+        {/* 16:9 Landscape Card Artwork */}
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg bg-surface-raised/40 shadow-inner">
+          <CoverImageFrame
+            owner="piece"
+            slug={piece.slug}
+            coverImage={thumbnailSrc(piece.slug, piece.thumbnailImage, piece.coverImage)}
+            aspect="aspect-[16/9]"
+            rounded="rounded-lg"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            priority={index === 0}
+            overlay
+          />
+        </div>
 
         {/* Content Details */}
         <div className="mt-4 flex-1 flex flex-col justify-between">
@@ -116,9 +116,9 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
       </Reveal>
 
       <Stagger as="div" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4" delay={0.1}>
-        {pieces.slice(0, 4).map((piece) => (
+        {pieces.slice(0, 4).map((piece, index) => (
           <StaggerItem key={piece.slug}>
-            <EpisodeCard piece={piece} />
+            <EpisodeCard piece={piece} index={index} />
           </StaggerItem>
         ))}
       </Stagger>

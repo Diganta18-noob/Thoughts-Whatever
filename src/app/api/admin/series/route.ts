@@ -20,6 +20,7 @@ export async function POST(request: Request) {
         titleEn: body.data.titleEn ?? null,
         descBn: body.data.descBn ?? null,
         coverImage: body.data.coverImage ?? null,
+        bannerImage: body.data.bannerImage ?? null,
       },
       select: { id: true, slug: true },
     });
