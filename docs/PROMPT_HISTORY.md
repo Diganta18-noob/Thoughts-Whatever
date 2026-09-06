@@ -510,3 +510,38 @@ OBJECTIVE:
 Build `FeaturedHeroSlider`, `FeaturedHeroSlide`, and `FeaturedHeroNavigation` in `src/components/home/featured-hero/` and integrate into `src/app/page.tsx`, replacing the static single featured card on the `feature/cinematic-hero-slider` branch.
 
 ---
+
+## 45. Master Prompt 33 — Latest Section Cinematic Hero Carousel
+```text
+MASTER PROMPT — Latest Section Cinematic Hero Carousel
+PROJECT: thoughts.whatever (thoughtswhatever.in)
+
+DIRECTIVE:
+Redesign ONLY the existing "LATEST" section of the Thoughts.Whatever website.
+Do not modify the navbar, header, existing hero section above, other sections, typography system, colors, routing, backend, or global layout.
+The goal is to replace the current static 4-card Latest grid with a premium cinematic editorial hero carousel.
+
+DESIGN CONCEPT:
+- Section heading preserved: LATEST ... VIEW ALL →
+- Large 21:9 / 16:7 landscape cinematic carousel.
+- Full background image using dedicated landscape editorial thumbnails.
+- Left-side dark gradient overlay:
+  linear-gradient(90deg, rgba(10,10,12,0.95) 0%, rgba(10,10,12,0.75) 35%, rgba(10,10,12,0.25) 65%, rgba(10,10,12,0.05) 100%)
+- Left editorial content:
+  Small uppercase orange label (DOCUMENTARY)
+  Large Bengali or English title
+  Short description (max 2-3 lines)
+  Date • Reading time
+  Button: READ STORY → (minimal editorial CTA)
+- 6-second auto-play loop with infinite cycling, pause on hover, pause on inactive tab, touch swipe, keyboard navigation.
+- Smooth crossfade + subtle image zoom (scale 1.03 -> 1).
+- Bottom progress indicator:
+  01 ─────── 02 ─────── 03 ─────── 04 ───────
+  Active slide has orange number + animated line filled over the 6-second duration. Direct click navigation.
+- Subtle navigation buttons: ‹ PREV  NEXT ›.
+```
+
+OBJECTIVE:
+Redesign `src/components/home/latest-episodes.tsx` into a self-contained cinematic hero carousel, restoring the existing hero section above in `src/app/page.tsx`.
+
+---
