@@ -453,10 +453,14 @@ Inspect newly added landscape images in `Content/Thumnail Landscape/নীলদ
 - `3055f9e5-7d22-4f2f-a11d-124e8ae2d78b.png` ("দ্বিতীয় পর্ব") -> `নীলদর্পণ পর্ব - ২ - Landscape.png`
 - `1cd04b1d-4ef5-4a1b-9679-df8cdfd695f0.png` ("অন্তিম পর্ব") -> `নীলদর্পণ অন্তিম পর্ব - Landscape.png`
 
+## 42. Master Prompt 30 — Pather Dabi Final Episode Thumbnail Cloudinary & Database Update
+```text
+D:\Antigravity\thoughts-whatever\Content\Thumnail\পথের দাবী
+
+i have change on eimage in the thumbnail on the last photo names পথের দাবী অন্তিম পর্ব , just chnage the photo in the database so that it will chnage in the website
+```
+
+OBJECTIVE:
+Upload newly updated thumbnail image `Content/Thumnail/পথের দাবী/পথের দাবী অন্তিম পর্ব .png` to Cloudinary CDN under folder `episodes/পথের-দাবী` and update PostgreSQL database piece record for `পথের-দাবী-3` (`cmtevwu070006kjms77me3i89`) with the new CDN `coverImage` URL, `ogImage`, and dimensions.
+
 ---
-
-
-
-
-
-
