@@ -16,7 +16,19 @@ const SLIDE_DURATION = 6000; // 6 seconds auto-play
 
 export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
   const { locale, isBn } = useLanguage();
-  const slides = pieces.slice(0, 4);
+  
+  // Deduplicate pieces by series: only one poster/episode per series
+  const seenSeries = new Set<string>();
+  const uniquePieces = pieces.filter((p) => {
+    const sId = p.seriesId || p.series?.slug;
+    if (sId) {
+      if (seenSeries.has(sId)) return false;
+      seenSeries.add(sId);
+    }
+    return true;
+  });
+
+  const slides = uniquePieces.slice(0, 4);
   const total = slides.length;
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -195,9 +207,17 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.25em] text-accent font-semibold"
+              className="flex flex-wrap items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.25em] text-accent font-semibold"
             >
               <span>{meta ? (isBn ? meta.labelBn : meta.labelEn) : "DOCUMENTARY"}</span>
+              {currentPiece.series?.titleBn && (
+                <>
+                  <span className="text-white/30 tracking-normal">•</span>
+                  <span className="font-bengali text-xs tracking-normal font-normal text-white/80">
+                    {currentPiece.series.titleBn}
+                  </span>
+                </>
+              )}
             </motion.div>
 
             {/* Navigation buttons (Desktop top/bottom right) */}

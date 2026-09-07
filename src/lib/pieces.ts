@@ -59,7 +59,9 @@ export const cardSelect = {
   featured: true,
   publishedAt: true,
   audioUrl: true,
+  seriesId: true,
   seriesOrder: true,
+  series: { select: { titleBn: true, slug: true } },
   authors: { select: { slug: true, nameBn: true } },
 } satisfies Prisma.PieceSelect;
 

@@ -545,3 +545,14 @@ OBJECTIVE:
 Redesign `src/components/home/latest-episodes.tsx` into a self-contained cinematic hero carousel, restoring the existing hero section above in `src/app/page.tsx`.
 
 ---
+
+## 46. Master Directive 34 — Deduplicate Latest Section by Series (Single Poster per Series)
+```text
+see here for latest section there should show only one ibe poster like for nidorpon series upload it should show only one poster .
+```
+
+OBJECTIVE:
+Ensure that in the Latest section (`LatestEpisodes` cinematic carousel on the home page), multi-episode series (such as Nildarpan, Pather Dabi, etc.) only display ONE poster representing the series (the newest published episode), rather than occupying multiple slides with separate episode posters of the same series. Standalone pieces continue to display individually. Also, exclude pieces shown in the Latest carousel from repeating in Featured Writing.
+
+---
+

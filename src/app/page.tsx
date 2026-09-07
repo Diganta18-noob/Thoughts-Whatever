@@ -56,16 +56,32 @@ export default async function HomePage() {
 
   // Latest episodes & featured writing
   const filteredRecent = recentPieces.filter((p) => !leadSlugs.has(p.slug));
-  const latestEpisodes = filteredRecent.length > 0 ? filteredRecent.slice(0, 4) : recentPieces.slice(0, 4);
 
-  const featuredPieces = recentPieces.filter((p) => p.featured);
-  const filteredFeatured = featuredPieces.filter((p) => !leadSlugs.has(p.slug));
+  // Deduplicate by series so multi-episode series only occupy ONE poster in the Latest section
+  const seenSeriesInLatest = new Set<string>();
+  const uniqueSeriesRecent: typeof recentPieces = [];
+  for (const piece of filteredRecent) {
+    const sId = piece.seriesId || piece.series?.slug;
+    if (sId) {
+      if (seenSeriesInLatest.has(sId)) {
+        continue;
+      }
+      seenSeriesInLatest.add(sId);
+    }
+    uniqueSeriesRecent.push(piece);
+  }
+
+  const latestEpisodes = uniqueSeriesRecent.slice(0, 4);
+  const latestSlugs = new Set(latestEpisodes.map((p) => p.slug));
+
+  const nonLatestRecent = recentPieces.filter(
+    (p) => !leadSlugs.has(p.slug) && !latestSlugs.has(p.slug),
+  );
+  const featuredPieces = nonLatestRecent.filter((p) => p.featured);
   const featuredWriting =
-    filteredFeatured.length > 0
-      ? filteredFeatured.slice(0, 5)
-      : recentPieces.slice(4, 9).length > 0
-        ? recentPieces.slice(4, 9)
-        : recentPieces.slice(0, 5);
+    featuredPieces.length > 0
+      ? featuredPieces.slice(0, 5)
+      : nonLatestRecent.slice(0, 5);
 
   const quoteCandidates = recentPieces.map((p) => ({
     slug: p.slug,
