@@ -120,6 +120,10 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
   const summary = currentPiece.dekBn || currentPiece.excerptBn;
   const imageSrc = thumbnailSrc(currentPiece.slug, currentPiece.thumbnailImage, currentPiece.coverImage);
   const isPaused = isHovered || !isTabActive;
+  const displayTitle =
+    currentPiece.titleBn
+      .replace(/\s*\|\s*(পর্ব[-\s]*\d+|অন্তিম\s*পর্ব|part[-\s]*\d+).*$/i, "")
+      .trim() || currentPiece.titleBn;
 
   return (
     <section className="py-6">
@@ -210,14 +214,15 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
               className="flex flex-wrap items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.25em] text-accent font-semibold"
             >
               <span>{meta ? (isBn ? meta.labelBn : meta.labelEn) : "DOCUMENTARY"}</span>
-              {currentPiece.series?.titleBn && (
-                <>
-                  <span className="text-white/30 tracking-normal">•</span>
-                  <span className="font-bengali text-xs tracking-normal font-normal text-white/80">
-                    {currentPiece.series.titleBn}
-                  </span>
-                </>
-              )}
+              {currentPiece.series?.titleBn &&
+                currentPiece.series.titleBn.trim().toLowerCase() !== displayTitle.trim().toLowerCase() && (
+                  <>
+                    <span className="text-white/30 tracking-normal">•</span>
+                    <span className="font-bengali text-xs tracking-normal font-normal text-white/80">
+                      {currentPiece.series.titleBn}
+                    </span>
+                  </>
+                )}
             </motion.div>
 
             {/* Navigation buttons (Desktop top/bottom right) */}
@@ -261,7 +266,7 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
                   className="font-bengali text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-medium leading-[1.18] text-white tracking-tight drop-shadow-md transition-colors hover:text-accent"
                   lang="bn"
                 >
-                  <Link href={href}>{currentPiece.titleBn}</Link>
+                  <Link href={href}>{displayTitle}</Link>
                 </h3>
 
                 {/* Short Literary Description (max 2-3 lines) */}

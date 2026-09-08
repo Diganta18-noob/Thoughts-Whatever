@@ -13,6 +13,7 @@ import {
   getFeaturedSeries,
   getRecentPieces,
   getFilterFacets,
+  getFirstPiecesForSeriesIds,
 } from "@/lib/pieces";
 import { extractPullQuotes } from "@/lib/markdown";
 import { JsonLd, seriesJsonLd, homeWebPageJsonLd } from "@/lib/seo";
@@ -57,25 +58,49 @@ export default async function HomePage() {
   // Latest episodes & featured writing
   const filteredRecent = recentPieces.filter((p) => !leadSlugs.has(p.slug));
 
-  // Deduplicate by series so multi-episode series only occupy ONE poster in the Latest section
+  // Deduplicate by series so multi-episode series only occupy ONE poster in the Latest section.
+  // Feature the first part (Part 1 / episode 1) so it shows the clean title without part suffixes.
   const seenSeriesInLatest = new Set<string>();
+  const candidateSeriesIds: string[] = [];
+  for (const piece of filteredRecent) {
+    const sId = piece.seriesId || piece.series?.slug;
+    if (sId) {
+      if (!seenSeriesInLatest.has(sId)) {
+        seenSeriesInLatest.add(sId);
+        if (piece.seriesId) {
+          candidateSeriesIds.push(piece.seriesId);
+        }
+      }
+    }
+  }
+
+  const firstPiecesMap = await getFirstPiecesForSeriesIds(candidateSeriesIds);
+
+  const seenSeries = new Set<string>();
   const uniqueSeriesRecent: typeof recentPieces = [];
   for (const piece of filteredRecent) {
     const sId = piece.seriesId || piece.series?.slug;
     if (sId) {
-      if (seenSeriesInLatest.has(sId)) {
+      if (seenSeries.has(sId)) {
         continue;
       }
-      seenSeriesInLatest.add(sId);
+      seenSeries.add(sId);
+      const firstPiece = piece.seriesId ? firstPiecesMap.get(piece.seriesId) : null;
+      uniqueSeriesRecent.push(firstPiece || piece);
+    } else {
+      uniqueSeriesRecent.push(piece);
     }
-    uniqueSeriesRecent.push(piece);
   }
 
   const latestEpisodes = uniqueSeriesRecent.slice(0, 4);
   const latestSlugs = new Set(latestEpisodes.map((p) => p.slug));
+  const latestSeriesIds = new Set(latestEpisodes.map((p) => p.seriesId).filter(Boolean));
 
   const nonLatestRecent = recentPieces.filter(
-    (p) => !leadSlugs.has(p.slug) && !latestSlugs.has(p.slug),
+    (p) =>
+      !leadSlugs.has(p.slug) &&
+      !latestSlugs.has(p.slug) &&
+      (!p.seriesId || !latestSeriesIds.has(p.seriesId)),
   );
   const featuredPieces = nonLatestRecent.filter((p) => p.featured);
   const featuredWriting =

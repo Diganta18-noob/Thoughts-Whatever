@@ -513,3 +513,29 @@ export const getPublishingTimeline = cache(async () => {
     count: Number(r.count),
   }));
 });
+
+export const getFirstPiecesForSeriesIds = cache(async (seriesIds: string[]) => {
+  const validIds = seriesIds.filter(Boolean);
+  if (validIds.length === 0) return new Map<string, CardPiece>();
+
+  const rows = await prisma.piece.findMany({
+    where: {
+      ...PUBLISHED,
+      seriesId: { in: validIds },
+    },
+    select: cardSelect,
+    orderBy: [
+      { seriesOrder: "asc" },
+      { publishedAt: "asc" },
+      { createdAt: "asc" },
+    ],
+  });
+
+  const map = new Map<string, CardPiece>();
+  for (const row of rows) {
+    if (row.seriesId && !map.has(row.seriesId)) {
+      map.set(row.seriesId, withCover(row));
+    }
+  }
+  return map;
+});

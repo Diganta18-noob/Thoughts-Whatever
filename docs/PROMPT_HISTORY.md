@@ -556,3 +556,11 @@ Ensure that in the Latest section (`LatestEpisodes` cinematic carousel on the ho
 
 ---
 
+## 47. Master Directive 35 — Feature First Part of Series in Latest Section
+```text
+insted of showing the part , you should show the first part because first has not part name so that it looks good like i gve u the secoond photo
+```
+
+OBJECTIVE:
+In the Latest (`LatestEpisodes`) hero carousel on the homepage, when featuring a multi-part series (such as নীলদর্পণ / Nil Darpan), display the first part (Part 1 / episode 1) instead of the latest part (e.g. "নীলদর্পণ | অন্তিম পর্ব"). The first part contains the clean series/work title without part suffixes ("| পর্ব-২", "| অন্তিম পর্ব"), provides the starting point for new readers, and utilizes the clean primary poster artwork. Also, ensure the category badge does not redundantly repeat the series title when it matches the story title, and sanitize any part suffixes for clean editorial presentation.
+
