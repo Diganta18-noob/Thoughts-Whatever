@@ -35,9 +35,14 @@ function interpolate(
 ) {
   if (template === undefined || template === null) return fallbackKey || "";
   if (!params) return template;
-  return template.replace(/\{(\w+)\}/g, (whole, name: string) =>
+  let text = template.replace(/\{(\w+)\}/g, (whole, name: string) =>
     name in params ? String(params[name]) : whole,
   );
+  // English grammatical agreement: e.g. "1 pieces" -> "1 piece", "1 sources" -> "1 source"
+  if (params.count === 1 || params.count === "1") {
+    text = text.replace(/\b1\s+pieces\b/gi, "1 piece").replace(/\b1\s+sources\b/gi, "1 source");
+  }
+  return text;
 }
 
 type Ctx = {

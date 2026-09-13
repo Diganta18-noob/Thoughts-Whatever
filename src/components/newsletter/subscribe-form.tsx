@@ -45,6 +45,7 @@ export function SubscribeForm({
 }) {
   const { t, locale, isBn } = useLanguage();
   const [email, setEmail] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [state, setState] = useState<State>("idle");
   const [messageKey, setMessageKey] =
     useState<TranslationKey>("letter.msg.failed");
@@ -60,7 +61,7 @@ export function SubscribeForm({
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source }),
+        body: JSON.stringify({ email, source, website: honeypot }),
       });
       const data = (await res.json()) as { ok?: boolean; code?: string };
       const key: TranslationKey =
@@ -110,6 +111,17 @@ export function SubscribeForm({
       onSubmit={onSubmit}
       className={cn("w-full", compact ? "" : "max-w-sm", className)}
     >
+      {/* Honeypot field for bot mitigation - invisible to real readers */}
+      <input
+        type="text"
+        name="website"
+        value={honeypot}
+        onChange={(e) => setHoneypot(e.target.value)}
+        className="hidden"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+      />
       <div className="flex gap-2">
         <label className="sr-only" htmlFor={`subscribe-${source}`} lang={locale}>
           {t("letter.emailLabel")}

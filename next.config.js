@@ -90,7 +90,27 @@ const nextConfig = {
           },
           {
             key: "Referrer-Policy",
-            value: "origin-when-cross-origin",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://us-assets.i.posthog.com https://us.i.posthog.com https://www.instagram.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com data:",
+              "img-src 'self' data: blob: https://res.cloudinary.com https://*.cdninstagram.com https://*.fbcdn.net https://i.ytimg.com https://images.unsplash.com",
+              "media-src 'self' https://res.cloudinary.com data: blob:",
+              "connect-src 'self' https://res.cloudinary.com https://us.i.posthog.com https://us-assets.i.posthog.com https://api.groq.com https://openrouter.ai",
+              "frame-src 'self' https://www.instagram.com https://www.youtube.com https://www.youtube-nocookie.com",
+              "frame-ancestors 'self'",
+              "base-uri 'self'",
+              "form-action 'self'",
+            ].join("; "),
           },
           {
             key: "Permissions-Policy",

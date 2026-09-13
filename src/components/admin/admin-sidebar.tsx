@@ -60,6 +60,7 @@ const NAV_GROUPS: NavGroup[] = [
       { href: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
       { href: "/admin/pieces", label: "Pieces", icon: FileText },
       { href: "/admin/series", label: "Series", icon: FolderTree },
+      { href: "/admin/reference", label: "Reference Library", icon: BookOpen },
       { href: "/admin/taxonomy", label: "Taxonomy", icon: Tags },
       { href: "/admin/media", label: "Media Library", icon: ImageIcon },
       { href: "/admin/import", label: "Import", icon: UploadCloud },

@@ -75,6 +75,8 @@ const KNOWN_REEL_METADATA: Record<string, { reelUrl: string; publishedAt: string
   "চিত্ত-যেথা-ভয়-শূন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
   "চিত্ত যেথা ভয় শুন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
   "চিত্ত যেথা ভয় শূন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
+  "চিত্ত যেথা ভয়শূন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
+  "চিত্ত যেথা ভয়শূন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
 };
 
 /**

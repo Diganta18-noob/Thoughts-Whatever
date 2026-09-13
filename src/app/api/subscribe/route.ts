@@ -7,8 +7,8 @@ export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   const ip = getClientIp(request);
-  const limiter = rateLimit(`subscribe:${ip}`, { windowMs: 60 * 1000, max: 10 });
-  if (!limiter.success) {
+  const ipLimiter = rateLimit(`subscribe:ip:${ip}`, { windowMs: 60 * 1000, max: 8 });
+  if (!ipLimiter.success) {
     return NextResponse.json(
       { ok: false, code: "rateLimited", messageBn: "অনেকবার চেষ্টা করা হয়েছে। একটু পরে আবার চেষ্টা করুন।" },
       { status: 429 }
@@ -33,7 +33,26 @@ export async function POST(request: Request) {
     );
   }
 
+  // Honeypot trap: if a bot filled the hidden website field, return synthetic success without writing to DB
+  if (parsed.data.website && parsed.data.website.trim().length > 0) {
+    return NextResponse.json({
+      ok: true,
+      code: "subscribed",
+      messageBn: "লেখা হয়ে গেল। মাসের চিঠি আপনার কাছে পৌঁছবে।",
+    });
+  }
+
   const email = parsed.data.email.trim().toLowerCase();
+
+  // Secondary rate limit per email address to prevent targeted spamming
+  const emailKey = Buffer.from(email).toString("hex").slice(0, 24);
+  const emailLimiter = rateLimit(`subscribe:mail:${emailKey}`, { windowMs: 60 * 1000, max: 3 });
+  if (!emailLimiter.success) {
+    return NextResponse.json(
+      { ok: false, code: "rateLimited", messageBn: "অনেকবার চেষ্টা করা হয়েছে। একটু পরে আবার চেষ্টা করুন।" },
+      { status: 429 }
+    );
+  }
 
   try {
     await prisma.subscriber.upsert({
@@ -49,7 +68,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    console.error("subscribe failed", error);
+    console.error("[Subscribe API] Subscription processing failure:", error);
     return NextResponse.json(
       {
         ok: false,
@@ -60,6 +79,7 @@ export async function POST(request: Request) {
     );
   }
 
+  // Uniform enumeration-safe success response
   return NextResponse.json({
     ok: true,
     code: "subscribed",
