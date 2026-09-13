@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ReferenceRightsBadge } from "./reference-rights-badge";
-import { BookOpen, ExternalLink, Headphones, ArrowRight, FileText } from "lucide-react";
+import { BookOpen, ExternalLink, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ReferenceCardProps {
@@ -44,73 +44,78 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
   const coverImage = edition?.coverImage;
 
   return (
-    <article className="group relative flex flex-col bg-zinc-950/80 border border-zinc-850 hover:border-zinc-750 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-black/40">
-      {/* Cover / Visual Frame */}
-      <div className="relative aspect-[16/10] w-full bg-zinc-900 overflow-hidden border-b border-zinc-850">
+    <article className="group relative flex flex-col border border-rule bg-surface transition-all duration-300 hover:border-content-faint/60">
+      {/* Cover / Archival Frame */}
+      <Link
+        href={`/reference/${work.slug}`}
+        className="relative aspect-[16/10] w-full overflow-hidden border-b border-rule bg-surface-raised block"
+      >
         {coverImage ? (
           <Image
             src={coverImage}
             alt={work.titleBn}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover object-top opacity-85 transition-transform duration-500 group-hover:scale-105 group-hover:opacity-95"
+            className="object-cover object-top opacity-85 transition-transform duration-700 group-hover:scale-[1.03] group-hover:opacity-100"
           />
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-zinc-900 to-zinc-950 p-6 text-center">
-            <BookOpen className="w-8 h-8 text-zinc-700 group-hover:text-emerald-500/80 transition-colors mb-2" />
-            <span className="font-serif text-lg font-bold text-zinc-400 line-clamp-1">
+          <div className="flex h-full w-full flex-col items-center justify-center p-6 text-center">
+            <BookOpen className="h-7 w-7 text-content-faint transition-colors group-hover:text-accent" />
+            <span className="mt-2 font-bengali text-lg text-content-soft">
               {work.titleBn}
             </span>
           </div>
         )}
 
         {/* Top Badges */}
-        <div className="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 pointer-events-none">
-          <span className="font-mono text-[0.65rem] px-2 py-0.5 rounded-full bg-zinc-950/80 backdrop-blur-md border border-zinc-700/60 text-zinc-300 uppercase tracking-wider">
+        <div className="absolute inset-x-3 top-3 flex items-center justify-between gap-2 pointer-events-none">
+          <span className="label !bg-surface/90 !text-[0.625rem] border border-rule/80 px-2 py-0.5 rounded-full backdrop-blur-sm">
             {work.type}
           </span>
           <ReferenceRightsBadge status={rightsStatus} size="sm" />
         </div>
-      </div>
+      </Link>
 
-      {/* Meta Content */}
-      <div className="flex flex-col flex-1 p-4 sm:p-5">
-        <div className="text-[0.7rem] font-mono text-zinc-500 uppercase tracking-wider flex items-center gap-2 mb-1.5">
+      {/* Meta Body */}
+      <div className="flex flex-1 flex-col p-5">
+        {/* Dateline & Era */}
+        <div className="flex items-center gap-2 text-[0.6875rem] font-mono text-content-faint uppercase tracking-wider">
           <span>{work.language}</span>
           {work.era && (
             <>
-              <span>•</span>
-              <span>{work.era}</span>
+              <span>·</span>
+              <span className="text-content-soft">{work.era}</span>
             </>
           )}
           {edition?.publicationYear && (
             <>
-              <span>•</span>
-              <span className="text-zinc-400">{edition.publicationYear}</span>
+              <span>·</span>
+              <span>{edition.publicationYear}</span>
             </>
           )}
         </div>
 
-        <h3 className="font-serif text-lg font-bold text-zinc-100 group-hover:text-emerald-400 transition-colors leading-snug line-clamp-2">
-          <Link href={`/reference/${work.slug}`} className="focus:outline-none">
+        {/* Title */}
+        <h3 className="mt-2.5 font-bengali text-xl font-medium leading-snug text-content transition-colors group-hover:text-accent">
+          <Link href={`/reference/${work.slug}`}>
             {work.titleBn}
           </Link>
         </h3>
 
         {work.titleEn && (
-          <div className="text-xs text-zinc-400 font-sans italic line-clamp-1 mt-0.5">
+          <p className="mt-1 font-serif text-xs italic text-content-faint line-clamp-1">
             {work.titleEn}
-          </div>
+          </p>
         )}
 
-        {/* Bibliographic Attribution */}
-        <div className="mt-3 pt-3 border-t border-zinc-900 text-xs text-zinc-400 space-y-1 flex-1">
+        {/* Bibliographic Details */}
+        <div className="mt-4 flex-1 space-y-1 border-t border-rule/60 pt-3 text-xs text-content-soft">
           {work.author && (
-            <div className="flex items-center gap-1 text-zinc-300">
-              <span className="text-zinc-500">লেখক:</span>
+            <div className="flex items-baseline gap-1.5 line-clamp-1">
+              <span className="label !text-[0.625rem]">Author</span>
               <Link
                 href={`/authors/${work.author.slug}`}
-                className="hover:text-emerald-400 font-serif"
+                className="font-bengali text-content hover:text-accent transition-colors"
               >
                 {work.author.nameBn}
               </Link>
@@ -118,65 +123,49 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
           )}
 
           {edition?.editor && (
-            <div className="line-clamp-1 text-zinc-400">
-              <span className="text-zinc-500">সম্পাদনা:</span> {edition.editor}
-            </div>
-          )}
-
-          {edition?.publisher && (
-            <div className="line-clamp-1 text-zinc-500 text-[0.75rem]">
-              প্রকাশক: {edition.publisher}
+            <div className="line-clamp-1 text-content-soft">
+              <span className="label !text-[0.625rem] mr-1.5">Editor</span>
+              <span className="font-serif">{edition.editor}</span>
             </div>
           )}
 
           {edition?.source && (
-            <div className="text-[0.7rem] text-zinc-500 line-clamp-1 flex items-center gap-1">
-              <span>উৎস:</span>
-              <span className="text-zinc-400">{edition.source.sourceName}</span>
+            <div className="line-clamp-1 text-[0.6875rem] text-content-faint">
+              <span className="label !text-[0.625rem] mr-1.5">Source</span>
+              <span className="font-serif">{edition.source.sourceName}</span>
             </div>
           )}
         </div>
 
-        {/* Dynamic Action System */}
-        <div className="mt-4 pt-3 border-t border-zinc-850 flex items-center justify-between text-xs">
+        {/* Actions Row */}
+        <div className="mt-5 flex items-center justify-between border-t border-rule pt-3 text-xs">
           <Link
             href={`/reference/${work.slug}`}
-            className="inline-flex items-center gap-1 text-zinc-400 group-hover:text-zinc-200 font-mono text-[0.75rem] transition-colors"
+            className="inline-flex items-center gap-1 font-serif text-xs text-content-soft hover:text-accent transition-colors"
           >
-            <span>বিবরণ ও বিবরণী</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            <span>Dossier</span>
+            <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
           </Link>
 
-          <div className="flex items-center gap-2">
-            {work.capabilities.canListen && (
-              <span
-                title="শ্রব্য সংস্করণ লভ্য"
-                className="p-1 rounded bg-zinc-900 text-emerald-400 border border-zinc-800"
-              >
-                <Headphones className="w-3.5 h-3.5" />
-              </span>
-            )}
-
-            {work.capabilities.canReadOnline && (
+          <div>
+            {work.capabilities.canReadOnline ? (
               <Link
                 href={`/reference/${work.slug}/read`}
-                className="px-2.5 py-1 rounded bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-400 border border-emerald-800/60 font-mono text-[0.7rem] transition-colors"
+                className="label !text-accent hover:opacity-75 transition-opacity"
               >
-                পাঠকক্ষ
+                Read Online →
               </Link>
-            )}
-
-            {!work.capabilities.canReadOnline && edition?.source?.sourceUrl && (
+            ) : edition?.source?.sourceUrl ? (
               <a
                 href={edition.source.sourceUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-850 text-zinc-300 border border-zinc-750 font-mono text-[0.7rem] transition-colors"
+                className="label !text-content-faint hover:!text-content transition-colors inline-flex items-center gap-1"
               >
-                <span>উৎস</span>
-                <ExternalLink className="w-3 h-3 text-zinc-500" />
+                <span>Original Source</span>
+                <ExternalLink className="h-2.5 w-2.5" />
               </a>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

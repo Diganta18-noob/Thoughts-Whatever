@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { ShieldAlert, X, Loader2, CheckCircle2 } from "lucide-react";
+import { X, Loader2, CheckCircle2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface ReportRightsModalProps {
@@ -50,142 +50,128 @@ export function ReportRightsModal({
       if (!res.ok) throw new Error(data.error || "Submission failed");
 
       setIsSuccess(true);
-      toast.success("আপনার বার্তা সফলভাবে জমা হয়েছে।");
+      toast.success("Notice submitted successfully.");
     } catch (err: any) {
-      toast.error(err.message || "ত্রুটি ঘটেছে। অনুগ্রহ করে পুনরায় চেষ্টা করুন।");
+      toast.error(err.message || "Failed to submit rights notice.");
     } finally {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-lg bg-zinc-950 border border-zinc-800 rounded-xl shadow-2xl p-6 text-zinc-100 my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
+      <div className="relative w-full max-w-lg bg-surface border border-rule p-6 sm:p-8 text-content my-8 shadow-2xl">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-100 p-1.5 rounded-lg hover:bg-zinc-850"
+          className="absolute top-4 right-4 text-content-faint hover:text-content p-1"
         >
-          <X className="w-5 h-5" />
+          <X className="h-4 w-4" />
         </button>
 
         {isSuccess ? (
-          <div className="py-8 text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-emerald-950/60 border border-emerald-800 text-emerald-400 flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-6 h-6" />
-            </div>
-            <h3 className="font-serif text-lg font-bold text-zinc-100">
-              নোটিশ জমা সম্পন্ন হয়েছে
+          <div className="py-6 text-center space-y-3">
+            <CheckCircle2 className="h-8 w-8 text-emerald-500 mx-auto" />
+            <h3 className="font-serif text-lg font-medium text-content">
+              Notice Received
             </h3>
-            <p className="text-xs text-zinc-400 leading-relaxed max-w-md mx-auto">
-              Thoughts.Whatever কপিরাইট ও বৌদ্ধিক স্বত্বাধিকার রক্ষায় প্রতিশ্রুতিবদ্ধ। আমাদের সম্পাদকীয় দল প্রদত্ত তথ্য যাচাই করে প্রয়োজনীয় ব্যবস্থা গ্রহণ করবে।
+            <p className="text-xs text-content-soft leading-relaxed max-w-sm mx-auto font-serif">
+              Thoughts.Whatever respects intellectual property rights. Our editorial team will review the submitted notice within 48 hours.
             </p>
-            <div className="pt-3">
+            <div className="pt-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2 text-xs font-mono text-zinc-950 bg-emerald-400 hover:bg-emerald-300 rounded-lg font-semibold"
+                className="label border border-rule px-4 py-2 hover:border-content transition-colors"
               >
-                বন্ধ করুন
+                Close
               </button>
             </div>
           </div>
         ) : (
           <div>
-            <div className="flex items-center gap-3 border-b border-zinc-850 pb-4 mb-4">
-              <div className="p-2 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-400">
-                <ShieldAlert className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-serif text-base font-bold text-zinc-100">
-                  স্বত্ব বা কপিরাইট সংক্রান্ত আপত্তি / নোটিশ
-                </h3>
-                <p className="text-xs text-zinc-400 line-clamp-1">{resourceTitle}</p>
-              </div>
+            <div className="border-b border-rule pb-3 mb-5">
+              <span className="label block">Rights Notice</span>
+              <h3 className="font-serif text-lg font-medium text-content mt-1">
+                Report a Rights or Copyright Concern
+              </h3>
+              <p className="text-xs text-content-faint font-bengali line-clamp-1 mt-0.5">
+                {resourceTitle}
+              </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-3.5">
+            <form onSubmit={handleSubmit} className="space-y-4 text-xs font-serif">
               <div>
-                <label className="block text-[0.7rem] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                  আপনার নাম (Full Name) *
-                </label>
+                <label className="label block mb-1">Your Full Name *</label>
                 <input
                   type="text"
                   required
                   value={claimantName}
                   onChange={(e) => setClaimantName(e.target.value)}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-surface-raised border border-rule px-3 py-2 text-content focus:border-accent focus:outline-none text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-[0.7rem] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                  ইমেইল ঠিকানা (Email Address) *
-                </label>
+                <label className="label block mb-1">Email Address *</label>
                 <input
                   type="email"
                   required
                   value={claimantEmail}
                   onChange={(e) => setClaimantEmail(e.target.value)}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-surface-raised border border-rule px-3 py-2 text-content focus:border-accent focus:outline-none text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-[0.7rem] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                  আপত্তির কারণ (Nature of Claim) *
-                </label>
+                <label className="label block mb-1">Nature of Concern *</label>
                 <input
                   type="text"
                   required
-                  placeholder="যেমন: সক্রিয় স্বত্বাধিকারী দাবি, মেয়াদকাল বা লাইসেন্স ত্রুটি"
+                  placeholder="e.g. Active copyright claim, translation licensing dispute"
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-surface-raised border border-rule px-3 py-2 text-content focus:border-accent focus:outline-none text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-[0.7rem] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                  প্রমাণপত্র বা তথ্যসূত্র লিঙ্ক (Supporting Evidence URL)
-                </label>
+                <label className="label block mb-1">Supporting Evidence / Catalog URL</label>
                 <input
                   type="url"
                   placeholder="https://..."
                   value={supportingUrl}
                   onChange={(e) => setSupportingUrl(e.target.value)}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-surface-raised border border-rule px-3 py-2 text-content focus:border-accent focus:outline-none text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-[0.7rem] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                  বিস্তারিত বিবরণ (Detailed Message) *
-                </label>
+                <label className="label block mb-1">Detailed Explanation *</label>
                 <textarea
                   required
                   rows={3}
-                  placeholder="আপনার দাবি বা তথ্যের সুনির্দিষ্ট বিবরণ দিন..."
+                  placeholder="Please provide specifics regarding the rights status of this edition..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500 resize-none"
+                  className="w-full bg-surface-raised border border-rule px-3 py-2 text-content focus:border-accent focus:outline-none text-xs resize-none"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-zinc-850">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-rule">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-3.5 py-1.5 text-xs text-zinc-400 hover:text-zinc-200 border border-zinc-800 rounded-lg"
+                  className="label border border-rule px-3 py-1.5 hover:border-content text-content-faint transition-colors"
                 >
-                  বাতিল
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-1.5 text-xs font-semibold text-zinc-950 bg-rose-400 hover:bg-rose-300 rounded-lg flex items-center gap-1.5 disabled:opacity-50"
+                  className="label bg-content text-surface px-4 py-1.5 hover:bg-content-soft transition-colors flex items-center gap-1.5 disabled:opacity-50"
                 >
-                  {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                  নোটিশ জমা দিন
+                  {isSubmitting && <Loader2 className="h-3 w-3 animate-spin" />}
+                  <span>Submit Notice</span>
                 </button>
               </div>
             </form>

@@ -2,47 +2,67 @@
 
 import React from "react";
 import { ReferenceRightsStatus } from "@prisma/client";
-import { getRightsBadgeMeta } from "@/lib/reference/rights-engine";
-import { ShieldCheck, ExternalLink, HelpCircle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ReferenceRightsBadgeProps {
   status: ReferenceRightsStatus;
-  showIcon?: boolean;
+  showDot?: boolean;
   className?: string;
   size?: "sm" | "md";
 }
 
+const BADGE_CONFIG: Record<
+  ReferenceRightsStatus,
+  { label: string; dotColor: string }
+> = {
+  PUBLIC_DOMAIN: {
+    label: "Public Domain",
+    dotColor: "bg-emerald-500/80",
+  },
+  LICENSED: {
+    label: "Licensed",
+    dotColor: "bg-sky-400/80",
+  },
+  EXTERNAL_SOURCE: {
+    label: "External Source",
+    dotColor: "bg-content-faint",
+  },
+  RIGHTS_UNVERIFIED: {
+    label: "Unverified Rights",
+    dotColor: "bg-amber-400/80",
+  },
+  RESTRICTED: {
+    label: "Restricted",
+    dotColor: "bg-rose-400/80",
+  },
+};
+
 export function ReferenceRightsBadge({
   status,
-  showIcon = true,
+  showDot = true,
   className,
   size = "sm",
 }: ReferenceRightsBadgeProps) {
-  const meta = getRightsBadgeMeta(status);
-
-  const icons = {
-    PUBLIC_DOMAIN: ShieldCheck,
-    LICENSED: ShieldCheck,
-    EXTERNAL_SOURCE: ExternalLink,
-    RIGHTS_UNVERIFIED: HelpCircle,
-    RESTRICTED: Lock,
+  const config = BADGE_CONFIG[status] || {
+    label: status,
+    dotColor: "bg-content-faint",
   };
-
-  const IconComponent = icons[status] || ExternalLink;
 
   return (
     <span
       className={cn(
-        "inline-flex items-center font-mono font-medium rounded-full border tracking-wide uppercase transition-colors",
-        meta.colorClass,
-        size === "sm" ? "text-[0.65rem] px-2 py-0.5 gap-1" : "text-xs px-2.5 py-1 gap-1.5",
+        "inline-flex items-center gap-1.5 rounded-full border border-rule/70 bg-surface/90 backdrop-blur-sm font-mono tracking-label uppercase text-content-soft transition-colors",
+        size === "sm" ? "px-2 py-0.5 text-[0.625rem]" : "px-2.5 py-1 text-[0.6875rem]",
         className,
       )}
-      title={`${meta.labelEn} — ${meta.labelBn}: ${meta.descriptionBn}`}
     >
-      {showIcon && <IconComponent className={cn(size === "sm" ? "w-3 h-3" : "w-3.5 h-3.5")} />}
-      <span>{meta.labelEn}</span>
+      {showDot && (
+        <span
+          className={cn("h-1.5 w-1.5 rounded-full shrink-0", config.dotColor)}
+          aria-hidden="true"
+        />
+      )}
+      <span>{config.label}</span>
     </span>
   );
 }

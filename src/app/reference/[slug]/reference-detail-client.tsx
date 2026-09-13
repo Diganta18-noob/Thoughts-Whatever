@@ -5,7 +5,7 @@ import { ReferenceRightsStatus } from "@prisma/client";
 import { RightsBadgeMeta } from "@/lib/reference/rights-engine";
 import { ReferenceRightsBadge } from "@/components/reference/reference-rights-badge";
 import { ReportRightsModal } from "@/components/reference/report-rights-modal";
-import { ShieldCheck, ChevronDown, ChevronUp, AlertCircle, ExternalLink, Flag } from "lucide-react";
+import { ChevronDown, ChevronUp, ExternalLink, Flag } from "lucide-react";
 
 interface ReferenceDetailClientProps {
   rightsStatus: ReferenceRightsStatus;
@@ -32,80 +32,81 @@ export function ReferenceDetailClient({
   const [isReportOpen, setIsReportOpen] = useState(false);
 
   return (
-    <div className="pt-6 border-t border-zinc-800/80 space-y-4">
+    <div className="border-t border-rule pt-6 space-y-4">
       <div className="flex items-center justify-between">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-zinc-300 hover:text-zinc-100 transition-colors"
+          className="flex items-center gap-2 label text-content hover:text-accent transition-colors"
         >
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <span>স্বত্ব ও প্রত্যয়ন বিবরণী (Rights & Attribution)</span>
+          <span>Rights & Provenance Dossier</span>
           {isExpanded ? (
-            <ChevronUp className="w-3.5 h-3.5 text-zinc-500" />
+            <ChevronUp className="h-3 w-3 text-content-faint" />
           ) : (
-            <ChevronDown className="w-3.5 h-3.5 text-zinc-500" />
+            <ChevronDown className="h-3 w-3 text-content-faint" />
           )}
         </button>
 
         <button
           onClick={() => setIsReportOpen(true)}
-          className="text-xs font-mono text-zinc-500 hover:text-rose-400 flex items-center gap-1 transition-colors"
+          className="label !text-content-faint hover:!text-accent flex items-center gap-1 transition-colors"
         >
-          <Flag className="w-3 h-3" />
-          <span>স্বত্ব সংক্রান্ত আপত্তি জানান</span>
+          <Flag className="h-3 w-3" />
+          <span>Report Rights Issue</span>
         </button>
       </div>
 
       {isExpanded && (
-        <div className="p-5 rounded-xl bg-zinc-950/70 border border-zinc-850 space-y-4 text-xs">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5">
+        <div className="border border-rule/80 bg-surface-raised p-5 space-y-3.5 text-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
               <ReferenceRightsBadge status={rightsStatus} size="md" />
-              <span className="font-serif text-zinc-300 text-sm">{rightsMeta.labelBn}</span>
+              <span className="font-serif text-content-soft font-medium">
+                {rightsMeta.labelEn}
+              </span>
             </div>
             {verifiedAt && (
-              <span className="font-mono text-zinc-500 text-[0.7rem]">
-                যাচাইয়ের তারিখ: {new Date(verifiedAt).toLocaleDateString()}
+              <span className="font-mono text-content-faint text-[0.6875rem]">
+                Verified: {new Date(verifiedAt).toLocaleDateString()}
               </span>
             )}
           </div>
 
-          <p className="text-zinc-300 leading-relaxed font-sans">
-            {rightsMeta.descriptionBn}
+          <p className="font-serif text-content-soft text-xs leading-relaxed">
+            {rightsMeta.descriptionEn}
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-zinc-900 text-zinc-400 font-mono text-[0.75rem]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-rule/60 text-xs font-serif">
             {license && (
               <div>
-                <span className="text-zinc-500 block">লাইসেন্স শর্ত:</span>
-                <span className="text-zinc-200">{license}</span>
+                <span className="label block text-[0.625rem]">License</span>
+                <span className="text-content">{license}</span>
               </div>
             )}
             {rightsHolder && (
               <div>
-                <span className="text-zinc-500 block">স্বত্বাধিকারী / কর্তৃপক্ষ:</span>
-                <span className="text-zinc-200">{rightsHolder}</span>
+                <span className="label block text-[0.625rem]">Authority / Rights Holder</span>
+                <span className="text-content">{rightsHolder}</span>
               </div>
             )}
             {evidenceUrl && (
               <div className="sm:col-span-2">
-                <span className="text-zinc-500 block">আইনি প্রমাণপত্র বা তথ্যসূত্র:</span>
+                <span className="label block text-[0.625rem]">Verification Evidence</span>
                 <a
                   href={evidenceUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-emerald-400 hover:underline flex items-center gap-1 truncate"
+                  className="text-accent hover:underline inline-flex items-center gap-1 truncate"
                 >
                   <span className="truncate">{evidenceUrl}</span>
-                  <ExternalLink className="w-3 h-3 shrink-0" />
+                  <ExternalLink className="h-3 w-3 shrink-0" />
                 </a>
               </div>
             )}
           </div>
 
-          <div className="p-3 bg-zinc-900/50 border border-zinc-850 rounded text-zinc-400 text-[0.7rem] leading-relaxed">
-            <strong>Thoughts.Whatever অধিকার নীতি:</strong> ভারতীয় কপিরাইট আইন (Copyright Act, 1957) ও আন্তর্জাতিক চুক্তি মেনে কেবল যাচাইকৃত পাবলিক ডোমেইন বা অনুমোদিত সাহিত্যকর্ম সরাসরি হোস্ট করা হয়। অন্যথায় কেবল রেফারেন্স লিংক ও গ্রন্থপঞ্জি তথ্য প্রদর্শিত হয়।
-          </div>
+          <p className="border-t border-rule/50 pt-2.5 font-serif text-[0.6875rem] text-content-faint leading-relaxed italic">
+            Thoughts.Whatever operates strictly under the Copyright Act, 1957 (India) and international copyright conventions. Works are cataloged for scholarly reference, and downloadable copies are restricted solely to confirmed public-domain or licensed editions.
+          </p>
         </div>
       )}
 
