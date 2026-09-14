@@ -120,16 +120,17 @@ export default async function ReferenceDetailPage({
               </span>
               <span className="text-rule">·</span>
               <span className="label !text-content-faint">{work.language}</span>
-              {work.era && (
-                <>
-                  <span className="text-rule">·</span>
-                  <span className="label !text-content-soft">{work.era}</span>
-                </>
-              )}
               {primaryEdition?.publicationYear && (
                 <>
                   <span className="text-rule">·</span>
                   <span className="label">{primaryEdition.publicationYear}</span>
+                </>
+              )}
+              {/* era shown separately only when it differs from a plain year — e.g. "19th Century" */}
+              {work.era && !primaryEdition?.publicationYear && (
+                <>
+                  <span className="text-rule">·</span>
+                  <span className="label !text-content-soft">{work.era}</span>
                 </>
               )}
             </div>
@@ -144,9 +145,14 @@ export default async function ReferenceDetailPage({
                 </p>
               )}
               {work.subtitleBn && (
-                <p className="mt-2 font-bengali text-base text-content-soft">
-                  {work.subtitleBn}
-                </p>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="label !text-[0.625rem] shrink-0 text-content-faint">
+                    Volume / Subtitle
+                  </span>
+                  <p className="font-bengali text-base text-content-soft">
+                    {work.subtitleBn}
+                  </p>
+                </div>
               )}
             </div>
 
@@ -155,35 +161,46 @@ export default async function ReferenceDetailPage({
               {work.author && (
                 <div className="flex items-baseline gap-2">
                   <span className="label !text-[0.6875rem] w-20 shrink-0">Author</span>
-                  <Link
-                    href={`/authors/${work.author.slug}`}
-                    className="font-bengali text-content hover:text-accent font-medium transition-colors"
-                  >
-                    {work.author.nameBn} {work.author.era && `(${work.author.era})`}
-                  </Link>
+                  <span className="flex items-baseline gap-2 flex-wrap">
+                    <Link
+                      href={`/authors/${work.author.slug}`}
+                      className="font-bengali text-content hover:text-accent font-medium transition-colors"
+                    >
+                      {work.author.nameBn}
+                    </Link>
+                    {work.author.era && (
+                      <span className="font-mono text-[0.625rem] text-content-faint">
+                        {work.author.era}
+                      </span>
+                    )}
+                  </span>
                 </div>
               )}
 
               {primaryEdition?.editor && (
                 <div className="flex items-baseline gap-2">
                   <span className="label !text-[0.6875rem] w-20 shrink-0">Editor</span>
-                  <span className="font-serif">{primaryEdition.editor}</span>
+                  <span className="font-bengali text-content">{primaryEdition.editor}</span>
                 </div>
               )}
 
               {primaryEdition?.translator && (
                 <div className="flex items-baseline gap-2">
                   <span className="label !text-[0.6875rem] w-20 shrink-0">Translator</span>
-                  <span className="font-serif">{primaryEdition.translator}</span>
+                  <span className="font-bengali text-content">{primaryEdition.translator}</span>
                 </div>
               )}
 
               {primaryEdition?.publisher && (
                 <div className="flex items-baseline gap-2">
                   <span className="label !text-[0.6875rem] w-20 shrink-0">Publisher</span>
-                  <span className="font-serif">
+                  <span className="font-bengali text-content">
                     {primaryEdition.publisher}
-                    {primaryEdition.publicationPlace && ` (${primaryEdition.publicationPlace})`}
+                    {primaryEdition.publicationPlace && (
+                      <span className="font-mono text-[0.625rem] text-content-faint ml-1.5 not-bengali">
+                        ({primaryEdition.publicationPlace})
+                      </span>
+                    )}
                   </span>
                 </div>
               )}
@@ -239,7 +256,12 @@ export default async function ReferenceDetailPage({
         {/* Bengali Literary Description */}
         {work.descriptionBn && (
           <div className="border-t border-rule pt-6 space-y-3">
-            <span className="label">Archival Notes & Overview</span>
+            <div className="space-y-0.5">
+              <span className="label">Archival Notes & Overview</span>
+              <p className="font-serif text-[0.6875rem] italic text-content-faint">
+                Historical description and cataloguing notes — in Bengali
+              </p>
+            </div>
             <div className="font-bengali text-bengali-base text-content-soft leading-relaxed whitespace-pre-line">
               {work.descriptionBn}
             </div>
