@@ -23,8 +23,8 @@ export const siteConfig = {
   instagram:
     process.env.NEXT_PUBLIC_INSTAGRAM ||
     "https://www.instagram.com/thoughts.whatever_/",
-  tagline: "বাংলা সাহিত্য, পাঠ ও তথ্যচিত্র",
-  taglineEn: "Bengali Literature, Reading & Documentary",
+  tagline: "আরও একটু বেশি",
+  taglineEn: "A Little Bit More",
 } as const;
 
 /** Absolute URL — needed for OG tags, JSON-LD, and sitemaps. */
