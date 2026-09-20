@@ -13,6 +13,7 @@ import {
   getRecentPieces,
   getFilterFacets,
   getFirstPiecesForSeriesIds,
+  countPieces,
 } from "@/lib/pieces";
 import { extractPullQuotes } from "@/lib/markdown";
 import { JsonLd, seriesJsonLd, homeWebPageJsonLd } from "@/lib/seo";
@@ -31,15 +32,25 @@ export default async function HomePage() {
   let series: Awaited<ReturnType<typeof getFeaturedSeries>> = [];
   let facets: Awaited<ReturnType<typeof getFilterFacets>> = DEFAULT_FACETS;
 
+  let countRachana = 0;
+  let countDocumentary = 0;
+  let countBlog = 0;
+
   try {
-    const [p, s, f] = await Promise.all([
+    const [p, s, f, cr, cd, cb] = await Promise.all([
       getRecentPieces({ take: 20 }),
       getFeaturedSeries(3),
       getFilterFacets(),
+      countPieces("RACHANA"),
+      countPieces("DOCUMENTARY"),
+      countPieces("BLOG"),
     ]);
     recentPieces = p;
     series = s;
     facets = f;
+    countRachana = cr;
+    countDocumentary = cd;
+    countBlog = cb;
   } catch {
     recentPieces = [];
     series = [];
@@ -133,18 +144,10 @@ export default async function HomePage() {
   }
   const timeline = Array.from(timelineGroups.values());
 
-  const kindCounts = recentPieces.reduce(
-    (acc, p) => {
-      acc[p.kind] = (acc[p.kind] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
-
   const kinds = [
-    { kind: "RACHANA" as const, count: kindCounts.RACHANA ?? 4 },
-    { kind: "DOCUMENTARY" as const, count: kindCounts.DOCUMENTARY ?? 14 },
-    { kind: "BLOG" as const, count: kindCounts.BLOG ?? 2 },
+    { kind: "RACHANA" as const, count: countRachana },
+    { kind: "DOCUMENTARY" as const, count: countDocumentary },
+    { kind: "BLOG" as const, count: countBlog },
   ];
 
   const formTags = (facets?.tags ?? [])

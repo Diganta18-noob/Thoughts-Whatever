@@ -630,3 +630,13 @@ The fallback UI must always display a clean, human-readable, production-safe err
 
 OBJECTIVE:
 Audit and overhaul all error boundaries, toasts, API routes, and administrative views to strictly prevent raw JSON, database exceptions (Prisma/MongoDB/PostgreSQL), network codes, Axios errors, internal file paths, or secrets from ever appearing in user-facing UI. Created centralized normalization layer in `src/lib/errors.ts`, created editorial dark-aesthetic `<ErrorState />` component in `src/components/ui/error-state.tsx`, auto-sanitized `toast.error()`, sanitized root and admin error boundaries (`src/app/error.tsx`, `src/app/admin/(dashboard)/error.tsx`), protected 500 API responses via `serverError()`, and added 28 unit tests covering all error conditions and secret scrubbing.
+
+---
+
+## 53. Master Directive 41 — Fix Blog Piece Publication & Categories Count Accuracy
+```text
+it is showing that 2 blogs is there but if i click on blog tab it is showing like this
+```
+
+OBJECTIVE:
+Resolve the discrepancy between homepage Categories showing "2 pieces" under Blog and the `/blog` page displaying an empty state. Found that the 2 blog pieces in the database (`রবীন্দ্রনাথকে নতুন করে পড়ার একটা পদ্ধতি` and `রিল থেকে রচনা: এই পাতাটা কেন`) had been set to `ARCHIVED`, while `/blog` only displays `PUBLISHED` content. Concurrently, the homepage Categories section was calculating counts from only the first 20 recent pieces with hardcoded fallbacks (`?? 2`, `?? 4`, `?? 14`). Fixed `src/app/page.tsx` to query genuine published counts via `countPieces` for all categories, and updated both blog pieces to `PUBLISHED` status so they now render properly on `/blog`.
