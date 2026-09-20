@@ -100,7 +100,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         ok: false,
-        error: "Database error. Please try again later.",
+        error: "Unable to sign in right now. Please try again.",
       },
       { status: 500 },
     );

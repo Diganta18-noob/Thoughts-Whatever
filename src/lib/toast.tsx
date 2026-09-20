@@ -2,6 +2,7 @@ import React from "react";
 import hotToast, { ToastOptions, Toast } from "react-hot-toast";
 import { AlertTriangle, AlertCircle, Info, CheckCircle2 } from "lucide-react";
 import { confirmToast, ConfirmToastOptions } from "./confirm-toast";
+import { normalizeError } from "./errors";
 
 /**
  * Centralized Application Toast System
@@ -19,11 +20,13 @@ export const toast = Object.assign(
         ...opts,
       }),
 
-    error: (message: string, opts?: ToastOptions) =>
-      hotToast.error(message, {
+    error: (rawError: unknown, opts?: ToastOptions) => {
+      const safeMessage = normalizeError(rawError).message;
+      return hotToast.error(safeMessage, {
         icon: <AlertCircle className="h-4 w-4 text-rose-500 shrink-0" />,
         ...opts,
-      }),
+      });
+    },
 
     warning: (message: string, opts?: ToastOptions) =>
       hotToast(message, {

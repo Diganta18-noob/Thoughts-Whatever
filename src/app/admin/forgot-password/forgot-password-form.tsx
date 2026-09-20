@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Loader2, CheckCircle2, ArrowLeft } from "lucide-react";
 import { useTranslation } from "@/components/providers/language-provider";
+import { normalizeError } from "@/lib/errors";
 
 export function ForgotPasswordForm() {
   const t = useTranslation();
@@ -50,8 +51,8 @@ export function ForgotPasswordForm() {
         setBusy(false);
         return;
       }
-
-      setError(data.error || t("admin.forgot.errorDefault"));
+      const safe = normalizeError(data.error, t("admin.forgot.errorDefault"));
+      setError(safe.message);
     } catch {
       setError(t("admin.forgot.errorNetwork"));
     }

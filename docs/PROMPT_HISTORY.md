@@ -619,3 +619,14 @@ do it
 
 OBJECTIVE:
 Increase the rotation and transition speed of the homepage hero carousel (`LatestEpisodes`). Reduced the auto-play slide duration from 6000ms to 4000ms, accelerated the background artwork crossfade transition from 0.8s to 0.5s, and tightened the editorial text animation from 0.5s to 0.35s for a faster, more dynamic browsing experience while keeping reading comfortable.
+
+---
+
+## 52. Master Directive 40 — Prevent Raw JSON/Technical Errors in Fallback UI
+```text
+Fix the entire application's error-handling and fallback UI so that RAW JSON, API responses, exception objects, stack traces, Axios errors, database errors, server errors, or any other technical error details are NEVER displayed directly to end users.
+The fallback UI must always display a clean, human-readable, production-safe error message.
+```
+
+OBJECTIVE:
+Audit and overhaul all error boundaries, toasts, API routes, and administrative views to strictly prevent raw JSON, database exceptions (Prisma/MongoDB/PostgreSQL), network codes, Axios errors, internal file paths, or secrets from ever appearing in user-facing UI. Created centralized normalization layer in `src/lib/errors.ts`, created editorial dark-aesthetic `<ErrorState />` component in `src/components/ui/error-state.tsx`, auto-sanitized `toast.error()`, sanitized root and admin error boundaries (`src/app/error.tsx`, `src/app/admin/(dashboard)/error.tsx`), protected 500 API responses via `serverError()`, and added 28 unit tests covering all error conditions and secret scrubbing.

@@ -9,6 +9,7 @@ import { useTranslation } from "@/components/providers/language-provider";
 import { ImageUpload } from "@/components/admin/image-upload";
 import { toast } from "react-hot-toast";
 import { confirmToast } from "@/lib/confirm-toast";
+import { normalizeError } from "@/lib/errors";
 
 /**
  * One editor for authors, tags, and series.
@@ -126,11 +127,12 @@ export function TaxonomyManager({
     };
 
     if (!res.ok || !data.ok) {
-      setError(
-        data.error ||
-          Object.values(data.fieldErrors ?? {})[0] ||
-          t("admin.taxonomy.saveFailed"),
+      const fieldError = Object.values(data.fieldErrors ?? {})[0];
+      const safe = normalizeError(
+        fieldError || data.error,
+        t("admin.taxonomy.saveFailed")
       );
+      setError(safe.message);
       setBusy(false);
       return;
     }
@@ -148,7 +150,7 @@ export function TaxonomyManager({
         const res = await fetch(`${endpoint}/${row.id}`, { method: "DELETE" });
         if (!res.ok) {
           const data = (await res.json().catch(() => ({}))) as { error?: string };
-          toast.error(data.error || t("admin.taxonomy.deleteFailed"));
+          toast.error(normalizeError(data.error, t("admin.taxonomy.deleteFailed")).message);
           return;
         }
         toast.success(`Deleted ${itemName}`);

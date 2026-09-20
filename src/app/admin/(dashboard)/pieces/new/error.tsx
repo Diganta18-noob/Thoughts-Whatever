@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { AlertCircle, ArrowLeft } from 'lucide-react';
+import { normalizeError } from '@/lib/errors';
 
 export default function NewPieceError({
   error,
@@ -14,6 +15,8 @@ export default function NewPieceError({
   useEffect(() => {
     console.error('Editor page error:', error);
   }, [error]);
+
+  const safeError = normalizeError(error, 'Something went wrong loading the piece editor.');
 
   return (
     <div className="space-y-6">
@@ -33,7 +36,7 @@ export default function NewPieceError({
               Failed to load editor
             </h2>
             <p className="mt-2 text-sm text-content-soft">
-              {error.message || 'Something went wrong loading the piece editor.'}
+              {safeError.message}
             </p>
             <div className="mt-4 flex gap-3">
               <button

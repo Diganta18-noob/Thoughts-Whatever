@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "react-hot-toast";
+import { normalizeError } from "@/lib/errors";
 
 export interface AutomationState {
   isRunning: boolean;
@@ -79,7 +80,7 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
         throw new Error(json.error || "Invalid response format");
       }
     } catch (err: any) {
-      const msg = err.message || "Failed to load automation status";
+      const msg = normalizeError(err, "Failed to load automation status").message;
       // Only set UI error banner if we don't already have live data
       if (!data) {
         setError(msg);
@@ -128,11 +129,12 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
         toast.success("Pipeline executed successfully!", { id: "pipeline" });
         fetchStatus(true);
       } else {
-        const errDetail = json?.error || (res.status ? `HTTP ${res.status}` : "Trigger error");
-        toast.error(`Pipeline error: ${errDetail}`, { id: "pipeline" });
+        const safeError = normalizeError(json?.error, "Pipeline execution failed");
+        toast.error(safeError.message, { id: "pipeline" });
       }
     } catch (err: any) {
-      toast.error(err?.message || "Network error triggering pipeline", { id: "pipeline" });
+      const safeError = normalizeError(err, "Network error triggering pipeline");
+      toast.error(safeError.message, { id: "pipeline" });
     } finally {
       setTriggering(false);
     }

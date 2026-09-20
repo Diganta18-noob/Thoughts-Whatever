@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useTranslation } from "@/components/providers/language-provider";
+import { normalizeError } from "@/lib/errors";
 
 export function LoginForm({ next }: { next: string }) {
   const router = useRouter();
@@ -48,7 +49,8 @@ export function LoginForm({ next }: { next: string }) {
         router.replace(next);
         return;
       }
-      setError(data.error || t("admin.login.errorDefault"));
+      const safe = normalizeError(data.error, t("admin.login.errorDefault"));
+      setError(safe.message);
     } catch {
       setError(t("admin.login.errorNetwork"));
     }

@@ -28,6 +28,7 @@ export async function POST(req: Request) {
     const report = await runMaintenance();
     return NextResponse.json({ ok: true, report });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message || "Maintenance trigger failed" }, { status: 500 });
+    console.error("Maintenance trigger error:", err);
+    return NextResponse.json({ error: "Maintenance trigger failed" }, { status: 500 });
   }
 }

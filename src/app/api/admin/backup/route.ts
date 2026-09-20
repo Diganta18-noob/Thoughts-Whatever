@@ -61,6 +61,7 @@ export async function POST(req: Request) {
     const result = await createBackup(type);
     return NextResponse.json({ ok: true, result });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message || "Backup trigger failed" }, { status: 500 });
+    console.error("Backup trigger error:", err);
+    return NextResponse.json({ error: "Backup trigger failed" }, { status: 500 });
   }
 }

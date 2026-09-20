@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Loader2, CheckCircle2, AlertCircle, ArrowRight, RefreshCw } from "lucide-react";
 import { useTranslation } from "@/components/providers/language-provider";
+import { normalizeError } from "@/lib/errors";
 
 export function ResetPasswordForm() {
   const t = useTranslation();
@@ -86,7 +87,8 @@ export function ResetPasswordForm() {
         setTokenErrorCode("TOKEN_INVALID");
         setError(t("admin.reset.errorInvalid"));
       } else {
-        setError(data.error || t("admin.reset.errorNetwork"));
+        const safe = normalizeError(data.error, t("admin.reset.errorNetwork"));
+        setError(safe.message);
       }
     } catch {
       setError(t("admin.reset.errorNetwork"));

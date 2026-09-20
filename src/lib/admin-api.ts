@@ -37,6 +37,8 @@ export function isValidCuid(id: string | null | undefined): boolean {
   return /^[0-9a-fA-F]{24}$/.test(id) || /^c[a-z0-9]{24,}$/i.test(id);
 }
 
+import { normalizeError } from "@/lib/errors";
+
 export function badRequest(error: ZodError) {
   return NextResponse.json(
     { ok: false, fieldErrors: flattenIssues(error) },
@@ -44,9 +46,29 @@ export function badRequest(error: ZodError) {
   );
 }
 
-
 export function fail(message: string, status = 400) {
-  return NextResponse.json({ ok: false, error: message }, { status });
+  const safeMessage = normalizeError(message, "Invalid request. Please try again.").message;
+  return NextResponse.json({ ok: false, error: safeMessage }, { status });
+}
+
+/**
+ * Safely logs server-side technical error details and returns a standardized,
+ * production-safe JSON response without leaking database exceptions, stacks, or secrets.
+ */
+export function serverError(
+  err: unknown,
+  fallbackMessage = "Something went wrong on our side. Please try again."
+) {
+  console.error("[API Server Error]:", err);
+  const normalized = normalizeError(err, fallbackMessage);
+  return NextResponse.json(
+    {
+      ok: false,
+      error: normalized.message,
+      code: normalized.code || "INTERNAL_SERVER_ERROR",
+    },
+    { status: 500 }
+  );
 }
 
 export function ok<T extends object>(data: T = {} as T) {

@@ -20,7 +20,8 @@ export async function POST(req: Request) {
     const result = await restoreBackup(backupId, { scope });
     return NextResponse.json({ ok: true, result });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message || "Restoration failed" }, { status: 500 });
+    console.error("Backup restoration error:", err);
+    return NextResponse.json({ error: "Restoration failed. Please check server logs." }, { status: 500 });
   }
 }
 
