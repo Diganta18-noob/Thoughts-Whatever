@@ -144,24 +144,51 @@
 
 ## 8. Admin Routes
 
-All admin dashboard routes captured with active authenticated session:
+All 41 admin dashboard & auth routes freshly captured with active session (old screenshots archived in `screenshots/08-admin-archive-old/`):
 
 | ID | Route | Viewport | Theme | State | Screenshot |
 |---|---|---|---|---|---|
 | 060 | `/admin/login` | Desktop (1440×900) | Light (cream) | READY | [01-admin-login-desktop.png](screenshots/08-admin/01-admin-login-desktop.png) |
-| 080 | `/admin` | Desktop (1440×900) | Light (cream) | READY | [02-admin-overview-desktop.png](screenshots/08-admin/02-admin-overview-desktop.png) |
-| 081 | `/admin/pieces` | Desktop (1440×900) | Light (cream) | READY | [03-admin-pieces-desktop.png](screenshots/08-admin/03-admin-pieces-desktop.png) |
-| 082 | `/admin/pieces/new` | Desktop (1440×900) | Light (cream) | READY | [04-admin-pieces-new-desktop.png](screenshots/08-admin/04-admin-pieces-new-desktop.png) |
-| 084 | `/admin/series` | Desktop (1440×900) | Light (cream) | READY | [05-admin-series-desktop.png](screenshots/08-admin/05-admin-series-desktop.png) |
-| 085 | `/admin/prompts` | Desktop (1440×900) | Light (cream) | READY | [06-admin-prompts-desktop.png](screenshots/08-admin/06-admin-prompts-desktop.png) |
-| 087 | `/admin/taxonomy` | Desktop (1440×900) | Light (cream) | READY | [07-admin-taxonomy-desktop.png](screenshots/08-admin/07-admin-taxonomy-desktop.png) |
-| 088 | `/admin/analytics` | Desktop (1440×900) | Light (cream) | READY | [08-admin-analytics-desktop.png](screenshots/08-admin/08-admin-analytics-desktop.png) |
-| 089 | `/admin/audit-log` | Desktop (1440×900) | Light (cream) | READY | [09-admin-audit-log-desktop.png](screenshots/08-admin/09-admin-audit-log-desktop.png) |
-| 090 | `/admin/subscribers` | Desktop (1440×900) | Light (cream) | READY | [10-admin-subscribers-desktop.png](screenshots/08-admin/10-admin-subscribers-desktop.png) |
-| 091 | `/admin/system` | Desktop (1440×900) | Light (cream) | READY | [11-admin-system-desktop.png](screenshots/08-admin/11-admin-system-desktop.png) |
-| 092 | `/admin/transliteration` | Desktop (1440×900) | Light (cream) | READY | [12-admin-transliteration-desktop.png](screenshots/08-admin/12-admin-transliteration-desktop.png) |
-| 093 | `/admin/import` | Desktop (1440×900) | Light (cream) | READY | [13-admin-import-desktop.png](screenshots/08-admin/13-admin-import-desktop.png) |
-| 094 | `/admin/settings` | Desktop (1440×900) | Light (cream) | READY | [14-admin-settings-desktop.png](screenshots/08-admin/14-admin-settings-desktop.png) |
+| 061 | `/admin/forgot-password` | Desktop (1440×900) | Light (cream) | READY | [02-admin-forgot-password-desktop.png](screenshots/08-admin/02-admin-forgot-password-desktop.png) |
+| 062 | `/admin/reset-password` | Desktop (1440×900) | Light (cream) | READY | [03-admin-reset-password-desktop.png](screenshots/08-admin/03-admin-reset-password-desktop.png) |
+| 080 | `/admin` | Desktop (1440×900) | Light (cream) | READY | [04-admin-overview-desktop.png](screenshots/08-admin/04-admin-overview-desktop.png) |
+| 081 | `/admin/pieces` | Desktop (1440×900) | Light (cream) | READY | [05-admin-pieces-desktop.png](screenshots/08-admin/05-admin-pieces-desktop.png) |
+| 082 | `/admin/pieces/new` | Desktop (1440×900) | Light (cream) | READY | [06-admin-pieces-new-desktop.png](screenshots/08-admin/06-admin-pieces-new-desktop.png) |
+| 083 | `/admin/pieces/[id]` | Desktop (1440×900) | Light (cream) | READY | [07-admin-piece-edit-desktop.png](screenshots/08-admin/07-admin-piece-edit-desktop.png) |
+| 084 | `/admin/pieces/[id]/history` | Desktop (1440×900) | Light (cream) | READY | [08-admin-piece-history-desktop.png](screenshots/08-admin/08-admin-piece-history-desktop.png) |
+| 085 | `/admin/series` | Desktop (1440×900) | Light (cream) | READY | [09-admin-series-desktop.png](screenshots/08-admin/09-admin-series-desktop.png) |
+| 086 | `/admin/taxonomy` | Desktop (1440×900) | Light (cream) | READY | [10-admin-taxonomy-desktop.png](screenshots/08-admin/10-admin-taxonomy-desktop.png) |
+| 087 | `/admin/media` | Desktop (1440×900) | Light (cream) | READY | [11-admin-media-desktop.png](screenshots/08-admin/11-admin-media-desktop.png) |
+| 088 | `/admin/prompts` | Desktop (1440×900) | Light (cream) | READY | [12-admin-prompts-desktop.png](screenshots/08-admin/12-admin-prompts-desktop.png) |
+| 089 | `/admin/prompts/new` | Desktop (1440×900) | Light (cream) | READY | [13-admin-prompts-new-desktop.png](screenshots/08-admin/13-admin-prompts-new-desktop.png) |
+| 090 | `/admin/prompts/[id]` | Desktop (1440×900) | Light (cream) | READY | [14-admin-prompt-detail-desktop.png](screenshots/08-admin/14-admin-prompt-detail-desktop.png) |
+| 091 | `/admin/content-graph` | Desktop (1440×900) | Light (cream) | READY | [15-admin-content-graph-desktop.png](screenshots/08-admin/15-admin-content-graph-desktop.png) |
+| 092 | `/admin/content-health` | Desktop (1440×900) | Light (cream) | READY | [16-admin-content-health-desktop.png](screenshots/08-admin/16-admin-content-health-desktop.png) |
+| 093 | `/admin/editorial-intelligence` | Desktop (1440×900) | Light (cream) | READY | [17-admin-editorial-intelligence-desktop.png](screenshots/08-admin/17-admin-editorial-intelligence-desktop.png) |
+| 094 | `/admin/recommendations` | Desktop (1440×900) | Light (cream) | READY | [18-admin-recommendations-desktop.png](screenshots/08-admin/18-admin-recommendations-desktop.png) |
+| 095 | `/admin/analytics` | Desktop (1440×900) | Light (cream) | READY | [19-admin-analytics-desktop.png](screenshots/08-admin/19-admin-analytics-desktop.png) |
+| 096 | `/admin/engagement` | Desktop (1440×900) | Light (cream) | READY | [20-admin-engagement-desktop.png](screenshots/08-admin/20-admin-engagement-desktop.png) |
+| 097 | `/admin/geography` | Desktop (1440×900) | Light (cream) | READY | [21-admin-geography-desktop.png](screenshots/08-admin/21-admin-geography-desktop.png) |
+| 098 | `/admin/goals` | Desktop (1440×900) | Light (cream) | READY | [22-admin-goals-desktop.png](screenshots/08-admin/22-admin-goals-desktop.png) |
+| 099 | `/admin/activity` | Desktop (1440×900) | Light (cream) | READY | [23-admin-activity-desktop.png](screenshots/08-admin/23-admin-activity-desktop.png) |
+| 100 | `/admin/notifications` | Desktop (1440×900) | Light (cream) | READY | [24-admin-notifications-desktop.png](screenshots/08-admin/24-admin-notifications-desktop.png) |
+| 101 | `/admin/subscribers` | Desktop (1440×900) | Light (cream) | READY | [25-admin-subscribers-desktop.png](screenshots/08-admin/25-admin-subscribers-desktop.png) |
+| 102 | `/admin/seo` | Desktop (1440×900) | Light (cream) | READY | [26-admin-seo-desktop.png](screenshots/08-admin/26-admin-seo-desktop.png) |
+| 103 | `/admin/seo-engine` | Desktop (1440×900) | Light (cream) | READY | [27-admin-seo-engine-desktop.png](screenshots/08-admin/27-admin-seo-engine-desktop.png) |
+| 104 | `/admin/seo-engine/audit` | Desktop (1440×900) | Light (cream) | READY | [28-admin-seo-engine-audit-desktop.png](screenshots/08-admin/28-admin-seo-engine-audit-desktop.png) |
+| 105 | `/admin/seo-engine/websites` | Desktop (1440×900) | Light (cream) | READY | [29-admin-seo-engine-websites-desktop.png](screenshots/08-admin/29-admin-seo-engine-websites-desktop.png) |
+| 106 | `/admin/system` | Desktop (1440×900) | Light (cream) | READY | [30-admin-system-desktop.png](screenshots/08-admin/30-admin-system-desktop.png) |
+| 107 | `/admin/system/monitoring` | Desktop (1440×900) | Light (cream) | READY | [31-admin-system-monitoring-desktop.png](screenshots/08-admin/31-admin-system-monitoring-desktop.png) |
+| 108 | `/admin/transliteration` | Desktop (1440×900) | Light (cream) | READY | [32-admin-transliteration-desktop.png](screenshots/08-admin/32-admin-transliteration-desktop.png) |
+| 109 | `/admin/import` | Desktop (1440×900) | Light (cream) | READY | [33-admin-import-desktop.png](screenshots/08-admin/33-admin-import-desktop.png) |
+| 110 | `/admin/exports` | Desktop (1440×900) | Light (cream) | READY | [34-admin-exports-desktop.png](screenshots/08-admin/34-admin-exports-desktop.png) |
+| 111 | `/admin/incidents` | Desktop (1440×900) | Light (cream) | READY | [35-admin-incidents-desktop.png](screenshots/08-admin/35-admin-incidents-desktop.png) |
+| 112 | `/admin/jobs` | Desktop (1440×900) | Light (cream) | READY | [36-admin-jobs-desktop.png](screenshots/08-admin/36-admin-jobs-desktop.png) |
+| 113 | `/admin/audit-log` | Desktop (1440×900) | Light (cream) | READY | [37-admin-audit-log-desktop.png](screenshots/08-admin/37-admin-audit-log-desktop.png) |
+| 114 | `/admin/security` | Desktop (1440×900) | Light (cream) | READY | [38-admin-security-desktop.png](screenshots/08-admin/38-admin-security-desktop.png) |
+| 115 | `/admin/developer` | Desktop (1440×900) | Light (cream) | READY | [39-admin-developer-desktop.png](screenshots/08-admin/39-admin-developer-desktop.png) |
+| 116 | `/admin/team` | Desktop (1440×900) | Light (cream) | READY | [40-admin-team-desktop.png](screenshots/08-admin/40-admin-team-desktop.png) |
+| 117 | `/admin/settings` | Desktop (1440×900) | Light (cream) | READY | [41-admin-settings-desktop.png](screenshots/08-admin/41-admin-settings-desktop.png) |
 
 ---
 

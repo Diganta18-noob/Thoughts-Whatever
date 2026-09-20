@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Instagram, Mail, MessageSquare } from "lucide-react";
+import { Instagram, Mail, MessageSquare, ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
 import { LetterBlock } from "@/components/newsletter/letter-block";
 import { siteConfig, absoluteUrl } from "@/lib/utils";
@@ -63,6 +63,32 @@ export default function ContactPage() {
         </div>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <a
+            href="mailto:editorial@thoughtswhatever.in"
+            className="flex items-center gap-3 rounded-lg border border-rule/70 bg-surface-raised/30 p-4 transition-all hover:border-accent/50 hover:bg-surface-raised/60"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
+              <Mail className="h-5 w-5" />
+            </div>
+            <div>
+              <span className="font-mono text-xs text-content-faint">সম্পাদকীয় ও তথ্যসূত্র</span>
+              <p className="font-sans text-sm font-medium text-content">editorial@thoughtswhatever.in</p>
+            </div>
+          </a>
+
+          <a
+            href="mailto:security@thoughtswhatever.in"
+            className="flex items-center gap-3 rounded-lg border border-rule/70 bg-surface-raised/30 p-4 transition-all hover:border-accent/50 hover:bg-surface-raised/60"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <div>
+              <span className="font-mono text-xs text-content-faint">সুরক্ষা ও গোপনীয়তা</span>
+              <p className="font-sans text-sm font-medium text-content">security@thoughtswhatever.in</p>
+            </div>
+          </a>
+
           <a
             href={siteConfig.instagram}
             target="_blank"

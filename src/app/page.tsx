@@ -8,7 +8,6 @@ import { Timeline } from "@/components/home/timeline";
 import { ArchiveTeaser } from "@/components/home/archive-teaser";
 import { Authors } from "@/components/home/authors";
 import { Quote } from "@/components/home/quote";
-import { LetterBlock } from "@/components/newsletter/letter-block";
 import {
   getFeaturedSeries,
   getRecentPieces,
@@ -197,12 +196,6 @@ export default async function HomePage() {
       </div>
 
       {quote && <Quote quote={quote} />}
-
-      <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-        <section className="border-t border-rule pt-14">
-          <LetterBlock source="home" />
-        </section>
-      </div>
     </div>
   );
 }

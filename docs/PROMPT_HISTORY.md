@@ -564,3 +564,58 @@ insted of showing the part , you should show the first part because first has no
 OBJECTIVE:
 In the Latest (`LatestEpisodes`) hero carousel on the homepage, when featuring a multi-part series (such as নীলদর্পণ / Nil Darpan), display the first part (Part 1 / episode 1) instead of the latest part (e.g. "নীলদর্পণ | অন্তিম পর্ব"). The first part contains the clean series/work title without part suffixes ("| পর্ব-২", "| অন্তিম পর্ব"), provides the starting point for new readers, and utilizes the clean primary poster artwork. Also, ensure the category badge does not redundantly repeat the series title when it matches the story title, and sanitize any part suffixes for clean editorial presentation.
 
+---
+
+## 48. Master Directive 36 — Production Product Review, Security Posture & Prioritized Upgrade Plan
+```text
+I’ll review the live site as a product, inspect its public security posture and visible technical signals, then turn that into a prioritized upgrade plan with concrete premium features and implementation guidance...
+What should be done immediately:
+1. Perform a full content and Unicode cleanup.
+2. Remove the repeated newsletter component.
+3. Improve article pages and mobile reading.
+4. Add proper search and author pages.
+5. Secure and rate-limit the newsletter endpoint.
+6. Verify HTTPS, security headers, cookies, CSP, and admin access.
+7. Rewrite the privacy policy with actual providers and retention details.
+8. Add structured SEO metadata and XML sitemap.
+9. Add a dedicated editorial and security contact.
+10. Add audio reading and better documentary navigation.
+```
+
+OBJECTIVE:
+Transform Thoughts Whatever from a generic reading blog into an authoritative, premium Bengali literary archive and knowledge discovery platform. Address critical production risks (duplicate newsletter blocks on homepage, newsletter endpoint protection with rate-limiting and honeypots, unverifiable claims and confusing dates in privacy policy, missing dedicated editorial and security contacts, security headers and CSP enforcement). Execute Phase 1 immediate trust and polish upgrades, followed by enhanced reader controls (distraction-free reading mode, font scaling, audio narration), faceted discovery search, and rich author dossiers.
+
+---
+
+## 49. Master Directive 37 — Comprehensive Admin Portal Screenshot Refresh (41 Routes)
+```text
+now take the admin portal all pae screensshot, old screenshot folder is old
+```
+
+
+
+---
+
+## 50. Master Directive 38 — Reference Library & Rights-Aware Digital Archive
+```text
+Build the Reference Library as a rights-aware digital archive, not as a generic "PDF download" page.
+The core principle:
+If we have verified rights to host it -> Thoughts.Whatever hosts it.
+If we do not have verified rights -> Thoughts.Whatever catalogs it and links to the legitimate external source.
+Never Make "Internet Archive" Equal "Public Domain".
+Implement dedicated ReferenceWork, ReferenceEdition, ReferenceSource, ReferenceRights, ReferenceAsset models, strict backend guardrails, comprehensive admin CMS with rights review workflows and immutable audit logs, full-featured public archive at /reference, online reader, audio architecture, and legal rights policy.
+```
+
+OBJECTIVE:
+Architect and deploy the Reference Library as an authoritative, rights-aware Bengali digital archive and research platform. Enforce the strict invariant that unverified or external materials (including Internet Archive items) default to link-only cataloging, while verified public-domain and licensed assets allow secure hosting, online reading, and audio delivery. Separate intellectual works from specific editions, log immutable rights review history, enforce backend publishing guardrails, and provide cinematic, typography-driven public archive interfaces.
+
+---
+
+## 51. Master Directive 39 — Hero Carousel Slide Speed & Animation Acceleration
+```text
+how i can control this speed of the slide or make it little bit faster
+do it
+```
+
+OBJECTIVE:
+Increase the rotation and transition speed of the homepage hero carousel (`LatestEpisodes`). Reduced the auto-play slide duration from 6000ms to 4000ms, accelerated the background artwork crossfade transition from 0.8s to 0.5s, and tightened the editorial text animation from 0.5s to 0.35s for a faster, more dynamic browsing experience while keeping reading comfortable.

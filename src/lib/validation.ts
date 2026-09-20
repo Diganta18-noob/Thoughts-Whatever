@@ -162,9 +162,10 @@ export const resetPasswordSchema = z.object({
 });
 
 export const subscribeSchema = z.object({
-  email: z.email("সঠিক ইমেল ঠিকানা দিন"),
+  email: z.string().trim().email("সঠিক ইমেল ঠিকানা দিন"),
   nameBn: optionalText,
   source: z.string().trim().max(120).optional(),
+  website: optionalText, // Honeypot field for bot mitigation
 });
 
 /** Collapse a ZodError into the shape the admin forms and API replies expect. */

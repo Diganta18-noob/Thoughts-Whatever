@@ -36,6 +36,12 @@ export const PRIMARY_NAV: NavItem[] = [
     labelBn: "সংগ্রহ",
     descEn: "Everything, by author, era, form, and theme",
   },
+  {
+    href: "/reference",
+    labelEn: "Reference",
+    labelBn: "রেফারেন্স",
+    descEn: "Texts, documents, recordings, and archival sources",
+  },
 ];
 
 export const SECONDARY_NAV: NavItem[] = [

@@ -240,14 +240,16 @@ async function main() {
       authorName: "পীতাম্বর দাস",
     },
 
-    // 19. চিত্ত যেথা ভয় শুন্য - রবীন্দ্রনাথ ঠাকুর (August 12)
+    // 19. চিত্ত যেথা ভয়শূন্য - রবীন্দ্রনাথ ঠাকুর (August 12)
     {
       match: (p: any) =>
         p.slug === "চিত্ত-যেথা-ভয়-শুন্য" ||
         p.slug === "চিত্ত-যেথা-ভয়-শূন্য" ||
+        p.slug === "চিত্ত-যেথা-ভয়-শুন্য" ||
+        p.slug === "চিত্ত-যেথা-ভয়-শূন্য" ||
         p.slug.includes("চিত্ত") ||
         p.titleBn.includes("চিত্ত"),
-      titleBn: "চিত্ত যেথা ভয় শুন্য",
+      titleBn: "চিত্ত যেথা ভয়শূন্য",
       publishedAt: new Date("2026-08-12T00:00:00.000Z"),
       reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/",
       authorName: "রবীন্দ্রনাথ ঠাকুর",
