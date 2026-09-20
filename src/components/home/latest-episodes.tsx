@@ -12,7 +12,7 @@ import type { CardPiece } from "@/lib/pieces";
 import { thumbnailSrc } from "@/lib/images";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 
-const SLIDE_DURATION = 6000; // 6 seconds auto-play
+const SLIDE_DURATION = 4000; // 4 seconds auto-play
 
 export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
   const { locale, isBn } = useLanguage();
@@ -165,7 +165,7 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
             initial={{ opacity: 0, scale: 1.03 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-0 z-0 h-full w-full"
           >
             {imageSrc ? (
@@ -258,7 +258,7 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="space-y-4"
               >
                 {/* Story Title */}

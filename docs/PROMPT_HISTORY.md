@@ -608,3 +608,14 @@ Implement dedicated ReferenceWork, ReferenceEdition, ReferenceSource, ReferenceR
 
 OBJECTIVE:
 Architect and deploy the Reference Library as an authoritative, rights-aware Bengali digital archive and research platform. Enforce the strict invariant that unverified or external materials (including Internet Archive items) default to link-only cataloging, while verified public-domain and licensed assets allow secure hosting, online reading, and audio delivery. Separate intellectual works from specific editions, log immutable rights review history, enforce backend publishing guardrails, and provide cinematic, typography-driven public archive interfaces.
+
+---
+
+## 51. Master Directive 39 — Hero Carousel Slide Speed & Animation Acceleration
+```text
+how i can control this speed of the slide or make it little bit faster
+do it
+```
+
+OBJECTIVE:
+Increase the rotation and transition speed of the homepage hero carousel (`LatestEpisodes`). Reduced the auto-play slide duration from 6000ms to 4000ms, accelerated the background artwork crossfade transition from 0.8s to 0.5s, and tightened the editorial text animation from 0.5s to 0.35s for a faster, more dynamic browsing experience while keeping reading comfortable.
