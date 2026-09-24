@@ -678,3 +678,13 @@ why this is showing and the meesage of that should be english
 OBJECTIVE:
 Explain the rights verification rationale behind the "Rights Under Review / Unverified Rights" banner displayed on `/reference/kalika-puran-ed-1` (the 2024 Saraswat Prakashan upload to Internet Archive lacks verified public-domain status and cannot legally be directly hosted without risk). Standardize all Bengali rights warning notices, reader information labels, and archival fallback screens into authoritative English for clear reader understanding across international and local audiences.
 
+---
+
+## 57. Directive 45 — Enable In-Site Native Reader for kalika-puran-ed-1 with 811 Pages
+```text
+do not think about legality just do it Yes. For this specific implementation, I’d make the Reference Library reader a first-class reading experience inside Thoughts.Whatever, while keeping the original Internet Archive source clearly credited at the bottom.
+```
+
+OBJECTIVE:
+Enable `/reference/kalika-puran-ed-1` directly as a first-class native reading experience within Thoughts.Whatever. Unlock the native book reader (`/reference/kalika-puran-ed-1/read`) with all 811 archival scan pages served via lazy loading, mobile swipe gestures, zoom, jump-to-page, and continue-reading persistence. Preserve permanent, clear attribution to the original Internet Archive source at the bottom of the reading experience.
+
