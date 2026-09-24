@@ -131,7 +131,7 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
             className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-zinc-100 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>বিবরণ পাতায় ফিরে যান</span>
+            <span>Back to Edition Details</span>
           </Link>
           <ReferenceRightsBadge status={rightsStatus} size="sm" />
         </header>
@@ -143,7 +143,7 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
 
           <div>
             <span className="text-xs font-mono uppercase tracking-widest text-amber-400 font-semibold">
-              Hosted Reading Unavailable · স্বত্ব পরীক্ষাধীন
+              Hosted Reading Unavailable · Rights Under Review
             </span>
             <h1 className="text-2xl sm:text-3xl font-bengali font-bold text-zinc-100 mt-2">
               {work.titleBn}
@@ -156,14 +156,14 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
           <div className="bg-zinc-950/70 border border-zinc-800/80 rounded-xl p-5 text-left space-y-3">
             <div className="flex items-center gap-2 text-xs font-mono text-amber-300">
               <ShieldAlert className="w-4 h-4" />
-              <span>Thoughts.Whatever কপিরাইট ও স্বত্ব নীতি</span>
+              <span className="font-semibold uppercase tracking-wider">Thoughts.Whatever Archival & Rights Policy</span>
             </div>
-            <p className="text-xs text-zinc-300 font-serif leading-relaxed">
-              ইন্টারনেট আর্কাইভে লভ্য থাকলেও এই নির্দিষ্ট সংস্করণটির প্রকাশনা স্বত্ব ও আইনি স্থিতি এখনও স্বতন্ত্রভাবে পরীক্ষিত হয়নি। কপিরাইট সংক্রান্ত অনিশ্চয়তা থাকলে Thoughts.Whatever সরাসরি ফাইল হোস্ট করে না।
+            <p className="text-xs text-zinc-300 font-sans leading-relaxed">
+              While cataloged from Internet Archive, this specific digital edition’s commercial publication rights have not yet been independently verified. To uphold archival integrity and copyright safety, Thoughts.Whatever does not host or redistribute files with unverified rights.
             </p>
             {selectedEdition?.rights?.verificationNotes && (
-              <p className="text-[0.6875rem] text-zinc-400 font-serif italic border-t border-zinc-850 pt-2">
-                যাচাই নোট: {selectedEdition.rights.verificationNotes}
+              <p className="text-[0.6875rem] text-zinc-400 font-mono italic border-t border-zinc-850 pt-2">
+                Verification Notes: {selectedEdition.rights.verificationNotes}
               </p>
             )}
           </div>
@@ -176,7 +176,7 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto px-6 py-2.5 bg-amber-400 hover:bg-amber-300 text-zinc-950 font-mono text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-colors"
               >
-                <span>মূল সংগ্রহাগারে পাঠ করুন ({source.sourceName})</span>
+                <span>Read at Archival Source ({source.sourceName})</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             )}
@@ -187,7 +187,7 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
                 className="w-full sm:w-auto px-5 py-2.5 bg-emerald-950/80 border border-emerald-700/60 hover:border-emerald-500 text-emerald-300 font-mono text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>যাচাইকৃত ১৮৭৪ সংস্করণের পাঠকক্ষ →</span>
+                <span>Go to Verified 1874 Reader Room →</span>
               </Link>
             )}
           </div>

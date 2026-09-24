@@ -247,22 +247,22 @@ export default async function ReferenceDetailPage({
               <div className="bg-amber-950/30 border border-amber-800/40 rounded-lg p-4 space-y-2 mt-4">
                 <div className="flex items-center gap-2 text-xs font-mono text-amber-400">
                   <ShieldAlert className="w-4 h-4 shrink-0" />
-                  <span className="font-semibold">স্বত্ব পর্যালোচনাধীন (Rights Unverified)</span>
+                  <span className="font-semibold uppercase tracking-wider">Rights Under Review (Unverified Rights)</span>
                 </div>
-                <p className="text-xs text-zinc-300 font-serif leading-relaxed">
-                  এই নির্দিষ্ট ডিজিটাল সংস্করণটির বাণিজ্যিক বা পুনঃবিতরণ স্বত্ব এখনো স্বতন্ত্রভাবে নিশ্চিত নয়। Thoughts.Whatever এর নীতি অনুসারে এই সংস্করণের ফাইল সরাসরি হোস্ট বা ডাউনলোড প্রদান করা স্থগিত রাখা হয়েছে।
+                <p className="text-xs text-zinc-300 font-sans leading-relaxed">
+                  Commercial and redistribution rights for this specific digital edition have not yet been independently verified. In accordance with Thoughts.Whatever policy, direct file hosting and downloads are suspended pending verification.
                 </p>
                 {companionEdition && (
                   <div className="pt-2 border-t border-amber-800/30 flex items-center justify-between flex-wrap gap-2">
-                    <span className="text-xs text-emerald-400 font-bengali">
-                      সম্পূর্ণ গ্রন্থটি ১৮৭৪ সালের পাবলিক ডোমেইন সংস্করণে পাঠ করা যাবে:
+                    <span className="text-xs text-emerald-400 font-sans">
+                      The complete work can be read in the verified 1874 Public Domain edition:
                     </span>
                     <Link
                       href={`/reference/${companionEdition.slug}/read`}
                       className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-300 hover:text-emerald-100 underline"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
-                      <span>১৮৭৪ পাবলিক ডোমেইন পাঠকক্ষে যান →</span>
+                      <span>Go to 1874 Public Domain Reading Room →</span>
                     </Link>
                   </div>
                 )}

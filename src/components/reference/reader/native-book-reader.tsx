@@ -423,7 +423,7 @@ export function NativeBookReader({
             <button
               onClick={() => setIsInfoOpen(true)}
               className="p-2 rounded-lg border border-zinc-800 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors"
-              title="গ্রন্থ বিবরণ ও স্বত্ব"
+              title="Book Details & Archival Rights"
               aria-label="Book metadata and rights"
             >
               <Info className="w-4 h-4" />
@@ -898,7 +898,7 @@ export function NativeBookReader({
             {/* Dossier Meta List */}
             <div className="space-y-4 text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-zinc-400 font-mono">স্বত্ব স্থিতি (Rights):</span>
+                <span className="text-zinc-400 font-mono">Rights Status:</span>
                 <ReferenceRightsBadge status={edition.rightsStatus as any} size="sm" />
               </div>
 
@@ -916,7 +916,7 @@ export function NativeBookReader({
               <div className="space-y-2 border-t border-zinc-800 pt-3 text-zinc-300">
                 {work.author && (
                   <div className="flex justify-between">
-                    <span className="text-zinc-500 font-mono">রচয়িতা / লেখক:</span>
+                    <span className="text-zinc-500 font-mono">Author:</span>
                     <span className="font-bengali font-medium text-zinc-200">
                       {work.author.nameBn}
                     </span>
@@ -925,39 +925,39 @@ export function NativeBookReader({
 
                 {edition.editor && (
                   <div className="flex justify-between">
-                    <span className="text-zinc-500 font-mono">সম্পাদক:</span>
+                    <span className="text-zinc-500 font-mono">Editor:</span>
                     <span className="font-bengali text-zinc-200">{edition.editor}</span>
                   </div>
                 )}
 
                 {edition.translator && (
                   <div className="flex justify-between">
-                    <span className="text-zinc-500 font-mono">অনুবাদক:</span>
+                    <span className="text-zinc-500 font-mono">Translator:</span>
                     <span className="font-bengali text-zinc-200">{edition.translator}</span>
                   </div>
                 )}
 
                 {edition.publisher && (
                   <div className="flex justify-between">
-                    <span className="text-zinc-500 font-mono">প্রকাশক:</span>
+                    <span className="text-zinc-500 font-mono">Publisher:</span>
                     <span className="font-bengali text-zinc-200">{edition.publisher}</span>
                   </div>
                 )}
 
                 {edition.publicationYear && (
                   <div className="flex justify-between">
-                    <span className="text-zinc-500 font-mono">প্রকাশকাল:</span>
+                    <span className="text-zinc-500 font-mono">Publication Year:</span>
                     <span className="font-mono text-zinc-200">{edition.publicationYear}</span>
                   </div>
                 )}
 
                 <div className="flex justify-between">
-                  <span className="text-zinc-500 font-mono">ভাষা:</span>
+                  <span className="text-zinc-500 font-mono">Language:</span>
                   <span className="text-zinc-200">{work.language}</span>
                 </div>
 
                 <div className="flex justify-between">
-                  <span className="text-zinc-500 font-mono">মোট পৃষ্ঠা:</span>
+                  <span className="text-zinc-500 font-mono">Total Pages:</span>
                   <span className="font-mono text-zinc-200">{totalPages}</span>
                 </div>
               </div>

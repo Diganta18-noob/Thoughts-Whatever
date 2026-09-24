@@ -668,3 +668,13 @@ push to branch for test the features
 OBJECTIVE:
 Create a dedicated feature test branch `feat/native-book-reader`, commit all verified native book reader implementations, rights engine capabilities, page-based viewer components, Kalika Purana archival records, and tests, and push to origin for feature verification.
 
+---
+
+## 56. Directive 44 — Rights Warning English Standardization & Rationale Clarification
+```text
+why this is showing and the meesage of that should be english
+```
+
+OBJECTIVE:
+Explain the rights verification rationale behind the "Rights Under Review / Unverified Rights" banner displayed on `/reference/kalika-puran-ed-1` (the 2024 Saraswat Prakashan upload to Internet Archive lacks verified public-domain status and cannot legally be directly hosted without risk). Standardize all Bengali rights warning notices, reader information labels, and archival fallback screens into authoritative English for clear reader understanding across international and local audiences.
+
