@@ -2,10 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ReferenceRightsBadge } from "./reference-rights-badge";
 import { BookOpen, ExternalLink, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface ReferenceCardProps {
   work: {
@@ -44,24 +42,23 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
   const coverImage = edition?.coverImage;
 
   return (
-    <article className="group relative flex flex-col border border-rule bg-surface transition-all duration-300 hover:border-content-faint/60">
-      {/* Cover / Archival Frame */}
+    <article className="group relative flex flex-col border border-rule bg-surface transition-all duration-300 hover:border-content-faint/60 rounded-sm overflow-hidden shadow-sm">
+      {/* Archival Book Cover Frame */}
       <Link
         href={`/reference/${work.slug}`}
-        className="relative aspect-[16/10] w-full overflow-hidden border-b border-rule bg-surface-raised block"
+        className="relative aspect-[3/4] w-full overflow-hidden border-b border-rule bg-surface-raised block"
       >
         {coverImage ? (
-          <Image
+          <img
             src={coverImage}
             alt={work.titleBn}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover object-top opacity-85 transition-transform duration-700 group-hover:scale-[1.03] group-hover:opacity-100"
+            className="w-full h-full object-cover object-top opacity-90 transition-transform duration-700 group-hover:scale-[1.02] group-hover:opacity-100"
+            loading="lazy"
           />
         ) : (
           <div className="flex h-full w-full flex-col items-center justify-center p-6 text-center">
-            <BookOpen className="h-7 w-7 text-content-faint transition-colors group-hover:text-accent" />
-            <span className="mt-2 font-bengali text-lg text-content-soft">
+            <BookOpen className="h-8 w-8 text-content-faint transition-colors group-hover:text-accent" />
+            <span className="mt-3 font-bengali text-lg text-content-soft line-clamp-2">
               {work.titleBn}
             </span>
           </div>
@@ -69,8 +66,8 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
 
         {/* Top Badges */}
         <div className="absolute inset-x-3 top-3 flex items-center justify-between gap-2 pointer-events-none">
-          <span className="label !bg-surface/90 !text-[0.625rem] border border-rule/80 px-2 py-0.5 rounded-full backdrop-blur-sm">
-            {work.type}
+          <span className="label !bg-surface/90 !text-[0.625rem] border border-rule/80 px-2.5 py-0.5 rounded-full backdrop-blur-sm">
+            {work.type} · ARCHIVE
           </span>
           <ReferenceRightsBadge status={rightsStatus} size="sm" />
         </div>
@@ -96,7 +93,7 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="mt-2.5 font-bengali text-xl font-medium leading-snug text-content transition-colors group-hover:text-accent">
+        <h3 className="mt-2.5 font-bengali text-xl font-medium leading-snug text-content transition-colors group-hover:text-accent line-clamp-1">
           <Link href={`/reference/${work.slug}`}>
             {work.titleBn}
           </Link>
@@ -109,10 +106,10 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
         )}
 
         {/* Bibliographic Details */}
-        <div className="mt-4 flex-1 space-y-1 border-t border-rule/60 pt-3 text-xs text-content-soft">
+        <div className="mt-4 flex-1 space-y-1.5 border-t border-rule/60 pt-3 text-xs text-content-soft">
           {work.author && (
             <div className="flex items-baseline gap-1.5 line-clamp-1">
-              <span className="label !text-[0.625rem]">Author</span>
+              <span className="label !text-[0.625rem] w-14 shrink-0">Author</span>
               <Link
                 href={`/authors/${work.author.slug}`}
                 className="font-bengali text-content hover:text-accent transition-colors"
@@ -123,15 +120,15 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
           )}
 
           {edition?.editor && (
-            <div className="line-clamp-1 text-content-soft">
-              <span className="label !text-[0.625rem] mr-1.5">Editor</span>
-              <span className="font-serif">{edition.editor}</span>
+            <div className="flex items-baseline gap-1.5 line-clamp-1 text-content-soft">
+              <span className="label !text-[0.625rem] w-14 shrink-0">Editor</span>
+              <span className="font-bengali">{edition.editor}</span>
             </div>
           )}
 
           {edition?.source && (
-            <div className="line-clamp-1 text-[0.6875rem] text-content-faint">
-              <span className="label !text-[0.625rem] mr-1.5">Source</span>
+            <div className="flex items-baseline gap-1.5 line-clamp-1 text-[0.6875rem] text-content-faint">
+              <span className="label !text-[0.625rem] w-14 shrink-0">Source</span>
               <span className="font-serif">{edition.source.sourceName}</span>
             </div>
           )}
@@ -151,9 +148,9 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
             {work.capabilities.canReadOnline ? (
               <Link
                 href={`/reference/${work.slug}/read`}
-                className="label !text-accent hover:opacity-75 transition-opacity"
+                className="label !text-accent hover:opacity-75 transition-opacity inline-flex items-center gap-1 font-semibold"
               >
-                Read Online →
+                <span>READ BOOK →</span>
               </Link>
             ) : edition?.source?.sourceUrl ? (
               <a
@@ -165,7 +162,14 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
                 <span>Original Source</span>
                 <ExternalLink className="h-2.5 w-2.5" />
               </a>
-            ) : null}
+            ) : (
+              <Link
+                href={`/reference/${work.slug}`}
+                className="label !text-content-faint hover:!text-content transition-colors"
+              >
+                Details
+              </Link>
+            )}
           </div>
         </div>
       </div>

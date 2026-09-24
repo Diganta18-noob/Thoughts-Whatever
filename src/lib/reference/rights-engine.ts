@@ -21,6 +21,8 @@ export interface RightsCapabilities {
   readOnlineUrl?: string | null;
   audioUrl?: string | null;
   originalSourceUrl?: string | null;
+  isRightsVerified: boolean;
+  isHosted: boolean;
 }
 
 export function validateHostingRights(
@@ -49,8 +51,9 @@ export function deriveCapabilities(params: {
     transcriptText?: string | null;
   }>;
   sourceUrl?: string | null;
+  readerManifest?: any;
 }): RightsCapabilities {
-  const { rightsStatus, hostingMode, assets = [], sourceUrl } = params;
+  const { rightsStatus, hostingMode, assets = [], sourceUrl, readerManifest } = params;
 
   const isRightsVerified =
     rightsStatus === "PUBLIC_DOMAIN" || rightsStatus === "LICENSED";
@@ -60,16 +63,21 @@ export function deriveCapabilities(params: {
   const audioAsset = assets.find((a) => a.kind === "AUDIO");
   const transcriptAsset = assets.find((a) => a.kind === "TRANSCRIPT");
 
+  const hasReaderPages = Boolean(
+    readerManifest &&
+    Array.isArray(readerManifest.pages) &&
+    readerManifest.pages.length > 0,
+  );
+
   const canDownload =
     isRightsVerified &&
     isHosted &&
     assets.some((a) => a.isDownloadable && a.fileUrl);
 
   const canReadOnline =
-    (isRightsVerified &&
-      isHosted &&
-      (Boolean(pdfAsset) || Boolean(transcriptAsset?.transcriptText))) ||
-    Boolean(sourceUrl);
+    isRightsVerified &&
+    isHosted &&
+    (hasReaderPages || Boolean(pdfAsset) || Boolean(transcriptAsset?.transcriptText));
 
   const canListen = isRightsVerified && isHosted && Boolean(audioAsset?.fileUrl);
   const canViewOriginalSource = Boolean(sourceUrl);
@@ -79,11 +87,13 @@ export function deriveCapabilities(params: {
     canDownload,
     canListen,
     canViewOriginalSource,
-    hasHostedFiles: isHosted && assets.length > 0,
+    hasHostedFiles: isHosted && (assets.length > 0 || hasReaderPages),
     downloadUrl: canDownload ? (pdfAsset?.fileUrl || assets[0]?.fileUrl) : null,
     readOnlineUrl: canReadOnline ? (pdfAsset?.fileUrl || null) : null,
     audioUrl: canListen ? (audioAsset?.fileUrl || null) : null,
     originalSourceUrl: sourceUrl || null,
+    isRightsVerified,
+    isHosted,
   };
 }
 

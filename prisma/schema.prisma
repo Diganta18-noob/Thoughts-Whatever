@@ -1503,6 +1503,7 @@ model ReferenceEdition {
   notes            String?
   coverImage       String?
   hostingMode      ReferenceHostingMode @default(EXTERNAL)
+  readerManifest   Json?                // { pageCount, searchable, pages: [{ pageNumber, imageUrl, thumbnailUrl, width, height, ocrText }] }
 
   sources          ReferenceSource[]
   rights           ReferenceRights?

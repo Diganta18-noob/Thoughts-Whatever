@@ -36,6 +36,11 @@ const nextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
       // Cloudinary CDN
       { protocol: "https", hostname: "res.cloudinary.com" },
+      // Archival & Library Repositories (Internet Archive & Wikimedia Commons)
+      { protocol: "https", hostname: "archive.org" },
+      { protocol: "https", hostname: "*.archive.org" },
+      { protocol: "https", hostname: "upload.wikimedia.org" },
+      { protocol: "https", hostname: "thumb.wikimedia.org" },
     ],
   },
   async headers() {
@@ -103,7 +108,7 @@ const nextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://us-assets.i.posthog.com https://us.i.posthog.com https://www.instagram.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
-              "img-src 'self' data: blob: https://res.cloudinary.com https://*.cdninstagram.com https://*.fbcdn.net https://i.ytimg.com https://images.unsplash.com",
+              "img-src 'self' data: blob: https://res.cloudinary.com https://*.cdninstagram.com https://*.fbcdn.net https://i.ytimg.com https://images.unsplash.com https://archive.org https://*.archive.org https://upload.wikimedia.org https://thumb.wikimedia.org",
               "media-src 'self' https://res.cloudinary.com data: blob:",
               "connect-src 'self' https://res.cloudinary.com https://us.i.posthog.com https://us-assets.i.posthog.com https://api.groq.com https://openrouter.ai",
               "frame-src 'self' https://www.instagram.com https://www.youtube.com https://www.youtube-nocookie.com",

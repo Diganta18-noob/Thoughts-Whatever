@@ -59,11 +59,28 @@ export async function PATCH(
 
     if (!existingWork) return fail("রেফারেন্স উপাদান পাওয়া যায়নি।", 404);
 
-    // If updating edition hostingMode, check guardrails against current rights
-    if (json.editionId && json.hostingMode) {
+    if (json.editionId) {
       const edition = existingWork.editions.find((e) => e.id === json.editionId);
-      if (edition && edition.rights) {
-        validateHostingRights(json.hostingMode, edition.rights.status);
+      const editionData: any = {};
+      if (json.hostingMode !== undefined) {
+        if (edition && edition.rights) {
+          validateHostingRights(json.hostingMode, edition.rights.status);
+        }
+        editionData.hostingMode = json.hostingMode;
+      }
+      if (json.readerManifest !== undefined) editionData.readerManifest = json.readerManifest;
+      if (json.coverImage !== undefined) editionData.coverImage = json.coverImage;
+      if (json.pages !== undefined) editionData.pages = json.pages;
+      if (json.editor !== undefined) editionData.editor = json.editor;
+      if (json.translator !== undefined) editionData.translator = json.translator;
+      if (json.publisher !== undefined) editionData.publisher = json.publisher;
+      if (json.publicationYear !== undefined) editionData.publicationYear = json.publicationYear;
+
+      if (Object.keys(editionData).length > 0) {
+        await prisma.referenceEdition.update({
+          where: { id: json.editionId },
+          data: editionData,
+        });
       }
     }
 

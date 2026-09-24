@@ -48,6 +48,7 @@ export const referenceWorkInputSchema = z.object({
       hostingMode: z
         .nativeEnum(ReferenceHostingMode)
         .default(ReferenceHostingMode.EXTERNAL),
+      readerManifest: z.any().optional().nullable(),
 
       // Source info
       source: z.object({

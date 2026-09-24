@@ -153,6 +153,7 @@ export async function POST(request: Request) {
                 notes: data.edition.notes || null,
                 coverImage: data.edition.coverImage || null,
                 hostingMode: data.edition.hostingMode,
+                readerManifest: data.edition.readerManifest || null,
                 sources: {
                   create: {
                     sourceName: data.edition.source.sourceName,

@@ -640,3 +640,31 @@ it is showing that 2 blogs is there but if i click on blog tab it is showing lik
 
 OBJECTIVE:
 Resolve the discrepancy between homepage Categories showing "2 pieces" under Blog and the `/blog` page displaying an empty state. Found that the 2 blog pieces in the database (`রবীন্দ্রনাথকে নতুন করে পড়ার একটা পদ্ধতি` and `রিল থেকে রচনা: এই পাতাটা কেন`) had been set to `ARCHIVED`, while `/blog` only displays `PUBLISHED` content. Concurrently, the homepage Categories section was calculating counts from only the first 20 recent pieces with hardcoded fallbacks (`?? 2`, `?? 4`, `?? 14`). Fixed `src/app/page.tsx` to query genuine published counts via `countPieces` for all categories, and updated both blog pieces to `PUBLISHED` status so they now render properly on `/blog`.
+
+---
+
+## 54. Master Directive 42 — Native Digital Book Reader for Reference Library
+```text
+Master Prompt — Native Book Reader for Thoughts.Whatever
+OBJECTIVE: Build a premium, native, in-site digital book reading experience for the Reference Library.
+REFERENCE SOURCE: https://archive.org/details/kalika-puran-ed-1/mode/1up
+The goal is NOT to redirect readers to Internet Archive for the main reading experience.
+Internet Archive / verified source -> Source material -> Thoughts.Whatever -> Native Book Reading Experience -> Reader reads complete book directly inside Thoughts.Whatever.
+At the very bottom of the reader page, provide a clearly visible "Original Source & Reference" section linking back to the original Internet Archive item.
+Rights verification requirement: Do not assume Internet Archive items are automatically redistributable. Verify rights status before hosting. If rights are unverified, catalog with verified source metadata and block hosted download/reading until rights are verified.
+Mobile-first reader with virtualization, smooth zoom, page navigation, touch gestures, page jump, reading progress bar, continue reading (localStorage), fullscreen, OCR/search status, and robust CMS integration.
+```
+
+OBJECTIVE:
+Architect and deploy a first-class, native digital book reading experience directly within Thoughts.Whatever. Verify rights of archival sources before hosting; implement a page-based virtualized reader with mobile-first controls, gesture navigation, zoom controls, continue-reading state persistence, book completion screen, and prominent original archival source attribution. Add rights verification gates in admin CMS and backend endpoints.
+
+---
+
+## 55. Directive 43 — Push to Test Branch for Feature Verification
+```text
+push to branch for test the features
+```
+
+OBJECTIVE:
+Create a dedicated feature test branch `feat/native-book-reader`, commit all verified native book reader implementations, rights engine capabilities, page-based viewer components, Kalika Purana archival records, and tests, and push to origin for feature verification.
+

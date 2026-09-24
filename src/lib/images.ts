@@ -118,6 +118,10 @@ const REMOTE_PATTERNS: { exact?: string; suffix?: string }[] = [
   { exact: "i.ytimg.com" },
   { exact: "images.unsplash.com" },
   { exact: "res.cloudinary.com" },
+  { exact: "archive.org" },
+  { suffix: ".archive.org" },
+  { exact: "upload.wikimedia.org" },
+  { exact: "thumb.wikimedia.org" },
 ];
 
 export function isOptimizable(src: string): boolean {
