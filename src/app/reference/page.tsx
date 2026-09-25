@@ -105,6 +105,9 @@ export default async function ReferenceLibraryPage({
         },
       }),
       prisma.referenceSource.count(),
+      prisma.referenceWork.count({
+        where: { published: true, type: "AUDIO" },
+      }),
     ]),
   ]);
 
@@ -130,12 +133,30 @@ export default async function ReferenceLibraryPage({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-rule py-4 text-xs">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[0.6875rem] text-content-faint tracking-label uppercase">
           <span>{stats[0]} Works Cataloged</span>
-          <span>·</span>
-          <span>{stats[1]} Texts & Books</span>
-          <span>·</span>
-          <span>{stats[2]} Historical Documents</span>
-          <span>·</span>
-          <span>{stats[3]} External Archives</span>
+          {stats[1] > 0 && (
+            <>
+              <span>·</span>
+              <span>{stats[1]} Texts & Books</span>
+            </>
+          )}
+          {stats[2] > 0 && (
+            <>
+              <span>·</span>
+              <span>{stats[2]} Historical Documents</span>
+            </>
+          )}
+          {stats[4] > 0 && (
+            <>
+              <span>·</span>
+              <span className="text-amber-400 font-semibold">{stats[4]} Audio Recordings</span>
+            </>
+          )}
+          {stats[3] > 0 && (
+            <>
+              <span>·</span>
+              <span>{stats[3]} Archival Sources</span>
+            </>
+          )}
         </div>
 
         <Link

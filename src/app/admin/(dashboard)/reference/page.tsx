@@ -16,6 +16,8 @@ import {
   CheckCircle2,
   AlertTriangle,
   RotateCcw,
+  Headphones,
+  Eye,
 } from "lucide-react";
 import { RightsBadge } from "@/components/admin/reference/rights-badge";
 import { RightsReviewModal } from "@/components/admin/reference/rights-review-modal";
@@ -332,6 +334,21 @@ export default function AdminReferencePage() {
 
                       <td className="py-3.5 px-4 text-right">
                         <div className="flex items-center justify-end gap-1.5">
+                          {/* Live Preview Button */}
+                          <a
+                            href={w.type === "AUDIO" ? `/reference/${w.slug}/listen` : `/reference/${w.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={w.type === "AUDIO" ? "Open Live Listening Room" : "View Live Reference"}
+                            className="p-1.5 rounded-lg border border-amber-800/40 text-amber-400 hover:bg-amber-950/40"
+                          >
+                            {w.type === "AUDIO" ? (
+                              <Headphones className="w-3.5 h-3.5" />
+                            ) : (
+                              <Eye className="w-3.5 h-3.5" />
+                            )}
+                          </a>
+
                           {/* Rights Review Button */}
                           <button
                             onClick={() => setReviewWork({ ...w, edition })}
