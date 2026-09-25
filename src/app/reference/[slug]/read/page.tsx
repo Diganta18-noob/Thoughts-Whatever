@@ -74,21 +74,7 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
     }
   }
 
-  // Look for any related or verified edition of Kalika Purana if this is kalika-puran-ed-1
   let companionEdition: { slug: string; titleBn: string; label: string } | null = null;
-  if (slug === "kalika-puran-ed-1") {
-    const pdWork = await prisma.referenceWork.findUnique({
-      where: { slug: "kalika-puran-1874" },
-      select: { slug: true, titleBn: true },
-    });
-    if (pdWork) {
-      companionEdition = {
-        slug: pdWork.slug,
-        titleBn: pdWork.titleBn,
-        label: "যাচাইকৃত ১৮৭৪ পাবলিক ডোমেইন সংস্করণ লভ্য",
-      };
-    }
-  }
 
   const rightsStatus = selectedEdition?.rights?.status || "RIGHTS_UNVERIFIED";
   const hostingMode = selectedEdition?.hostingMode || "EXTERNAL";
@@ -184,16 +170,6 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
                 <span>Read at Archival Source ({source.sourceName})</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
-            )}
-
-            {companionEdition && (
-              <Link
-                href={`/reference/${companionEdition.slug}/read`}
-                className="w-full sm:w-auto px-5 py-2.5 bg-emerald-950/80 border border-emerald-700/60 hover:border-emerald-500 text-emerald-300 font-mono text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Go to Verified 1874 Reader Room →</span>
-              </Link>
             )}
           </div>
         </main>

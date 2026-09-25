@@ -741,3 +741,31 @@ Add a reusable archival audio-with-synced-transcription capability to the Refere
    - Added automatic redirection from `/reference/[slug]/read` to `/reference/[slug]/listen` when the reference work is `AUDIO`.
 6. **Testing & Integrity**:
    - Unit tests created and verified in `src/lib/__tests__/reference-audio.test.ts` for binary search, word timing, timecode formatting, and WebVTT generation. All tests passing.
+
+---
+
+## 60. Directive 48 — Reader English Localization & Removing Empty Thumbnail Reference Work
+```text
+those message shoulbe be in english like page no at the rigght side of the page , remove the first empty thumbnail refernce content , i just want to show the rest of the two reference 2nd and 3rd one
+```
+
+OBJECTIVE:
+1. **Reader UI Localization to English**:
+   - Replaced Bengali resume banner text in `native-book-reader.tsx`:
+     - Banner notification: `You were previously on page {savedPageNotice}.`
+     - Action button: `Go to page {savedPageNotice}`
+   - Updated reader chrome and controls:
+     - Navigation footer: `Page {currentPage}`, `Previous`, `Next`.
+     - Jump to page modal: `Jump to Page`, `Enter page number (1 to {totalPages})`, `Go`, `Cover (1)`, `Middle`, `Last Page`.
+     - Search modal: `Book Search`, `Search text...`, `Type keywords to search archival text.`, `No results found.`, `Page {pageNumber}`, `Digital Text Search Unavailable`.
+     - End of book state: `Book Complete`, `You have reached the end of this historical edition.`, `Return to First Page`, `Back to Reference Dossier`.
+     - Error states: `Failed to load page {currentPage}`, `Try Again`, `Next Page →`.
+     - Tooltips and control accessibility labels converted to clear English.
+2. **Removed Empty Thumbnail Reference Work**:
+   - Identified the empty thumbnail card as `kalika-puran-1874` (`কালিকা পুরাণ — খণ্ড ১ (১৮৭৪ সংস্করণ)`).
+   - Permanently deleted `kalika-puran-1874` and its cascaded editions, assets, sources, and rights records from the database.
+   - Preserved the remaining 2 target reference items:
+     1. `kalika-puran-ed-1` (কালিকা পুরাণ, Internet Archive 811-page digital edition with the Kali artwork cover).
+     2. `debabrata-biswas-rabindrasangeet-1974` (রবীন্দ্রসংগীত সম্বন্ধে সমস্যা ও মতামত, Debabrata Biswas 1974 audio archive with portrait).
+   - Cleaned up seed scripts and companion edition lookups to prevent accidental recreation.
+

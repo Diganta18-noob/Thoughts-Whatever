@@ -346,7 +346,7 @@ export function NativeBookReader({
             <Link
               href={`/reference/${work.slug}`}
               className="p-2 rounded-lg border border-zinc-800 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors shrink-0"
-              title="তথ্যপঞ্জিতে ফিরে যান"
+              title="Back to Reference dossier"
               aria-label="Back to Reference dossier"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -377,7 +377,7 @@ export function NativeBookReader({
                 setIsJumpOpen(true);
               }}
               className="px-2.5 py-1.5 rounded-lg border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-850 text-xs font-mono text-zinc-300 flex items-center gap-1.5 transition-colors"
-              title="পৃষ্ঠায় লাফ দিন"
+              title="Jump to page"
               aria-label="Jump to page"
             >
               <BookOpen className="w-3.5 h-3.5 text-amber-400" />
@@ -391,7 +391,7 @@ export function NativeBookReader({
               <button
                 onClick={handleZoomOut}
                 className="p-1.5 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 rounded"
-                title="ছোট করুন (Zoom Out: -)"
+                title="Zoom out (-)"
                 aria-label="Zoom out"
               >
                 <ZoomOut className="w-3.5 h-3.5" />
@@ -399,7 +399,7 @@ export function NativeBookReader({
               <button
                 onClick={handleResetZoom}
                 className="px-1.5 py-0.5 text-[0.6875rem] font-mono text-zinc-400 hover:text-zinc-200"
-                title="রিসেট করুন (Reset: 0)"
+                title="Reset zoom (0)"
                 aria-label="Reset zoom"
               >
                 {Math.round(zoom * 100)}%
@@ -407,7 +407,7 @@ export function NativeBookReader({
               <button
                 onClick={handleZoomIn}
                 className="p-1.5 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 rounded"
-                title="বড় করুন (Zoom In: +)"
+                title="Zoom in (+)"
                 aria-label="Zoom in"
               >
                 <ZoomIn className="w-3.5 h-3.5" />
@@ -418,7 +418,7 @@ export function NativeBookReader({
             <button
               onClick={() => setIsSearchOpen(true)}
               className="p-2 rounded-lg border border-zinc-800 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors"
-              title="অনুসন্ধান করুন"
+              title="Search within book"
               aria-label="Search within book"
             >
               <Search className="w-4 h-4" />
@@ -438,7 +438,7 @@ export function NativeBookReader({
             <button
               onClick={handleShare}
               className="p-2 rounded-lg border border-zinc-800 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors hidden sm:inline-flex"
-              title="পৃষ্ঠা লিংক কপি করুন"
+              title="Copy page link"
               aria-label="Share current page link"
             >
               {hasCopiedShare ? (
@@ -452,7 +452,7 @@ export function NativeBookReader({
             <button
               onClick={toggleFullscreen}
               className="p-2 rounded-lg border border-zinc-800 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors"
-              title={isFullscreen ? "পূর্ণপর্দা থেকে বের হন (Esc)" : "পূর্ণপর্দা পাঠ (F)"}
+              title={isFullscreen ? "Exit fullscreen (Esc)" : "Fullscreen reading (F)"}
               aria-label="Toggle fullscreen"
             >
               {isFullscreen ? (
@@ -471,7 +471,7 @@ export function NativeBookReader({
           <div className="flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span>
-              আপনি পূর্বে পৃষ্ঠা {savedPageNotice}-এ ছিলেন।
+              You were previously on page {savedPageNotice}.
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -482,7 +482,7 @@ export function NativeBookReader({
               }}
               className="px-2.5 py-1 bg-amber-400 text-zinc-950 font-bold rounded hover:bg-amber-300 transition-colors"
             >
-              পৃষ্ঠা {savedPageNotice}-এ যান
+              Go to page {savedPageNotice}
             </button>
             <button
               onClick={() => setSavedPageNotice(null)}
@@ -538,13 +538,13 @@ export function NativeBookReader({
 
             <div>
               <span className="text-xs font-mono uppercase tracking-widest text-amber-400">
-                Book Complete · পাঠ সমাপ্ত
+                Book Complete
               </span>
               <h2 className="text-2xl sm:text-3xl font-bengali font-bold text-zinc-100 mt-2">
                 {work.titleBn}
               </h2>
               <p className="text-xs sm:text-sm text-zinc-400 font-serif mt-2">
-                আপনি এই ঐতিহাসিক সংস্করণের শেষ পৃষ্ঠায় পৌঁছেছেন।
+                You have reached the end of this historical edition.
               </p>
             </div>
 
@@ -554,14 +554,14 @@ export function NativeBookReader({
                 className="px-4 py-2 border border-zinc-700 hover:border-zinc-500 rounded-lg text-xs font-mono text-zinc-300 hover:text-zinc-100 flex items-center gap-1.5"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>প্রথম পৃষ্ঠায় ফিরে যান</span>
+                <span>Return to First Page</span>
               </button>
 
               <Link
                 href={`/reference/${work.slug}`}
                 className="px-5 py-2 bg-zinc-100 hover:bg-white text-zinc-950 font-mono text-xs font-semibold rounded-lg"
               >
-                তথ্যপঞ্জিতে ফিরুন
+                Back to Reference Dossier
               </Link>
             </div>
 
@@ -591,11 +591,11 @@ export function NativeBookReader({
           /* Safe Error State for Failed Page */
           <div className="max-w-md mx-auto my-auto text-center p-8 border border-zinc-800 rounded-2xl bg-zinc-900/60 space-y-4">
             <ShieldAlert className="w-10 h-10 text-rose-400 mx-auto" />
-            <h3 className="font-bengali text-lg font-bold text-zinc-200">
-              পৃষ্ঠা {currentPage} লোড করা সম্ভব হয়নি
+            <h3 className="font-semibold text-lg text-zinc-200">
+              Failed to load page {currentPage}
             </h3>
             <p className="text-xs text-zinc-400 font-serif">
-              নেটওয়ার্ক বাধা বা ফাইলের অপ্রাপ্যতার কারণে পৃষ্ঠাটি লোড হয়নি। আপনি পরবর্তী পৃষ্ঠায় এগিয়ে যেতে পারেন।
+              This page could not be loaded due to a network interruption or asset unavailability. You can continue to the next page.
             </p>
             <div className="flex items-center justify-center gap-3 pt-2">
               <button
@@ -604,13 +604,13 @@ export function NativeBookReader({
                 }}
                 className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg text-xs font-mono"
               >
-                পুনরায় চেষ্টা করুন
+                Try Again
               </button>
               <button
                 onClick={goToNextPage}
                 className="px-4 py-2 bg-amber-400 text-zinc-950 font-bold rounded-lg text-xs font-mono"
               >
-                পরবর্তী পৃষ্ঠা →
+                Next Page →
               </button>
             </div>
           </div>
@@ -629,7 +629,7 @@ export function NativeBookReader({
           >
             <Image
               src={activePageUrl}
-              alt={`${work.titleBn} — পৃষ্ঠা ${currentPage}`}
+              alt={`${work.titleEn || work.titleBn} — Page ${currentPage}`}
               width={1200}
               height={1600}
               priority
@@ -652,7 +652,7 @@ export function NativeBookReader({
           /* Loading skeleton */
           <div className="w-full max-w-2xl h-[70vh] rounded-xl bg-zinc-900/60 animate-pulse border border-zinc-800 flex flex-col items-center justify-center p-6 text-zinc-500 font-mono text-xs">
             <BookOpen className="w-8 h-8 mb-2 opacity-50" />
-            <span>পৃষ্ঠা লোড হচ্ছে...</span>
+            <span>Loading page...</span>
           </div>
         )}
       </main>
@@ -672,7 +672,7 @@ export function NativeBookReader({
             aria-label="Previous page"
           >
             <ChevronLeft className="w-4 h-4 text-amber-400" />
-            <span className="hidden sm:inline">পূর্ববর্তী</span>
+            <span className="hidden sm:inline">Previous</span>
           </button>
 
           {/* Central Page Pill & Jump Modal Trigger */}
@@ -685,7 +685,7 @@ export function NativeBookReader({
               className="min-h-[44px] px-4 py-2 rounded-xl border border-zinc-800 bg-zinc-900/90 hover:border-amber-500/50 text-xs font-mono text-zinc-200 flex items-center gap-2 transition-all shadow-sm"
               aria-label="Jump to page modal"
             >
-              <span className="font-semibold text-amber-400">পৃষ্ঠা {currentPage}</span>
+              <span className="font-semibold text-amber-400">Page {currentPage}</span>
               <span className="text-zinc-500">/</span>
               <span className="text-zinc-400">{totalPages}</span>
               <span className="text-[0.625rem] text-zinc-500 font-sans hidden sm:inline">
@@ -701,7 +701,7 @@ export function NativeBookReader({
             className="min-h-[44px] min-w-[44px] px-3.5 py-2 rounded-xl border border-zinc-800 bg-zinc-900/80 hover:bg-zinc-850 text-zinc-200 disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1.5 text-xs font-mono transition-colors shadow-sm"
             aria-label="Next page"
           >
-            <span className="hidden sm:inline">পরবর্তী</span>
+            <span className="hidden sm:inline">Next</span>
             <ChevronRight className="w-4 h-4 text-amber-400" />
           </button>
         </div>
@@ -714,8 +714,8 @@ export function NativeBookReader({
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <div className="flex items-center gap-2">
                 <BookOpen className="w-4 h-4 text-amber-400" />
-                <h3 className="font-bengali font-semibold text-zinc-100 text-sm">
-                  পৃষ্ঠায় লাফ দিন (Go to Page)
+                <h3 className="font-semibold text-zinc-100 text-sm">
+                  Jump to Page
                 </h3>
               </div>
               <button
@@ -730,7 +730,7 @@ export function NativeBookReader({
             <form onSubmit={handleJumpSubmit} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-[0.6875rem] font-mono uppercase tracking-wider text-zinc-400">
-                  পৃষ্ঠা নম্বর লিখুন (১ থেকে {totalPages})
+                  Enter page number (1 to {totalPages})
                 </label>
                 <div className="flex items-center gap-2">
                   <input
@@ -746,7 +746,7 @@ export function NativeBookReader({
                     type="submit"
                     className="min-h-[48px] px-6 rounded-xl bg-amber-400 hover:bg-amber-300 text-zinc-950 font-mono text-xs font-bold transition-colors"
                   >
-                    যান (Go)
+                    Go
                   </button>
                 </div>
               </div>
@@ -773,7 +773,7 @@ export function NativeBookReader({
                   }}
                   className="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
                 >
-                  প্রচ্ছদ (১)
+                  Cover (1)
                 </button>
                 <button
                   type="button"
@@ -783,7 +783,7 @@ export function NativeBookReader({
                   }}
                   className="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
                 >
-                  মাঝামাঝি ({Math.round(totalPages / 2)})
+                  Middle ({Math.round(totalPages / 2)})
                 </button>
                 <button
                   type="button"
@@ -793,7 +793,7 @@ export function NativeBookReader({
                   }}
                   className="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
                 >
-                  শেষ পৃষ্ঠা ({totalPages})
+                  Last Page ({totalPages})
                 </button>
               </div>
             </form>
@@ -808,8 +808,8 @@ export function NativeBookReader({
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <div className="flex items-center gap-2">
                 <Search className="w-4 h-4 text-amber-400" />
-                <h3 className="font-bengali font-semibold text-zinc-100 text-sm">
-                  গ্রন্থে অনুসন্ধান (Book Search)
+                <h3 className="font-semibold text-zinc-100 text-sm">
+                  Book Search
                 </h3>
               </div>
               <button
@@ -825,21 +825,21 @@ export function NativeBookReader({
               <div className="space-y-4 flex-1 flex flex-col">
                 <input
                   type="text"
-                  placeholder="শব্দ বা চরণ অনুসন্ধান করুন..."
+                  placeholder="Search text..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-zinc-950 border border-zinc-750 rounded-xl px-4 py-2.5 text-xs text-zinc-100 focus:outline-none focus:border-amber-400 font-bengali"
+                  className="w-full bg-zinc-950 border border-zinc-750 rounded-xl px-4 py-2.5 text-xs text-zinc-100 focus:outline-none focus:border-amber-400"
                   autoFocus
                 />
 
                 <div className="flex-1 overflow-y-auto space-y-2.5 pr-1">
                   {searchQuery.trim() === "" ? (
                     <div className="text-center py-12 text-zinc-500 text-xs font-serif">
-                      শব্দ টাইপ করে ডিজিটাল টেক্সট অনুসন্ধান করুন।
+                      Type keywords to search archival text.
                     </div>
                   ) : searchResults.length === 0 ? (
                     <div className="text-center py-12 text-zinc-500 text-xs font-serif">
-                      কোনো ফলাফল মেলেনি।
+                      No results found.
                     </div>
                   ) : (
                     searchResults.map((res) => (
@@ -852,12 +852,12 @@ export function NativeBookReader({
                         className="w-full text-left p-3 rounded-xl border border-zinc-800 bg-zinc-950/60 hover:bg-zinc-850 hover:border-amber-500/50 transition-colors group space-y-1"
                       >
                         <div className="flex items-center justify-between text-[0.6875rem] font-mono text-amber-400">
-                          <span>পৃষ্ঠা {res.pageNumber}</span>
+                          <span>Page {res.pageNumber}</span>
                           <span className="opacity-0 group-hover:opacity-100 text-zinc-400">
-                            যান →
+                            Go →
                           </span>
                         </div>
-                        <p className="text-xs text-zinc-300 font-bengali line-clamp-2 leading-relaxed">
+                        <p className="text-xs text-zinc-300 line-clamp-2 leading-relaxed">
                           {res.ocrText}
                         </p>
                       </button>
@@ -866,16 +866,16 @@ export function NativeBookReader({
                 </div>
               </div>
             ) : (
-              /* No OCR Available Status Banner (Per Prompt Section 16) */
+              /* No OCR Available Status Banner */
               <div className="flex-1 flex flex-col items-center justify-center p-6 text-center space-y-3">
                 <div className="w-12 h-12 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center">
                   <Search className="w-5 h-5" />
                 </div>
-                <h4 className="font-bengali font-medium text-sm text-zinc-200">
-                  ডিজিটাল টেক্সট অনুসন্ধান উপলব্ধ নয়
+                <h4 className="font-medium text-sm text-zinc-200">
+                  Digital Text Search Unavailable
                 </h4>
                 <p className="text-xs text-zinc-400 font-serif leading-relaxed">
-                  Text search isn&apos;t available for this scan. এই ঐতিহাসিক স্ক্যানটি একটি আলোকচিত্র-ভিত্তিক মূল পুথি। পৃষ্ঠা নেভিগেশন ও জুম ব্যবহার করে মূল পুথিপত্র অবিকৃতভাবে পাঠ করুন।
+                  Text search is not available for this edition. This historical archival edition is an image-based preservation scan. Use page navigation and zoom controls to read the manuscript.
                 </p>
               </div>
             )}
@@ -890,8 +890,8 @@ export function NativeBookReader({
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <div className="flex items-center gap-2">
                 <Info className="w-4 h-4 text-amber-400" />
-                <h3 className="font-bengali font-semibold text-zinc-100 text-sm">
-                  গ্রন্থ পরিচিতি ও অধিকার (Book Dossier)
+                <h3 className="font-semibold text-zinc-100 text-sm">
+                  Book Details & Archival Rights
                 </h3>
               </div>
               <button
@@ -1012,7 +1012,7 @@ export function NativeBookReader({
                     href={`/reference/${companionEdition.slug}/read`}
                     className="inline-flex items-center gap-1.5 text-xs font-mono text-amber-300 hover:text-white underline"
                   >
-                    <span>এই সংস্করণের পাঠকক্ষে যান →</span>
+                    <span>Open in Reader →</span>
                   </Link>
                 </div>
               )}
