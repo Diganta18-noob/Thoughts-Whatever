@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { deriveCapabilities, getRightsBadgeMeta } from "@/lib/reference/rights-engine";
 import { ArrowLeft, BookOpen, ExternalLink, ShieldAlert, Sparkles } from "lucide-react";
@@ -52,6 +52,11 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
   });
 
   if (!work || !work.published) notFound();
+
+  // If this is an audio work, seamlessly redirect to the listening room
+  if (work.type === "AUDIO") {
+    redirect(`/reference/${work.slug}/listen`);
+  }
 
   // Find targeted edition or prefer public-domain / licensed hosted edition if available
   let selectedEdition = work.editions[0] || null;

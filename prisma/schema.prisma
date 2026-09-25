@@ -1583,6 +1583,7 @@ model ReferenceAsset {
   durationSec      Int?
   transcriptText   String?
   narrator         String?
+  audioManifest    Json?
   isDownloadable   Boolean            @default(false)
   isOnlineReadable Boolean            @default(false)
 

@@ -714,4 +714,30 @@ Systematically resolve 8 critical and medium bugs across rendering, rate limitin
 7. Implemented and hooked `invalidateAdminCache` across team updates, deletions, password resets, and user settings.
 8. Standardized Zod email validation to `z.string().trim().email()` in `validation.ts`.
 
+---
 
+## 59. Directive 47 — Debabrata Biswas 1974 Archival Audio Listening Room with Real-Time Audio Pulse & Synced Bengali Captions
+```text
+Debabrata Biswas i want to add a audio to the refernce section with full transcription and audio . people can go there and listen to to audio with advanced auto caption with bengali language , the aduio player should be looks col and advanced with realtime audio pulse showig features i add all things in the refernce folder
+```
+
+OBJECTIVE:
+Add a reusable archival audio-with-synced-transcription capability to the Reference Library, seeded with the 1974 Debabrata Biswas personal tape recording:
+1. **Schema Extension**: Added `audioManifest Json?` to the `ReferenceAsset` Prisma model to store precomputed peak waveforms, timed sentence cues, word karaoke breakdowns, and confidence scoring.
+2. **Audio Stream Extraction & Hosting**: Extracted 27 MB `.m4a` audio stream from original 94 MB MP4 using `ffmpeg-static` stream-copy (`-map 0:a -c:a copy`) without quality loss. Hosted audio stream and high-res portrait on Cloudinary CDN (`reference/debabrata-biswas/recording-1974-audio.m4a`).
+3. **Precomputed Waveforms & Sentence Timing**:
+   - Calculated 3,531 normalized 0.5s audio peak buckets from PCM audio.
+   - Segmented 24,157 characters of human Bengali prose into 262 timestamped cues with word-level karaoke intervals.
+4. **Listening Room Architecture (`/reference/[slug]/listen`)**:
+   - Built `useAudioEngine` utilizing Web Audio API `AudioContext` and `AnalyserNode` with smooth voice frequency FFT analysis and dynamic breathing envelope fallback.
+   - Built `WaveformTrack` rendering interactive canvas waveform with live amplitude ripples and draggable scrub seek.
+   - Built `PulseButton` with glowing aura and breathing concentric ring visuals synchronized to live voice amplitude.
+   - Built `CaptionStage` highlighting current spoken sentences with word-level karaoke glow and context (prev/next sentence fading).
+   - Built `TranscriptScroller` with live auto-scroll, search filter across all 262 sentences, and one-click quote copying.
+   - Built `TransportBar` with ±15s skips, 0.75x–1.5x speed toggling, mute, and direct `.m4a` download.
+5. **Seamless Routing & Navigation**:
+   - Connected `/reference/[slug]` with an amber `LISTEN AUDIO · অডিও শুনুন ও পাঠ করুন →` primary action button.
+   - Updated `ReferenceCard` to display `LISTEN · শুনুন →` when `capabilities.canListen` is true.
+   - Added automatic redirection from `/reference/[slug]/read` to `/reference/[slug]/listen` when the reference work is `AUDIO`.
+6. **Testing & Integrity**:
+   - Unit tests created and verified in `src/lib/__tests__/reference-audio.test.ts` for binary search, word timing, timecode formatting, and WebVTT generation. All tests passing.

@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ReferenceRightsBadge } from "./reference-rights-badge";
-import { BookOpen, ExternalLink, ArrowRight } from "lucide-react";
+import { BookOpen, ExternalLink, ArrowRight, Headphones } from "lucide-react";
 
 interface ReferenceCardProps {
   work: {
@@ -147,7 +147,15 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
           </Link>
 
           <div>
-            {work.capabilities.canReadOnline ? (
+            {work.capabilities.canListen ? (
+              <Link
+                href={`/reference/${work.slug}/listen`}
+                className="label !text-amber-400 hover:text-amber-300 transition-colors inline-flex items-center gap-1 font-semibold"
+              >
+                <Headphones className="h-3 w-3" />
+                <span>LISTEN · শুনুন →</span>
+              </Link>
+            ) : work.capabilities.canReadOnline ? (
               <Link
                 href={`/reference/${work.slug}/read`}
                 className="label !text-accent hover:opacity-75 transition-opacity inline-flex items-center gap-1 font-semibold"

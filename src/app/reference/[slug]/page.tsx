@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { deriveCapabilities, getRightsBadgeMeta } from "@/lib/reference/rights-engine";
 import { ReferenceRightsBadge } from "@/components/reference/reference-rights-badge";
 import { ReferenceDetailClient } from "./reference-detail-client";
-import { BookOpen, ExternalLink, Download, ArrowLeft, ShieldAlert, Sparkles, FileText } from "lucide-react";
+import { BookOpen, ExternalLink, Download, ArrowLeft, ShieldAlert, Sparkles, FileText, Headphones } from "lucide-react";
 import type { Metadata } from "next";
 
 interface ReferenceDetailPageProps {
@@ -274,7 +274,17 @@ export default async function ReferenceDetailPage({
 
             {/* Dynamic Action Buttons */}
             <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-rule">
-              {capabilities.canReadOnline ? (
+              {capabilities.canListen && (
+                <Link
+                  href={`/reference/${work.slug}/listen`}
+                  className="label inline-flex items-center gap-2 bg-amber-500 text-zinc-950 px-5 py-2.5 hover:bg-amber-400 transition-colors text-xs font-bold shadow-lg"
+                >
+                  <Headphones className="h-4 w-4 text-zinc-950" />
+                  <span>LISTEN AUDIO · অডিও শুনুন ও পাঠ করুন →</span>
+                </Link>
+              )}
+
+              {capabilities.canReadOnline && (
                 <Link
                   href={`/reference/${work.slug}/read`}
                   className="label inline-flex items-center gap-2 bg-content text-surface px-5 py-2.5 hover:bg-content-soft transition-colors text-xs font-bold"
@@ -282,7 +292,9 @@ export default async function ReferenceDetailPage({
                   <BookOpen className="h-4 w-4 text-amber-500" />
                   <span>READ BOOK · গ্রন্থ পাঠ করুন →</span>
                 </Link>
-              ) : (
+              )}
+
+              {!capabilities.canReadOnline && !capabilities.canListen && (
                 <Link
                   href={`/reference/${work.slug}/read`}
                   className="label inline-flex items-center gap-2 border border-rule bg-surface-raised px-4 py-2 text-content hover:border-content transition-colors text-xs"
