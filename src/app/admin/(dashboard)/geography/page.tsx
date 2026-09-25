@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Globe, MapPin, Users, Filter, Compass } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
@@ -17,7 +17,7 @@ export default function GeographicAnalyticsPage() {
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<string>("30d");
 
-  const fetchGeo = async () => {
+  const fetchGeo = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/admin/geography?period=${period}`);
@@ -32,11 +32,11 @@ export default function GeographicAnalyticsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [period]);
 
   useEffect(() => {
     fetchGeo();
-  }, [period]);
+  }, [fetchGeo]);
 
   return (
     <div className="space-y-8 animate-fade-in">

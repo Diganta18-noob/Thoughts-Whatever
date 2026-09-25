@@ -42,6 +42,14 @@ function scalarData(input: PieceInput) {
     ogImage: input.ogImage ?? null,
     publishedAt: resolvePublishedAt(input),
     seriesOrder: input.seriesId ? (input.seriesOrder ?? null) : null,
+    ...(input.status === "PUBLISHED"
+      ? {
+          previewToken: null,
+          previewExpiresAt: null,
+          reviewComments: [],
+          reviewStatus: "published",
+        }
+      : {}),
   };
 }
 

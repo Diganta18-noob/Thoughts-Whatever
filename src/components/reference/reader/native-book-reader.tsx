@@ -173,6 +173,51 @@ export function NativeBookReader({
     preload(currentPage - 1);
   }, [currentPage, pages, totalPages]);
 
+  const goToNextPage = useCallback(() => {
+    setCurrentPage((p) => {
+      if (p < totalPages) return p + 1;
+      setIsCompleted(true);
+      return p;
+    });
+  }, [totalPages]);
+
+  const goToPrevPage = useCallback(() => {
+    setCurrentPage((p) => {
+      if (p > 1) {
+        setIsCompleted(false);
+        return p - 1;
+      }
+      return p;
+    });
+  }, []);
+
+  const handleZoomIn = useCallback(() => {
+    setZoom((z) => Math.min(3, +(z + 0.25).toFixed(2)));
+    setFitMode("actual");
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    setZoom((z) => Math.max(0.6, +(z - 0.25).toFixed(2)));
+    setFitMode("actual");
+  }, []);
+
+  const handleResetZoom = useCallback(() => {
+    setZoom(1);
+    setFitMode("fit-page");
+  }, []);
+
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      containerRef.current?.requestFullscreen().catch(() => {});
+      setIsFullscreen(true);
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+      setIsFullscreen(false);
+    }
+  }, []);
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -207,7 +252,7 @@ export function NativeBookReader({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentPage, totalPages, zoom]);
+  }, [goToNextPage, goToPrevPage, handleZoomIn, handleZoomOut, handleResetZoom, toggleFullscreen]);
 
   // Touch gesture handling for mobile swipe navigation
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -238,21 +283,6 @@ export function NativeBookReader({
     touchStartY.current = null;
   };
 
-  function goToNextPage() {
-    if (currentPage < totalPages) {
-      setCurrentPage((p) => p + 1);
-    } else {
-      setIsCompleted(true);
-    }
-  }
-
-  function goToPrevPage() {
-    if (currentPage > 1) {
-      setCurrentPage((p) => p - 1);
-      setIsCompleted(false);
-    }
-  }
-
   function handleJumpSubmit(e?: React.FormEvent) {
     if (e) e.preventDefault();
     const target = parseInt(jumpInputValue, 10);
@@ -260,31 +290,6 @@ export function NativeBookReader({
       const valid = Math.min(Math.max(1, target), totalPages);
       setCurrentPage(valid);
       setIsJumpOpen(false);
-    }
-  }
-
-  function handleZoomIn() {
-    setZoom((z) => Math.min(3, +(z + 0.25).toFixed(2)));
-    setFitMode("actual");
-  }
-
-  function handleZoomOut() {
-    setZoom((z) => Math.max(0.6, +(z - 0.25).toFixed(2)));
-    setFitMode("actual");
-  }
-
-  function handleResetZoom() {
-    setZoom(1);
-    setFitMode("fit-page");
-  }
-
-  function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      containerRef.current?.requestFullscreen().catch(() => {});
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen().catch(() => {});
-      setIsFullscreen(false);
     }
   }
 
@@ -622,14 +627,17 @@ export function NativeBookReader({
               transformOrigin: "center center",
             }}
           >
-            <img
+            <Image
               src={activePageUrl}
               alt={`${work.titleBn} — পৃষ্ঠা ${currentPage}`}
+              width={1200}
+              height={1600}
+              priority
+              unoptimized
               className="w-full h-auto object-contain block mx-auto transition-opacity duration-300"
               onError={() => {
                 setFailedPages((prev) => ({ ...prev, [currentPage]: true }));
               }}
-              loading="eager"
             />
           </div>
         ) : transcriptText ? (
@@ -867,7 +875,7 @@ export function NativeBookReader({
                   ডিজিটাল টেক্সট অনুসন্ধান উপলব্ধ নয়
                 </h4>
                 <p className="text-xs text-zinc-400 font-serif leading-relaxed">
-                  Text search isn't available for this scan. এই ঐতিহাসিক স্ক্যানটি একটি আলোকচিত্র-ভিত্তিক মূল পুথি। পৃষ্ঠা নেভিগেশন ও জুম ব্যবহার করে মূল পুথিপত্র অবিকৃতভাবে পাঠ করুন।
+                  Text search isn&apos;t available for this scan. এই ঐতিহাসিক স্ক্যানটি একটি আলোকচিত্র-ভিত্তিক মূল পুথি। পৃষ্ঠা নেভিগেশন ও জুম ব্যবহার করে মূল পুথিপত্র অবিকৃতভাবে পাঠ করুন।
                 </p>
               </div>
             )}

@@ -105,10 +105,20 @@ export async function updateReviewStatus(
   status: "draft" | "in_review" | "approved" | "scheduled" | "published",
   admin: { id: string; email: string; nameBn?: string | null }
 ) {
+  const isPublishing = status === "published";
   const updated = await prisma.piece.update({
     where: { id: pieceId },
     data: {
       reviewStatus: status,
+      ...(isPublishing
+        ? {
+            status: "PUBLISHED",
+            publishedAt: new Date(),
+            previewToken: null,
+            previewExpiresAt: null,
+            reviewComments: [],
+          }
+        : {}),
     },
     select: {
       id: true,

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireAdmin, hashPassword, verifyPassword } from "@/lib/auth";
+import { requireAdmin, hashPassword, verifyPassword, invalidateAdminCache } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/lib/validation";
 import { z } from "zod";
@@ -99,6 +99,8 @@ export async function POST(req: Request) {
           data: { revoked: true },
         }),
       ]);
+
+      invalidateAdminCache(admin.id);
 
       return NextResponse.json({ ok: true, message: "Password updated successfully. Active sessions invalidated." });
     }

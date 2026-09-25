@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   BookOpen,
@@ -34,7 +34,7 @@ export default function EngagementIntelligencePage() {
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<string>("30d");
 
-  const fetchEngagement = async () => {
+  const fetchEngagement = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/admin/engagement?period=${period}`);
@@ -49,11 +49,11 @@ export default function EngagementIntelligencePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [period]);
 
   useEffect(() => {
     fetchEngagement();
-  }, [period]);
+  }, [fetchEngagement]);
 
   const formatSec = (sec: number) => {
     const m = Math.floor(sec / 60);

@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ReferenceRightsBadge } from "./reference-rights-badge";
 import { BookOpen, ExternalLink, ArrowRight } from "lucide-react";
 
@@ -49,11 +50,12 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
         className="relative aspect-[3/4] w-full overflow-hidden border-b border-rule bg-surface-raised block"
       >
         {coverImage ? (
-          <img
+          <Image
             src={coverImage}
             alt={work.titleBn}
-            className="w-full h-full object-cover object-top opacity-90 transition-transform duration-700 group-hover:scale-[1.02] group-hover:opacity-100"
-            loading="lazy"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover object-top opacity-90 transition-transform duration-700 group-hover:scale-[1.02] group-hover:opacity-100"
           />
         ) : (
           <div className="flex h-full w-full flex-col items-center justify-center p-6 text-center">

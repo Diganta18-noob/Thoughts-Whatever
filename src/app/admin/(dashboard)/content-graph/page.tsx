@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import {
   Share2,
@@ -44,30 +44,7 @@ export default function ContentGraphPage() {
   const simNodesRef = useRef<SimNode[]>([]);
   const animFrameRef = useRef<number | null>(null);
 
-  const fetchGraph = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/admin/content-graph?includeTags=${includeTags}`);
-      const json = await res.json();
-      if (json.ok) {
-        setData(json);
-        initSimulation(json.nodes || [], json.links || []);
-      } else {
-        toast.error(json.error || "Failed to load graph");
-      }
-    } catch (err: any) {
-      console.error("Fetch graph error:", err);
-      toast.error("Network error while connecting to graph API");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchGraph();
-  }, [includeTags]);
-
-  const initSimulation = (nodes: GraphNode[], links: GraphLink[]) => {
+  const initSimulation = useCallback((nodes: GraphNode[], _links: GraphLink[]) => {
     const width = 900;
     const height = 650;
 
@@ -86,7 +63,30 @@ export default function ContentGraphPage() {
 
     simNodesRef.current = simNodes;
     transformRef.current = { x: 0, y: 0, scale: 1 };
-  };
+  }, []);
+
+  const fetchGraph = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/admin/content-graph?includeTags=${includeTags}`);
+      const json = await res.json();
+      if (json.ok) {
+        setData(json);
+        initSimulation(json.nodes || [], json.links || []);
+      } else {
+        toast.error(json.error || "Failed to load graph");
+      }
+    } catch (err: any) {
+      console.error("Fetch graph error:", err);
+      toast.error("Network error while connecting to graph API");
+    } finally {
+      setLoading(false);
+    }
+  }, [includeTags, initSimulation]);
+
+  useEffect(() => {
+    fetchGraph();
+  }, [fetchGraph]);
 
   // Run Physics Simulation loop on Canvas
   useEffect(() => {

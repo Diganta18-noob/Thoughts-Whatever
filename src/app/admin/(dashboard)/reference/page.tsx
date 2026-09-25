@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   BookOpen,
   Plus,
@@ -47,11 +47,7 @@ export default function AdminReferencePage() {
   const [assetWork, setAssetWork] = useState<any | null>(null);
   const [isClaimsOpen, setIsClaimsOpen] = useState(false);
 
-  useEffect(() => {
-    fetchResources();
-  }, [statusFilter]);
-
-  async function fetchResources() {
+  const fetchResources = useCallback(async () => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
@@ -69,7 +65,11 @@ export default function AdminReferencePage() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [statusFilter, searchQuery]);
+
+  useEffect(() => {
+    fetchResources();
+  }, [fetchResources]);
 
   function handleSearchSubmit(e: React.FormEvent) {
     e.preventDefault();

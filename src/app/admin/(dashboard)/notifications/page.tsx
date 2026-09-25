@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Bell,
@@ -34,7 +34,7 @@ export default function NotificationsPage() {
   const [filterRead, setFilterRead] = useState<string>("all");
   const [unreadCount, setUnreadCount] = useState(0);
 
-  const fetchList = async () => {
+  const fetchList = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -53,11 +53,11 @@ export default function NotificationsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterRead, filterSeverity]);
 
   useEffect(() => {
     fetchList();
-  }, [filterSeverity, filterRead]);
+  }, [fetchList]);
 
   const markAllAsRead = async () => {
     try {

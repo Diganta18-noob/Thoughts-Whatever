@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   BarChart2,
@@ -60,7 +60,7 @@ export default function AdvancedAnalyticsPage() {
   const [period, setPeriod] = useState<string>("30d");
   const [activeTab, setActiveTab] = useState<"traffic" | "content" | "series" | "sources">("traffic");
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/admin/analytics?period=${period}`);
@@ -75,11 +75,11 @@ export default function AdvancedAnalyticsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [period]);
 
   useEffect(() => {
     fetchAnalytics();
-  }, [period]);
+  }, [fetchAnalytics]);
 
   const handleExportCSV = () => {
     window.open(`/api/admin/analytics?period=${period}&format=csv`, "_blank");

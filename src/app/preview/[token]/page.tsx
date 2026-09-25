@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getPieceByPreviewToken } from "@/lib/staging";
 import { Prose } from "@/components/reader/prose";
@@ -149,11 +150,14 @@ export default async function StagingPreviewPage({ params }: PreviewPageProps) {
 
         {/* Cover Image if available */}
         {piece.coverImage && (
-          <figure className="rounded-sm overflow-hidden border border-rule">
-            <img
+          <figure className="relative rounded-sm overflow-hidden border border-rule aspect-[16/9] w-full max-h-[500px]">
+            <Image
               src={piece.coverImage}
               alt={piece.titleBn}
-              className="w-full max-h-[500px] object-cover"
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 800px"
+              className="object-cover"
             />
           </figure>
         )}

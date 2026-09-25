@@ -148,12 +148,12 @@ export const seriesInputSchema = z.object({
 });
 
 export const loginSchema = z.object({
-  email: z.email("সঠিক ইমেল দিন"),
+  email: z.string().trim().email("সঠিক ইমেল দিন"),
   password: z.string().min(8, "পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে"),
 });
 
 export const forgotPasswordSchema = z.object({
-  email: z.email("সঠিক ইমেল দিন"),
+  email: z.string().trim().email("সঠিক ইমেল দিন"),
 });
 
 export const resetPasswordSchema = z.object({

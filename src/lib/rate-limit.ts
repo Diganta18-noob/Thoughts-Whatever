@@ -36,6 +36,14 @@ export interface RateLimitResult {
 
 export function rateLimit(identifier: string, options: RateLimitOptions): RateLimitResult {
   const now = Date.now();
+
+  // Defensive memory cap: prune expired entries if map grows large
+  if (storage.size > 5_000) {
+    for (const [k, v] of storage.entries()) {
+      if (now > v.resetTime) storage.delete(k);
+    }
+  }
+
   const tracker = storage.get(identifier);
 
   if (!tracker || now > tracker.resetTime) {

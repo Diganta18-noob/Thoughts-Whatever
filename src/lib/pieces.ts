@@ -188,6 +188,8 @@ export const getPieceBySlug = cache(async (slug: string, kind?: PieceKind) => {
     select: pieceSelect,
   });
 
+  let resolvedSlug = slug;
+
   // Resilient fallback: support nasal consonant variants (ণ <-> ন)
   if (!piece) {
     const altSlug = slug.includes("ণ")
@@ -197,12 +199,13 @@ export const getPieceBySlug = cache(async (slug: string, kind?: PieceKind) => {
         : null;
 
     if (altSlug) {
-      piece = await prisma.piece.findFirst({
+      const altPiece = await prisma.piece.findFirst({
         where: { slug: altSlug, ...PUBLISHED, ...(kind ? { kind } : {}) },
         select: pieceSelect,
       });
-      if (piece) {
-        slug = piece.slug;
+      if (altPiece) {
+        piece = altPiece;
+        resolvedSlug = altPiece.slug;
       }
     }
   }
@@ -210,12 +213,12 @@ export const getPieceBySlug = cache(async (slug: string, kind?: PieceKind) => {
   if (!piece) return null;
 
   const [shareImages, coverImages] = await Promise.all([
-    publishedBlobPrefixes("ogImage", [slug]),
-    publishedBlobPrefixes("coverImage", [slug]),
+    publishedBlobPrefixes("ogImage", [resolvedSlug]),
+    publishedBlobPrefixes("coverImage", [resolvedSlug]),
   ]);
 
-  const ogImage = usablePrefix(shareImages.get(slug));
-  const coverImage = usablePrefix(coverImages.get(slug));
+  const ogImage = usablePrefix(shareImages.get(resolvedSlug));
+  const coverImage = usablePrefix(coverImages.get(resolvedSlug));
   return sanitizeShareImage(withCover({ ...piece, coverImage, ogImage }));
 });
 

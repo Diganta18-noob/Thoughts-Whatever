@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import {
@@ -52,7 +52,7 @@ export default function PieceRevisionHistoryPage() {
   const [previewRevision, setPreviewRevision] = useState<Revision | null>(null);
   const [restoring, setRestoring] = useState(false);
 
-  const fetchHistory = async () => {
+  const fetchHistory = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/admin/pieces/${pieceId}/revisions`);
@@ -74,11 +74,11 @@ export default function PieceRevisionHistoryPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [pieceId]);
 
   useEffect(() => {
     if (pieceId) fetchHistory();
-  }, [pieceId]);
+  }, [pieceId, fetchHistory]);
 
   const handleRestore = (revision: Revision) => {
     confirmToast(

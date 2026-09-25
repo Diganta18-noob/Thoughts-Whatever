@@ -249,6 +249,14 @@ export type AuthenticatedAdmin = {
 
 const adminCache = new Map<string, { admin: AuthenticatedAdmin; expiresAt: number }>();
 
+export function invalidateAdminCache(userId?: string) {
+  if (userId) {
+    adminCache.delete(userId);
+  } else {
+    adminCache.clear();
+  }
+}
+
 export async function requireAdmin(): Promise<AuthenticatedAdmin | null> {
   const session = readSession();
   if (!session) return null;

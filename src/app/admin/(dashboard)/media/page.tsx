@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -70,7 +70,7 @@ export default function MediaLibraryPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const fetchMedia = async () => {
+  const fetchMedia = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams({
@@ -92,11 +92,11 @@ export default function MediaLibraryPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterType, unusedOnly, search, page]);
 
   useEffect(() => {
     fetchMedia();
-  }, [filterType, unusedOnly, search, page]);
+  }, [fetchMedia]);
 
   useEffect(() => {
     if (selectedMedia) {
@@ -417,11 +417,13 @@ export default function MediaLibraryPage() {
                 {/* Thumbnail */}
                 <div className="relative aspect-square w-full bg-surface overflow-hidden flex items-center justify-center">
                   {isImage ? (
-                    <img
+                    <Image
                       src={media.url}
                       alt={media.altText || media.filename}
-                      className="h-full w-full object-cover transition group-hover:scale-105"
-                      loading="lazy"
+                      fill
+                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 16vw"
+                      className="object-cover transition group-hover:scale-105"
+                      unoptimized
                     />
                   ) : media.mimeType.startsWith("video/") ? (
                     <Video className="h-8 w-8 text-content-faint" />
@@ -478,7 +480,14 @@ export default function MediaLibraryPage() {
                   <td className="p-3 flex items-center gap-3">
                     <div className="h-10 w-10 shrink-0 rounded bg-surface border border-rule/50 overflow-hidden flex items-center justify-center">
                       {media.mimeType.startsWith("image/") ? (
-                        <img src={media.url} alt="" className="h-full w-full object-cover" />
+                        <Image
+                          src={media.url}
+                          alt={media.altText || media.filename || "Thumbnail"}
+                          width={40}
+                          height={40}
+                          className="h-full w-full object-cover"
+                          unoptimized
+                        />
                       ) : (
                         <FileText className="h-4 w-4 text-content-faint" />
                       )}
@@ -539,10 +548,13 @@ export default function MediaLibraryPage() {
           {/* Large Preview */}
           <div className="aspect-video w-full rounded-sm border border-rule bg-surface-raised overflow-hidden flex items-center justify-center relative">
             {selectedMedia.mimeType.startsWith("image/") ? (
-              <img
+              <Image
                 src={selectedMedia.url}
                 alt={selectedMedia.altText || selectedMedia.filename}
-                className="h-full w-full object-contain"
+                fill
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="object-contain"
+                unoptimized
               />
             ) : (
               <FileText className="h-12 w-12 text-content-faint" />

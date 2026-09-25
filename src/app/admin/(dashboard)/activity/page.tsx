@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Activity,
   FileText,
@@ -34,7 +34,7 @@ export default function ActivityFeedPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const fetchActivities = async () => {
+  const fetchActivities = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -53,11 +53,11 @@ export default function ActivityFeedPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterType, page]);
 
   useEffect(() => {
     fetchActivities();
-  }, [filterType, page]);
+  }, [fetchActivities]);
 
   const getActivityIcon = (type: string) => {
     if (type.startsWith("piece.") || type.startsWith("article.")) return FileText;

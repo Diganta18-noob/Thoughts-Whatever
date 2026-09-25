@@ -121,10 +121,13 @@ export default async function ReferenceDetailPage({
           {/* Dedicated Archival Book Cover Frame */}
           <div className="relative aspect-[3/4] w-full max-w-[260px] mx-auto md:mx-0 border border-rule bg-surface-raised shrink-0 overflow-hidden shadow-lg rounded-sm">
             {primaryEdition?.coverImage ? (
-              <img
+              <Image
                 src={primaryEdition.coverImage}
                 alt={work.titleBn}
-                className="w-full h-full object-cover object-top"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 260px"
+                className="object-cover object-top"
               />
             ) : (
               <div className="flex h-full w-full flex-col items-center justify-center p-6 text-center">

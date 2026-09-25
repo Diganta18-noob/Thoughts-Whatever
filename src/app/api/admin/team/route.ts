@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin, requirePermission, hashPassword } from "@/lib/auth";
+import { requireAdmin, requirePermission, hashPassword, invalidateAdminCache } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getPermissionsMatrix, ROLE_LABELS } from "@/lib/permissions";
 import { logAuditEvent } from "@/lib/audit";
@@ -180,6 +180,8 @@ export async function PUT(req: NextRequest) {
       },
     });
 
+    invalidateAdminCache(id);
+
     await logAuditEvent({
       action: "user.updated",
       entityType: "AdminUser",
@@ -229,6 +231,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     await prisma.adminUser.delete({ where: { id } });
+    invalidateAdminCache(id);
 
     await logAuditEvent({
       action: "user.deleted",

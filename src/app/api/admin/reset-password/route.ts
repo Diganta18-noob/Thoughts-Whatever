@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { resetPasswordSchema } from "@/lib/validation";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { consumeResetToken } from "@/lib/password-reset";
-import { hashPassword } from "@/lib/auth";
+import { hashPassword, invalidateAdminCache } from "@/lib/auth";
 import { auditAuthAction } from "@/lib/audit";
 
 export const runtime = "nodejs";
@@ -95,6 +95,8 @@ export async function POST(request: Request) {
         data: { revoked: true },
       }),
     ]);
+
+    invalidateAdminCache(user.id);
 
     await auditAuthAction("reset_password", {
       adminId: user.id,
