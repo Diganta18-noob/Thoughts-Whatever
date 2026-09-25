@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { CoverImageFrame } from "@/components/media/cover-image-frame";
 import { useCardHover } from "@/lib/hooks/use-card-hover";
 import { thumbnailSrc } from "@/lib/images";
+import { StoryReadLink } from "@/components/ui/story-read-link";
 
 function FeaturedHeroSpread({
   piece,
@@ -53,7 +54,7 @@ function FeaturedHeroSpread({
         {/* Right: 5 Columns Editorial Narrative (42%) */}
         <div className="flex flex-col justify-center lg:col-span-5 lg:pl-2">
           {/* Eyebrow Label */}
-          <div className="flex items-center gap-2.5 font-mono text-[0.6875rem] uppercase tracking-[0.25em] text-accent font-semibold">
+          <div className="flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.25em] text-accent font-semibold">
             <span>{meta ? meta.labelEn : "DOCUMENTARY"}</span>
             <span className="text-rule">•</span>
             <span className="text-content-faint tracking-widest font-normal">EDITOR’S SELECTION</span>
@@ -97,15 +98,9 @@ function FeaturedHeroSpread({
             <span>{formatReading(piece.readingMinutes, locale)}</span>
           </div>
 
-          {/* Pure Editorial Link CTA */}
+          {/* Pure Editorial Link CTA (Issue 8: Standardized StoryReadLink) */}
           <div className="mt-8">
-            <Link
-              href={href}
-              className="group/cta inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-accent transition-colors duration-200 hover:text-accent/80"
-            >
-              <span>Read story</span>
-              <span className="transition-transform duration-200 group-hover/cta:translate-x-1.5">→</span>
-            </Link>
+            <StoryReadLink href={href} />
           </div>
         </div>
       </div>
@@ -134,12 +129,12 @@ function SupportingEditorialItem({
       <Link href={href} className="block flex-1 flex flex-col">
         {/* Index Header Track */}
         <div className="mb-3 flex items-center justify-between border-b border-rule/30 pb-2">
-          <span className="font-mono text-[0.6875rem] font-semibold text-content-faint transition-colors group-hover:text-accent">
+          <span className="font-mono text-xs font-semibold text-content-faint transition-colors group-hover:text-accent">
             {indexStr}
           </span>
           <time
             dateTime={toIsoString(piece.publishedAt)}
-            className="font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint"
+            className="font-mono text-xs uppercase tracking-wider text-content-faint"
           >
             {piece.publishedAt && formatDate(piece.publishedAt, locale)}
           </time>

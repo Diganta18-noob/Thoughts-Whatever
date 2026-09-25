@@ -11,6 +11,7 @@ import { piecePath, KIND_META } from "@/lib/nav";
 import type { CardPiece } from "@/lib/pieces";
 import { thumbnailSrc } from "@/lib/images";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { StoryReadLink } from "@/components/ui/story-read-link";
 
 const SLIDE_DURATION = 4000; // 4 seconds auto-play
 
@@ -127,11 +128,11 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
 
   return (
     <section className="py-6">
-      {/* ─── Section Heading ─── */}
+      {/* ─── Section Heading (Issue 11: View all placement and accessible font scale) ─── */}
       <Reveal>
         <div className="mb-6 flex items-center justify-between border-b border-rule/50 pb-2.5">
           <div className="flex items-baseline gap-3">
-            <span className="font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-accent font-medium">
+            <span className="font-mono text-xs uppercase tracking-[0.2em] text-accent font-medium">
               Latest
             </span>
             <h2 className="font-bengali text-xl font-medium text-content" lang="bn">
@@ -140,10 +141,10 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
           </div>
           <Link
             href="/archive"
-            className="group/link inline-flex items-center gap-1 font-mono text-[0.6875rem] uppercase tracking-widest text-content-soft transition-colors hover:text-accent"
+            className="group/link inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-content-soft transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
           >
             <span>View all</span>
-            <span className="transition-transform group-hover/link:translate-x-0.5">→</span>
+            <span className="transition-transform duration-200 group-hover/link:translate-x-1">→</span>
           </Link>
         </div>
       </Reveal>
@@ -185,16 +186,21 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
           </motion.div>
         </AnimatePresence>
 
-        {/* ─── Cinematic Gradient Overlays (Text Legibility) ─── */}
-        {/* Desktop Left-to-Right darkening */}
+        {/* ─── Cinematic Gradient Overlays (Issue 16: Scrim & Contrast Over Archival Text) ─── */}
+        {/* Overall base scrim to suppress high-contrast archival manuscript text from photo */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 z-10 hidden sm:block bg-gradient-to-r from-[#0a0a0c]/95 via-[#0a0a0c]/75 via-40% to-transparent"
+          className="pointer-events-none absolute inset-0 z-10 bg-black/40"
         />
-        {/* Mobile & Overall Bottom-to-Top darkening */}
+        {/* Desktop Left-to-Right directional darkening where text sits */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-[#0a0a0c]/95 via-[#0a0a0c]/60 via-45% to-black/25 sm:via-transparent"
+          className="pointer-events-none absolute inset-0 z-10 hidden sm:block bg-gradient-to-r from-[#0a0a0c]/98 via-[#0a0a0c]/85 via-45% to-[#0a0a0c]/30"
+        />
+        {/* Mobile & Overall Bottom-to-Top directional darkening */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-10 sm:hidden bg-gradient-to-t from-[#0a0a0c]/98 via-[#0a0a0c]/75 via-50% to-[#0a0a0c]/30"
         />
         {/* Subtle Vignette border ring */}
         <div
@@ -202,16 +208,38 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
           className="pointer-events-none absolute inset-0 z-10 ring-1 ring-inset ring-rule/40 rounded-xl"
         />
 
+        {/* ─── Carousel Prev/Next Side Controls (Issue 15: Conventional, Accessible, >=44px) ─── */}
+        {total > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={goToPrev}
+              aria-label="Previous story"
+              className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/25 bg-black/60 text-white shadow-xl backdrop-blur-md transition-all hover:bg-accent hover:border-accent hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+            </button>
+            <button
+              type="button"
+              onClick={goToNext}
+              aria-label="Next story"
+              className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/25 bg-black/60 text-white shadow-xl backdrop-blur-md transition-all hover:bg-accent hover:border-accent hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+            </button>
+          </>
+        )}
+
         {/* ─── Left Editorial Content Area ─── */}
-        <div className="relative z-20 flex h-full flex-col justify-between p-6 sm:p-10 lg:p-12">
-          {/* Top Row: Category label & Navigation controls */}
+        <div className="relative z-20 flex h-full flex-col justify-between p-6 sm:p-10 lg:p-12 pl-14 sm:pl-16 lg:pl-20">
+          {/* Top Row: Category label & Slide Indicator */}
           <div className="flex items-center justify-between gap-4">
             <motion.div
               key={`category-${currentPiece.slug}`}
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="flex flex-wrap items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.25em] text-accent font-semibold"
+              className="flex flex-wrap items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-accent font-semibold"
             >
               <span>{meta ? (isBn ? meta.labelBn : meta.labelEn) : "DOCUMENTARY"}</span>
               {currentPiece.series?.titleBn &&
@@ -225,28 +253,10 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
                 )}
             </motion.div>
 
-            {/* Navigation buttons (Desktop top/bottom right) */}
             {total > 1 && (
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={goToPrev}
-                  aria-label="Previous story"
-                  className="inline-flex h-7 items-center gap-1 rounded-sm border border-white/20 bg-black/40 px-2.5 font-mono text-[0.6875rem] uppercase tracking-wider text-white/80 backdrop-blur-sm transition-all hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-                >
-                  <ChevronLeft className="h-3 w-3" />
-                  <span className="hidden sm:inline">PREV</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={goToNext}
-                  aria-label="Next story"
-                  className="inline-flex h-7 items-center gap-1 rounded-sm border border-white/20 bg-black/40 px-2.5 font-mono text-[0.6875rem] uppercase tracking-wider text-white/80 backdrop-blur-sm transition-all hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-                >
-                  <span className="hidden sm:inline">NEXT</span>
-                  <ChevronRight className="h-3 w-3" />
-                </button>
-              </div>
+              <span className="font-mono text-xs tracking-widest text-white/60">
+                {String(currentIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+              </span>
             )}
           </div>
 
@@ -272,7 +282,7 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
                 {/* Short Literary Description (max 2-3 lines) */}
                 {summary && (
                   <p
-                    className="font-bengali text-xs sm:text-sm lg:text-base leading-relaxed text-white/85 line-clamp-2 sm:line-clamp-3 max-w-xl drop-shadow"
+                    className="font-bengali text-xs sm:text-sm lg:text-base leading-relaxed text-white/90 line-clamp-2 sm:line-clamp-3 max-w-xl drop-shadow"
                     lang="bn"
                   >
                     {summary}
@@ -292,15 +302,9 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
                   <span>{formatReading(currentPiece.readingMinutes, locale)}</span>
                 </div>
 
-                {/* Editorial CTA */}
+                {/* Editorial CTA (Issue 8: Standardized StoryReadLink) */}
                 <div className="pt-2">
-                  <Link
-                    href={href}
-                    className="group/cta inline-flex items-center gap-2 rounded-sm border border-accent/80 bg-accent/20 px-4 py-2 font-mono text-xs uppercase tracking-[0.2em] text-accent backdrop-blur-sm transition-all duration-200 hover:bg-accent hover:text-white"
-                  >
-                    <span>{isBn ? "রচনাটি পড়ুন" : "READ STORY"}</span>
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/cta:translate-x-1" />
-                  </Link>
+                  <StoryReadLink href={href} variant="pill" />
                 </div>
               </motion.div>
             </AnimatePresence>

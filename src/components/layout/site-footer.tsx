@@ -88,26 +88,25 @@ export function SiteFooter() {
                   href={siteConfig.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-2 text-sm text-content-soft transition hover:text-accent"
+                  aria-label="Instagram — ইনস্টাগ্রাম"
+                  className="group flex items-baseline gap-2 text-sm text-content-soft transition hover:text-accent"
                 >
-                  <Instagram className="h-3.5 w-3.5" />
-                  <span className={isBn ? "font-bengali" : "font-serif"}>
-                    {t("header.instagram")}
-                  </span>
+                  <NavLabel
+                    item={{ labelEn: "Instagram", labelBn: "ইনস্টাগ্রাম" }}
+                    glossClassName="ml-0 font-bengali text-xs text-content-faint"
+                  />
                 </a>
               </li>
             </ul>
           </nav>
         </div>
 
-        {/* Colophon. A literary journal names its types — and it doubles as a
-            quiet signal that the Bengali typography here was chosen, not
-            defaulted into. */}
+        {/* Colophon (Issue 5: Readable text scale 12-13px) */}
         <div className="mt-14 flex flex-col gap-4 border-t border-rule pt-6 sm:flex-row sm:items-baseline sm:justify-between">
           <p
             className={cn(
-              "label normal-case tracking-normal",
-              isBn && "font-bengali-sans",
+              "text-xs sm:text-[0.8125rem] text-content-faint tracking-normal leading-relaxed",
+              isBn ? "font-bengali-sans" : "font-sans",
             )}
             lang={locale}
           >

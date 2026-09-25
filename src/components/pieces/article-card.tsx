@@ -9,6 +9,7 @@ import { useLanguage } from "@/components/providers/language-provider";
 import { cn } from "@/lib/utils";
 import { PortraitCover } from "@/components/pieces/portrait-cover";
 import type { PieceCardData } from "@/components/pieces/piece-card";
+import { StoryReadLink } from "@/components/ui/story-read-link";
 
 function KindLabel({ kind }: { kind: PieceKindKey }) {
   const { locale, isBn } = useLanguage();
@@ -29,7 +30,7 @@ function CardDate({ publishedAt }: { publishedAt: Date | string }) {
   const bangla = toBanglaDate(publishedAt);
 
   return (
-    <span className="flex items-center gap-1.5 text-[0.6875rem] text-content-faint">
+    <span className="flex items-center gap-1.5 text-xs text-content-faint">
       <span lang={locale} className={isBn ? "font-bengali-sans" : "font-sans"}>
         {formatDate(publishedAt, locale)}
       </span>
@@ -98,16 +99,16 @@ export function ArticleCard({
             <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1">
               {showKind && <KindLabel kind={piece.kind} />}
               {piece.publishedAt && <CardDate publishedAt={piece.publishedAt} />}
-              <span className={cn(metaFace, "text-[0.6875rem] text-content-faint")} lang={locale}>
+              <span className={cn(metaFace, "text-xs text-content-faint")} lang={locale}>
                 {formatReading(piece.readingMinutes, locale)}
               </span>
               {piece.audioUrl && (
-                <span className={cn(metaFace, "text-[0.6875rem] text-accent")} lang={locale}>
+                <span className={cn(metaFace, "text-xs text-accent")} lang={locale}>
                   {t("piece.hasNarration")}
                 </span>
               )}
               {piece.reelUrl && (
-                <span className="text-[0.6875rem] font-mono text-[#e6683c] font-medium">
+                <span className="text-xs font-mono text-[#e6683c] font-medium">
                   🎬 Reel
                 </span>
               )}
@@ -154,13 +155,7 @@ export function ArticleCard({
             )}
 
             <div className="mt-6">
-              <Link
-                href={piecePath(piece.kind, piece.slug)}
-                className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-accent transition-transform group-hover/article-card:translate-x-1"
-              >
-                <span>পড়ুন</span>
-                <span>→</span>
-              </Link>
+              <StoryReadLink href={piecePath(piece.kind, piece.slug)} />
             </div>
           </div>
         </div>
@@ -195,11 +190,11 @@ export function ArticleCard({
         <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1">
           {showKind && <KindLabel kind={piece.kind} />}
           {piece.publishedAt && <CardDate publishedAt={piece.publishedAt} />}
-          <span className={cn(metaFace, "text-[0.6875rem] text-content-faint")} lang={locale}>
+          <span className={cn(metaFace, "text-xs text-content-faint")} lang={locale}>
             {formatReading(piece.readingMinutes, locale)}
           </span>
           {piece.reelUrl && (
-            <span className="text-[0.6875rem] font-mono text-[#e6683c] font-medium">
+            <span className="text-xs font-mono text-[#e6683c] font-medium">
               🎬 Reel
             </span>
           )}

@@ -35,16 +35,16 @@ export function NavLabel({
   }
 
   return (
-    <>
-      <span lang="en" className={cn("font-serif", className)}>
+    <span className={cn("inline-grid grid-cols-[6.5rem_auto] sm:grid-cols-[7.5rem_auto] items-baseline gap-2", className)}>
+      <span lang="en" className="font-serif">
         {item.labelEn}
       </span>
       <span
         lang="bn"
-        className={cn("ml-2 font-bengali text-xs text-content-faint", glossClassName)}
+        className={cn("font-bengali text-xs text-content-faint", glossClassName)}
       >
         {item.labelBn}
       </span>
-    </>
+    </span>
   );
 }

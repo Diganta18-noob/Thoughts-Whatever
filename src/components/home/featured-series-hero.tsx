@@ -8,6 +8,7 @@ import { formatDate, formatReading, toIsoString } from "@/lib/i18n/format";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useCardHover } from "@/lib/hooks/use-card-hover";
 import type { PieceCardData } from "@/components/pieces/piece-card";
+import { StoryReadLink } from "@/components/ui/story-read-link";
 
 export interface FeaturedSeriesHeroProps {
   piece: PieceCardData;
@@ -107,15 +108,12 @@ export function FeaturedSeriesHero({
             </p>
           )}
 
-          {/* Action CTA Button */}
+          {/* Action CTA Button (Issue 8: Standardized StoryReadLink) */}
           <div className="mt-8">
-            <Link
+            <StoryReadLink
               href={piecePath(piece.kind, piece.slug)}
-              className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:bg-accent/90 hover:shadow"
-            >
-              <span>Continue Reading</span>
-              <span>→</span>
-            </Link>
+              variant="button"
+            />
           </div>
         </div>
       </div>

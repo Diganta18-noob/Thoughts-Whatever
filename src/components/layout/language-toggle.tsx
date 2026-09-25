@@ -82,13 +82,13 @@ export function LanguageToggle() {
         aria-haspopup="menu"
         aria-label={t("lang.choose")}
         title={t("lang.label")}
-        className="grid h-9 min-w-9 place-items-center gap-1 rounded-full px-1.5 text-content-soft transition hover:bg-content/5 hover:text-content sm:flex sm:w-auto"
+        className="grid h-10 min-w-10 sm:h-11 sm:min-w-11 min-h-[44px] min-w-[44px] place-items-center gap-1.5 rounded-full px-2 text-content-soft transition hover:bg-content/5 hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:flex sm:w-auto"
       >
         <Languages className="h-[1.05rem] w-[1.05rem]" />
         <span
           aria-hidden
           className={cn(
-            "hidden text-[0.6875rem] uppercase tracking-wider sm:inline",
+            "hidden text-xs uppercase tracking-wider sm:inline",
             isBn && "font-bengali-sans normal-case tracking-normal",
           )}
         >

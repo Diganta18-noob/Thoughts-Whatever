@@ -44,7 +44,12 @@ export function SiteHeader() {
             <span className="font-serif text-sm font-semibold tracking-tight leading-none text-content transition-colors group-hover:text-accent">
               thoughts.whatever
             </span>
-            <span className="label text-[0.6rem] leading-none mt-1 tracking-wider text-content-faint">
+            <span
+              className={cn(
+                "text-xs leading-none mt-1 tracking-wider text-content-faint",
+                isBn ? "font-bengali-sans" : "font-mono",
+              )}
+            >
               {isBn ? siteConfig.tagline : siteConfig.taglineEn}
             </span>
           </div>
@@ -52,30 +57,31 @@ export function SiteHeader() {
 
         <nav
           lang={locale}
-          className="ml-auto hidden items-center gap-1 md:flex"
+          className="ml-auto hidden items-center gap-1.5 md:flex"
           aria-label={t("nav.sections")}
         >
           {PRIMARY_NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
+              aria-current={isActive(item.href) ? "page" : undefined}
               className={cn(
-                "relative rounded-sm px-3 py-2 text-sm transition-colors",
+                "relative rounded-sm px-3.5 py-2 text-sm font-medium transition-colors",
                 isBn ? "font-bengali" : "font-serif",
                 isActive(item.href)
-                  ? "text-accent"
-                  : "text-content-soft hover:text-content",
+                  ? "text-accent font-semibold"
+                  : "text-content/85 hover:text-content",
               )}
             >
               {isBn ? item.labelBn : item.labelEn}
               {isActive(item.href) && (
-                <span className="absolute inset-x-3 -bottom-px h-px bg-accent" />
+                <span className="absolute inset-x-3.5 -bottom-px h-0.5 bg-accent" />
               )}
             </Link>
           ))}
         </nav>
 
-        <div className="ml-auto flex items-center gap-0.5 md:ml-2">
+        <div className="ml-auto flex items-center gap-2 sm:gap-2.5 md:ml-4">
           <SearchDialog />
           <LanguageToggle />
           <ReadingSettingsButton />
@@ -84,11 +90,11 @@ export function SiteHeader() {
             href="/bookmarks"
             aria-label={t("header.saved")}
             title={t("header.saved")}
-            className="relative grid h-9 w-9 place-items-center rounded-full text-content-soft transition hover:bg-content/5 hover:text-content"
+            className="relative grid h-10 w-10 sm:h-11 sm:w-11 min-h-[44px] min-w-[44px] place-items-center rounded-full text-content-soft transition hover:bg-content/5 hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
           >
             <Bookmark className="h-[1.05rem] w-[1.05rem]" />
             {ready && bookmarks.length > 0 && (
-              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-accent" />
+              <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-accent" />
             )}
           </Link>
 
@@ -97,7 +103,7 @@ export function SiteHeader() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={t("header.instagram")}
-            className="hidden h-9 w-9 place-items-center rounded-full text-content-soft transition hover:bg-content/5 hover:text-content sm:grid"
+            className="hidden h-10 w-10 sm:h-11 sm:w-11 min-h-[44px] min-w-[44px] place-items-center rounded-full text-content-soft transition hover:bg-content/5 hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:grid"
           >
             <Instagram className="h-[1.05rem] w-[1.05rem]" />
           </a>
@@ -107,7 +113,7 @@ export function SiteHeader() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-expanded={menuOpen}
             aria-label={menuOpen ? t("header.closeMenu") : t("header.openMenu")}
-            className="grid h-9 w-9 place-items-center rounded-full text-content-soft transition hover:bg-content/5 hover:text-content md:hidden"
+            className="grid h-10 w-10 min-h-[44px] min-w-[44px] place-items-center rounded-full text-content-soft transition hover:bg-content/5 hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent md:hidden"
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>

@@ -15,7 +15,7 @@ export function ArchiveTeaser({ years }: { years: number[] }) {
   return (
     <section className="py-16">
       <Reveal>
-        <div className="mb-8 border-b border-rule pb-3">
+        <div className="mb-5 border-b border-rule pb-3">
           <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
             সংগ্রহ
           </h2>

@@ -19,7 +19,7 @@ export function Authors({ authors }: { authors: AuthorEntry[] }) {
   return (
     <section className="py-16">
       <Reveal>
-        <div className="mb-8 border-b border-rule pb-3">
+        <div className="mb-5 border-b border-rule pb-3">
           <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
             লেখক
           </h2>
@@ -31,29 +31,36 @@ export function Authors({ authors }: { authors: AuthorEntry[] }) {
         </div>
       </Reveal>
 
-      <Stagger as="ul" className="flex flex-wrap gap-x-6 gap-y-3" delay={0.1}>
-        {authors.map((author) => (
-          <StaggerItem key={author.slug} as="li">
-            <Link
-              href={`/archive?author=${encodeURIComponent(author.slug)}`}
-              className="group inline-flex items-baseline gap-2 transition"
-            >
-              <span
-                className="font-bengali text-lg text-content transition group-hover:text-accent"
-                lang="bn"
+      <Stagger as="ul" className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 sm:gap-3.5" delay={0.1}>
+        {authors.map((author) => {
+          const countLabel = isBn
+            ? `${formatNumber(author.count, locale)}টি রচনা`
+            : `${author.count} ${author.count === 1 ? "story" : "stories"}`;
+          const fullLabel = `${author.nameBn}, ${countLabel}`;
+
+          return (
+            <StaggerItem key={author.slug} as="li" className="min-w-0">
+              <Link
+                href={`/archive?author=${encodeURIComponent(author.slug)}`}
+                aria-label={fullLabel}
+                className="group flex items-center justify-between gap-2 rounded-md border border-rule/60 bg-surface-raised/30 px-3 py-2 text-left transition-all hover:border-accent/40 hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
               >
-                {author.nameBn}
-              </span>
-              <span
-                className={`text-[0.6875rem] text-content-faint ${
-                  isBn ? "font-bengali-sans" : "font-mono tracking-widest"
-                }`}
-              >
-                {formatNumber(author.count, locale)}
-              </span>
-            </Link>
-          </StaggerItem>
-        ))}
+                <span
+                  className="author-name font-bengali text-sm sm:text-base text-content transition-colors group-hover:text-accent truncate"
+                  lang="bn"
+                >
+                  {author.nameBn}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="author-count shrink-0 rounded bg-content/[0.05] px-1.5 py-0.5 font-mono text-[0.75rem] text-content-faint transition-colors group-hover:text-content-soft"
+                >
+                  ({formatNumber(author.count, locale)})
+                </span>
+              </Link>
+            </StaggerItem>
+          );
+        })}
       </Stagger>
     </section>
   );

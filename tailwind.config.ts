@@ -42,9 +42,14 @@ const config: Config = {
         gold: "rgb(var(--gold) / <alpha-value>)",
       },
       fontFamily: {
+        // Semantic roles
+        display: ["var(--font-display)", "var(--font-bengali-display)", "var(--font-bengali-serif)", "serif"],
+        body: ["var(--font-body)", "var(--font-bengali-serif)", "serif"],
+        ui: ["var(--font-ui)", "var(--font-bengali-sans)", "sans-serif"],
+        editorial: ["var(--font-editorial)", "var(--font-latin-serif)", "Georgia", "serif"],
+        // Brand & System faces
         bengali: ["var(--font-bengali-serif)", "SolaimanLipi", "Kalpurush", "Vrinda", "serif"],
         "bengali-sans": ["var(--font-bengali-sans)", "SolaimanLipi", "Kalpurush", "sans-serif"],
-        display: ["var(--font-bengali-display)", "var(--font-bengali-serif)", "serif"],
         serif: ["var(--font-latin-serif)", "Georgia", "serif"],
         sans: ["var(--font-latin-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],

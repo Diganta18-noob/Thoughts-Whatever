@@ -140,7 +140,7 @@ export function SubscribeForm({
           data-testid="subscribe-email-input"
           className={cn(
             field,
-            "min-w-0 flex-1 border-b border-rule bg-transparent py-2 text-content outline-none transition-colors placeholder:text-content-faint focus:border-accent",
+            "min-w-0 flex-1 rounded-sm border border-rule/80 bg-surface-raised/40 px-3.5 py-2 text-content placeholder:text-content-faint transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/30 min-h-[44px]",
           )}
         />
         <button
@@ -150,7 +150,7 @@ export function SubscribeForm({
           data-testid="subscribe-submit"
           className={cn(
             field,
-            "shrink-0 border-b border-accent px-1 py-2 text-accent transition hover:opacity-75 disabled:opacity-50",
+            "inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-sm border border-accent bg-accent px-4 py-2 font-medium text-white shadow-sm transition-all hover:bg-accent/90 active:scale-[0.98] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
           )}
         >
           {state === "sending" ? (

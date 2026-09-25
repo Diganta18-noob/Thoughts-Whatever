@@ -38,7 +38,7 @@ export function Hero() {
       <div className="relative z-10 flex w-full max-w-5xl flex-col items-center text-center">
         <Reveal>
           <p
-            className={`text-xs uppercase tracking-[0.2em] text-content-faint ${isBn ? "font-bengali-sans normal-case tracking-normal" : "font-mono"}`}
+            className={`text-xs tracking-wider text-content-faint ${isBn ? "font-bengali-sans normal-case tracking-normal" : "font-mono"}`}
             lang={locale}
           >
             {isBn ? siteConfig.tagline : siteConfig.taglineEn}
@@ -68,7 +68,7 @@ export function Hero() {
               <Magnetic>
                 <Link
                   href={resumeHref}
-                  className={`inline-flex items-center gap-2.5 rounded-sm bg-accent px-6 py-3 text-sm text-surface transition hover:opacity-90 ${face}`}
+                  className={`inline-flex items-center gap-2.5 rounded-sm bg-accent px-6 py-3 text-sm font-medium text-white transition hover:opacity-90 ${face}`}
                   lang={locale}
                 >
                   {t("home.continueReading")}
@@ -82,7 +82,7 @@ export function Hero() {
             <Magnetic>
               <Link
                 href="/series"
-                className={`inline-flex items-center rounded-sm border border-rule px-6 py-3 text-sm text-content transition hover:border-accent/40 hover:text-accent ${face}`}
+                className={`inline-flex items-center justify-center rounded-sm bg-accent px-6 py-3 text-sm font-medium text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${face}`}
                 lang={locale}
               >
                 {t("home.latestSeries")}
@@ -92,10 +92,11 @@ export function Hero() {
             <Magnetic>
               <Link
                 href="/archive"
-                className={`inline-flex items-center rounded-sm px-6 py-3 text-sm text-content-soft transition hover:text-content ${face}`}
+                className={`group inline-flex items-center gap-1.5 rounded-sm border border-transparent px-6 py-3 text-sm text-content-soft transition-colors hover:border-rule hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${face}`}
                 lang={locale}
               >
-                {t("home.exploreArchive")}
+                <span>{t("home.exploreArchive")}</span>
+                <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">→</span>
               </Link>
             </Magnetic>
           </div>

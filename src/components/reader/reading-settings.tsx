@@ -91,7 +91,7 @@ export function ReadingSettingsButton() {
         aria-label="Reading settings"
         title="Reading settings"
         className={cn(
-          "grid h-9 w-9 place-items-center rounded-full text-content-soft transition hover:bg-content/5 hover:text-content",
+          "grid h-10 w-10 sm:h-11 sm:w-11 min-h-[44px] min-w-[44px] place-items-center rounded-full text-content-soft transition hover:bg-content/5 hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent",
           open && "bg-content/10 text-content",
         )}
       >
