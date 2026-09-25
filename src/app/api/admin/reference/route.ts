@@ -74,8 +74,19 @@ export async function GET(request: Request) {
       ]),
     ]);
 
+    const serializedWorks = works.map((w) => ({
+      ...w,
+      editions: w.editions.map((ed) => ({
+        ...ed,
+        assets: ed.assets.map((a) => ({
+          ...a,
+          sizeBytes: a.sizeBytes ? Number(a.sizeBytes) : null,
+        })),
+      })),
+    }));
+
     return ok({
-      works,
+      works: serializedWorks,
       stats: {
         total: statsGroup[0],
         publicDomain: statsGroup[1],

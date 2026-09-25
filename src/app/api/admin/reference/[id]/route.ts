@@ -31,7 +31,18 @@ export async function GET(
 
     if (!work) return fail("রেফারেন্স উপাদান খুঁজে পাওয়া যায়নি।", 404);
 
-    return ok({ work });
+    const serializedWork = {
+      ...work,
+      editions: work.editions.map((ed) => ({
+        ...ed,
+        assets: ed.assets.map((a) => ({
+          ...a,
+          sizeBytes: a.sizeBytes ? Number(a.sizeBytes) : null,
+        })),
+      })),
+    };
+
+    return ok({ work: serializedWork });
   } catch (error) {
     console.error("[ADMIN_REFERENCE_ID_GET_ERROR]", error);
     return fail("তথ্য লোড করা সম্ভব হয়নি।", 500);
