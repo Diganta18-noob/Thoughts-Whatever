@@ -69,6 +69,11 @@ export function ArticleCard({
   const archive = variant === "archive";
   const summary = piece.dekBn || piece.excerptBn;
   const metaFace = isBn ? "font-bengali-sans" : "font-sans";
+  const hasCover = Boolean(
+    piece.coverImage &&
+      (piece.coverImageWidth ||
+        (!piece.coverImage.startsWith("/api/cover/") && piece.coverImage.length > 0))
+  );
 
   // 1. Desktop Split Layout (Image 35-40% left, Text 60-65% right)
   if (layout === "split" || layout === "hero") {
@@ -79,12 +84,12 @@ export function ArticleCard({
           className
         )}
       >
-        <div className="grid gap-6 md:grid-cols-[2fr_3fr] md:items-center lg:gap-10">
+        <div className={cn("grid gap-6 md:items-center lg:gap-10", hasCover && "md:grid-cols-[2fr_3fr]")}>
           {/* Portrait Cover Frame */}
-          {piece.coverImage ? (
+          {hasCover ? (
             <Link href={piecePath(piece.kind, piece.slug)} className="block shrink-0">
               <PortraitCover
-                src={piece.coverImage}
+                src={piece.coverImage!}
                 alt={piece.titleBn}
                 width={piece.coverImageWidth}
                 height={piece.coverImageHeight}
@@ -171,16 +176,15 @@ export function ArticleCard({
         className
       )}
     >
-      {piece.coverImage && (
+      {hasCover && (
         <Link href={piecePath(piece.kind, piece.slug)} className="block mb-4 overflow-hidden rounded-lg">
           <PortraitCover
-            src={piece.coverImage}
+            src={piece.coverImage!}
             alt={piece.titleBn}
             width={piece.coverImageWidth}
             height={piece.coverImageHeight}
             priority={priority}
             size="md"
-            className="w-full"
           />
         </Link>
       )}

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminHeaderBrand, AdminHeaderActions } from "@/components/admin/admin-header-chrome";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { LogoutButton } from "@/components/admin/logout-button";
+import { useBodyScrollLock } from "@/lib/hooks/use-body-scroll-lock";
 
 interface AdminLayoutClientProps {
   adminEmail: string;
@@ -17,6 +18,21 @@ export function AdminLayoutClient({
   children,
 }: AdminLayoutClientProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useBodyScrollLock(mobileMenuOpen);
+
+  // The drawer covers the page but the page kept its keyboard affordances:
+  // Escape did nothing, so dismissing it meant finding the backdrop or the X.
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setMobileMenuOpen(false);
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobileMenuOpen]);
 
   return (
     <div className="min-h-screen bg-surface flex flex-col">
@@ -51,8 +67,14 @@ export function AdminLayoutClient({
             <div
               className="fixed inset-0 bg-content/40 backdrop-blur-xs"
               onClick={() => setMobileMenuOpen(false)}
+              aria-hidden
             />
-            <div className="relative z-10 w-72 max-w-[85vw] h-full max-h-full overflow-hidden shadow-2xl animate-fade-up">
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navigation menu"
+              className="relative z-10 w-72 max-w-[85vw] h-full max-h-full overflow-hidden shadow-2xl animate-fade-up"
+            >
               <AdminSidebar onClose={() => setMobileMenuOpen(false)} />
             </div>
           </div>

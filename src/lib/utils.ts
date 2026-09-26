@@ -1,8 +1,26 @@
 import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { extendTailwindMerge } from "tailwind-merge";
+
+const customTwMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      rounded: ["rounded-card"],
+      shadow: ["shadow-card"],
+      "font-family": [
+        "font-display",
+        "font-body",
+        "font-ui",
+        "font-editorial",
+        "font-bengali",
+        "font-bengali-sans",
+        "font-mono",
+      ],
+    },
+  },
+});
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  return customTwMerge(clsx(inputs));
 }
 
 import { getSiteName } from "./transliterate";

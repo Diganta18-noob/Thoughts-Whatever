@@ -4,6 +4,8 @@
  * Runs before all tests to configure the testing environment
  */
 
+require("@testing-library/jest-dom");
+
 // React.cache polyfill for Next.js App Router unit testing
 const React = require("react");
 if (!React.cache) {

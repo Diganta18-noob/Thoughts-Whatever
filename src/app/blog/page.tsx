@@ -11,7 +11,7 @@ import { absoluteUrl, siteConfig } from "@/lib/utils";
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "ব্লগ — Thoughts Whatever",
+  title: "ব্লগ",
   description:
     "Thoughts Whatever ব্লগ ও পাঠ বিভাগ — বাংলা সাহিত্য, চিন্তাভাবনা ও দীর্ঘ প্রবন্ধ সংকলন।",
   alternates: { canonical: "/blog" },
@@ -63,16 +63,14 @@ export default async function BlogPage() {
         />
       ) : (
         <div className="grid gap-10 py-12 lg:grid-cols-[1fr_18rem] lg:gap-16">
-          <div className="divide-y divide-rule">
+          <div className="space-y-6">
             {pieces.map((piece) => (
-              <div key={piece.slug} className="py-8 first:pt-0">
-                <ArticleCard piece={piece} layout="stacked" />
-              </div>
+              <ArticleCard key={piece.slug} piece={piece} layout="stacked" />
             ))}
           </div>
 
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <LetterBlock source="blog" />
+            <LetterBlock source="blog" variant="sidebar" />
           </aside>
         </div>
       )}

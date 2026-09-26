@@ -37,8 +37,11 @@ export function EditorialImage({
     width && height ? { width, height } : null
   );
   const [loaded, setLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const [inView, setInView] = useState(priority);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  if (hasError) return null;
 
   // Probe dimensions client-side if missing
   useEffect(() => {
@@ -118,6 +121,7 @@ export function EditorialImage({
               priority={priority}
               unoptimized={src.startsWith("data:")}
               onLoad={() => setLoaded(true)}
+              onError={() => setHasError(true)}
               className={cn(
                 "w-full h-full object-cover",
                 loaded ? "opacity-100" : "opacity-0"
@@ -162,6 +166,7 @@ export function EditorialImage({
           priority={priority}
           unoptimized={src.startsWith("data:")}
           onLoad={() => setLoaded(true)}
+          onError={() => setHasError(true)}
           className={cn(
             "w-full h-full object-cover",
             loaded ? "opacity-100" : "opacity-0"

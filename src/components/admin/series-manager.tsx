@@ -6,6 +6,7 @@ import { toBengaliNumber } from "@/lib/bengali";
 import { ArrowUp, ArrowDown, Save, Loader2, ExternalLink } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "@/components/providers/language-provider";
+import { Button, buttonVariants, Card, CardHeader, CardTitle, CardBody, Badge, EmptyState } from "@/components/ui";
 
 export interface SeriesWithPieces {
   id: string;
@@ -89,21 +90,23 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
   return (
     <div className="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
       {/* Series Selector Sidebar */}
-      <div className="border border-rule bg-surface p-4 space-y-3">
-        <span className="label" lang="en">
-          Series List
-        </span>
-        <div className="space-y-1.5 pt-2">
+      <Card className="h-fit">
+        <CardHeader className="py-3">
+          <CardTitle className="text-step-1" lang="en">
+            Series List
+          </CardTitle>
+        </CardHeader>
+        <CardBody className="space-y-1.5 p-3">
           {seriesList.map((s) => (
             <button
               key={s.id}
               onClick={() => {
                 setSelectedSeriesId(s.id);
               }}
-              className={`w-full text-left rounded-sm px-3 py-2 font-bengali text-bengali-base transition ${
+              className={`w-full text-left rounded-card px-3 py-2 font-body text-bengali-base transition ${
                 selectedSeriesId === s.id
-                  ? "bg-accent text-surface font-medium"
-                  : "text-content-soft hover:bg-surface-raised hover:text-content"
+                  ? "bg-accent text-surface font-medium shadow-card"
+                  : "text-content-soft hover:bg-rule/30 hover:text-content"
               }`}
               lang="bn"
             >
@@ -116,26 +119,26 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
             </button>
           ))}
           {seriesList.length === 0 && (
-             <p className="text-xs text-content-faint">
+            <p className="p-3 text-xs text-content-faint">
               {t("admin.series.emptyList")}
             </p>
           )}
-        </div>
-      </div>
+        </CardBody>
+      </Card>
 
       {/* Series Episodes Reordering Panel */}
       {activeSeries ? (
-        <div className="border border-rule bg-surface p-6 space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-rule pb-4">
+        <Card>
+          <CardHeader className="flex flex-wrap items-center justify-between gap-4 py-4">
             <div>
               <span className="label" lang="en">
                 Episode Management
               </span>
-              <h2 className="mt-1 font-bengali text-xl font-medium text-content" lang="bn">
+              <h2 className="mt-1 font-body text-xl font-medium text-content" lang="bn">
                 {activeSeries.titleBn}
               </h2>
               {activeSeries.descBn && (
-                <p className="mt-1 font-bengali text-xs text-content-soft" lang="bn">
+                <p className="mt-1 font-body text-xs text-content-soft" lang="bn">
                   {activeSeries.descBn}
                 </p>
               )}
@@ -145,57 +148,75 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
               <Link
                 href={`/series/${activeSeries.slug}`}
                 target="_blank"
-                className="inline-flex items-center gap-1 font-sans text-xs text-content-soft hover:text-accent"
+                className={buttonVariants({ variant: "ghost", size: "sm" })}
               >
                 View Series <ExternalLink className="h-3.5 w-3.5" />
               </Link>
-              <button
+              <Button
+                variant="primary"
+                size="sm"
                 onClick={saveOrder}
                 disabled={saving}
-                className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-bengali text-sm text-surface transition hover:opacity-90 disabled:opacity-50"
               >
-                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                {saving ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4" />
+                )}
                 {t("admin.series.saveOrder")}
-              </button>
+              </Button>
             </div>
-          </div>
+          </CardHeader>
 
-          <div className="space-y-3">
-            <span className="label" lang="en">
-              Reorder Episodes ({activeSeries.pieces.length})
-            </span>
-            <ul className="divide-y divide-rule border-y border-rule">
+          <CardBody className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="label" lang="en">
+                Reorder Episodes ({activeSeries.pieces.length})
+              </span>
+              <Badge tone="accent">
+                {toBengaliNumber(activeSeries.pieces.length)} episodes
+              </Badge>
+            </div>
+
+            <ul className="divide-y divide-rule rounded-card border border-rule overflow-hidden">
               {activeSeries.pieces.map((piece, index) => (
                 <li
                   key={piece.id}
-                  className="flex items-center justify-between py-3 px-2 transition hover:bg-surface-raised"
+                  className="flex items-center justify-between py-3 px-3 transition hover:bg-rule/20"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
                     <span className="font-mono text-xs font-semibold text-content-faint w-6">
                       #{toBengaliNumber(index + 1)}
                     </span>
-                    <span className="font-bengali text-bengali-base font-medium text-content" lang="bn">
+                    <span className="font-body text-bengali-base font-medium text-content" lang="bn">
                       {piece.titleBn}
                     </span>
+                    <Badge tone="neutral" className="ml-2">
+                      {piece.kind}
+                    </Badge>
                   </div>
 
-                  <div className="flex items-center gap-1">
-                    <button
+                  <div className="flex items-center gap-1.5">
+                    <Button
+                      variant="secondary"
+                      size="sm"
                       onClick={() => moveEpisode(index, "up")}
                       disabled={index === 0}
-                      className="p-1.5 rounded border border-rule text-content-soft hover:text-accent hover:border-accent disabled:opacity-30"
+                      className="h-8 w-8 p-0"
                       title={t("admin.series.moveUp")}
                     >
                       <ArrowUp className="h-4 w-4" />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
                       onClick={() => moveEpisode(index, "down")}
                       disabled={index === activeSeries.pieces.length - 1}
-                      className="p-1.5 rounded border border-rule text-content-soft hover:text-accent hover:border-accent disabled:opacity-30"
+                      className="h-8 w-8 p-0"
                       title={t("admin.series.moveDown")}
                     >
                       <ArrowDown className="h-4 w-4" />
-                    </button>
+                    </Button>
                   </div>
                 </li>
               ))}
@@ -206,12 +227,13 @@ export function SeriesManager({ initialSeriesList }: SeriesManagerProps) {
                 </li>
               )}
             </ul>
-          </div>
-        </div>
+          </CardBody>
+        </Card>
       ) : (
-        <div className="border border-rule bg-surface p-12 text-center text-content-faint">
-          {t("admin.series.selectPrompt")}
-        </div>
+        <EmptyState
+          title={t("admin.series.selectPrompt")}
+          description="Select a series from the left rail to manage and reorder its episodes."
+        />
       )}
     </div>
   );

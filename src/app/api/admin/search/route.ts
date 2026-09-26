@@ -19,7 +19,6 @@ export async function GET(req: NextRequest) {
         series: [],
         authors: [],
         tags: [],
-        actions: [],
       },
     });
   }
@@ -78,45 +77,12 @@ export async function GET(req: NextRequest) {
     }),
   ]);
 
-  // Static navigation/action matches
-  const adminActions = [
-    { title: "Dashboard Overview", path: "/admin", category: "Navigation" },
-    { title: "Pieces & Articles", path: "/admin/pieces", category: "Content" },
-    { title: "Create New Piece", path: "/admin/pieces/new", category: "Action" },
-    { title: "Media Library", path: "/admin/media", category: "Content" },
-    { title: "Series Management", path: "/admin/series", category: "Content" },
-    { title: "Taxonomy & Tags", path: "/admin/taxonomy", category: "Content" },
-    { title: "Editorial Intelligence Dashboard", path: "/admin/editorial-intelligence", category: "Intelligence" },
-    { title: "Content Relationship Graph", path: "/admin/content-graph", category: "Intelligence" },
-    { title: "Smart Recommendations Engine", path: "/admin/recommendations", category: "Intelligence" },
-    { title: "Analytics & Traffic", path: "/admin/analytics", category: "Intelligence" },
-    { title: "Reading & Engagement", path: "/admin/engagement", category: "Intelligence" },
-    { title: "Audience Geography", path: "/admin/geography", category: "Intelligence" },
-    { title: "Content Health Dashboard", path: "/admin/content-health", category: "Intelligence" },
-    { title: "SEO & Broken Link Scanner", path: "/admin/seo", category: "Intelligence" },
-    { title: "Scheduled Jobs Center", path: "/admin/jobs", category: "Workflow" },
-    { title: "Editorial Goals & KPIs", path: "/admin/goals", category: "Workflow" },
-    { title: "Real-Time Activity", path: "/admin/activity", category: "Workflow" },
-    { title: "Notification Center", path: "/admin/notifications", category: "Workflow" },
-    { title: "Advanced System Monitoring", path: "/admin/system/monitoring", category: "System" },
-    { title: "Alert & Incident Center", path: "/admin/incidents", category: "System" },
-    { title: "System Automation Hub", path: "/admin/system", category: "System" },
-    { title: "API & Webhook Center", path: "/admin/developer", category: "Administration" },
-    { title: "Data Export Center", path: "/admin/exports", category: "Administration" },
-    { title: "Team & Role Management", path: "/admin/team", category: "Administration" },
-    { title: "Security Center", path: "/admin/security", category: "Administration" },
-    { title: "Audit Log Explorer", path: "/admin/audit-log", category: "Administration" },
-    { title: "Newsletter Subscribers", path: "/admin/subscribers", category: "Audience" },
-    { title: "Transliteration Engine", path: "/admin/transliteration", category: "Tools" },
-    { title: "Import & Migration", path: "/admin/import", category: "Tools" },
-    { title: "Prompt History & Ideas", path: "/admin/prompts", category: "Tools" },
-    { title: "Admin Portal Settings", path: "/admin/settings", category: "Settings" },
-  ];
-
-  const matchedActions = adminActions.filter((a) =>
-    a.title.toLowerCase().includes(q.toLowerCase()) || a.path.toLowerCase().includes(q.toLowerCase())
-  );
-
+  // Admin pages are deliberately not matched here. They live in
+  // `lib/admin-nav` and are fuzzy-matched in the browser by the command
+  // palette, which is both instant and typo-tolerant — this route's old
+  // `includes()` copy of the route list could be neither, and had already
+  // drifted out of date (it never listed Reference Library or the SEO Growth
+  // Engine, so ⌘K could not reach either).
   return NextResponse.json({
     ok: true,
     results: {
@@ -145,11 +111,6 @@ export async function GET(req: NextRequest) {
         title: t.labelBn,
         subtitle: t.kind,
         url: `/admin/taxonomy`,
-      })),
-      actions: matchedActions.map((a) => ({
-        title: a.title,
-        subtitle: a.category,
-        url: a.path,
       })),
     },
   });

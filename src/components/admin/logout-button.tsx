@@ -7,13 +7,17 @@ import { useTranslation } from "@/components/providers/language-provider";
 
 import { posthog } from "@/lib/posthog-client";
 
+import { Button } from "@/components/ui";
+
 export function LogoutButton() {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const t = useTranslation();
 
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="sm"
       type="button"
       onClick={async () => {
         setBusy(true);
@@ -22,11 +26,9 @@ export function LogoutButton() {
         router.refresh();
         router.replace("/admin/login");
       }}
-
       disabled={busy}
       data-testid="logout-button"
-      className="inline-flex items-center gap-1.5 font-sans text-sm text-content-soft transition hover:text-accent disabled:opacity-50"
-
+      className="inline-flex items-center gap-1.5 font-ui text-step-0 text-content-soft transition hover:text-accent disabled:opacity-50"
     >
       {busy ? (
         <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -34,6 +36,6 @@ export function LogoutButton() {
         <LogOut className="h-3.5 w-3.5" />
       )}
       {t("admin.logout")}
-    </button>
+    </Button>
   );
 }

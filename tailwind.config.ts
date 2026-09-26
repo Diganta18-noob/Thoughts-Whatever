@@ -40,6 +40,39 @@ const config: Config = {
         rule: "rgb(var(--rule) / <alpha-value>)",
         accent: "rgb(var(--accent) / <alpha-value>)",
         gold: "rgb(var(--gold) / <alpha-value>)",
+        danger: "rgb(var(--danger) / <alpha-value>)",
+        success: "rgb(var(--success) / <alpha-value>)",
+        warning: "rgb(var(--warning) / <alpha-value>)",
+        // ─── shadcn bridge ──────────────────────────────────
+        border: "rgb(var(--rule) / <alpha-value>)",
+        input: "rgb(var(--rule) / <alpha-value>)",
+        ring: "rgb(var(--accent) / <alpha-value>)",
+        background: "rgb(var(--surface) / <alpha-value>)",
+        foreground: "rgb(var(--content) / <alpha-value>)",
+        primary: {
+          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
+          foreground: "rgb(var(--surface) / <alpha-value>)",
+        },
+        secondary: {
+          DEFAULT: "rgb(var(--surface-raised) / <alpha-value>)",
+          foreground: "rgb(var(--content) / <alpha-value>)",
+        },
+        destructive: {
+          DEFAULT: "rgb(var(--danger) / <alpha-value>)",
+          foreground: "rgb(var(--surface) / <alpha-value>)",
+        },
+        muted: {
+          DEFAULT: "rgb(var(--rule) / <alpha-value>)",
+          foreground: "rgb(var(--content-soft) / <alpha-value>)",
+        },
+        popover: {
+          DEFAULT: "rgb(var(--surface-raised) / <alpha-value>)",
+          foreground: "rgb(var(--content) / <alpha-value>)",
+        },
+        card: {
+          DEFAULT: "rgb(var(--surface-raised) / <alpha-value>)",
+          foreground: "rgb(var(--content) / <alpha-value>)",
+        },
       },
       fontFamily: {
         // Semantic roles
@@ -79,6 +112,15 @@ const config: Config = {
       },
       letterSpacing: {
         label: "0.14em",
+      },
+      borderRadius: {
+        card: "var(--radius)",
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        card: "var(--shadow-card)",
       },
       keyframes: {
         "fade-up": {
