@@ -62,18 +62,18 @@ export default async function BlogPage() {
           bnClassName="font-bengali"
         />
       ) : (
-        <div className="grid gap-10 py-12 lg:grid-cols-[1fr_18rem] lg:gap-16">
-          <div className="space-y-6">
-            {pieces.map((piece) => (
-              <ArticleCard key={piece.slug} piece={piece} layout="stacked" />
-            ))}
-          </div>
-
-          <aside className="lg:sticky lg:top-24 lg:self-start">
-            <LetterBlock source="blog" variant="sidebar" />
-          </aside>
+        <div className="divide-y divide-rule py-12">
+          {pieces.map((piece) => (
+            <div key={piece.slug} className="py-8 first:pt-0">
+              <ArticleCard piece={piece} layout="stacked" />
+            </div>
+          ))}
         </div>
       )}
+
+      <div className="mt-12 pt-12 border-t border-rule/60">
+        <LetterBlock source="blog" />
+      </div>
     </div>
   );
 }
