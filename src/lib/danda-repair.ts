@@ -52,7 +52,9 @@ export function makeWordChecker(words: Iterable<string>): (word: string) => bool
 
   return (word: string): boolean => {
     if (!word) return false;
-    const lower = word.toLowerCase();
+    let lower = word.toLowerCase().trim();
+    lower = lower.replace(/^[^a-z]+|[^a-z]+$/gi, "");
+    if (!lower) return false;
     if (set.has(lower)) return true;
     if (lower.endsWith("'s") && set.has(lower.slice(0, -2))) return true;
     return false;
@@ -67,7 +69,19 @@ export function repairString(
   source: string,
   isWord: (word: string) => boolean,
 ): DandaRepairResult {
-  let text = source;
+  // Normalize double-dandas between Latin letters (e.g. "ki। । you" -> "kill you", "co। । apse" -> "collapse")
+  let text = source.replace(/([A-Za-z]+)।\s*।\s*([A-Za-z]+)/g, (_match, prefix, suffix) => {
+    const word1 = prefix + "ll";
+    if (isWord(word1) && isWord(suffix)) {
+      return word1 + " " + suffix;
+    }
+    const combined = prefix + "ll" + suffix;
+    if (isWord(combined)) {
+      return combined;
+    }
+    return word1 + suffix;
+  });
+
   let resolved = 0;
   const reviews: DandaReview[] = [];
   let from = 0;
@@ -85,24 +99,46 @@ export function repairString(
 
     const joined = head + "l" + tail;
     const split = head + " l" + tail;
+    const endSpace = head + "l " + tail;
 
     // In `joined` the restored l sits at dandaIdx; in `split` at dandaIdx + 1.
     const joinOk = isWord(tokenAround(joined, dandaIdx));
     const splitOk =
       isWord(tokenAround(split, dandaIdx + 1)) && isWord(tokenAround(split, dandaIdx - 1));
 
-    if (joinOk && !splitOk) {
+    const wordBefore = tokenAround(head + "l", dandaIdx);
+    const wordAfter = tokenAround(tail, 0);
+    const endSpaceOk = isWord(wordBefore) && isWord(wordAfter);
+
+    if (joinOk && !splitOk && !endSpaceOk) {
       text = joined;
       resolved++;
       from = dandaIdx;
       continue;
     }
 
-    if (splitOk && !joinOk) {
+    if (splitOk && !joinOk && !endSpaceOk) {
       text = split;
       resolved++;
       from = dandaIdx + 2;
       continue;
+    }
+
+    if (endSpaceOk && !joinOk && !splitOk) {
+      text = endSpace;
+      resolved++;
+      from = dandaIdx + 2;
+      continue;
+    }
+
+    // Prefer joined word if the wordAfter in endSpace is a single letter (like 's')
+    if (joinOk && endSpaceOk) {
+      if (wordAfter.length <= 1 && wordAfter.toLowerCase() !== "a" && wordAfter.toLowerCase() !== "i") {
+        text = joined;
+        resolved++;
+        from = dandaIdx;
+        continue;
+      }
     }
 
     reviews.push({
@@ -111,7 +147,7 @@ export function repairString(
       joined,
       split,
       reason:
-        joinOk && splitOk
+        (joinOk && splitOk) || (joinOk && endSpaceOk) || (splitOk && endSpaceOk)
           ? "ambiguous: both readings are words"
           : "neither reading is a word",
     });

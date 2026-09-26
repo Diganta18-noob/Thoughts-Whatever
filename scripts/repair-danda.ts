@@ -25,12 +25,23 @@ const APPLY = process.argv.includes("--apply");
 const WORDS_PATH = join(process.cwd(), "scripts", "data", "english-words.txt");
 const REPORT_PATH = join(process.cwd(), "danda-repair-report.txt");
 
+const VALID_2_LETTER = new Set([
+  "am", "an", "as", "at", "be", "by", "do", "go", "he", "if", "in", "is", "it",
+  "me", "my", "no", "of", "on", "or", "so", "to", "up", "us", "we", "ok", "hi", "ox", "pi"
+]);
+
 function loadWords(): string[] {
   if (!existsSync(WORDS_PATH)) {
     console.warn(`⚠ ${WORDS_PATH} not found — every occurrence will be sent to review.`);
     return [];
   }
-  return readFileSync(WORDS_PATH, "utf8").split(/\r?\n/).filter(Boolean);
+  const lines = readFileSync(WORDS_PATH, "utf8").split(/\r?\n/).filter(Boolean);
+  return lines.filter((w) => {
+    const lower = w.trim().toLowerCase();
+    if (lower.length === 1) return lower === "a" || lower === "i";
+    if (lower.length === 2) return VALID_2_LETTER.has(lower);
+    return true;
+  });
 }
 
 interface Hit {
