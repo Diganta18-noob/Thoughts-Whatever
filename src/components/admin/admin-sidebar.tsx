@@ -1,117 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ChevronDown, ChevronRight, X } from "lucide-react";
 import {
-  LayoutDashboard,
-  FileText,
-  FolderTree,
-  Tags,
-  UploadCloud,
-  Image as ImageIcon,
-  BarChart2,
-  BookOpen,
-  Globe,
-  Target,
-  HeartPulse,
-  SearchCheck,
-  Activity,
-  Bell,
-  Sparkles,
-  Users,
-  ShieldCheck,
-  ClipboardList,
-  Mail,
-  Languages,
-  Settings,
-  Database,
-  ChevronDown,
-  ChevronRight,
-  X,
-  Clock,
-  AlertTriangle,
-  Code,
-  Download,
-  Cpu,
-  Share2,
-  Compass,
-  Lightbulb,
-} from "lucide-react";
+  ADMIN_NAV_GROUPS,
+  resolveActiveGroup,
+  resolveActiveHref,
+} from "@/lib/admin-nav";
+import { NavIcon } from "@/components/admin/nav-icon";
 import { cn } from "@/lib/utils";
 
-export interface NavItem {
-  href: string;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-  badge?: string;
-  exact?: boolean;
-}
-
-export interface NavGroup {
-  name: string;
-  items: NavItem[];
-}
-
-const NAV_GROUPS: NavGroup[] = [
-  {
-    name: "Content",
-    items: [
-      { href: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
-      { href: "/admin/pieces", label: "Pieces", icon: FileText },
-      { href: "/admin/series", label: "Series", icon: FolderTree },
-      { href: "/admin/reference", label: "Reference Library", icon: BookOpen },
-      { href: "/admin/taxonomy", label: "Taxonomy", icon: Tags },
-      { href: "/admin/media", label: "Media Library", icon: ImageIcon },
-      { href: "/admin/import", label: "Import", icon: UploadCloud },
-    ],
-  },
-  {
-    name: "Intelligence",
-    items: [
-      { href: "/admin/seo-engine", label: "SEO Growth Engine", icon: SearchCheck, badge: "PRO" },
-      { href: "/admin/editorial-intelligence", label: "Editorial Intelligence", icon: Compass, badge: "AI" },
-      { href: "/admin/content-graph", label: "Content Graph", icon: Share2 },
-      { href: "/admin/recommendations", label: "Recommendations", icon: Sparkles },
-      { href: "/admin/analytics", label: "Analytics", icon: BarChart2 },
-      { href: "/admin/engagement", label: "Reading & Engagement", icon: BookOpen },
-      { href: "/admin/geography", label: "Audience Geography", icon: Globe },
-      { href: "/admin/content-health", label: "Content Health", icon: HeartPulse },
-      { href: "/admin/seo", label: "SEO Scanner", icon: SearchCheck },
-    ],
-  },
-  {
-    name: "Workflow",
-    items: [
-      { href: "/admin/jobs", label: "Scheduled Jobs", icon: Clock },
-      { href: "/admin/activity", label: "Activity Feed", icon: Activity },
-      { href: "/admin/goals", label: "Editorial Goals", icon: Target },
-      { href: "/admin/notifications", label: "Notifications", icon: Bell },
-      { href: "/admin/prompts", label: "Prompts & Ideas", icon: Sparkles },
-    ],
-  },
-  {
-    name: "System & Ops",
-    items: [
-      { href: "/admin/system", label: "Automation Hub", icon: Database },
-      { href: "/admin/system/monitoring", label: "Advanced Monitoring", icon: Cpu },
-      { href: "/admin/incidents", label: "Incident Center", icon: AlertTriangle },
-      { href: "/admin/security", label: "Security Center", icon: ShieldCheck },
-      { href: "/admin/audit-log", label: "Audit Log", icon: ClipboardList },
-    ],
-  },
-  {
-    name: "Administration",
-    items: [
-      { href: "/admin/team", label: "Team & Roles", icon: Users },
-      { href: "/admin/developer", label: "API & Webhooks", icon: Code },
-      { href: "/admin/exports", label: "Data Export Center", icon: Download },
-      { href: "/admin/subscribers", label: "Subscribers", icon: Mail },
-      { href: "/admin/transliteration", label: "Transliteration", icon: Languages },
-      { href: "/admin/settings", label: "Settings", icon: Settings },
-    ],
-  },
-];
+const COLLAPSE_STORAGE_KEY = "tw:admin:collapsed-nav-groups";
 
 interface AdminSidebarProps {
   onClose?: () => void;
@@ -120,18 +21,50 @@ interface AdminSidebarProps {
 
 export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
   const pathname = usePathname() ?? "";
+  const activeHref = resolveActiveHref(pathname, { visibleOnly: true });
+  const activeGroup = resolveActiveGroup(activeHref);
+
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
 
+  // Read on mount, not during render: `localStorage` does not exist on the
+  // server, and seeding initial state from it would desync hydration.
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(COLLAPSE_STORAGE_KEY);
+      if (stored) setCollapsedGroups(JSON.parse(stored) as Record<string, boolean>);
+    } catch {
+      // Private-mode and quota failures are not worth surfacing — the rail just
+      // opens fully expanded, which is the sane default anyway.
+    }
+  }, []);
+
+  // Reveal wherever you just landed. Jumping via ⌘K used to drop you on a page
+  // whose nav entry sat inside a group you had collapsed, leaving nothing in the
+  // rail to say where you were. Collapsing the active group by hand still works;
+  // navigating away and back re-opens it.
+  useEffect(() => {
+    if (!activeGroup) return;
+
+    setCollapsedGroups((prev) => {
+      if (!prev[activeGroup]) return prev;
+      const next = { ...prev, [activeGroup]: false };
+      persistCollapsedGroups(next);
+      return next;
+    });
+  }, [activeGroup]);
+
   const toggleGroup = (groupName: string) => {
-    setCollapsedGroups((prev) => ({
-      ...prev,
-      [groupName]: !prev[groupName],
-    }));
+    setCollapsedGroups((prev) => {
+      const next = { ...prev, [groupName]: !prev[groupName] };
+      persistCollapsedGroups(next);
+      return next;
+    });
   };
 
   return (
     <aside
       data-lenis-prevent
+      aria-label="Admin sections"
       className={cn(
         "flex h-full max-h-full min-h-0 flex-col overflow-hidden border-r border-rule bg-surface/90 backdrop-blur w-64 select-none",
         className
@@ -146,6 +79,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
           <button
             type="button"
             onClick={onClose}
+            aria-label="Close navigation menu"
             className="rounded p-1 text-content-soft hover:bg-surface hover:text-content"
           >
             <X className="h-5 w-5" />
@@ -154,41 +88,49 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
       )}
 
       {/* Navigation Links Scrollable */}
-      <div
+      <nav
         data-lenis-prevent
         className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-4 space-y-6 scrollbar-thin"
       >
-        {NAV_GROUPS.map((group) => {
+        {ADMIN_NAV_GROUPS.map((group) => {
           const isCollapsed = !!collapsedGroups[group.name];
+          const panelId = `admin-nav-${group.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`;
+          const visibleItems = group.items.filter((item) => !item.hidden);
 
           return (
             <div key={group.name} className="space-y-1">
               <button
                 type="button"
                 onClick={() => toggleGroup(group.name)}
+                aria-expanded={!isCollapsed}
+                aria-controls={panelId}
                 className="flex w-full items-center justify-between px-2.5 py-1 text-left font-mono text-[10px] uppercase tracking-wider text-content-faint hover:text-content transition"
               >
                 <span>{group.name}</span>
-                {isCollapsed ? (
-                  <ChevronRight className="h-3 w-3" />
-                ) : (
-                  <ChevronDown className="h-3 w-3" />
-                )}
+                <span className="flex items-center gap-1.5">
+                  {/* A collapsed group holding the current page still says so. */}
+                  {isCollapsed && group.name === activeGroup && (
+                    <span className="h-1 w-1 rounded-full bg-accent" aria-hidden />
+                  )}
+                  {isCollapsed ? (
+                    <ChevronRight className="h-3 w-3" aria-hidden />
+                  ) : (
+                    <ChevronDown className="h-3 w-3" aria-hidden />
+                  )}
+                </span>
               </button>
 
               {!isCollapsed && (
-                <div className="space-y-0.5 pt-0.5">
-                  {group.items.map((item) => {
-                    const Icon = item.icon;
-                    const active = item.exact
-                      ? pathname === item.href
-                      : pathname === item.href || pathname.startsWith(`${item.href}/`);
+                <div id={panelId} className="space-y-0.5 pt-0.5">
+                  {visibleItems.map((item) => {
+                    const active = item.href === activeHref;
 
                     return (
                       <Link
                         key={item.href}
                         href={item.href}
                         onClick={onClose}
+                        aria-current={active ? "page" : undefined}
                         className={cn(
                           "flex items-center justify-between rounded-sm px-2.5 py-1.5 font-sans text-xs transition",
                           active
@@ -197,7 +139,8 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
                         )}
                       >
                         <div className="flex items-center gap-2.5 truncate">
-                          <Icon
+                          <NavIcon
+                            name={item.icon}
                             className={cn(
                               "h-3.5 w-3.5 shrink-0",
                               active ? "text-accent" : "text-content-faint"
@@ -207,7 +150,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
                         </div>
 
                         {item.badge && (
-                          <span className="rounded bg-accent px-1.5 py-0.2 font-mono text-[9px] font-bold text-white">
+                          <span className="rounded bg-accent px-1.5 py-0.5 font-mono text-[9px] font-bold leading-none text-surface">
                             {item.badge}
                           </span>
                         )}
@@ -219,7 +162,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
             </div>
           );
         })}
-      </div>
+      </nav>
 
       {/* Sidebar Footer */}
       <div className="shrink-0 border-t border-rule p-3 font-mono text-[10px] text-content-faint text-center">
@@ -227,4 +170,12 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
       </div>
     </aside>
   );
+}
+
+function persistCollapsedGroups(groups: Record<string, boolean>) {
+  try {
+    window.localStorage.setItem(COLLAPSE_STORAGE_KEY, JSON.stringify(groups));
+  } catch {
+    // See the mount effect above: a failed write only costs the preference.
+  }
 }
