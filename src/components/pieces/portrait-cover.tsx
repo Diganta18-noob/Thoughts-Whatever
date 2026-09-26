@@ -31,6 +31,11 @@ export function PortraitCover({
   size = "md",
 }: PortraitCoverProps) {
   const [loaded, setLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  if (!src || hasError) {
+    return null;
+  }
 
   // Size preset max height & widths
   const sizeClasses = {
@@ -83,6 +88,7 @@ export function PortraitCover({
           priority={priority}
           unoptimized={src.startsWith("data:")}
           onLoad={() => setLoaded(true)}
+          onError={() => setHasError(true)}
           className={cn(
             "w-full h-full object-cover transition-opacity duration-500",
             loaded ? "opacity-100" : "opacity-0"
