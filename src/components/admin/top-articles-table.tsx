@@ -4,6 +4,19 @@ import Link from "next/link";
 import { toBengaliNumber } from "@/lib/bengali";
 import { KIND_META, piecePath } from "@/lib/nav";
 import { useTranslation, useLanguage } from "@/components/providers/language-provider";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
+  Table,
+  THead,
+  TBody,
+  TR,
+  TH,
+  TD,
+  Badge,
+} from "@/components/ui";
 
 export interface TopArticleItem {
   id: string;
@@ -27,65 +40,65 @@ export function TopArticlesTable({ articles }: TopArticlesTableProps) {
   const formatNumber = (num: number) => (isBn ? toBengaliNumber(num) : num.toLocaleString());
 
   return (
-    <div className="border border-rule bg-surface p-5">
-      <div className="flex items-center justify-between pb-4 border-b border-rule">
+    <Card>
+      <CardHeader className="py-4">
         <div>
           <span className="label">
             Top Performing Content
           </span>
-          <h3 className="font-sans text-lg font-medium text-content">
+          <CardTitle className="text-lg font-medium">
             {t("admin.dashboard.topArticles")}
-          </h3>
+          </CardTitle>
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-left font-sans text-xs">
-          <thead>
-            <tr className="border-b border-rule font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint">
-              <th className="py-3 pr-4">{t("admin.pieces.tableTitle")}</th>
-              <th className="py-3 px-3">{t("admin.pieces.tableKind")}</th>
-              <th className="py-3 px-3 text-right">{t("admin.pieces.tableViews")}</th>
-              <th className="py-3 pl-3 text-right">Instagram Clicks</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-rule/60">
+      <CardBody className="p-0">
+        <Table>
+          <THead>
+            <TR>
+              <TH>{t("admin.pieces.tableTitle")}</TH>
+              <TH>{t("admin.pieces.tableKind")}</TH>
+              <TH className="text-right">{t("admin.pieces.tableViews")}</TH>
+              <TH className="text-right">Instagram Clicks</TH>
+            </TR>
+          </THead>
+          <TBody>
             {articles.map((art) => (
-              <tr key={art.id} className="transition hover:bg-surface-raised">
-                <td className="py-3 pr-4">
+              <TR key={art.id}>
+                <TD>
                   <Link
                     href={piecePath(art.kind, art.slug)}
                     target="_blank"
-                    className="font-bengali text-bengali-base font-medium text-content hover:text-accent"
+                    className="font-body text-bengali-base font-medium text-content hover:text-accent transition-colors"
                     lang="bn"
                   >
                     {art.titleBn}
                   </Link>
-                </td>
-                <td className="py-3 px-3">
-                  <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint">
+                </TD>
+                <TD>
+                  <Badge tone="neutral">
                     {KIND_META[art.kind]?.labelEn || art.kind}
-                  </span>
-                </td>
-                <td className="py-3 px-3 text-right font-sans text-content">
+                  </Badge>
+                </TD>
+                <TD className="text-right font-mono text-content">
                   {formatNumber(art.views)}
-                </td>
-                <td className="py-3 pl-3 text-right font-sans text-content-soft">
+                </TD>
+                <TD className="text-right font-mono text-content-soft">
                   {formatNumber(art.clicks)}
-                </td>
-              </tr>
+                </TD>
+              </TR>
             ))}
 
             {articles.length === 0 && (
-              <tr>
-                <td colSpan={4} className="py-8 text-center font-sans text-xs text-content-faint">
+              <TR>
+                <TD colSpan={4} className="py-8 text-center text-xs text-content-faint">
                   {t("common.empty")}
-                </td>
-              </tr>
+                </TD>
+              </TR>
             )}
-          </tbody>
-        </table>
-      </div>
-    </div>
+          </TBody>
+        </Table>
+      </CardBody>
+    </Card>
   );
 }
