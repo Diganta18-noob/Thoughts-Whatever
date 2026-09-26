@@ -7,6 +7,8 @@ import { toast } from "react-hot-toast";
 import { confirmToast } from "@/lib/confirm-toast";
 import { useTranslation } from "@/components/providers/language-provider";
 
+import { Button } from "@/components/ui";
+
 export function DeletePieceButton({
   id,
   titleBn,
@@ -42,12 +44,14 @@ export function DeletePieceButton({
   }
 
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="sm"
       type="button"
       onClick={onClick}
       disabled={busy}
       title={t("common.delete")}
-      className="text-content-faint transition hover:text-accent disabled:opacity-50"
+      className="h-8 w-8 p-0 text-content-faint hover:text-danger"
     >
       {busy ? (
         <Loader2 className="h-4 w-4 animate-spin" />
@@ -55,6 +59,6 @@ export function DeletePieceButton({
         <Trash2 className="h-4 w-4" />
       )}
       <span className="sr-only">{t("common.delete")}</span>
-    </button>
+    </Button>
   );
 }

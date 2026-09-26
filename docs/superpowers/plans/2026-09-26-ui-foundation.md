@@ -63,7 +63,7 @@
   export function repairString(source: string, isWord: (word: string) => boolean): DandaRepairResult;
   ```
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `src/lib/__tests__/danda-repair.test.ts`:
 
@@ -181,12 +181,12 @@ describe("makeWordChecker", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npx jest src/lib/__tests__/danda-repair.test.ts`
 Expected: FAIL — `Cannot find module '@/lib/danda-repair'`
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 Create `src/lib/danda-repair.ts`:
 
@@ -314,17 +314,17 @@ export function repairString(
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npx jest src/lib/__tests__/danda-repair.test.ts`
 Expected: PASS — 15 tests
 
-- [ ] **Step 5: Typecheck**
+- [x] **Step 5: Typecheck**
 
 Run: `npm run typecheck`
 Expected: no errors
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/lib/danda-repair.ts src/lib/__tests__/danda-repair.test.ts
@@ -355,7 +355,7 @@ MSG
 - Consumes: `DANDA`, `hasCorruption`, `makeWordChecker`, `repairString` from `src/lib/danda-repair.ts`.
 - Produces: the CLI `npm run repair:danda [-- --apply]` and the file `danda-repair-report.txt`.
 
-- [ ] **Step 1: Create the word list**
+- [x] **Step 1: Create the word list**
 
 The list must be plain, newline-delimited, lowercase. Fetch a public list:
 
@@ -368,7 +368,7 @@ wc -l scripts/data/english-words.txt
 
 Expected: roughly 370,000 lines. If the fetch fails, create the file empty — the script must still run and route every occurrence to review. Verify that fallback works in Step 5.
 
-- [ ] **Step 2: Add the npm script**
+- [x] **Step 2: Add the npm script**
 
 In `package.json`, inside `"scripts"`, alongside the other `tsx` entries:
 
@@ -376,7 +376,7 @@ In `package.json`, inside `"scripts"`, alongside the other `tsx` entries:
 "repair:danda": "tsx scripts/repair-danda.ts"
 ```
 
-- [ ] **Step 3: Write the script**
+- [x] **Step 3: Write the script**
 
 Create `scripts/repair-danda.ts`:
 
@@ -576,12 +576,12 @@ main()
   .finally(() => prisma.$disconnect());
 ```
 
-- [ ] **Step 4: Run the dry run**
+- [x] **Step 4: Run the dry run**
 
 Run: `npm run repair:danda`
 Expected: a summary on stdout and `danda-repair-report.txt` written. **Nothing in the database changes.** Confirm the report's RESOLVED section shows `morta। s` → `mortals` and `Uneasy। ies` → `Uneasy lies`.
 
-- [ ] **Step 5: Verify the no-word-list fallback**
+- [x] **Step 5: Verify the no-word-list fallback**
 
 ```bash
 mv scripts/data/english-words.txt scripts/data/english-words.bak
@@ -591,7 +591,7 @@ mv scripts/data/english-words.bak scripts/data/english-words.txt
 
 Expected: the warning prints, `Resolvable: 0`, every hit lands in NEEDS REVIEW, exit code 0.
 
-- [ ] **Step 6: Ignore the report artifact**
+- [x] **Step 6: Ignore the report artifact**
 
 Append to `.gitignore`:
 
@@ -600,7 +600,7 @@ Append to `.gitignore`:
 danda-repair-report.txt
 ```
 
-- [ ] **Step 7: Commit (script only — the DB write is a separate, reviewed step)**
+- [x] **Step 7: Commit (script only — the DB write is a separate, reviewed step)**
 
 ```bash
 git add scripts/repair-danda.ts scripts/data/english-words.txt package.json .gitignore
@@ -618,7 +618,7 @@ MSG
 )"
 ```
 
-- [ ] **Step 8: Read the report, then apply**
+- [x] **Step 8: Read the report, then apply**
 
 Open `danda-repair-report.txt`. Read the NEEDS REVIEW section first. Only once the RESOLVED entries look right:
 
@@ -642,7 +642,7 @@ Then confirm on the live homepage that `Sophocles`, `mortals`, and `Uneasy lies`
 - Consumes: nothing.
 - Produces: the utilities `rounded-card`, `shadow-card`, `bg-danger`, `bg-success`, `bg-warning` (and their `text-`/`border-` forms), plus a working `font-mono`.
 
-- [ ] **Step 1: Install dependencies**
+- [x] **Step 1: Install dependencies**
 
 ```bash
 npm install @radix-ui/react-dialog @radix-ui/react-select @radix-ui/react-dropdown-menu @radix-ui/react-tooltip @radix-ui/react-tabs class-variance-authority
@@ -650,7 +650,7 @@ npm install @radix-ui/react-dialog @radix-ui/react-select @radix-ui/react-dropdo
 
 `clsx` and `tailwind-merge` are already present — do not reinstall them.
 
-- [ ] **Step 2: Add the tokens**
+- [x] **Step 2: Add the tokens**
 
 In `src/app/globals.css`, add to the existing `:root` block that begins at line 90 (the one holding `--reading-size`):
 
@@ -698,7 +698,7 @@ In `[data-surface="archive"]` (line 57):
 
 The shadow is confined to the admin surface. Reading themes separate raised elements with `--surface-raised`, which is what that token exists for.
 
-- [ ] **Step 3: Map the tokens in Tailwind**
+- [x] **Step 3: Map the tokens in Tailwind**
 
 In `tailwind.config.ts`, inside `theme.extend.colors` after the `gold` entry at line 42:
 
@@ -719,7 +719,7 @@ And inside `theme.extend`, after the `letterSpacing` block at line 82:
       },
 ```
 
-- [ ] **Step 4: Create `components.json`**
+- [x] **Step 4: Create `components.json`**
 
 ```json
 {
@@ -746,12 +746,12 @@ And inside `theme.extend`, after the `letterSpacing` block at line 82:
 
 This is what makes `npx shadcn add @vengeanceui/<component>` resolve into `src/components/ui`. Registry components will still need their colours rethemed onto these tokens — the file makes installation possible, not automatic.
 
-- [ ] **Step 5: Verify the build picks up the new utilities**
+- [x] **Step 5: Verify the build picks up the new utilities**
 
 Run: `npm run typecheck && npm run build`
 Expected: both pass. A `rounded-card` or `shadow-card` class is not yet used anywhere, so this only proves the config parses.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/app/globals.css tailwind.config.ts components.json package.json package-lock.json
@@ -791,7 +791,7 @@ Establishes the cva + forwardRef pattern every later primitive follows.
   export const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>;
   ```
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `src/components/ui/__tests__/button.test.tsx`. **The docblock is required** — the jest default environment is `node`, which has no DOM:
 
@@ -850,12 +850,12 @@ describe("Button", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npx jest src/components/ui/__tests__/button.test.tsx`
 Expected: FAIL — `Cannot find module '@/components/ui/button'`
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 Create `src/components/ui/button.tsx`:
 
@@ -908,14 +908,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npx jest src/components/ui/__tests__/button.test.tsx`
 Expected: PASS — 8 tests
 
 If `toBeInTheDocument` is undefined, `jest.setup.js` is not importing `@testing-library/jest-dom`. Add `import "@testing-library/jest-dom";` to it — the package is already a devDependency.
 
-- [ ] **Step 5: Typecheck and commit**
+- [x] **Step 5: Typecheck and commit**
 
 ```bash
 npm run typecheck
@@ -949,7 +949,7 @@ MSG
   export const Textarea: React.ForwardRefExoticComponent<React.TextareaHTMLAttributes<HTMLTextAreaElement> & React.RefAttributes<HTMLTextAreaElement>>;
   ```
 
-- [ ] **Step 1: Write `input.tsx`**
+- [x] **Step 1: Write `input.tsx`**
 
 ```tsx
 "use client";
@@ -978,7 +978,7 @@ export const Input = React.forwardRef<
 });
 ```
 
-- [ ] **Step 2: Write `textarea.tsx`**
+- [x] **Step 2: Write `textarea.tsx`**
 
 ```tsx
 "use client";
@@ -1007,7 +1007,7 @@ export const Textarea = React.forwardRef<
 });
 ```
 
-- [ ] **Step 3: Typecheck and commit**
+- [x] **Step 3: Typecheck and commit**
 
 ```bash
 npm run typecheck
@@ -1037,7 +1037,7 @@ MSG
   export const Table, THead, TBody, TR, TH, TD;
   ```
 
-- [ ] **Step 1: Write `card.tsx`**
+- [x] **Step 1: Write `card.tsx`**
 
 ```tsx
 import * as React from "react";
@@ -1079,7 +1079,7 @@ export function CardFooter({ className, ...props }: React.HTMLAttributes<HTMLDiv
 }
 ```
 
-- [ ] **Step 2: Write `badge.tsx`**
+- [x] **Step 2: Write `badge.tsx`**
 
 ```tsx
 import * as React from "react";
@@ -1111,7 +1111,7 @@ export function Badge({ className, tone, ...props }: BadgeProps) {
 }
 ```
 
-- [ ] **Step 3: Write `table.tsx`**
+- [x] **Step 3: Write `table.tsx`**
 
 The rounded outer border is why `Table` wraps itself in a container — `overflow-hidden` on a `<table>` does not clip its own borders reliably.
 
@@ -1161,7 +1161,7 @@ export function TD({ className, ...props }: React.TdHTMLAttributes<HTMLTableCell
 }
 ```
 
-- [ ] **Step 4: Typecheck and commit**
+- [x] **Step 4: Typecheck and commit**
 
 ```bash
 npm run typecheck
@@ -1193,7 +1193,7 @@ MSG
   export function Skeleton(props: React.HTMLAttributes<HTMLDivElement>): JSX.Element;
   ```
 
-- [ ] **Step 1: Write `page-header.tsx`**
+- [x] **Step 1: Write `page-header.tsx`**
 
 ```tsx
 import * as React from "react";
@@ -1228,7 +1228,7 @@ export function PageHeader({
 
 `subtitle` uses `font-mono` because it carries counts and dates. This is the one place the metadata/prose split survives from the rejected style C, and it is the reason `--font-mono` was added.
 
-- [ ] **Step 2: Write `empty-state.tsx`**
+- [x] **Step 2: Write `empty-state.tsx`**
 
 ```tsx
 import * as React from "react";
@@ -1265,7 +1265,7 @@ export function EmptyState({
 }
 ```
 
-- [ ] **Step 3: Write `skeleton.tsx`**
+- [x] **Step 3: Write `skeleton.tsx`**
 
 ```tsx
 import * as React from "react";
@@ -1282,7 +1282,7 @@ export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivEl
 }
 ```
 
-- [ ] **Step 4: Typecheck and commit**
+- [x] **Step 4: Typecheck and commit**
 
 ```bash
 npm run typecheck
@@ -1319,7 +1319,7 @@ These five exist so that focus traps, escape handling, roving tabindex and ARIA 
   export const Tabs, TabsList, TabsTrigger, TabsContent;
   ```
 
-- [ ] **Step 1: Write `dialog.tsx`**
+- [x] **Step 1: Write `dialog.tsx`**
 
 ```tsx
 "use client";
@@ -1384,7 +1384,7 @@ export function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLD
 
 `animate-fade-in` and `animate-fade-up` are the keyframes already defined at `tailwind.config.ts:83-101`. Reusing them keeps motion consistent, and `globals.css:112` already neutralizes them under `prefers-reduced-motion`.
 
-- [ ] **Step 2: Write `select.tsx`**
+- [x] **Step 2: Write `select.tsx`**
 
 ```tsx
 "use client";
@@ -1466,7 +1466,7 @@ export const SelectItem = React.forwardRef<
 });
 ```
 
-- [ ] **Step 3: Write `dropdown-menu.tsx`**
+- [x] **Step 3: Write `dropdown-menu.tsx`**
 
 ```tsx
 "use client";
@@ -1519,7 +1519,7 @@ export function DropdownMenuSeparator({ className }: { className?: string }) {
 }
 ```
 
-- [ ] **Step 4: Write `tooltip.tsx`**
+- [x] **Step 4: Write `tooltip.tsx`**
 
 ```tsx
 "use client";
@@ -1552,7 +1552,7 @@ export const TooltipContent = React.forwardRef<
 });
 ```
 
-- [ ] **Step 5: Write `tabs.tsx`**
+- [x] **Step 5: Write `tabs.tsx`**
 
 ```tsx
 "use client";
@@ -1608,7 +1608,7 @@ export const TabsContent = React.forwardRef<
 });
 ```
 
-- [ ] **Step 6: Typecheck and commit**
+- [x] **Step 6: Typecheck and commit**
 
 ```bash
 npm run typecheck
@@ -1640,7 +1640,7 @@ The smoke page is the primary guard for this layer: the failure mode of a themed
 - Consumes: every primitive from Tasks 4–8.
 - Produces: `@/components/ui` as a single import point; the route `/admin/developer/ui`.
 
-- [ ] **Step 1: Write the barrel**
+- [x] **Step 1: Write the barrel**
 
 ```ts
 export { Button, buttonVariants, type ButtonProps } from "./button";
@@ -1665,7 +1665,7 @@ export { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "./tool
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs";
 ```
 
-- [ ] **Step 2: Write the smoke page**
+- [x] **Step 2: Write the smoke page**
 
 `src/app/admin/(dashboard)/developer/ui/page.tsx`. It is a client component because it holds the theme-switcher state, and it is excluded from production by `notFound()`:
 
@@ -1858,7 +1858,7 @@ export default function UiSmokePage() {
 }
 ```
 
-- [ ] **Step 3: Verify visually**
+- [x] **Step 3: Verify visually**
 
 ```bash
 npm run dev
@@ -1873,7 +1873,7 @@ Open `http://localhost:3000/admin/developer/ui` and click through cream → sepi
 5. Bengali (`font-body`) and dates (`font-mono`) are visibly different typefaces.
 6. Badge tones are distinguishable on both light and dark surfaces.
 
-- [ ] **Step 4: Run the full suite**
+- [x] **Step 4: Run the full suite**
 
 ```bash
 npm run typecheck
@@ -1884,7 +1884,7 @@ npm run build
 
 Expected: all four pass. `npm run build` must confirm the smoke page compiles even though `notFound()` gates it at runtime.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/ui/index.ts "src/app/admin/(dashboard)/developer/ui/page.tsx"
