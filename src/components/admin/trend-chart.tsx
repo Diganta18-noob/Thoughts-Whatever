@@ -41,7 +41,7 @@ export function TrendChart({ data }: TrendChartProps) {
   const areaD = `${pathD} L ${points[points.length - 1].x} ${height - padding} L ${points[0].x} ${height - padding} Z`;
 
   return (
-    <div className="border border-rule bg-surface p-5">
+    <div className="rounded-card border border-rule bg-surface-raised p-5 shadow-card">
       <div className="flex items-center justify-between pb-4">
         <div>
           <span className="label">

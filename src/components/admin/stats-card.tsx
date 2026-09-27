@@ -27,7 +27,7 @@ export function StatsCard({ labelEn, labelBn, value, subtext, icon, trend }: Sta
   return (
     <div
       className={cn(
-        "group border border-rule bg-surface p-5",
+        "group rounded-card border border-rule bg-surface-raised p-5 shadow-card",
         // Lift and rule-darkening only, no shadow bloom: the tiles sit in a grid
         // of shared borders, and a glow on one makes the row look misaligned.
         "transition-[transform,border-color] duration-150 ease-out",

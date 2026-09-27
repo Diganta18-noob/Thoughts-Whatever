@@ -132,9 +132,9 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
                         onClick={onClose}
                         aria-current={active ? "page" : undefined}
                         className={cn(
-                          "flex items-center justify-between rounded-sm px-2.5 py-1.5 font-sans text-xs transition",
+                          "flex items-center justify-between rounded-card px-2.5 py-1.5 font-sans text-xs transition-all duration-150 border border-transparent",
                           active
-                            ? "bg-accent/10 font-semibold text-accent"
+                            ? "bg-accent/12 font-medium text-accent border-accent/20 shadow-xs"
                             : "text-content-soft hover:bg-surface-raised hover:text-content"
                         )}
                       >

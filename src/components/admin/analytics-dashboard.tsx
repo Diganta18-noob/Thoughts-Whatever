@@ -9,6 +9,7 @@ import { toBengaliNumber } from "@/lib/bengali";
 import { Eye, Users, Bookmark, ExternalLink, AlertTriangle, RotateCcw } from "lucide-react";
 import { useTranslation, useLanguage } from "@/components/providers/language-provider";
 import { Button } from "@/components/ui";
+import { Stagger, StaggerItem, FadeIn } from "@/components/admin/ui/motion";
 
 export interface AnalyticsData {
   overview?: {
@@ -120,7 +121,7 @@ export function AnalyticsDashboard({ initialData }: AnalyticsDashboardProps) {
                   setPeriod(p);
                 }
               }}
-              className={`rounded-sm px-3 py-1 font-sans text-xs transition ${
+              className={`rounded-card px-3 py-1 font-sans text-xs transition ${
                 period === p
                   ? "bg-accent text-surface"
                   : "text-content-soft hover:text-content"
@@ -159,42 +160,52 @@ export function AnalyticsDashboard({ initialData }: AnalyticsDashboardProps) {
       ) : (
         <>
           {/* Overview Cards */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <StatsCard
-              labelEn="Total Views"
-              labelBn={t("admin.dashboard.totalViews")}
-              value={overview?.totalViews ?? 0}
-              icon={<Eye className="h-4 w-4" />}
-            />
-            <StatsCard
-              labelEn="Unique Visitors"
-              labelBn={t("admin.dashboard.totalPublished")}
-              value={overview?.uniqueVisitors ?? 0}
-              icon={<Users className="h-4 w-4" />}
-            />
-            <StatsCard
-              labelEn="Instagram Clicks"
-              labelBn="Instagram Clicks"
-              value={overview?.totalReelClicks ?? 0}
-              icon={<ExternalLink className="h-4 w-4" />}
-            />
-            <StatsCard
-              labelEn="Newsletter Subscribers"
-              labelBn={t("admin.dashboard.subscribers")}
-              value={overview?.totalSubscribers ?? 0}
-              icon={<Bookmark className="h-4 w-4" />}
-            />
-          </div>
+          <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <StaggerItem>
+              <StatsCard
+                labelEn="Total Views"
+                labelBn={t("admin.dashboard.totalViews")}
+                value={overview?.totalViews ?? 0}
+                icon={<Eye className="h-4 w-4" />}
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <StatsCard
+                labelEn="Unique Visitors"
+                labelBn={t("admin.dashboard.totalPublished")}
+                value={overview?.uniqueVisitors ?? 0}
+                icon={<Users className="h-4 w-4" />}
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <StatsCard
+                labelEn="Instagram Clicks"
+                labelBn="Instagram Clicks"
+                value={overview?.totalReelClicks ?? 0}
+                icon={<ExternalLink className="h-4 w-4" />}
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <StatsCard
+                labelEn="Newsletter Subscribers"
+                labelBn={t("admin.dashboard.subscribers")}
+                value={overview?.totalSubscribers ?? 0}
+                icon={<Bookmark className="h-4 w-4" />}
+              />
+            </StaggerItem>
+          </Stagger>
 
           {/* Traffic Chart */}
-          <TrendChart data={data.dailyTrend || []} />
+          <FadeIn delay={0.08}>
+            <TrendChart data={data.dailyTrend || []} />
+          </FadeIn>
 
           {/* Grid: Top Articles & Series Performance */}
           <div className="grid gap-8 lg:grid-cols-2">
             <TopArticlesTable articles={data.topArticles || []} />
 
             {/* Series Performance Panel */}
-            <div className="border border-rule bg-surface p-5">
+            <div className="rounded-card border border-rule bg-surface-raised p-5 shadow-card">
               <div className="flex items-center justify-between pb-4 border-b border-rule">
                 <div>
                   <span className="label">
