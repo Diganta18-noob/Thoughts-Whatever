@@ -21,7 +21,7 @@ import {
 import { toast } from "react-hot-toast";
 import { PromptCard, PromptItem } from "./prompt-card";
 import { confirmToast } from "@/lib/confirm-toast";
-import { Button } from "@/components/ui";
+import { Button, NativeSelect } from "@/components/ui";
 
 export function PromptsDashboard() {
   const [prompts, setPrompts] = useState<PromptItem[]>([]);
@@ -215,7 +215,7 @@ export function PromptsDashboard() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-        <div className="rounded-sm border border-rule bg-surface p-4">
+        <div className="rounded-card border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
             <span className="font-sans text-xs">Total Prompts</span>
             <BookOpen className="h-4 w-4 text-accent" />
@@ -225,7 +225,7 @@ export function PromptsDashboard() {
           </p>
         </div>
 
-        <div className="rounded-sm border border-rule bg-surface p-4">
+        <div className="rounded-card border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
             <span className="font-sans text-xs">Completed (Done)</span>
             <CheckCircle2 className="h-4 w-4 text-success" />
@@ -235,7 +235,7 @@ export function PromptsDashboard() {
           </p>
         </div>
 
-        <div className="rounded-sm border border-rule bg-surface p-4">
+        <div className="rounded-card border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
             <span className="font-sans text-xs">Planned / In Progress</span>
             <Sparkles className="h-4 w-4 text-warning" />
@@ -245,7 +245,7 @@ export function PromptsDashboard() {
           </p>
         </div>
 
-        <div className="rounded-sm border border-rule bg-surface p-4">
+        <div className="rounded-card border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
             <span className="font-sans text-xs">Ideas / Backlog</span>
             <Layers className="h-4 w-4 text-special" />
@@ -257,7 +257,7 @@ export function PromptsDashboard() {
       </div>
 
       {/* Filter Control Bar */}
-      <div className="rounded-sm border border-rule bg-surface p-4 space-y-4">
+      <div className="rounded-card border border-rule bg-surface p-4 space-y-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-5">
           {/* Search Box */}
           <div className="relative col-span-1 sm:col-span-2">
@@ -267,37 +267,35 @@ export function PromptsDashboard() {
               placeholder="Search prompt text, summary, tags..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-sm border border-rule bg-surface-raised pl-9 pr-3 py-1.5 font-sans text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
+              className="w-full rounded-card border border-rule bg-surface-raised pl-9 pr-3 py-1.5 font-sans text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
             />
           </div>
 
           {/* Source Filter */}
           <div>
-            <select
+            <NativeSelect
               value={sourceFilter}
               onChange={(e) => {
                 setSourceFilter(e.target.value);
                 setPage(1);
               }}
-              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             >
               <option value="">All Sources</option>
               <option value="kiro">Kiro</option>
               <option value="antigravity">Antigravity</option>
               <option value="manual">Manual</option>
               <option value="other">Other</option>
-            </select>
+            </NativeSelect>
           </div>
 
           {/* Status Filter */}
           <div>
-            <select
+            <NativeSelect
               value={statusFilter}
               onChange={(e) => {
                 setStatusFilter(e.target.value);
                 setPage(1);
               }}
-              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             >
               <option value="">All Statuses</option>
               <option value="idea">💡 Idea</option>
@@ -305,18 +303,17 @@ export function PromptsDashboard() {
               <option value="in-progress">🔵 In Progress</option>
               <option value="done">🟢 Done</option>
               <option value="rejected">🔴 Rejected</option>
-            </select>
+            </NativeSelect>
           </div>
 
           {/* Category Filter */}
           <div>
-            <select
+            <NativeSelect
               value={categoryFilter}
               onChange={(e) => {
                 setCategoryFilter(e.target.value);
                 setPage(1);
               }}
-              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             >
               <option value="">All Categories</option>
               <option value="feature">Feature</option>
@@ -325,7 +322,7 @@ export function PromptsDashboard() {
               <option value="plan">Plan / Architecture</option>
               <option value="question">Question</option>
               <option value="other">Other</option>
-            </select>
+            </NativeSelect>
           </div>
         </div>
 
@@ -350,7 +347,7 @@ export function PromptsDashboard() {
           Loading prompt library...
         </div>
       ) : prompts.length === 0 ? (
-        <div className="rounded-sm border border-rule bg-surface p-12 text-center space-y-3">
+        <div className="rounded-card border border-rule bg-surface p-12 text-center space-y-3">
           <FileText className="mx-auto h-8 w-8 text-content-soft/40" />
           <p className="font-sans text-sm text-content-soft">No prompts match your criteria.</p>
           <Link

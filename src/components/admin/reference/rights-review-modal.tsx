@@ -5,7 +5,7 @@ import { ReferenceRightsStatus } from "@prisma/client";
 import { RightsBadge } from "./rights-badge";
 import { ShieldCheck, AlertTriangle, History, X, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
-import { Button, Input, Textarea } from "@/components/ui";
+import { Button, Input, NativeSelect, Textarea } from "@/components/ui";
 
 interface RightsReviewModalProps {
   isOpen: boolean;
@@ -92,7 +92,7 @@ export function RightsReviewModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-surface border border-rule rounded-xl shadow-2xl p-6 text-content-faint my-8">
+      <div className="relative w-full max-w-2xl bg-surface border border-rule rounded-card shadow-2xl p-6 text-content-faint my-8">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-content-faint hover:text-content-faint/80 p-1.5 rounded-lg hover:bg-surface-raised/60"
@@ -113,7 +113,7 @@ export function RightsReviewModal({
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="bg-surface-raised/60 border border-rule/80 rounded-lg p-3.5 flex items-center justify-between">
+          <div className="bg-surface-raised/60 border border-rule/80 rounded-card p-3.5 flex items-center justify-between">
             <span className="text-xs text-content-faint">Current Rights State:</span>
             <RightsBadge status={currentStatus} />
           </div>
@@ -122,17 +122,16 @@ export function RightsReviewModal({
             <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1.5">
               New Rights Decision Status *
             </label>
-            <select
+            <NativeSelect
               value={newStatus}
               onChange={(e) => setNewStatus(e.target.value as ReferenceRightsStatus)}
-              className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
             >
               <option value="PUBLIC_DOMAIN">PUBLIC_DOMAIN (Verified Free of Restrictions)</option>
               <option value="LICENSED">LICENSED (Explicit License / Rights Holder Permission)</option>
               <option value="EXTERNAL_SOURCE">EXTERNAL_SOURCE (Direct Catalog Link, No Hosting)</option>
               <option value="RIGHTS_UNVERIFIED">RIGHTS_UNVERIFIED (Requires Copyright Verification)</option>
               <option value="RESTRICTED">RESTRICTED (Active Copyright, Bibliographic Info Only)</option>
-            </select>
+            </NativeSelect>
           </div>
 
           {newStatus === "RIGHTS_UNVERIFIED" && (
@@ -225,7 +224,7 @@ export function RightsReviewModal({
                 {auditLogs.map((log) => (
                   <div
                     key={log.id}
-                    className="p-2 bg-surface-raised/50 border border-rule/60 rounded text-xs space-y-1"
+                    className="p-2 bg-surface-raised/50 border border-rule/60 rounded-card text-xs space-y-1"
                   >
                     <div className="flex items-center justify-between text-content-faint">
                       <span>{log.changedBy}</span>

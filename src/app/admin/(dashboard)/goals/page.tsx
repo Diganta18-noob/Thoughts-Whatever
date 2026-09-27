@@ -152,7 +152,7 @@ export default function GoalsKPITrackingPage() {
             return (
               <div
                 key={goal.id}
-                className="rounded-sm border border-rule bg-surface-raised p-6 space-y-4 font-sans text-xs flex flex-col justify-between"
+                className="rounded-card border border-rule bg-surface-raised p-6 space-y-4 font-sans text-xs flex flex-col justify-between"
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-2">

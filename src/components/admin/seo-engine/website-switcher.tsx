@@ -43,7 +43,7 @@ export function WebsiteSwitcher() {
       </Button>
 
       {open && (
-        <div className="absolute left-0 mt-1.5 w-72 rounded-lg border border-rule bg-surface p-1.5 shadow-xl z-50 animate-fade-in">
+        <div className="absolute left-0 mt-1.5 w-72 rounded-card border border-rule bg-surface p-1.5 shadow-xl z-50 animate-fade-in">
           <div className="px-2 py-1.5 border-b border-rule">
             <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-content-faint">
               Active SEO Projects

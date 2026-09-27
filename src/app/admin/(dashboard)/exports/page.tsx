@@ -226,7 +226,7 @@ export default function DataExportCenterPage() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-content">{job.entityType}</span>
-                    <span className="bg-surface-raised border border-rule px-1.5 py-0.5 rounded text-[10px] text-content-soft font-semibold">
+                    <span className="bg-surface-raised border border-rule px-1.5 py-0.5 rounded-card text-[10px] text-content-soft font-semibold">
                       {job.format}
                     </span>
                     <span className="text-success font-semibold text-[10px] uppercase">

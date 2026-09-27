@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { MessageSquarePlus, X, Save, Sparkles } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { Button, Input } from "@/components/ui";
+import { Button, Input, NativeSelect } from "@/components/ui";
 
 export function QuickAddPromptModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,7 +72,7 @@ export function QuickAddPromptModal() {
       {/* Modal Dialog */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-          <div className="w-full max-w-lg rounded-sm border border-rule bg-surface p-6 shadow-2xl space-y-4">
+          <div className="w-full max-w-lg rounded-card border border-rule bg-surface p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-rule pb-3">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-accent" />
@@ -99,31 +99,29 @@ export function QuickAddPromptModal() {
                   placeholder="Paste or type the prompt text..."
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface-raised p-3 font-mono text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
+                  className="w-full rounded-card border border-rule bg-surface-raised p-3 font-mono text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block font-sans text-xs font-medium text-content mb-1">Source</label>
-                  <select
+                  <NativeSelect
                     value={source}
                     onChange={(e) => setSource(e.target.value)}
-                    className="w-full rounded-sm border border-rule bg-surface-raised px-2.5 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
                   >
                     <option value="kiro">Kiro</option>
                     <option value="antigravity">Antigravity</option>
                     <option value="manual">Manual</option>
                     <option value="other">Other</option>
-                  </select>
+                  </NativeSelect>
                 </div>
 
                 <div>
                   <label className="block font-sans text-xs font-medium text-content mb-1">Category</label>
-                  <select
+                  <NativeSelect
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full rounded-sm border border-rule bg-surface-raised px-2.5 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
                   >
                     <option value="feature">Feature</option>
                     <option value="design">Design</option>
@@ -131,7 +129,7 @@ export function QuickAddPromptModal() {
                     <option value="plan">Plan</option>
                     <option value="question">Question</option>
                     <option value="other">Other</option>
-                  </select>
+                  </NativeSelect>
                 </div>
               </div>
 

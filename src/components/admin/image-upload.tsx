@@ -200,7 +200,7 @@ export function ImageUpload({
 
       {preview ? (
         <div className="relative group">
-          <div className="relative overflow-hidden rounded-sm border border-rule bg-surface-raised/50 p-1">
+          <div className="relative overflow-hidden rounded-card border border-rule bg-surface-raised/50 p-1">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={preview}

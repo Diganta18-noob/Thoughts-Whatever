@@ -18,7 +18,7 @@ import {
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { confirmToast } from "@/lib/confirm-toast";
-import { Button, Input } from "@/components/ui";
+import { Button, Input, NativeSelect, TBody, TD, TH, THead, TR } from "@/components/ui";
 
 interface TeamMember {
   id: string;
@@ -257,27 +257,27 @@ export default function TeamManagementPage() {
 
       {/* Tab 1: Members Table */}
       {activeTab === "members" && (
-        <div className="rounded-sm border border-rule bg-surface-raised overflow-x-auto">
+        <div className="rounded-card border border-rule bg-surface-raised overflow-x-auto">
           {loading ? (
             <div className="p-16 text-center font-sans text-xs text-content-faint">
               Loading team directory...
             </div>
           ) : (
             <table className="w-full text-left font-sans text-xs">
-              <thead className="border-b border-rule bg-surface/60 font-mono text-[10px] uppercase tracking-wider text-content-faint">
-                <tr>
-                  <th className="px-4 py-3">Member</th>
-                  <th className="px-4 py-3">Role</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Active Sessions</th>
-                  <th className="px-4 py-3">Last Active</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-rule/70">
+              <THead className="border-b border-rule bg-surface/60 font-mono text-[10px] uppercase tracking-wider text-content-faint">
+                <TR>
+                  <TH className="px-4 py-3">Member</TH>
+                  <TH className="px-4 py-3">Role</TH>
+                  <TH className="px-4 py-3">Status</TH>
+                  <TH className="px-4 py-3">Active Sessions</TH>
+                  <TH className="px-4 py-3">Last Active</TH>
+                  <TH className="px-4 py-3 text-right">Actions</TH>
+                </TR>
+              </THead>
+              <TBody className="divide-y divide-rule/70">
                 {members.map((m) => (
-                  <tr key={m.id} className="hover:bg-surface/40 transition">
-                    <td className="px-4 py-3.5">
+                  <TR key={m.id} className="hover:bg-surface/40 transition">
+                    <TD className="px-4 py-3.5">
                       <div className="flex flex-col">
                         <span className="font-semibold text-content">
                           {m.nameBn || m.email.split("@")[0]}
@@ -286,9 +286,9 @@ export default function TeamManagementPage() {
                           {m.email}
                         </span>
                       </div>
-                    </td>
+                    </TD>
 
-                    <td className="px-4 py-3.5">
+                    <TD className="px-4 py-3.5">
                       <span
                         className={cn(
                           "inline-flex items-center rounded border px-2 py-0.5 font-mono text-[10px] font-semibold",
@@ -297,9 +297,9 @@ export default function TeamManagementPage() {
                       >
                         {m.roleMeta.labelEn}
                       </span>
-                    </td>
+                    </TD>
 
-                    <td className="px-4 py-3.5">
+                    <TD className="px-4 py-3.5">
                       <span
                         className={cn(
                           "inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider",
@@ -316,22 +316,22 @@ export default function TeamManagementPage() {
                         />
                         {m.status}
                       </span>
-                    </td>
+                    </TD>
 
-                    <td className="px-4 py-3.5 font-mono text-content-soft">
+                    <TD className="px-4 py-3.5 font-mono text-content-soft">
                       {m.activeSessionsCount}{" "}
                       {m.activeSessionsCount === 1 ? "device" : "devices"}
-                    </td>
+                    </TD>
 
-                    <td className="px-4 py-3.5 font-mono text-[11px] text-content-faint">
+                    <TD className="px-4 py-3.5 font-mono text-[11px] text-content-faint">
                       {m.lastActiveAt
                         ? new Date(m.lastActiveAt).toLocaleString()
                         : m.lastLoginAt
                         ? new Date(m.lastLoginAt).toLocaleString()
                         : "Never"}
-                    </td>
+                    </TD>
 
-                    <td className="px-4 py-3.5 text-right">
+                    <TD className="px-4 py-3.5 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
                           type="button"
@@ -352,10 +352,10 @@ export default function TeamManagementPage() {
                           </button>
                         )}
                       </div>
-                    </td>
-                  </tr>
+                    </TD>
+                  </TR>
                 ))}
-              </tbody>
+              </TBody>
             </table>
           )}
         </div>
@@ -363,7 +363,7 @@ export default function TeamManagementPage() {
 
       {/* Tab 2: Permissions Matrix */}
       {activeTab === "matrix" && (
-        <div className="rounded-sm border border-rule bg-surface-raised overflow-x-auto p-6 space-y-6">
+        <div className="rounded-card border border-rule bg-surface-raised overflow-x-auto p-6 space-y-6">
           <div>
             <h2 className="font-serif text-lg font-normal text-content">
               Role Permission Matrix
@@ -374,41 +374,41 @@ export default function TeamManagementPage() {
           </div>
 
           <table className="w-full text-left font-sans text-xs">
-            <thead className="border-b border-rule bg-surface/60 font-mono text-[10px] uppercase tracking-wider text-content-faint">
-              <tr>
-                <th className="px-4 py-3">Resource & Action</th>
+            <THead className="border-b border-rule bg-surface/60 font-mono text-[10px] uppercase tracking-wider text-content-faint">
+              <TR>
+                <TH className="px-4 py-3">Resource & Action</TH>
                 {["SUPER_ADMIN", "ADMIN", "EDITOR", "AUTHOR", "ANALYST", "VIEWER"].map((r) => (
-                  <th key={r} className="px-3 py-3 text-center">
+                  <TH key={r} className="px-3 py-3 text-center">
                     {r.replace("_", " ")}
-                  </th>
+                  </TH>
                 ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-rule/70">
+              </TR>
+            </THead>
+            <TBody className="divide-y divide-rule/70">
               {matrix.map((row) => (
-                <tr key={`${row.resource}-${row.action}`} className="hover:bg-surface/30">
-                  <td className="px-4 py-2.5 font-medium text-content">
+                <TR key={`${row.resource}-${row.action}`} className="hover:bg-surface/30">
+                  <TD className="px-4 py-2.5 font-medium text-content">
                     <span className="capitalize">{row.action}</span>{" "}
                     <span className="font-mono text-content-soft uppercase text-[10px]">
                       ({row.resource})
                     </span>
-                  </td>
+                  </TD>
 
                   {["SUPER_ADMIN", "ADMIN", "EDITOR", "AUTHOR", "ANALYST", "VIEWER"].map((r) => {
                     const granted = row.roles[r];
                     return (
-                      <td key={r} className="px-3 py-2.5 text-center">
+                      <TD key={r} className="px-3 py-2.5 text-center">
                         {granted ? (
                           <Check className="h-3.5 w-3.5 text-success mx-auto" />
                         ) : (
                           <span className="text-rule text-sm select-none">&mdash;</span>
                         )}
-                      </td>
+                      </TD>
                     );
                   })}
-                </tr>
+                </TR>
               ))}
-            </tbody>
+            </TBody>
           </table>
         </div>
       )}
@@ -416,7 +416,7 @@ export default function TeamManagementPage() {
       {/* Add Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-content/30 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="w-full max-w-md rounded-sm border border-rule bg-surface-raised p-6 shadow-2xl animate-fade-up">
+          <div className="w-full max-w-md rounded-card border border-rule bg-surface-raised p-6 shadow-2xl animate-fade-up">
             <div className="flex items-center justify-between border-b border-rule pb-3">
               <h3 className="font-serif text-lg font-normal text-content">
                 Add Team Member
@@ -465,10 +465,9 @@ export default function TeamManagementPage() {
 
               <div>
                 <label className="label block mb-1">Assigned Role</label>
-                <select
+                <NativeSelect
                   value={formRole}
                   onChange={(e) => setFormRole(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 text-content focus:border-accent focus:outline-none"
                 >
                   <option value="EDITOR">Editor (Full Content & Media Access)</option>
                   <option value="AUTHOR">Author (Draft & Upload Access)</option>
@@ -478,7 +477,7 @@ export default function TeamManagementPage() {
                     <option value="SUPER_ADMIN">Super Admin (Unrestricted)</option>
                   )}
                   <option value="VIEWER">Viewer (Read-only)</option>
-                </select>
+                </NativeSelect>
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-rule">
@@ -502,7 +501,7 @@ export default function TeamManagementPage() {
       {/* Edit Modal */}
       {showEditModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-content/30 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="w-full max-w-md rounded-sm border border-rule bg-surface-raised p-6 shadow-2xl animate-fade-up">
+          <div className="w-full max-w-md rounded-card border border-rule bg-surface-raised p-6 shadow-2xl animate-fade-up">
             <div className="flex items-center justify-between border-b border-rule pb-3">
               <h3 className="font-serif text-lg font-normal text-content">
                 Edit Member &bull; {showEditModal.email}
@@ -528,10 +527,9 @@ export default function TeamManagementPage() {
 
               <div>
                 <label className="label block mb-1">Role</label>
-                <select
+                <NativeSelect
                   value={formRole}
                   onChange={(e) => setFormRole(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 text-content focus:border-accent focus:outline-none"
                 >
                   <option value="EDITOR">Editor</option>
                   <option value="AUTHOR">Author</option>
@@ -541,19 +539,18 @@ export default function TeamManagementPage() {
                     <option value="SUPER_ADMIN">Super Admin</option>
                   )}
                   <option value="VIEWER">Viewer</option>
-                </select>
+                </NativeSelect>
               </div>
 
               <div>
                 <label className="label block mb-1">Account Status</label>
-                <select
+                <NativeSelect
                   value={formStatus}
                   onChange={(e) => setFormStatus(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 text-content focus:border-accent focus:outline-none"
                 >
                   <option value="active">Active</option>
                   <option value="inactive">Inactive (Access Suspended)</option>
-                </select>
+                </NativeSelect>
               </div>
 
               <div>

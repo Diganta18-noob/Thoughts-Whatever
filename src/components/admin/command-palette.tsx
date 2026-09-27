@@ -265,7 +265,7 @@ export function CommandPalette() {
       >
         <Search className="h-3.5 w-3.5 text-content-faint" aria-hidden />
         <span className="hidden lg:inline">Search anything...</span>
-        <kbd className="rounded border border-rule bg-surface-raised px-1.5 py-0.5 font-mono text-[10px] text-content-soft">
+        <kbd className="rounded-card border border-rule bg-surface-raised px-1.5 py-0.5 font-mono text-[10px] text-content-soft">
           Ctrl K
         </kbd>
       </Button>
@@ -282,7 +282,7 @@ export function CommandPalette() {
             role="dialog"
             aria-modal="true"
             aria-label="Command palette"
-            className="relative w-full max-w-2xl rounded-sm border border-rule bg-surface-raised shadow-2xl overflow-hidden animate-fade-up"
+            className="relative w-full max-w-2xl rounded-card border border-rule bg-surface-raised shadow-2xl overflow-hidden animate-fade-up"
           >
             {/* Search input bar */}
             <div className="flex items-center gap-3 border-b border-rule px-4 py-3">

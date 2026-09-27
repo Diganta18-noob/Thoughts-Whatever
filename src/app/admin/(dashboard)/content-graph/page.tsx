@@ -437,7 +437,7 @@ export default function ContentGraphPage() {
           )}
 
           {/* Floating Canvas Controls */}
-          <div className="absolute bottom-4 right-4 flex items-center gap-1.5 bg-surface/90 backdrop-blur rounded border border-rule p-1 shadow-sm">
+          <div className="absolute bottom-4 right-4 flex items-center gap-1.5 bg-surface/90 backdrop-blur rounded-card border border-rule p-1 shadow-sm">
             <button
               type="button"
               onClick={() => {
@@ -470,7 +470,7 @@ export default function ContentGraphPage() {
         </div>
 
         {/* Selected Node Details Panel (4 or 3 cols) */}
-        <div className="lg:col-span-4 xl:col-span-3 rounded-sm border border-rule bg-surface-raised p-5 space-y-4">
+        <div className="lg:col-span-4 xl:col-span-3 rounded-card border border-rule bg-surface-raised p-5 space-y-4">
           <div className="flex items-center gap-2 border-b border-rule pb-3">
             <Info className="h-4 w-4 text-accent" />
             <h3 className="font-serif text-sm font-semibold text-content">
@@ -490,7 +490,7 @@ export default function ContentGraphPage() {
               </div>
 
               {selectedNode.details && (
-                <div className="rounded bg-surface p-3 border border-rule/60 space-y-2 font-mono text-[11px]">
+                <div className="rounded-card bg-surface p-3 border border-rule/60 space-y-2 font-mono text-[11px]">
                   {selectedNode.details.kind && (
                     <div className="flex justify-between">
                       <span className="text-content-faint">Kind:</span>
@@ -525,7 +525,7 @@ export default function ContentGraphPage() {
                 {selectedNode.type === "series" && (
                   <Link
                     href="/admin/series"
-                    className="flex w-full items-center justify-center gap-1.5 rounded-sm border border-rule bg-surface px-3 py-2 text-content hover:border-accent transition"
+                    className="flex w-full items-center justify-center gap-1.5 rounded-card border border-rule bg-surface px-3 py-2 text-content hover:border-accent transition"
                   >
                     Manage Series <ExternalLink className="h-3 w-3" />
                   </Link>
@@ -534,7 +534,7 @@ export default function ContentGraphPage() {
                 {selectedNode.type === "author" && (
                   <Link
                     href="/admin/taxonomy"
-                    className="flex w-full items-center justify-center gap-1.5 rounded-sm border border-rule bg-surface px-3 py-2 text-content hover:border-accent transition"
+                    className="flex w-full items-center justify-center gap-1.5 rounded-card border border-rule bg-surface px-3 py-2 text-content hover:border-accent transition"
                   >
                     View in Taxonomy <ExternalLink className="h-3 w-3" />
                   </Link>

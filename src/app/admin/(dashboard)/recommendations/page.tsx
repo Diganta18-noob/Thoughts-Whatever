@@ -21,7 +21,7 @@ import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import type { RecommendationItem } from "@/lib/recommendations";
 import { confirmToast } from "@/lib/confirm-toast";
-import { Button } from "@/components/ui";
+import { Button, NativeSelect, TBody, TD, TH, THead, TR } from "@/components/ui";
 
 export default function RecommendationsPage() {
   const [recommendations, setRecommendations] = useState<RecommendationItem[]>([]);
@@ -174,7 +174,7 @@ export default function RecommendationsPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-        <div className="rounded-sm border border-rule bg-surface-raised p-4">
+        <div className="rounded-card border border-rule bg-surface-raised p-4">
           <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
             Total Recommended Pairs
           </span>
@@ -183,7 +183,7 @@ export default function RecommendationsPage() {
           </div>
         </div>
 
-        <div className="rounded-sm border border-rule bg-surface-raised p-4">
+        <div className="rounded-card border border-rule bg-surface-raised p-4">
           <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
             Editorially Pinned
           </span>
@@ -192,7 +192,7 @@ export default function RecommendationsPage() {
           </div>
         </div>
 
-        <div className="rounded-sm border border-rule bg-surface-raised p-4">
+        <div className="rounded-card border border-rule bg-surface-raised p-4">
           <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
             Excluded Pairs
           </span>
@@ -201,7 +201,7 @@ export default function RecommendationsPage() {
           </div>
         </div>
 
-        <div className="rounded-sm border border-rule bg-surface-raised p-4">
+        <div className="rounded-card border border-rule bg-surface-raised p-4">
           <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
             Algorithm Precision
           </span>
@@ -221,17 +221,16 @@ export default function RecommendationsPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search article titles..."
-              className="w-full rounded-sm border border-rule bg-surface-raised pl-8 pr-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
+              className="w-full rounded-card border border-rule bg-surface-raised pl-8 pr-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             />
           </div>
         </div>
 
         <div className="flex items-center gap-2 text-xs font-sans">
           <Filter className="h-3.5 w-3.5 text-content-faint" />
-          <select
+          <NativeSelect
             value={filterReason}
             onChange={(e) => setFilterReason(e.target.value)}
-            className="rounded-sm border border-rule bg-surface-raised px-2.5 py-1.5 text-content focus:border-accent focus:outline-none"
           >
             <option value="all">All Affinity Vectors</option>
             <option value="same_series">Same Series</option>
@@ -239,18 +238,17 @@ export default function RecommendationsPage() {
             <option value="similar_keywords">Author / Keywords</option>
             <option value="reader_behavior">Reader Telemetry</option>
             <option value="manual_editorial_pin">Manual Pin</option>
-          </select>
+          </NativeSelect>
 
-          <select
+          <NativeSelect
             value={filterPinned}
             onChange={(e) => setFilterPinned(e.target.value)}
-            className="rounded-sm border border-rule bg-surface-raised px-2.5 py-1.5 text-content focus:border-accent focus:outline-none"
           >
             <option value="all">All States</option>
             <option value="pinned">Pinned Only</option>
             <option value="active">Dynamic Only</option>
             <option value="excluded">Excluded Only</option>
-          </select>
+          </NativeSelect>
         </div>
       </div>
 
@@ -260,7 +258,7 @@ export default function RecommendationsPage() {
           Loading recommendation models...
         </div>
       ) : recommendations.length === 0 ? (
-        <div className="rounded-sm border border-rule bg-surface-raised p-12 text-center space-y-3">
+        <div className="rounded-card border border-rule bg-surface-raised p-12 text-center space-y-3">
           <Sparkles className="h-8 w-8 text-accent mx-auto" />
           <h3 className="font-serif text-base text-content">No Recommendations Generated Yet</h3>
           <p className="font-sans text-xs text-content-soft max-w-md mx-auto">
@@ -273,21 +271,21 @@ export default function RecommendationsPage() {
           </Button>
         </div>
       ) : (
-        <div className="rounded-sm border border-rule bg-surface-raised overflow-hidden">
+        <div className="rounded-card border border-rule bg-surface-raised overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left font-sans text-xs">
-              <thead className="border-b border-rule bg-surface text-content-faint font-mono text-[10px] uppercase tracking-wider">
-                <tr>
-                  <th className="p-3">Source Article</th>
-                  <th className="p-3">Recommended Companion</th>
-                  <th className="p-3">Affinity Reason</th>
-                  <th className="p-3">Score</th>
-                  <th className="p-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-rule/60">
+              <THead className="border-b border-rule bg-surface text-content-faint font-mono text-[10px] uppercase tracking-wider">
+                <TR>
+                  <TH className="p-3">Source Article</TH>
+                  <TH className="p-3">Recommended Companion</TH>
+                  <TH className="p-3">Affinity Reason</TH>
+                  <TH className="p-3">Score</TH>
+                  <TH className="p-3 text-right">Actions</TH>
+                </TR>
+              </THead>
+              <TBody className="divide-y divide-rule/60">
                 {filtered.map((item) => (
-                  <tr
+                  <TR
                     key={item.id}
                     className={cn(
                       "hover:bg-surface/50 transition",
@@ -295,16 +293,16 @@ export default function RecommendationsPage() {
                       item.pinned && "bg-accent/5 font-medium"
                     )}
                   >
-                    <td className="p-3 font-bengali text-sm text-content max-w-xs truncate" lang="bn">
+                    <TD className="p-3 font-bengali text-sm text-content max-w-xs truncate" lang="bn">
                       <Link
                         href={`/admin/pieces/${item.pieceId}`}
                         className="hover:text-accent transition"
                       >
                         {item.pieceTitleBn}
                       </Link>
-                    </td>
+                    </TD>
 
-                    <td className="p-3 font-bengali text-sm text-content max-w-xs truncate" lang="bn">
+                    <TD className="p-3 font-bengali text-sm text-content max-w-xs truncate" lang="bn">
                       <div className="flex items-center gap-1.5">
                         <Link
                           href={`/admin/pieces/${item.recommendedId}`}
@@ -316,15 +314,15 @@ export default function RecommendationsPage() {
                           ({item.recommendedKind})
                         </span>
                       </div>
-                    </td>
+                    </TD>
 
-                    <td className="p-3 font-mono text-[11px] text-content-soft">
-                      <span className="inline-block rounded bg-surface border border-rule/70 px-2 py-0.5 capitalize">
+                    <TD className="p-3 font-mono text-[11px] text-content-soft">
+                      <span className="inline-block rounded-card bg-surface border border-rule/70 px-2 py-0.5 capitalize">
                         {item.reason.replace(/_/g, " ")}
                       </span>
-                    </td>
+                    </TD>
 
-                    <td className="p-3">
+                    <TD className="p-3">
                       <div className="flex items-center gap-2">
                         <div className="h-1.5 w-16 bg-surface rounded-full overflow-hidden border border-rule/40">
                           <div
@@ -339,9 +337,9 @@ export default function RecommendationsPage() {
                           {Math.round(item.score)}%
                         </span>
                       </div>
-                    </td>
+                    </TD>
 
-                    <td className="p-3 text-right">
+                    <TD className="p-3 text-right">
                       <div className="flex items-center justify-end gap-1.5">
                         <button
                           type="button"
@@ -371,10 +369,10 @@ export default function RecommendationsPage() {
                           <EyeOff className="h-3.5 w-3.5" />
                         </button>
                       </div>
-                    </td>
-                  </tr>
+                    </TD>
+                  </TR>
                 ))}
-              </tbody>
+              </TBody>
             </table>
           </div>
         </div>

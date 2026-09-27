@@ -150,7 +150,7 @@ export default function WebsitesManagementPage() {
 
         <Button variant="primary"
           onClick={handleOpenAdd}
-          className="shadow-xs self-start"
+          className="shadow-card self-start"
         >
           <Plus className="h-4 w-4" />
           <span>Add New Website</span>
@@ -166,7 +166,7 @@ export default function WebsitesManagementPage() {
             <div
               key={w.id}
               className={cn(
-                "relative rounded-xl border bg-surface p-5 shadow-xs transition flex flex-col justify-between",
+                "relative rounded-xl border bg-surface p-5 shadow-card transition flex flex-col justify-between",
                 isActive
                   ? "border-accent ring-1 ring-accent shadow-sm"
                   : "border-rule hover:border-rule-strong"
@@ -316,7 +316,7 @@ export default function WebsitesManagementPage() {
       {/* Add / Edit Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-content/40 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-md rounded-xl border border-rule bg-surface p-6 shadow-2xl animate-fade-up">
+          <div className="w-full max-w-md rounded-card border border-rule bg-surface p-6 shadow-2xl animate-fade-up">
             <h2 className="font-sans text-base font-bold text-content">
               {editingId ? "Edit Website Profile" : "Register New Website"}
             </h2>

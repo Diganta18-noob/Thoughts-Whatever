@@ -13,11 +13,11 @@ export default function AdminAnalyticsPageLoading() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-28 rounded border border-rule bg-surface p-5" />
+          <div key={i} className="h-28 rounded-card border border-rule bg-surface p-5" />
         ))}
       </div>
 
-      <div className="h-44 rounded-lg border border-rule/60 bg-surface-raised/40 p-6 space-y-4" />
+      <div className="h-44 rounded-card border border-rule/60 bg-surface-raised/40 p-6 space-y-4" />
     </div>
   );
 }

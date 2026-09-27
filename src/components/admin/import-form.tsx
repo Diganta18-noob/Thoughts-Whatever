@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Loader2, Upload, FileSpreadsheet, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "@/components/providers/language-provider";
 import { toast } from "@/lib/toast";
-import { Button } from "@/components/ui";
+import { Button, TBody, TD, TH, THead, TR } from "@/components/ui";
 
 interface ParsedRow {
   kind?: "RACHANA" | "BLOG" | "DOCUMENTARY";
@@ -160,7 +160,7 @@ export function ImportForm() {
           onChange={(e) => handleTextChange(e.target.value)}
           rows={8}
           placeholder={`titleBn,bodyBn,kind,dekBn,reelUrl,seriesTitle\n"জীবনানন্দের রবীন্দ্রনাথ","রবীন্দ্রনাথকে নিয়ে জীবনানন্দের প্রবন্ধ...","RACHANA","মূল পরিচিতি...","https://www.instagram.com/reel/xxx","রবীন্দ্র-বীক্ষা"`}
-          className="w-full rounded-sm border border-rule bg-surface p-3 font-mono text-xs text-content outline-none focus:border-accent"
+          className="w-full rounded-card border border-rule bg-surface p-3 font-mono text-xs text-content outline-none focus:border-accent"
         />
       </div>
 
@@ -196,32 +196,32 @@ export function ImportForm() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left font-sans text-xs">
-              <thead>
-                <tr className="border-b border-rule font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint">
-                  <th className="py-2.5 pr-4">{t("admin.pieces.tableTitle")}</th>
-                  <th className="py-2.5 px-3">{t("admin.pieces.tableKind")}</th>
-                  <th className="py-2.5 px-3">{t("admin.series.name")}</th>
-                  <th className="py-2.5 pl-3">Reel URL</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-rule/60">
+              <THead>
+                <TR className="border-b border-rule font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint">
+                  <TH className="py-2.5 pr-4">{t("admin.pieces.tableTitle")}</TH>
+                  <TH className="py-2.5 px-3">{t("admin.pieces.tableKind")}</TH>
+                  <TH className="py-2.5 px-3">{t("admin.series.name")}</TH>
+                  <TH className="py-2.5 pl-3">Reel URL</TH>
+                </TR>
+              </THead>
+              <TBody className="divide-y divide-rule/60">
                 {parsedRows.map((r, i) => (
-                  <tr key={i} className="transition hover:bg-surface-raised">
-                    <td className="py-2.5 pr-4 font-bengali text-sm text-content font-medium" lang="bn">
+                  <TR key={i} className="transition hover:bg-surface-raised">
+                    <TD className="py-2.5 pr-4 font-bengali text-sm text-content font-medium" lang="bn">
                       {r.titleBn}
-                    </td>
-                    <td className="py-2.5 px-3 font-mono text-xs text-content-soft">
+                    </TD>
+                    <TD className="py-2.5 px-3 font-mono text-xs text-content-soft">
                       {r.kind || "RACHANA"}
-                    </td>
-                    <td className="py-2.5 px-3 font-bengali text-xs text-content-faint" lang="bn">
+                    </TD>
+                    <TD className="py-2.5 px-3 font-bengali text-xs text-content-faint" lang="bn">
                       {r.seriesTitle || "—"}
-                    </td>
-                    <td className="py-2.5 pl-3 font-mono text-xs text-content-faint max-w-[200px] truncate">
+                    </TD>
+                    <TD className="py-2.5 pl-3 font-mono text-xs text-content-faint max-w-[200px] truncate">
                       {r.reelUrl || "—"}
-                    </td>
-                  </tr>
+                    </TD>
+                  </TR>
                 ))}
-              </tbody>
+              </TBody>
             </table>
           </div>
         </div>

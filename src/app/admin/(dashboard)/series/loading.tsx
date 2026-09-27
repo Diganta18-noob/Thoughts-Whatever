@@ -13,7 +13,7 @@ export default function AdminSeriesLoading() {
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="border border-rule bg-surface p-5 space-y-4 rounded">
+          <div key={i} className="border border-rule bg-surface p-5 space-y-4 rounded-card">
             <div className="h-36 rounded bg-content/10" />
             <div className="h-5 w-3/4 rounded bg-content/15" />
             <div className="h-3 w-1/2 rounded bg-content/10" />

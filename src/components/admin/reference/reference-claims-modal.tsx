@@ -64,7 +64,7 @@ export function ReferenceClaimsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-3xl bg-surface border border-rule rounded-xl shadow-2xl p-6 text-content-faint my-8">
+      <div className="relative w-full max-w-3xl bg-surface border border-rule rounded-card shadow-2xl p-6 text-content-faint my-8">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-content-faint hover:text-content-faint/80 p-1.5 rounded-lg hover:bg-surface-raised/60"
@@ -99,7 +99,7 @@ export function ReferenceClaimsModal({
             {claims.map((c) => (
               <div
                 key={c.id}
-                className="p-4 bg-surface-raised/60 border border-rule rounded-lg space-y-2"
+                className="p-4 bg-surface-raised/60 border border-rule rounded-card space-y-2"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-sm text-content-faint">
@@ -133,7 +133,7 @@ export function ReferenceClaimsModal({
                   )}
                 </div>
 
-                <p className="text-xs text-content-faint bg-surface/60 p-2.5 rounded border border-rule/80">
+                <p className="text-xs text-content-faint bg-surface/60 p-2.5 rounded-card border border-rule/80">
                   {c.message}
                 </p>
 

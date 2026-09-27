@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui";
+import { Button, TBody, TD, TH, THead, TR } from "@/components/ui";
 
 interface SEOScanResult {
   overallScore: number;
@@ -153,7 +153,7 @@ export default function SEOScannerPage() {
         <>
           {/* Top Score Cards */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-sm border border-rule bg-surface-raised p-5 space-y-2">
+            <div className="rounded-card border border-rule bg-surface-raised p-5 space-y-2">
               <span className="label">
                 Overall SEO Score
               </span>
@@ -174,7 +174,7 @@ export default function SEOScannerPage() {
               </div>
             </div>
 
-            <div className="rounded-sm border border-rule bg-surface-raised p-5 space-y-1">
+            <div className="rounded-card border border-rule bg-surface-raised p-5 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="label">
                   Meta Descriptions
@@ -187,7 +187,7 @@ export default function SEOScannerPage() {
               <p className="font-sans text-[11px] text-content-soft">Snippet quality & length</p>
             </div>
 
-            <div className="rounded-sm border border-rule bg-surface-raised p-5 space-y-1">
+            <div className="rounded-card border border-rule bg-surface-raised p-5 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="label">
                   Dead / Broken Links
@@ -200,7 +200,7 @@ export default function SEOScannerPage() {
               <p className="font-sans text-[11px] text-content-soft">Requires URL repair</p>
             </div>
 
-            <div className="rounded-sm border border-rule bg-surface-raised p-5 space-y-1">
+            <div className="rounded-card border border-rule bg-surface-raised p-5 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="label">
                   Image Alt Optimization
@@ -220,7 +220,7 @@ export default function SEOScannerPage() {
               onClick={() => setActiveTab("overview")}
               className={cn(
                 "px-3 py-1.5 rounded-sm transition",
-                activeTab === "overview" ? "bg-surface font-semibold text-content border border-rule shadow-xs" : "text-content-soft hover:text-content"
+                activeTab === "overview" ? "bg-surface font-semibold text-content border border-rule shadow-card" : "text-content-soft hover:text-content"
               )}
             >
               All Scanned Articles ({data.scannedPieces.length})
@@ -229,7 +229,7 @@ export default function SEOScannerPage() {
               onClick={() => setActiveTab("broken-links")}
               className={cn(
                 "px-3 py-1.5 rounded-sm transition flex items-center gap-1.5",
-                activeTab === "broken-links" ? "bg-surface font-semibold text-content border border-rule shadow-xs" : "text-content-soft hover:text-content"
+                activeTab === "broken-links" ? "bg-surface font-semibold text-content border border-rule shadow-card" : "text-content-soft hover:text-content"
               )}
             >
               Broken Links ({data.brokenLinksCount})
@@ -238,20 +238,20 @@ export default function SEOScannerPage() {
 
           {/* Tab 1: Articles Audit */}
           {activeTab === "overview" && (
-            <div className="rounded-sm border border-rule bg-surface-raised overflow-hidden">
+            <div className="rounded-card border border-rule bg-surface-raised overflow-hidden">
               <table className="w-full text-left font-sans text-xs">
-                <thead>
-                  <tr className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
-                    <th className="p-3">SEO Score</th>
-                    <th className="p-3">Article</th>
-                    <th className="p-3">Identified Issues</th>
-                    <th className="p-3 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-rule/50">
+                <THead>
+                  <TR className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
+                    <TH className="p-3">SEO Score</TH>
+                    <TH className="p-3">Article</TH>
+                    <TH className="p-3">Identified Issues</TH>
+                    <TH className="p-3 text-right">Action</TH>
+                  </TR>
+                </THead>
+                <TBody className="divide-y divide-rule/50">
                   {data.scannedPieces.map((piece) => (
-                    <tr key={piece.pieceId} className="hover:bg-surface/50 transition">
-                      <td className="p-3 w-20">
+                    <TR key={piece.pieceId} className="hover:bg-surface/50 transition">
+                      <TD className="p-3 w-20">
                         <span
                           className={cn(
                             "inline-flex items-center justify-center font-mono text-xs font-bold px-2 py-0.5 rounded-sm border",
@@ -262,16 +262,16 @@ export default function SEOScannerPage() {
                         >
                           {piece.score}
                         </span>
-                      </td>
+                      </TD>
 
-                      <td className="p-3 max-w-xs">
+                      <TD className="p-3 max-w-xs">
                         <p className="font-medium text-content truncate font-bengali text-sm" lang="bn">
                           {piece.titleBn}
                         </p>
                         <span className="font-mono text-[10px] text-content-faint">/{piece.slug}</span>
-                      </td>
+                      </TD>
 
-                      <td className="p-3">
+                      <TD className="p-3">
                         {piece.issues.length === 0 ? (
                           <span className="inline-flex items-center gap-1 text-[11px] text-success font-medium">
                             <CheckCircle2 className="h-3 w-3" /> Fully optimized
@@ -293,26 +293,26 @@ export default function SEOScannerPage() {
                             ))}
                           </div>
                         )}
-                      </td>
+                      </TD>
 
-                      <td className="p-3 text-right">
+                      <TD className="p-3 text-right">
                         <Link
                           href={`/admin/pieces/${piece.pieceId}`}
                           className="inline-flex items-center gap-1 font-sans text-xs text-accent hover:underline font-medium"
                         >
                           Edit &rarr;
                         </Link>
-                      </td>
-                    </tr>
+                      </TD>
+                    </TR>
                   ))}
-                </tbody>
+                </TBody>
               </table>
             </div>
           )}
 
           {/* Tab 2: Broken Links Table */}
           {activeTab === "broken-links" && (
-            <div className="rounded-sm border border-rule bg-surface-raised overflow-hidden">
+            <div className="rounded-card border border-rule bg-surface-raised overflow-hidden">
               {data.brokenLinks.length === 0 ? (
                 <div className="p-12 text-center font-sans text-xs text-content-soft">
                   <CheckCircle2 className="h-8 w-8 text-success mx-auto mb-2" />
@@ -321,31 +321,31 @@ export default function SEOScannerPage() {
                 </div>
               ) : (
                 <table className="w-full text-left font-sans text-xs">
-                  <thead>
-                    <tr className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
-                      <th className="p-3">Target URL</th>
-                      <th className="p-3">Source Piece</th>
-                      <th className="p-3">Reason</th>
-                      <th className="p-3">Last Checked</th>
-                      <th className="p-3 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-rule/50">
+                  <THead>
+                    <TR className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
+                      <TH className="p-3">Target URL</TH>
+                      <TH className="p-3">Source Piece</TH>
+                      <TH className="p-3">Reason</TH>
+                      <TH className="p-3">Last Checked</TH>
+                      <TH className="p-3 text-right">Actions</TH>
+                    </TR>
+                  </THead>
+                  <TBody className="divide-y divide-rule/50">
                     {data.brokenLinks.map((link) => (
-                      <tr key={link.id} className={cn("hover:bg-surface/50 transition", link.ignored && "opacity-40")}>
-                        <td className="p-3 font-mono text-[11px] text-danger truncate max-w-xs">
+                      <TR key={link.id} className={cn("hover:bg-surface/50 transition", link.ignored && "opacity-40")}>
+                        <TD className="p-3 font-mono text-[11px] text-danger truncate max-w-xs">
                           {link.url}
-                        </td>
-                        <td className="p-3 font-medium text-content">
+                        </TD>
+                        <TD className="p-3 font-medium text-content">
                           {link.sourceTitle || "Article"}
-                        </td>
-                        <td className="p-3 font-sans text-content-soft">
+                        </TD>
+                        <TD className="p-3 font-sans text-content-soft">
                           {link.reason}
-                        </td>
-                        <td className="p-3 font-mono text-[10px] text-content-faint">
+                        </TD>
+                        <TD className="p-3 font-mono text-[10px] text-content-faint">
                           {new Date(link.lastChecked).toLocaleDateString()}
-                        </td>
-                        <td className="p-3 text-right flex items-center justify-end gap-2">
+                        </TD>
+                        <TD className="p-3 text-right flex items-center justify-end gap-2">
                           {link.pieceId && (
                             <Link
                               href={`/admin/pieces/${link.pieceId}`}
@@ -364,10 +364,10 @@ export default function SEOScannerPage() {
                               Ignore
                             </button>
                           )}
-                        </td>
-                      </tr>
+                        </TD>
+                      </TR>
                     ))}
-                  </tbody>
+                  </TBody>
                 </table>
               )}
             </div>

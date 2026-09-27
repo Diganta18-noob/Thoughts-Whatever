@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { countBengaliWords, readingMinutes } from "@/lib/bengali";
 import { formatErrorMessage } from "@/lib/error-formatter";
 import { getErrorDetails } from "@/lib/transcription-errors";
-import { Button } from "@/components/ui";
+import { Button, NativeSelect } from "@/components/ui";
 
 type TranscriptionState =
   | "idle"           // No file selected
@@ -464,15 +464,14 @@ export function AudioTranscribe({
             <label className="text-xs text-content-faint" lang="en">
               Language:
             </label>
-            <select
+            <NativeSelect
               value={language}
               onChange={(e) => setLanguage(e.target.value as "bn" | "en" | "auto")}
-              className="rounded-sm border border-rule bg-surface px-2 py-1 text-xs text-content focus:border-accent"
             >
               <option value="bn">Bengali (বাংলা)</option>
               <option value="en">English</option>
               <option value="auto">Auto-detect</option>
-            </select>
+            </NativeSelect>
           </div>
         )}
       </div>
@@ -517,7 +516,7 @@ export function AudioTranscribe({
       {/* Audio Selected / Ready State */}
       {audioFile && (state === "ready" || state === "transcribing") && (
         <div className="space-y-3">
-          <div className="flex items-center justify-between rounded-sm border border-rule bg-surface p-3">
+          <div className="flex items-center justify-between rounded-card border border-rule bg-surface p-3">
             <div className="flex items-center gap-3">
               <Music className="h-5 w-5 text-accent" />
               <div>
@@ -598,7 +597,7 @@ export function AudioTranscribe({
             rows={8}
             lang="bn"
             spellCheck={false}
-            className="w-full rounded-sm border border-rule bg-surface p-3 font-bengali text-bengali-base leading-relaxed text-content focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            className="w-full rounded-card border border-rule bg-surface p-3 font-bengali text-bengali-base leading-relaxed text-content focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
             placeholder="Transcribed text will appear here for review..."
           />
 
@@ -713,7 +712,7 @@ export function AudioTranscribe({
           </button>
 
           {showActivityLog && (
-            <div className="rounded-sm border border-rule bg-surface p-2 max-h-48 overflow-y-auto space-y-1">
+            <div className="rounded-card border border-rule bg-surface p-2 max-h-48 overflow-y-auto space-y-1">
               {eventLog.map((event, i) => {
                 const icons: Record<string, string> = {
                   ATTEMPT: "🔄",
@@ -764,7 +763,7 @@ export function AudioTranscribe({
           <summary className="cursor-pointer text-content-faint hover:text-content font-mono text-[0.7rem]">
             🔍 Debug Info (Development Only)
           </summary>
-          <pre className="mt-2 rounded-sm bg-surface p-3 text-[0.65rem] font-mono text-content-faint overflow-auto max-h-40 border border-rule">
+          <pre className="mt-2 rounded-card bg-surface p-3 text-[0.65rem] font-mono text-content-faint overflow-auto max-h-40 border border-rule">
             {JSON.stringify(debugInfo, null, 2)}
           </pre>
         </details>

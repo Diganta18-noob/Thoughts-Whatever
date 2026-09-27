@@ -92,7 +92,7 @@ export default function EditorialIntelligencePage() {
           Synthesizing reading patterns, taxonomy growth, and editorial recommendations...
         </div>
       ) : !data ? (
-        <div className="rounded-sm border border-rule bg-surface-raised p-12 text-center text-xs text-content-faint">
+        <div className="rounded-card border border-rule bg-surface-raised p-12 text-center text-xs text-content-faint">
           No intelligence data available. Ensure articles and telemetry events exist.
         </div>
       ) : (
@@ -165,7 +165,7 @@ export default function EditorialIntelligencePage() {
                 </h2>
               </div>
 
-              <div className="rounded-sm border border-rule bg-surface-raised divide-y divide-rule/70">
+              <div className="rounded-card border border-rule bg-surface-raised divide-y divide-rule/70">
                 {data.risingTopics.length === 0 ? (
                   <div className="p-6 text-center text-xs text-content-faint">
                     No surging topics detected in current 30-day window.
@@ -207,7 +207,7 @@ export default function EditorialIntelligencePage() {
                 </h2>
               </div>
 
-              <div className="rounded-sm border border-rule bg-surface-raised divide-y divide-rule/70">
+              <div className="rounded-card border border-rule bg-surface-raised divide-y divide-rule/70">
                 {data.decliningTopics.length === 0 ? (
                   <div className="p-6 text-center text-xs text-content-faint">
                     All active topics are maintaining healthy baseline readership.
@@ -250,14 +250,14 @@ export default function EditorialIntelligencePage() {
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {data.contentGaps.length === 0 ? (
-                <div className="col-span-2 rounded-sm border border-rule bg-surface-raised p-8 text-center text-xs text-content-faint">
+                <div className="col-span-2 rounded-card border border-rule bg-surface-raised p-8 text-center text-xs text-content-faint">
                   No critical content inventory deficits detected.
                 </div>
               ) : (
                 data.contentGaps.map((gap) => (
                   <div
                     key={gap.tagId}
-                    className="rounded-sm border border-rule bg-surface-raised p-5 space-y-3"
+                    className="rounded-card border border-rule bg-surface-raised p-5 space-y-3"
                   >
                     <div className="flex items-start justify-between">
                       <div>
@@ -290,7 +290,7 @@ export default function EditorialIntelligencePage() {
           {/* Section: Publishing Timing & Article Length Dynamics */}
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {/* Optimal Publishing Window */}
-            <div className="space-y-4 rounded-sm border border-rule bg-surface-raised p-6">
+            <div className="space-y-4 rounded-card border border-rule bg-surface-raised p-6">
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-accent" />
                 <h3 className="font-serif text-base font-semibold text-content">
@@ -298,7 +298,7 @@ export default function EditorialIntelligencePage() {
                 </h3>
               </div>
 
-              <div className="p-4 rounded bg-surface border border-rule/60 flex items-center justify-between">
+              <div className="p-4 rounded-card bg-surface border border-rule/60 flex items-center justify-between">
                 <div>
                   <span className="font-mono text-[10px] uppercase text-content-faint">Recommended Peak</span>
                   <div className="font-serif text-xl font-bold text-accent">
@@ -318,7 +318,7 @@ export default function EditorialIntelligencePage() {
                 <div className="grid grid-cols-7 gap-1">
                   {data.publishingTime.dailyDistribution.map((d) => (
                     <div key={d.day} className="text-center">
-                      <div className="h-12 bg-surface rounded flex items-end justify-center p-1 border border-rule/40">
+                      <div className="h-12 bg-surface rounded-card flex items-end justify-center p-1 border border-rule/40">
                         <div
                           className="w-full bg-accent/70 rounded-xs"
                           style={{
@@ -336,7 +336,7 @@ export default function EditorialIntelligencePage() {
             </div>
 
             {/* Article Length & Format Dynamics */}
-            <div className="space-y-4 rounded-sm border border-rule bg-surface-raised p-6">
+            <div className="space-y-4 rounded-card border border-rule bg-surface-raised p-6">
               <div className="flex items-center gap-2">
                 <BookOpen className="h-4 w-4 text-accent" />
                 <h3 className="font-serif text-base font-semibold text-content">
@@ -344,7 +344,7 @@ export default function EditorialIntelligencePage() {
                 </h3>
               </div>
 
-              <div className="p-4 rounded bg-surface border border-rule/60">
+              <div className="p-4 rounded-card bg-surface border border-rule/60">
                 <span className="font-mono text-[10px] uppercase text-content-faint">Sweet Spot</span>
                 <div className="font-serif text-lg font-bold text-content">
                   {data.articleLength.optimalWordCountRange}
@@ -383,7 +383,7 @@ export default function EditorialIntelligencePage() {
                 High-Interest Series Expansion Candidates
               </h2>
 
-              <div className="rounded-sm border border-rule bg-surface-raised divide-y divide-rule/70">
+              <div className="rounded-card border border-rule bg-surface-raised divide-y divide-rule/70">
                 {data.seriesOpportunities.length === 0 ? (
                   <div className="p-6 text-center text-xs text-content-faint">
                     No standalone articles currently meet high-frequency serialization criteria.
@@ -425,7 +425,7 @@ export default function EditorialIntelligencePage() {
                 Evergreen Articles Requiring Refresh
               </h2>
 
-              <div className="rounded-sm border border-rule bg-surface-raised divide-y divide-rule/70">
+              <div className="rounded-card border border-rule bg-surface-raised divide-y divide-rule/70">
                 {data.staleArticles.length === 0 ? (
                   <div className="p-6 text-center text-xs text-content-faint">
                     All evergreen pieces have been updated within the last 120 days.

@@ -9,6 +9,7 @@ export { EmptyState } from "./empty-state";
 export { Skeleton } from "./skeleton";
 export { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogFooter, DialogClose } from "./dialog";
 export { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "./select";
+export { NativeSelect } from "./native-select";
 export {
   DropdownMenu,
   DropdownMenuTrigger,

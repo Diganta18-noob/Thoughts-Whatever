@@ -17,7 +17,17 @@ const files = execSync('git ls-files "src/app/admin" "src/components/admin"', { 
   .split(/\r?\n/)
   .filter((f) => f.endsWith(".tsx"));
 
-const TAGS = ["Button", "Input", "Textarea"] as const;
+const TAGS = [
+  "Button",
+  "Input",
+  "Textarea",
+  "NativeSelect",
+  "THead",
+  "TBody",
+  "TR",
+  "TH",
+  "TD",
+] as const;
 let bad = 0;
 
 /**

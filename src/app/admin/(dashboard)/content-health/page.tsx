@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui";
+import { Button, NativeSelect, TBody, TD, TH, THead, TR } from "@/components/ui";
 
 interface Issue {
   type: string;
@@ -132,7 +132,7 @@ export default function ContentHealthPage() {
           {/* Top KPI Cards */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {/* Overall Score */}
-            <div className="rounded-sm border border-rule bg-surface-raised p-5 space-y-2">
+            <div className="rounded-card border border-rule bg-surface-raised p-5 space-y-2">
               <span className="label">
                 Overall Index
               </span>
@@ -216,7 +216,7 @@ export default function ContentHealthPage() {
 
           {/* Actionable Editorial Recommendations Box */}
           {data.topIssues.length > 0 && (
-            <div className="rounded-sm border border-rule bg-surface-raised/60 p-5 space-y-3 font-sans text-xs">
+            <div className="rounded-card border border-rule bg-surface-raised/60 p-5 space-y-3 font-sans text-xs">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-accent" />
                 <h3 className="label">
@@ -227,7 +227,7 @@ export default function ContentHealthPage() {
                 {data.topIssues.map((issue, idx) => (
                   <div
                     key={idx}
-                    className="p-3 bg-surface rounded-sm border border-rule/70 flex items-start justify-between gap-2"
+                    className="p-3 bg-surface rounded-card border border-rule/70 flex items-start justify-between gap-2"
                   >
                     <div>
                       <p className="font-medium text-content">{issue.message}</p>
@@ -249,7 +249,7 @@ export default function ContentHealthPage() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Filter pieces by title..."
-                  className="pl-8 pr-3 py-1.5 text-xs rounded-sm border border-rule bg-surface font-sans text-content placeholder:text-content-faint focus:border-accent focus:outline-none w-56 sm:w-72"
+                  className="pl-8 pr-3 py-1.5 text-xs rounded-card border border-rule bg-surface font-sans text-content placeholder:text-content-faint focus:border-accent focus:outline-none w-56 sm:w-72"
                 />
               </div>
 
@@ -266,40 +266,39 @@ export default function ContentHealthPage() {
 
             <div className="flex items-center gap-2 text-xs font-sans text-content-soft">
               <span>Sort by:</span>
-              <select
+              <NativeSelect
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="rounded-sm border border-rule bg-surface px-2 py-1 text-xs text-content focus:outline-none focus:border-accent"
               >
                 <option value="score-asc">Lowest Health Score First</option>
                 <option value="score-desc">Highest Health Score First</option>
                 <option value="updated">Recently Updated</option>
-              </select>
+              </NativeSelect>
             </div>
           </div>
 
           {/* Articles Table */}
-          <div className="rounded-sm border border-rule bg-surface-raised overflow-hidden">
+          <div className="rounded-card border border-rule bg-surface-raised overflow-hidden">
             <table className="w-full text-left font-sans text-xs">
-              <thead>
-                <tr className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
-                  <th className="p-3">Score</th>
-                  <th className="p-3">Piece Title</th>
-                  <th className="p-3">Detected Issues</th>
-                  <th className="p-3">Length</th>
-                  <th className="p-3">Last Updated</th>
-                  <th className="p-3 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-rule/50">
+              <THead>
+                <TR className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
+                  <TH className="p-3">Score</TH>
+                  <TH className="p-3">Piece Title</TH>
+                  <TH className="p-3">Detected Issues</TH>
+                  <TH className="p-3">Length</TH>
+                  <TH className="p-3">Last Updated</TH>
+                  <TH className="p-3 text-right">Action</TH>
+                </TR>
+              </THead>
+              <TBody className="divide-y divide-rule/50">
                 {filteredPieces.map((piece) => {
                   const isHealthy = piece.grade === "healthy";
                   const isCritical = piece.grade === "critical";
 
                   return (
-                    <tr key={piece.id} className="hover:bg-surface/50 transition">
+                    <TR key={piece.id} className="hover:bg-surface/50 transition">
                       {/* Score Badge */}
-                      <td className="p-3 w-20">
+                      <TD className="p-3 w-20">
                         <span
                           className={cn(
                             "inline-flex items-center justify-center font-mono text-xs font-bold px-2 py-0.5 rounded-sm border",
@@ -310,10 +309,10 @@ export default function ContentHealthPage() {
                         >
                           {piece.score}
                         </span>
-                      </td>
+                      </TD>
 
                       {/* Title & Slug */}
-                      <td className="p-3 max-w-xs">
+                      <TD className="p-3 max-w-xs">
                         <p className="font-medium text-content truncate font-bengali text-sm" lang="bn">
                           {piece.titleBn}
                         </p>
@@ -322,10 +321,10 @@ export default function ContentHealthPage() {
                           <span>•</span>
                           <span>{piece.status}</span>
                         </div>
-                      </td>
+                      </TD>
 
                       {/* Issues Pills */}
-                      <td className="p-3">
+                      <TD className="p-3">
                         {piece.issues.length === 0 ? (
                           <span className="inline-flex items-center gap-1 text-[11px] text-success font-medium">
                             <CheckCircle2 className="h-3 w-3" /> All criteria satisfied
@@ -347,32 +346,32 @@ export default function ContentHealthPage() {
                             ))}
                           </div>
                         )}
-                      </td>
+                      </TD>
 
                       {/* Word Count */}
-                      <td className="p-3 font-mono text-[11px] text-content-soft whitespace-nowrap">
+                      <TD className="p-3 font-mono text-[11px] text-content-soft whitespace-nowrap">
                         {piece.wordCount} words <br />
                         <span className="text-[10px] text-content-faint">{piece.readingMinutes} min read</span>
-                      </td>
+                      </TD>
 
                       {/* Last Updated */}
-                      <td className="p-3 font-mono text-[11px] text-content-faint whitespace-nowrap">
+                      <TD className="p-3 font-mono text-[11px] text-content-faint whitespace-nowrap">
                         {new Date(piece.updatedAt).toLocaleDateString()}
-                      </td>
+                      </TD>
 
                       {/* Action */}
-                      <td className="p-3 text-right whitespace-nowrap">
+                      <TD className="p-3 text-right whitespace-nowrap">
                         <Link
                           href={`/admin/pieces/${piece.id}`}
                           className="inline-flex items-center gap-1 font-sans text-xs text-accent hover:underline font-medium"
                         >
                           Fix in Editor <ArrowRight className="h-3 w-3" />
                         </Link>
-                      </td>
-                    </tr>
+                      </TD>
+                    </TR>
                   );
                 })}
-              </tbody>
+              </TBody>
             </table>
           </div>
         </>

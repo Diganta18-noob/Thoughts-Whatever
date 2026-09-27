@@ -103,7 +103,7 @@ export function RevisionDiffViewer({
   }, [diffLines]);
 
   return (
-    <div className="rounded-sm border border-rule bg-surface-raised overflow-hidden text-xs font-mono">
+    <div className="rounded-card border border-rule bg-surface-raised overflow-hidden text-xs font-mono">
       {/* Diff Header */}
       <div className="flex items-center justify-between border-b border-rule bg-surface/80 px-4 py-2 text-[11px]">
         <div className="flex items-center gap-4">

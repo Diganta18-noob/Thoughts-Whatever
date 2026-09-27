@@ -18,7 +18,7 @@ import {
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { confirmToast } from "@/lib/confirm-toast";
-import { Button, Input } from "@/components/ui";
+import { Button, Input, NativeSelect } from "@/components/ui";
 
 interface APIKeyItem {
   id: string;
@@ -292,7 +292,7 @@ export default function DeveloperAPICenterPage() {
 
                     <div className="flex flex-wrap gap-1.5 pt-1">
                       {k.scopes.map((s) => (
-                        <span key={s} className="font-mono text-[10px] bg-surface-raised border border-rule px-1.5 py-0.5 rounded text-content-faint">
+                        <span key={s} className="font-mono text-[10px] bg-surface-raised border border-rule px-1.5 py-0.5 rounded-card text-content-faint">
                           {s}
                         </span>
                       ))}
@@ -348,7 +348,7 @@ export default function DeveloperAPICenterPage() {
 
                     <div className="flex flex-wrap gap-1.5 pt-1">
                       {wh.events.map((e) => (
-                        <span key={e} className="font-mono text-[10px] bg-surface-raised border border-rule px-1.5 py-0.5 rounded text-content-soft">
+                        <span key={e} className="font-mono text-[10px] bg-surface-raised border border-rule px-1.5 py-0.5 rounded-card text-content-soft">
                           {e}
                         </span>
                       ))}
@@ -395,7 +395,7 @@ export default function DeveloperAPICenterPage() {
                   Make sure to copy your API secret now. You won&apos;t be able to see it again!
                 </div>
 
-                <div className="bg-surface-raised border border-rule p-3 rounded-sm font-mono text-xs break-all flex items-center justify-between gap-2">
+                <div className="bg-surface-raised border border-rule p-3 rounded-card font-mono text-xs break-all flex items-center justify-between gap-2">
                   <span>{newlyGeneratedSecret}</span>
                   <button
                     onClick={() => handleCopy(newlyGeneratedSecret, "API Key")}
@@ -448,16 +448,15 @@ export default function DeveloperAPICenterPage() {
 
                 <div>
                   <label className="label block mb-1">Expiration</label>
-                  <select
+                  <NativeSelect
                     value={keyExpiresDays}
                     onChange={(e) => setKeyExpiresDays(e.target.value)}
-                    className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-xs text-content outline-none focus:border-accent"
                   >
                     <option value="30">30 Days</option>
                     <option value="90">90 Days</option>
                     <option value="365">1 Year</option>
                     <option value="0">Never Expires</option>
-                  </select>
+                  </NativeSelect>
                 </div>
 
                 <div className="flex justify-end gap-3 pt-3 border-t border-rule">

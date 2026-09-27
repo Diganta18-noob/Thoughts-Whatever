@@ -57,7 +57,7 @@ export function SEOGrowthCharts({ trafficData, backlinkData, isEstimated = false
   );
 
   return (
-    <div className="rounded-xl border border-rule bg-surface p-5 shadow-xs">
+    <div className="rounded-card border border-rule bg-surface p-5 shadow-card">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-rule pb-4">
         <div>
           <div className="flex items-center gap-2">
@@ -77,13 +77,13 @@ export function SEOGrowthCharts({ trafficData, backlinkData, isEstimated = false
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex items-center rounded-lg border border-rule bg-surface-raised/50 p-0.5 self-start">
+        <div className="flex items-center rounded-card border border-rule bg-surface-raised/50 p-0.5 self-start">
           <button
             type="button"
             onClick={() => setActiveTab("traffic")}
             className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition ${
               activeTab === "traffic"
-                ? "bg-surface text-content shadow-xs"
+                ? "bg-surface text-content shadow-card"
                 : "text-content-soft hover:text-content"
             }`}
           >
@@ -96,7 +96,7 @@ export function SEOGrowthCharts({ trafficData, backlinkData, isEstimated = false
             onClick={() => setActiveTab("backlinks")}
             className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition ${
               activeTab === "backlinks"
-                ? "bg-surface text-content shadow-xs"
+                ? "bg-surface text-content shadow-card"
                 : "text-content-soft hover:text-content"
             }`}
           >
@@ -110,7 +110,7 @@ export function SEOGrowthCharts({ trafficData, backlinkData, isEstimated = false
       <div className="mt-5">
         {activeTab === "traffic" ? (
           !hasTrafficData ? (
-            <div className="py-12 text-center rounded-lg border border-dashed border-rule bg-surface-raised/20">
+            <div className="py-12 text-center rounded-card border border-dashed border-rule bg-surface-raised/20">
               <BarChart2 className="mx-auto h-8 w-8 text-content-faint" />
               <h4 className="mt-2 font-sans text-xs font-semibold text-content">
                 No Verified Traffic Data Available
@@ -182,7 +182,7 @@ export function SEOGrowthCharts({ trafficData, backlinkData, isEstimated = false
           )
         ) : (
           !hasBacklinkData ? (
-            <div className="py-12 text-center rounded-lg border border-dashed border-rule bg-surface-raised/20">
+            <div className="py-12 text-center rounded-card border border-dashed border-rule bg-surface-raised/20">
               <Link2 className="mx-auto h-8 w-8 text-content-faint" />
               <h4 className="mt-2 font-sans text-xs font-semibold text-content">
                 No Monitored Backlinks Recorded Yet

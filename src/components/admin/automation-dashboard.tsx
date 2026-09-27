@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import { normalizeError } from "@/lib/errors";
-import { Button } from "@/components/ui";
+import { Button, TBody, TD, TH, THead, TR } from "@/components/ui";
 
 export interface AutomationState {
   isRunning: boolean;
@@ -242,32 +242,32 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-mono">
-              <thead>
-                <tr className="border-b border-journal-rule text-journal-inkFaint">
-                  <th className="py-2">Step</th>
-                  <th className="py-2">Name</th>
-                  <th className="py-2">Status</th>
-                  <th className="py-2">Duration</th>
-                  <th className="py-2">Details</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-journal-rule">
+              <THead>
+                <TR className="border-b border-journal-rule text-journal-inkFaint">
+                  <TH className="py-2">Step</TH>
+                  <TH className="py-2">Name</TH>
+                  <TH className="py-2">Status</TH>
+                  <TH className="py-2">Duration</TH>
+                  <TH className="py-2">Details</TH>
+                </TR>
+              </THead>
+              <TBody className="divide-y divide-journal-rule">
                 {data.lastReport.steps.map((step) => (
-                  <tr key={step.stepNumber}>
-                    <td className="py-2 text-journal-inkFaint">{step.stepNumber}</td>
-                    <td className="py-2 font-bold text-journal-ink">{step.name}</td>
-                    <td className="py-2">
+                  <TR key={step.stepNumber}>
+                    <TD className="py-2 text-journal-inkFaint">{step.stepNumber}</TD>
+                    <TD className="py-2 font-bold text-journal-ink">{step.name}</TD>
+                    <TD className="py-2">
                       <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
                         step.status === "SUCCESS" ? "bg-success/10 text-success" : "bg-danger/10 text-danger"
                       }`}>
                         {step.status}
                       </span>
-                    </td>
-                    <td className="py-2 text-journal-inkSoft">{step.durationMs}ms</td>
-                    <td className="py-2 text-journal-inkSoft">{step.message}</td>
-                  </tr>
+                    </TD>
+                    <TD className="py-2 text-journal-inkSoft">{step.durationMs}ms</TD>
+                    <TD className="py-2 text-journal-inkSoft">{step.message}</TD>
+                  </TR>
                 ))}
-              </tbody>
+              </TBody>
             </table>
           </div>
         </div>

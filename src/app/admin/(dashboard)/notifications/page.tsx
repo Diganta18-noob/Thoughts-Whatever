@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui";
+import { Button, NativeSelect } from "@/components/ui";
 
 interface NotificationItem {
   id: string;
@@ -154,22 +154,21 @@ export default function NotificationsPage() {
 
         <div className="flex items-center gap-2">
           <Filter className="h-3.5 w-3.5 text-content-faint" />
-          <select
+          <NativeSelect
             value={filterSeverity}
             onChange={(e) => setFilterSeverity(e.target.value)}
             aria-label="Filter notifications by severity"
-            className="rounded-sm border border-rule bg-surface-raised px-2.5 py-1 font-sans text-xs text-content focus:border-accent focus:outline-none"
           >
             <option value="all">All Severities</option>
             <option value="critical">Critical Only</option>
             <option value="warning">Warnings Only</option>
             <option value="info">Info Only</option>
-          </select>
+          </NativeSelect>
         </div>
       </div>
 
       {/* List */}
-      <div className="rounded-sm border border-rule bg-surface-raised divide-y divide-rule/70">
+      <div className="rounded-card border border-rule bg-surface-raised divide-y divide-rule/70">
         {loading ? (
           <div className="p-12 text-center font-sans text-xs text-content-faint">
             Loading notification logs...

@@ -22,7 +22,7 @@ import {
   CheckCircle2
 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { Button, Input } from "@/components/ui";
+import { Button, Input, NativeSelect } from "@/components/ui";
 
 interface AuditLogItem {
   id: string;
@@ -226,7 +226,7 @@ export function AuditLogDashboard() {
 
       {/* Stats Quick Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-sm border border-rule bg-surface p-4">
+        <div className="rounded-card border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
             <span className="font-sans text-xs">Total Recorded Events</span>
             <Activity className="h-4 w-4 text-accent" />
@@ -236,7 +236,7 @@ export function AuditLogDashboard() {
           </p>
         </div>
 
-        <div className="rounded-sm border border-rule bg-surface p-4">
+        <div className="rounded-card border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
             <span className="font-sans text-xs">Today&apos;s Activity</span>
             <Clock className="h-4 w-4 text-info" />
@@ -246,7 +246,7 @@ export function AuditLogDashboard() {
           </p>
         </div>
 
-        <div className="rounded-sm border border-rule bg-surface p-4">
+        <div className="rounded-card border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
             <span className="font-sans text-xs">Critical Alerts</span>
             <ShieldAlert className="h-4 w-4 text-danger" />
@@ -258,7 +258,7 @@ export function AuditLogDashboard() {
       </div>
 
       {/* Filter Control Bar */}
-      <div className="rounded-sm border border-rule bg-surface p-4 space-y-4">
+      <div className="rounded-card border border-rule bg-surface p-4 space-y-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
           {/* Free Text Search */}
           <div className="relative col-span-1 sm:col-span-2">
@@ -268,19 +268,18 @@ export function AuditLogDashboard() {
               placeholder="Search summary, slug, email..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-sm border border-rule bg-surface-raised pl-9 pr-3 py-1.5 font-sans text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
+              className="w-full rounded-card border border-rule bg-surface-raised pl-9 pr-3 py-1.5 font-sans text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
             />
           </div>
 
           {/* Action Filter */}
           <div>
-            <select
+            <NativeSelect
               value={actionFilter}
               onChange={(e) => {
                 setActionFilter(e.target.value);
                 setPage(1);
               }}
-              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             >
               <option value="">All Actions</option>
 
@@ -289,18 +288,17 @@ export function AuditLogDashboard() {
                   {act}
                 </option>
               ))}
-            </select>
+            </NativeSelect>
           </div>
 
           {/* Entity Type Filter */}
           <div>
-            <select
+            <NativeSelect
               value={entityFilter}
               onChange={(e) => {
                 setEntityFilter(e.target.value);
                 setPage(1);
               }}
-              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             >
               <option value="">All Entities</option>
               {availableFilters.entityTypes.map((ent) => (
@@ -308,24 +306,23 @@ export function AuditLogDashboard() {
                   {ent}
                 </option>
               ))}
-            </select>
+            </NativeSelect>
           </div>
 
           {/* Severity Filter */}
           <div>
-            <select
+            <NativeSelect
               value={severityFilter}
               onChange={(e) => {
                 setSeverityFilter(e.target.value);
                 setPage(1);
               }}
-              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             >
               <option value="">All Severities</option>
               <option value="info">Info</option>
               <option value="warning">Warning</option>
               <option value="critical">Critical</option>
-            </select>
+            </NativeSelect>
           </div>
 
           {/* Clear Button */}
@@ -367,7 +364,7 @@ export function AuditLogDashboard() {
           Loading audit events timeline...
         </div>
       ) : logs.length === 0 ? (
-        <div className="rounded-sm border border-rule bg-surface p-12 text-center space-y-3">
+        <div className="rounded-card border border-rule bg-surface p-12 text-center space-y-3">
           <FileText className="mx-auto h-8 w-8 text-content-soft/40" />
           <p className="font-sans text-sm text-content-soft">No audit events match your filters.</p>
           <button
@@ -390,7 +387,7 @@ export function AuditLogDashboard() {
               </div>
 
               {/* Log Entry Items */}
-              <div className="divide-y divide-rule/40 rounded-sm border border-rule bg-surface">
+              <div className="divide-y divide-rule/40 rounded-card border border-rule bg-surface">
                 {groupLogs.map((log) => {
                   const isExpanded = expandedId === log.id;
                   const timeStr = new Date(log.createdAt).toLocaleTimeString("en-US", {
@@ -480,7 +477,7 @@ export function AuditLogDashboard() {
                               <span className="text-content font-sans font-medium block mb-1">
                                 Changes Snapshot (Before / After)
                               </span>
-                              <pre className="max-h-60 overflow-auto rounded-sm border border-rule bg-surface p-3 text-[11px] text-content">
+                              <pre className="max-h-60 overflow-auto rounded-card border border-rule bg-surface p-3 text-[11px] text-content">
                                 {JSON.stringify(log.changes, null, 2)}
                               </pre>
                             </div>
@@ -492,7 +489,7 @@ export function AuditLogDashboard() {
                               <span className="text-content font-sans font-medium block mb-1">
                                 Metadata Context
                               </span>
-                              <pre className="max-h-40 overflow-auto rounded-sm border border-rule bg-surface p-3 text-[11px] text-content">
+                              <pre className="max-h-40 overflow-auto rounded-card border border-rule bg-surface p-3 text-[11px] text-content">
                                 {JSON.stringify(log.metadata, null, 2)}
                               </pre>
                             </div>

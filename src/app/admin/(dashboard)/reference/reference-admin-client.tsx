@@ -22,7 +22,7 @@ import { ReferenceEditorModal } from "@/components/admin/reference/reference-edi
 import { ReferenceAssetModal } from "@/components/admin/reference/reference-asset-modal";
 import { ReferenceClaimsModal } from "@/components/admin/reference/reference-claims-modal";
 import toast from "react-hot-toast";
-import { Button } from "@/components/ui";
+import { Button, TBody, TD, TH, THead, TR } from "@/components/ui";
 
 interface ReferenceAdminClientProps {
   initialWorks: any[];
@@ -147,7 +147,7 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
 
       {/* Rights Metric KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-        <div className="bg-surface-raised/60 border border-rule p-3 rounded-lg">
+        <div className="bg-surface-raised/60 border border-rule p-3 rounded-card">
           <div className="text-[0.65rem] font-mono uppercase text-content-faint">Total Works</div>
           <div className="font-mono text-xl font-bold text-content-faint mt-1">{stats.total}</div>
         </div>
@@ -159,7 +159,7 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
           <div className="text-[0.65rem] font-mono uppercase text-info">Licensed</div>
           <div className="font-mono text-xl font-bold text-info mt-1">{stats.licensed}</div>
         </div>
-        <div className="bg-surface-raised/60 border border-rule/60 p-3 rounded-lg">
+        <div className="bg-surface-raised/60 border border-rule/60 p-3 rounded-card">
           <div className="text-[0.65rem] font-mono uppercase text-content-faint">External Only</div>
           <div className="font-mono text-xl font-bold text-content-faint mt-1">{stats.external}</div>
         </div>
@@ -229,14 +229,14 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
               placeholder="Search archive..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 pr-3 py-1.5 bg-surface-raised border border-rule rounded-lg text-xs text-content-faint placeholder-content-faint focus:outline-none focus:border-success w-48 sm:w-64"
+              className="pl-8 pr-3 py-1.5 bg-surface-raised border border-rule rounded-card text-xs text-content-faint placeholder-content-faint focus:outline-none focus:border-success w-48 sm:w-64"
             />
           </div>
           <button
             type="button"
             onClick={fetchResources}
             title="Refresh list"
-            className="p-1.5 text-content-faint hover:text-content-faint/80 border border-rule rounded-lg hover:bg-surface-raised"
+            className="p-1.5 text-content-faint hover:text-content-faint/80 border border-rule rounded-card hover:bg-surface-raised"
           >
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
@@ -244,7 +244,7 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
       </div>
 
       {/* Resource Table */}
-      <div className="border border-rule rounded-xl overflow-hidden bg-surface">
+      <div className="border border-rule rounded-card overflow-hidden bg-surface">
         {filteredWorks.length === 0 ? (
           <div className="py-16 text-center text-content-faint text-sm">
             No reference resources found.
@@ -252,18 +252,18 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="border-b border-rule bg-surface-raised/50 text-content-faint font-mono uppercase text-[0.7rem] tracking-wider">
-                  <th className="py-3 px-4">Title & Type</th>
-                  <th className="py-3 px-4">Edition / Editor</th>
-                  <th className="py-3 px-4">Source</th>
-                  <th className="py-3 px-4">Rights Status</th>
-                  <th className="py-3 px-4">Hosting</th>
-                  <th className="py-3 px-4">Assets</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-rule">
+              <THead>
+                <TR className="border-b border-rule bg-surface-raised/50 text-content-faint font-mono uppercase text-[0.7rem] tracking-wider">
+                  <TH className="py-3 px-4">Title & Type</TH>
+                  <TH className="py-3 px-4">Edition / Editor</TH>
+                  <TH className="py-3 px-4">Source</TH>
+                  <TH className="py-3 px-4">Rights Status</TH>
+                  <TH className="py-3 px-4">Hosting</TH>
+                  <TH className="py-3 px-4">Assets</TH>
+                  <TH className="py-3 px-4 text-right">Actions</TH>
+                </TR>
+              </THead>
+              <TBody className="divide-y divide-rule">
                 {filteredWorks.map((w) => {
                   const edition = w.editions[0];
                   const rightsStatus = edition?.rights?.status || "RIGHTS_UNVERIFIED";
@@ -271,8 +271,8 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
                   const source = edition?.sources[0];
 
                   return (
-                    <tr key={w.id} className="hover:bg-surface-raised/40 transition-colors">
-                      <td className="py-3.5 px-4">
+                    <TR key={w.id} className="hover:bg-surface-raised/40 transition-colors">
+                      <TD className="py-3.5 px-4">
                         <div className="font-serif font-bold text-sm text-content-faint line-clamp-1">
                           {w.titleBn}
                         </div>
@@ -287,9 +287,9 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
                             </>
                           )}
                         </div>
-                      </td>
+                      </TD>
 
-                      <td className="py-3.5 px-4 text-content-faint">
+                      <TD className="py-3.5 px-4 text-content-faint">
                         {edition ? (
                           <div>
                             <div className="line-clamp-1">
@@ -302,9 +302,9 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
                         ) : (
                           <span className="text-content-faint italic">No edition</span>
                         )}
-                      </td>
+                      </TD>
 
-                      <td className="py-3.5 px-4">
+                      <TD className="py-3.5 px-4">
                         {source ? (
                           <a
                             href={source.sourceUrl}
@@ -318,13 +318,13 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
                         ) : (
                           <span className="text-content-faint">—</span>
                         )}
-                      </td>
+                      </TD>
 
-                      <td className="py-3.5 px-4">
+                      <TD className="py-3.5 px-4">
                         <RightsBadge status={rightsStatus} size="sm" />
-                      </td>
+                      </TD>
 
-                      <td className="py-3.5 px-4">
+                      <TD className="py-3.5 px-4">
                         <span
                           className={`font-mono text-[0.65rem] px-2 py-0.5 rounded uppercase ${
                             hostingMode === "THOUGHTS_WHATEVER"
@@ -334,13 +334,13 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
                         >
                           {hostingMode === "THOUGHTS_WHATEVER" ? "Hosted" : "External"}
                         </span>
-                      </td>
+                      </TD>
 
-                      <td className="py-3.5 px-4 text-content-faint font-mono text-[0.75rem]">
+                      <TD className="py-3.5 px-4 text-content-faint font-mono text-[0.75rem]">
                         {edition?.assets?.length || 0} files
-                      </td>
+                      </TD>
 
-                      <td className="py-3.5 px-4 text-right">
+                      <TD className="py-3.5 px-4 text-right">
                         <div className="flex items-center justify-end gap-1.5">
                           {/* Live Preview Button */}
                           <a
@@ -378,7 +378,7 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
                           <button
                             onClick={() => setAssetWork({ ...w, edition })}
                             title="Attach Digital Asset"
-                            className="p-1.5 rounded-lg border border-rule text-content-faint hover:bg-surface-raised"
+                            className="p-1.5 rounded-card border border-rule text-content-faint hover:bg-surface-raised"
                           >
                             <UploadCloud className="w-3.5 h-3.5" />
                           </button>
@@ -390,7 +390,7 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
                               setIsEditorOpen(true);
                             }}
                             title="Edit Metadata"
-                            className="p-1.5 rounded-lg border border-rule text-content-faint hover:bg-surface-raised"
+                            className="p-1.5 rounded-card border border-rule text-content-faint hover:bg-surface-raised"
                           >
                             <Edit className="w-3.5 h-3.5" />
                           </button>
@@ -404,11 +404,11 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
-                      </td>
-                    </tr>
+                      </TD>
+                    </TR>
                   );
                 })}
-              </tbody>
+              </TBody>
             </table>
           </div>
         )}

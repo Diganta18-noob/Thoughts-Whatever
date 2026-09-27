@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
-import { Button, Input, Textarea } from "@/components/ui";
+import { Button, Input, NativeSelect, Textarea } from "@/components/ui";
 
 interface Incident {
   id: string;
@@ -208,27 +208,25 @@ export default function IncidentsCenterPage() {
           </h2>
 
           <div className="flex items-center gap-3">
-            <select
+            <NativeSelect
               value={filterSeverity}
               onChange={(e) => setFilterSeverity(e.target.value)}
-              className="rounded-sm border border-rule bg-surface px-2 py-1 font-sans text-xs text-content outline-none focus:border-accent"
             >
               <option value="ALL">All Severities</option>
               <option value="CRITICAL">Critical</option>
               <option value="WARNING">Warning</option>
               <option value="INFO">Info</option>
-            </select>
+            </NativeSelect>
 
-            <select
+            <NativeSelect
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="rounded-sm border border-rule bg-surface px-2 py-1 font-sans text-xs text-content outline-none focus:border-accent"
             >
               <option value="ALL">All Statuses</option>
               <option value="DETECTED">Detected</option>
               <option value="INVESTIGATING">Investigating</option>
               <option value="RESOLVED">Resolved</option>
-            </select>
+            </NativeSelect>
 
             <button
               onClick={fetchIncidents}
@@ -336,7 +334,7 @@ export default function IncidentsCenterPage() {
               {/* Timeline Notes */}
               <div>
                 <span className="label block mb-2">Incident Timeline</span>
-                <div className="space-y-2 max-h-40 overflow-y-auto border border-rule p-3 bg-surface-raised rounded-sm">
+                <div className="space-y-2 max-h-40 overflow-y-auto border border-rule p-3 bg-surface-raised rounded-card">
                   {(activeIncident.timeline as any[])?.map((t, idx) => (
                     <div key={idx} className="font-mono text-[11px] text-content flex justify-between border-b border-rule/50 pb-1.5 last:border-0">
                       <span>• {t.message}</span>
@@ -447,23 +445,21 @@ export default function IncidentsCenterPage() {
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
                   <label className="label block mb-1">Severity</label>
-                  <select
+                  <NativeSelect
                     value={newSeverity}
                     onChange={(e: any) => setNewSeverity(e.target.value)}
-                    className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-xs text-content outline-none focus:border-accent"
                   >
                     <option value="INFO">Info</option>
                     <option value="WARNING">Warning</option>
                     <option value="CRITICAL">Critical</option>
-                  </select>
+                  </NativeSelect>
                 </div>
 
                 <div>
                   <label className="label block mb-1">Affected Subsystem</label>
-                  <select
+                  <NativeSelect
                     value={newArea}
                     onChange={(e) => setNewArea(e.target.value)}
-                    className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-xs text-content outline-none focus:border-accent"
                   >
                     <option value="database">Database Pool</option>
                     <option value="api">API / Edge Routing</option>
@@ -471,7 +467,7 @@ export default function IncidentsCenterPage() {
                     <option value="backups">R2 Backups</option>
                     <option value="cron">Automated Pipelines</option>
                     <option value="security">Authentication & JWT</option>
-                  </select>
+                  </NativeSelect>
                 </div>
               </div>
 

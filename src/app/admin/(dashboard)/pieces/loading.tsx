@@ -16,7 +16,7 @@ export default function AdminPiecesLoading() {
         <div className="h-8 w-24 rounded bg-content/10" />
       </div>
 
-      <div className="rounded border border-rule bg-surface divide-y divide-rule">
+      <div className="rounded-card border border-rule bg-surface divide-y divide-rule">
         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
           <div key={i} className="flex items-center justify-between p-4">
             <div className="space-y-2">

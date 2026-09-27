@@ -16,10 +16,10 @@ export default function AdminDashboardLoading() {
       <div className="space-y-8">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-28 rounded border border-rule bg-surface p-5" />
+            <div key={i} className="h-28 rounded-card border border-rule bg-surface p-5" />
           ))}
         </div>
-        <div className="h-64 rounded border border-rule bg-surface" />
+        <div className="h-64 rounded-card border border-rule bg-surface" />
       </div>
 
       {/* Recently Edited list skeleton */}

@@ -12,6 +12,8 @@ export const badgeVariants = cva(
         success: "bg-success/12 text-success",
         warning: "bg-warning/12 text-warning",
         danger: "bg-danger/12 text-danger",
+        info: "bg-info/12 text-info",
+        special: "bg-special/12 text-special",
       },
     },
     defaultVariants: { tone: "neutral" },

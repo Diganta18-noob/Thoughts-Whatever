@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui";
+import { Button, TBody, TD, TH, THead, TR } from "@/components/ui";
 
 interface AnalyticsData {
   period: string;
@@ -121,7 +121,7 @@ export default function AdvancedAnalyticsPage() {
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Date Filter Buttons */}
-          <div className="flex items-center bg-surface-raised p-1 rounded-sm border border-rule font-sans text-xs">
+          <div className="flex items-center bg-surface-raised p-1 rounded-card border border-rule font-sans text-xs">
             {[
               { id: "today", label: "Today" },
               { id: "yesterday", label: "Yesterday" },
@@ -136,7 +136,7 @@ export default function AdvancedAnalyticsPage() {
                 className={cn(
                   "px-2.5 py-1 rounded-sm transition text-xs",
                   period === p.id
-                    ? "bg-surface font-semibold text-content shadow-xs"
+                    ? "bg-surface font-semibold text-content shadow-card"
                     : "text-content-soft hover:text-content"
                 )}
               >
@@ -169,7 +169,7 @@ export default function AdvancedAnalyticsPage() {
         <>
           {/* Top KPI Cards (6 metrics) */}
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            <div className="rounded-sm border border-rule bg-surface-raised p-4 space-y-1">
+            <div className="rounded-card border border-rule bg-surface-raised p-4 space-y-1">
               <span className="label">Page Views</span>
               <div className="font-serif text-2xl font-normal text-content">
                 {data.overview.totalViews.toLocaleString()}
@@ -177,7 +177,7 @@ export default function AdvancedAnalyticsPage() {
               <p className="font-mono text-[10px] text-content-faint">Total article views</p>
             </div>
 
-            <div className="rounded-sm border border-rule bg-surface-raised p-4 space-y-1">
+            <div className="rounded-card border border-rule bg-surface-raised p-4 space-y-1">
               <span className="label">Unique Visitors</span>
               <div className="font-serif text-2xl font-normal text-content">
                 {data.overview.uniqueVisitors.toLocaleString()}
@@ -185,7 +185,7 @@ export default function AdvancedAnalyticsPage() {
               <p className="font-mono text-[10px] text-content-faint">Distinct sessions</p>
             </div>
 
-            <div className="rounded-sm border border-rule bg-surface-raised p-4 space-y-1">
+            <div className="rounded-card border border-rule bg-surface-raised p-4 space-y-1">
               <span className="label">Returning Readers</span>
               <div className="font-serif text-2xl font-normal text-content">
                 {data.overview.returningVisitors.toLocaleString()}
@@ -193,7 +193,7 @@ export default function AdvancedAnalyticsPage() {
               <p className="font-mono text-[10px] text-success font-semibold">Loyal audience</p>
             </div>
 
-            <div className="rounded-sm border border-rule bg-surface-raised p-4 space-y-1">
+            <div className="rounded-card border border-rule bg-surface-raised p-4 space-y-1">
               <span className="label">Avg Read Time</span>
               <div className="font-serif text-2xl font-normal text-content">
                 {data.overview.avgReadingMinutes}m
@@ -201,7 +201,7 @@ export default function AdvancedAnalyticsPage() {
               <p className="font-mono text-[10px] text-content-faint">Per session duration</p>
             </div>
 
-            <div className="rounded-sm border border-rule bg-surface-raised p-4 space-y-1">
+            <div className="rounded-card border border-rule bg-surface-raised p-4 space-y-1">
               <span className="label">Completion Rate</span>
               <div className="font-serif text-2xl font-normal text-content">
                 {data.overview.completionRate}%
@@ -209,7 +209,7 @@ export default function AdvancedAnalyticsPage() {
               <p className="font-mono text-[10px] text-content-faint">Read to finish</p>
             </div>
 
-            <div className="rounded-sm border border-rule bg-surface-raised p-4 space-y-1">
+            <div className="rounded-card border border-rule bg-surface-raised p-4 space-y-1">
               <span className="label">Bounce Rate</span>
               <div className="font-serif text-2xl font-normal text-content">
                 {data.overview.bounceRate}%
@@ -219,7 +219,7 @@ export default function AdvancedAnalyticsPage() {
           </div>
 
           {/* Traffic Trend Visualizer (Editorial Bar Chart) */}
-          <div className="rounded-sm border border-rule bg-surface-raised p-6 space-y-4">
+          <div className="rounded-card border border-rule bg-surface-raised p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-serif text-base text-content">Daily Traffic Flow</h3>
@@ -275,7 +275,7 @@ export default function AdvancedAnalyticsPage() {
                 className={cn(
                   "px-3 py-1.5 rounded-sm transition",
                   activeTab === tab.id
-                    ? "bg-surface font-semibold text-content border border-rule shadow-xs"
+                    ? "bg-surface font-semibold text-content border border-rule shadow-card"
                     : "text-content-soft hover:text-content"
                 )}
               >
@@ -286,23 +286,23 @@ export default function AdvancedAnalyticsPage() {
 
           {/* Tab 1: Top Articles Table */}
           {activeTab === "traffic" && (
-            <div className="rounded-sm border border-rule bg-surface-raised overflow-hidden">
+            <div className="rounded-card border border-rule bg-surface-raised overflow-hidden">
               <table className="w-full text-left font-sans text-xs">
-                <thead>
-                  <tr className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
-                    <th className="p-3">Rank</th>
-                    <th className="p-3">Piece Title</th>
-                    <th className="p-3">Kind</th>
-                    <th className="p-3">Read Time</th>
-                    <th className="p-3">Views</th>
-                    <th className="p-3 text-right">Reel Clicks</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-rule/50">
+                <THead>
+                  <TR className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
+                    <TH className="p-3">Rank</TH>
+                    <TH className="p-3">Piece Title</TH>
+                    <TH className="p-3">Kind</TH>
+                    <TH className="p-3">Read Time</TH>
+                    <TH className="p-3">Views</TH>
+                    <TH className="p-3 text-right">Reel Clicks</TH>
+                  </TR>
+                </THead>
+                <TBody className="divide-y divide-rule/50">
                   {data.topArticles.map((article, idx) => (
-                    <tr key={article.id} className="hover:bg-surface/50 transition">
-                      <td className="p-3 font-mono text-content-faint w-12">{idx + 1}</td>
-                      <td className="p-3 max-w-sm">
+                    <TR key={article.id} className="hover:bg-surface/50 transition">
+                      <TD className="p-3 font-mono text-content-faint w-12">{idx + 1}</TD>
+                      <TD className="p-3 max-w-sm">
                         <Link
                           href={`/admin/pieces/${article.id}`}
                           className="font-medium text-content hover:text-accent font-bengali text-sm"
@@ -311,14 +311,14 @@ export default function AdvancedAnalyticsPage() {
                           {article.titleBn}
                         </Link>
                         <p className="font-mono text-[10px] text-content-faint">/{article.slug}</p>
-                      </td>
-                      <td className="p-3 font-mono text-[11px] text-content-soft">{article.kind}</td>
-                      <td className="p-3 font-mono text-[11px] text-content-soft">{article.readingMinutes} min</td>
-                      <td className="p-3 font-mono text-[11px] font-bold text-content">{article.views.toLocaleString()}</td>
-                      <td className="p-3 font-mono text-[11px] text-right text-accent">{article.clicks}</td>
-                    </tr>
+                      </TD>
+                      <TD className="p-3 font-mono text-[11px] text-content-soft">{article.kind}</TD>
+                      <TD className="p-3 font-mono text-[11px] text-content-soft">{article.readingMinutes} min</TD>
+                      <TD className="p-3 font-mono text-[11px] font-bold text-content">{article.views.toLocaleString()}</TD>
+                      <TD className="p-3 font-mono text-[11px] text-right text-accent">{article.clicks}</TD>
+                    </TR>
                   ))}
-                </tbody>
+                </TBody>
               </table>
             </div>
           )}
@@ -327,7 +327,7 @@ export default function AdvancedAnalyticsPage() {
           {activeTab === "series" && (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {data.seriesStats.map((s) => (
-                <div key={s.id} className="rounded-sm border border-rule bg-surface-raised p-5 space-y-3 font-sans text-xs">
+                <div key={s.id} className="rounded-card border border-rule bg-surface-raised p-5 space-y-3 font-sans text-xs">
                   <div className="flex items-start justify-between">
                     <h4 className="font-bengali font-bold text-base text-content" lang="bn">
                       {s.titleBn}
@@ -362,7 +362,7 @@ export default function AdvancedAnalyticsPage() {
 
           {/* Tab 3: Referral Sources */}
           {activeTab === "sources" && (
-            <div className="rounded-sm border border-rule bg-surface-raised p-6 space-y-4 font-sans text-xs">
+            <div className="rounded-card border border-rule bg-surface-raised p-6 space-y-4 font-sans text-xs">
               <h3 className="font-serif text-base text-content">Traffic Acquisition Channels</h3>
               <div className="space-y-3">
                 {data.sources.map((src) => (

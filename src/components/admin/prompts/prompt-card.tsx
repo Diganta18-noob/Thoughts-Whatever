@@ -90,7 +90,7 @@ export function PromptCard({ prompt, onStatusChange, onDelete }: PromptCardProps
   };
 
   return (
-    <div className="group rounded-sm border border-rule bg-surface p-4 transition hover:border-rule/80 hover:bg-surface-raised/40 space-y-3">
+    <div className="group rounded-card border border-rule bg-surface p-4 transition hover:border-rule/80 hover:bg-surface-raised/40 space-y-3">
       {/* Top Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-rule/50 pb-2.5">
         <div className="flex items-center gap-2">
@@ -119,7 +119,7 @@ export function PromptCard({ prompt, onStatusChange, onDelete }: PromptCardProps
           </span>
 
           {/* Category */}
-          <span className="rounded-sm border border-rule bg-surface-raised px-2 py-0.5 font-sans text-xs text-content-soft capitalize">
+          <span className="rounded-card border border-rule bg-surface-raised px-2 py-0.5 font-sans text-xs text-content-soft capitalize">
             {prompt.category}
           </span>
         </div>
@@ -187,7 +187,7 @@ export function PromptCard({ prompt, onStatusChange, onDelete }: PromptCardProps
 
       {/* Notes Section if Present */}
       {prompt.notes && (
-        <div className="rounded-sm border border-rule/60 bg-surface-raised/60 p-2.5 text-xs font-sans text-content-soft">
+        <div className="rounded-card border border-rule/60 bg-surface-raised/60 p-2.5 text-xs font-sans text-content-soft">
           <span className="font-medium text-content block mb-0.5">Notes & Context:</span>
           <p>{prompt.notes}</p>
         </div>
@@ -199,7 +199,7 @@ export function PromptCard({ prompt, onStatusChange, onDelete }: PromptCardProps
           {prompt.tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center gap-1 rounded-sm border border-rule/60 bg-surface-raised px-2 py-0.5 font-mono text-[11px] text-content-soft"
+              className="inline-flex items-center gap-1 rounded-card border border-rule/60 bg-surface-raised px-2 py-0.5 font-mono text-[11px] text-content-soft"
             >
               <TagIcon className="h-2.5 w-2.5 text-accent" />
               {tag}

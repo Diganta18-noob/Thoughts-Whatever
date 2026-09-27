@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { ReferenceAssetKind, ReferenceRightsStatus } from "@prisma/client";
 import { UploadCloud, X, Loader2, AlertCircle } from "lucide-react";
 import toast from "react-hot-toast";
-import { Button, Input, Textarea } from "@/components/ui";
+import { Button, Input, NativeSelect, Textarea } from "@/components/ui";
 
 interface ReferenceAssetModalProps {
   isOpen: boolean;
@@ -86,7 +86,7 @@ export function ReferenceAssetModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-xl bg-surface border border-rule rounded-xl shadow-2xl p-6 text-content-faint my-8">
+      <div className="relative w-full max-w-xl bg-surface border border-rule rounded-card shadow-2xl p-6 text-content-faint my-8">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-content-faint hover:text-content-faint/80 p-1.5 rounded-lg hover:bg-surface-raised/60"
@@ -138,17 +138,16 @@ export function ReferenceAssetModal({
                 <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   Asset Kind *
                 </label>
-                <select
+                <NativeSelect
                   value={kind}
                   onChange={(e) => setKind(e.target.value as ReferenceAssetKind)}
-                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                 >
                   <option value="PDF">PDF (Digitized Book / Document)</option>
                   <option value="EPUB">EPUB (Digital Reader File)</option>
                   <option value="AUDIO">AUDIO (Narration / Voice Recording)</option>
                   <option value="TRANSCRIPT">TRANSCRIPT (Full Text Transcription)</option>
                   <option value="SCAN_IMAGE">SCAN_IMAGE (Archival Plate / Manuscript Page)</option>
-                </select>
+                </NativeSelect>
               </div>
 
               <div>

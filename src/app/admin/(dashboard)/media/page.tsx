@@ -24,7 +24,7 @@ import {
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { confirmToast } from "@/lib/confirm-toast";
-import { Button } from "@/components/ui";
+import { Button, TBody, TD, TH, THead, TR } from "@/components/ui";
 
 interface MediaItem {
   id: string;
@@ -286,7 +286,7 @@ export default function MediaLibraryPage() {
           }
         }}
         onClick={() => fileInputRef.current?.click()}
-        className="cursor-pointer border-2 border-dashed border-rule/80 hover:border-accent/60 rounded-sm bg-surface-raised/40 p-6 text-center transition group"
+        className="cursor-pointer border-2 border-dashed border-rule/80 hover:border-accent/60 rounded-card bg-surface-raised/40 p-6 text-center transition group"
       >
         <UploadCloud className="h-8 w-8 text-content-faint group-hover:text-accent mx-auto mb-2 transition" />
         <p className="font-serif text-sm text-content">
@@ -300,7 +300,7 @@ export default function MediaLibraryPage() {
       {/* Controls & Filters */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         {/* Type Tabs */}
-        <div className="flex items-center gap-1 bg-surface-raised p-1 rounded-sm border border-rule">
+        <div className="flex items-center gap-1 bg-surface-raised p-1 rounded-card border border-rule">
           {[
             { id: "all", label: "All Assets" },
             { id: "image", label: "Images" },
@@ -316,7 +316,7 @@ export default function MediaLibraryPage() {
               className={cn(
                 "px-3 py-1 text-xs font-sans rounded-sm transition",
                 filterType === t.id
-                  ? "bg-surface font-semibold text-content shadow-xs"
+                  ? "bg-surface font-semibold text-content shadow-card"
                   : "text-content-soft hover:text-content"
               )}
             >
@@ -350,11 +350,11 @@ export default function MediaLibraryPage() {
                 setPage(1);
               }}
               placeholder="Search filename or alt..."
-              className="pl-8 pr-3 py-1.5 text-xs rounded-sm border border-rule bg-surface font-sans text-content placeholder:text-content-faint focus:border-accent focus:outline-none w-48 sm:w-60"
+              className="pl-8 pr-3 py-1.5 text-xs rounded-card border border-rule bg-surface font-sans text-content placeholder:text-content-faint focus:border-accent focus:outline-none w-48 sm:w-60"
             />
           </div>
 
-          <div className="flex items-center border border-rule rounded-sm bg-surface-raised overflow-hidden">
+          <div className="flex items-center border border-rule rounded-card bg-surface-raised overflow-hidden">
             <button
               type="button"
               onClick={() => setViewMode("grid")}
@@ -387,7 +387,7 @@ export default function MediaLibraryPage() {
           Loading media library assets...
         </div>
       ) : items.length === 0 ? (
-        <div className="rounded-sm border border-rule bg-surface-raised p-12 text-center">
+        <div className="rounded-card border border-rule bg-surface-raised p-12 text-center">
           <ImageIcon className="h-8 w-8 text-content-faint mx-auto mb-2" />
           <h3 className="font-serif text-lg font-normal text-content">No Media Assets Found</h3>
           <p className="font-sans text-xs text-content-soft mt-1">
@@ -408,7 +408,7 @@ export default function MediaLibraryPage() {
                 key={media.id}
                 onClick={() => setSelectedMedia(media)}
                 className={cn(
-                  "group relative cursor-pointer rounded-sm border border-rule bg-surface-raised overflow-hidden transition hover:border-accent/80 hover:shadow-xs",
+                  "group relative cursor-pointer rounded-sm border border-rule bg-surface-raised overflow-hidden transition hover:border-accent/80 hover:shadow-card",
                   isSelected && "ring-2 ring-accent border-accent"
                 )}
               >
@@ -431,11 +431,11 @@ export default function MediaLibraryPage() {
 
                   {/* Usage Badge overlay */}
                   {media.usageCount > 0 ? (
-                    <span className="absolute bottom-1 right-1 rounded bg-surface/90 px-1.5 py-0.5 font-mono text-[9px] font-bold text-accent shadow-xs">
+                    <span className="absolute bottom-1 right-1 rounded bg-surface/90 px-1.5 py-0.5 font-mono text-[9px] font-bold text-accent shadow-card">
                       {media.usageCount} uses
                     </span>
                   ) : (
-                    <span className="absolute bottom-1 right-1 rounded bg-surface/90 px-1.5 py-0.5 font-mono text-[9px] text-content-faint shadow-xs">
+                    <span className="absolute bottom-1 right-1 rounded bg-surface/90 px-1.5 py-0.5 font-mono text-[9px] text-content-faint shadow-card">
                       unused
                     </span>
                   )}
@@ -456,27 +456,27 @@ export default function MediaLibraryPage() {
         </div>
       ) : (
         /* List View */
-        <div className="rounded-sm border border-rule bg-surface-raised overflow-hidden">
+        <div className="rounded-card border border-rule bg-surface-raised overflow-hidden">
           <table className="w-full text-left font-sans text-xs">
-            <thead>
-              <tr className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
-                <th className="p-3">Asset</th>
-                <th className="p-3">Type</th>
-                <th className="p-3">Size</th>
-                <th className="p-3">Usage</th>
-                <th className="p-3">Uploaded</th>
-                <th className="p-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-rule/50">
+            <THead>
+              <TR className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
+                <TH className="p-3">Asset</TH>
+                <TH className="p-3">Type</TH>
+                <TH className="p-3">Size</TH>
+                <TH className="p-3">Usage</TH>
+                <TH className="p-3">Uploaded</TH>
+                <TH className="p-3 text-right">Actions</TH>
+              </TR>
+            </THead>
+            <TBody className="divide-y divide-rule/50">
               {items.map((media) => (
-                <tr
+                <TR
                   key={media.id}
                   onClick={() => setSelectedMedia(media)}
                   className="cursor-pointer hover:bg-surface/50 transition"
                 >
-                  <td className="p-3 flex items-center gap-3">
-                    <div className="h-10 w-10 shrink-0 rounded bg-surface border border-rule/50 overflow-hidden flex items-center justify-center">
+                  <TD className="p-3 flex items-center gap-3">
+                    <div className="h-10 w-10 shrink-0 rounded-card bg-surface border border-rule/50 overflow-hidden flex items-center justify-center">
                       {media.mimeType.startsWith("image/") ? (
                         <Image
                           src={media.url}
@@ -494,10 +494,10 @@ export default function MediaLibraryPage() {
                       <p className="font-medium text-content">{media.filename}</p>
                       <p className="text-[11px] text-content-soft truncate max-w-xs">{media.altText || "No alt text"}</p>
                     </div>
-                  </td>
-                  <td className="p-3 font-mono text-[11px] text-content-soft">{media.mimeType}</td>
-                  <td className="p-3 font-mono text-[11px] text-content-soft">{formatBytes(media.sizeBytes)}</td>
-                  <td className="p-3">
+                  </TD>
+                  <TD className="p-3 font-mono text-[11px] text-content-soft">{media.mimeType}</TD>
+                  <TD className="p-3 font-mono text-[11px] text-content-soft">{formatBytes(media.sizeBytes)}</TD>
+                  <TD className="p-3">
                     {media.usageCount > 0 ? (
                       <span className="rounded bg-accent/10 px-2 py-0.5 font-mono text-[10px] font-bold text-accent">
                         {media.usageCount} {media.usageCount === 1 ? "reference" : "references"}
@@ -505,11 +505,11 @@ export default function MediaLibraryPage() {
                     ) : (
                       <span className="text-content-faint font-mono text-[11px]">Unused</span>
                     )}
-                  </td>
-                  <td className="p-3 font-mono text-[11px] text-content-faint">
+                  </TD>
+                  <TD className="p-3 font-mono text-[11px] text-content-faint">
                     {new Date(media.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="p-3 text-right">
+                  </TD>
+                  <TD className="p-3 text-right">
                     <button
                       type="button"
                       onClick={(e) => {
@@ -521,10 +521,10 @@ export default function MediaLibraryPage() {
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
-                  </td>
-                </tr>
+                  </TD>
+                </TR>
               ))}
-            </tbody>
+            </TBody>
           </table>
         </div>
       )}
@@ -544,7 +544,7 @@ export default function MediaLibraryPage() {
           </div>
 
           {/* Large Preview */}
-          <div className="aspect-video w-full rounded-sm border border-rule bg-surface-raised overflow-hidden flex items-center justify-center relative">
+          <div className="aspect-video w-full rounded-card border border-rule bg-surface-raised overflow-hidden flex items-center justify-center relative">
             {selectedMedia.mimeType.startsWith("image/") ? (
               <Image
                 src={selectedMedia.url}
@@ -590,7 +590,7 @@ export default function MediaLibraryPage() {
           </div>
 
           {/* Metadata Specs */}
-          <div className="space-y-2 rounded-sm border border-rule/70 bg-surface-raised/40 p-4 font-mono text-xs">
+          <div className="space-y-2 rounded-card border border-rule/70 bg-surface-raised/40 p-4 font-mono text-xs">
             <div className="flex justify-between">
               <span className="text-content-faint">Filename:</span>
               <span className="text-content truncate max-w-[200px]" title={selectedMedia.filename}>
@@ -626,7 +626,7 @@ export default function MediaLibraryPage() {
                 value={editAltText}
                 onChange={(e) => setEditAltText(e.target.value)}
                 placeholder="Describe image for screen readers & search engines"
-                className="w-full p-2 rounded-sm border border-rule bg-surface font-sans text-content focus:border-accent focus:outline-none"
+                className="w-full p-2 rounded-card border border-rule bg-surface font-sans text-content focus:border-accent focus:outline-none"
               />
             </div>
 
@@ -639,7 +639,7 @@ export default function MediaLibraryPage() {
                 onChange={(e) => setEditCaption(e.target.value)}
                 rows={2}
                 placeholder="Optional editorial caption or credit"
-                className="w-full p-2 rounded-sm border border-rule bg-surface font-sans text-content focus:border-accent focus:outline-none"
+                className="w-full p-2 rounded-card border border-rule bg-surface font-sans text-content focus:border-accent focus:outline-none"
               />
             </div>
 
@@ -670,7 +670,7 @@ export default function MediaLibraryPage() {
                 {selectedMedia.usages.map((u) => (
                   <div key={u.id} className="pt-2 flex items-center justify-between">
                     <div>
-                      <span className="font-mono text-[9px] uppercase px-1 rounded bg-surface-raised border border-rule text-content-soft mr-2">
+                      <span className="font-mono text-[9px] uppercase px-1 rounded-card bg-surface-raised border border-rule text-content-soft mr-2">
                         {u.entityType}
                       </span>
                       <span className="font-medium text-content">

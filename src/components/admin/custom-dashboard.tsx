@@ -183,7 +183,7 @@ export function CustomDashboard({
             {widgets.map((w, idx) => (
               <div
                 key={w.id}
-                className="flex items-center justify-between rounded border border-rule bg-surface p-2.5 text-xs font-sans"
+                className="flex items-center justify-between rounded-card border border-rule bg-surface p-2.5 text-xs font-sans"
               >
                 <div className="flex items-center gap-2 truncate">
                   <button
@@ -241,7 +241,7 @@ export function CustomDashboard({
             return (
               <div
                 key={w.id}
-                className="rounded-sm border border-rule bg-surface-raised p-6 space-y-4"
+                className="rounded-card border border-rule bg-surface-raised p-6 space-y-4"
               >
                 <div className="flex items-center justify-between border-b border-rule/60 pb-3">
                   <div className="flex items-center gap-2">
@@ -259,7 +259,7 @@ export function CustomDashboard({
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3 text-xs font-sans">
-                  <div className="p-3 bg-surface rounded border border-rule/50 space-y-1">
+                  <div className="p-3 bg-surface rounded-card border border-rule/50 space-y-1">
                     <span className="font-mono text-[10px] uppercase text-content-faint">Peak Window</span>
                     <div className="font-serif text-base font-bold text-accent">
                       Fridays &bull; 6:00 PM
@@ -267,7 +267,7 @@ export function CustomDashboard({
                     <p className="text-content-soft text-[11px]">Optimal release timing for essay read completion.</p>
                   </div>
 
-                  <div className="p-3 bg-surface rounded border border-rule/50 space-y-1">
+                  <div className="p-3 bg-surface rounded-card border border-rule/50 space-y-1">
                     <span className="font-mono text-[10px] uppercase text-content-faint">Recommended Length</span>
                     <div className="font-serif text-base font-bold text-content">
                       1,200 &ndash; 2,000 words
@@ -275,7 +275,7 @@ export function CustomDashboard({
                     <p className="text-content-soft text-[11px]">78% completion retainability sweet spot.</p>
                   </div>
 
-                  <div className="p-3 bg-surface rounded border border-rule/50 space-y-1">
+                  <div className="p-3 bg-surface rounded-card border border-rule/50 space-y-1">
                     <span className="font-mono text-[10px] uppercase text-content-faint">Knowledge Graph</span>
                     <div className="font-serif text-base font-bold text-success">
                       Topology Active
@@ -360,7 +360,7 @@ export function CustomDashboard({
 
           if (w.id === "content_health") {
             return (
-              <div key={w.id} className="rounded-sm border border-rule bg-surface-raised p-5 flex items-center justify-between">
+              <div key={w.id} className="rounded-card border border-rule bg-surface-raised p-5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <HeartPulse className="h-5 w-5 text-accent" />
                   <div>
@@ -374,7 +374,7 @@ export function CustomDashboard({
                 </div>
                 <Link
                   href="/admin/content-health"
-                  className="rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:border-accent transition shrink-0"
+                  className="rounded-card border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:border-accent transition shrink-0"
                 >
                   View Health Scores
                 </Link>
@@ -384,7 +384,7 @@ export function CustomDashboard({
 
           if (w.id === "seo_summary") {
             return (
-              <div key={w.id} className="rounded-sm border border-rule bg-surface-raised p-5 flex items-center justify-between">
+              <div key={w.id} className="rounded-card border border-rule bg-surface-raised p-5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <SearchCheck className="h-5 w-5 text-accent" />
                   <div>
@@ -398,7 +398,7 @@ export function CustomDashboard({
                 </div>
                 <Link
                   href="/admin/seo"
-                  className="rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:border-accent transition shrink-0"
+                  className="rounded-card border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:border-accent transition shrink-0"
                 >
                   Run SEO Scan
                 </Link>

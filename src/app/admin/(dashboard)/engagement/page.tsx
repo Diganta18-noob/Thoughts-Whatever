@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { TBody, TD, TH, THead, TR } from "@/components/ui";
 
 interface EngagementData {
   period: string;
@@ -80,7 +81,7 @@ export default function EngagementIntelligencePage() {
         </div>
 
         {/* Date Filter Buttons */}
-        <div className="flex items-center bg-surface-raised p-1 rounded-sm border border-rule font-sans text-xs">
+        <div className="flex items-center bg-surface-raised p-1 rounded-card border border-rule font-sans text-xs">
           {[
             { id: "7d", label: "7 Days" },
             { id: "30d", label: "30 Days" },
@@ -93,7 +94,7 @@ export default function EngagementIntelligencePage() {
               className={cn(
                 "px-2.5 py-1 rounded-sm transition text-xs",
                 period === p.id
-                  ? "bg-surface font-semibold text-content shadow-xs"
+                  ? "bg-surface font-semibold text-content shadow-card"
                   : "text-content-soft hover:text-content"
               )}
             >
@@ -111,7 +112,7 @@ export default function EngagementIntelligencePage() {
         <>
           {/* Top Metric Cards */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="rounded-sm border border-rule bg-surface-raised p-5 space-y-1">
+            <div className="rounded-card border border-rule bg-surface-raised p-5 space-y-1">
               <span className="label">Average Reading Duration</span>
               <div className="font-serif text-3xl font-normal text-content">
                 {formatSec(data.averageReadingTimeSec)}
@@ -119,7 +120,7 @@ export default function EngagementIntelligencePage() {
               <p className="font-mono text-[11px] text-content-faint">Active dwell time per piece</p>
             </div>
 
-            <div className="rounded-sm border border-rule bg-surface-raised p-5 space-y-1">
+            <div className="rounded-card border border-rule bg-surface-raised p-5 space-y-1">
               <span className="label">Midpoint Retention (50%)</span>
               <div className="font-serif text-3xl font-normal text-success">
                 {data.depthFunnel[2]?.pct}%
@@ -127,7 +128,7 @@ export default function EngagementIntelligencePage() {
               <p className="font-mono text-[11px] text-content-faint">Readers reaching middle of essay</p>
             </div>
 
-            <div className="rounded-sm border border-rule bg-surface-raised p-5 space-y-1">
+            <div className="rounded-card border border-rule bg-surface-raised p-5 space-y-1">
               <span className="label">Full Completion Rate</span>
               <div className="font-serif text-3xl font-normal text-accent">
                 {data.depthFunnel[4]?.pct}%
@@ -137,7 +138,7 @@ export default function EngagementIntelligencePage() {
           </div>
 
           {/* Scroll Funnel Visualization */}
-          <div className="rounded-sm border border-rule bg-surface-raised p-6 space-y-4 font-sans text-xs">
+          <div className="rounded-card border border-rule bg-surface-raised p-6 space-y-4 font-sans text-xs">
             <h3 className="font-serif text-base text-content">Scroll Depth Retention Funnel</h3>
             <p className="text-content-soft -mt-2">
               Visualizing how readers progress through longform content and where drop-offs occur.
@@ -167,48 +168,48 @@ export default function EngagementIntelligencePage() {
           </div>
 
           {/* Top Engaged Articles Table */}
-          <div className="rounded-sm border border-rule bg-surface-raised overflow-hidden font-sans text-xs">
+          <div className="rounded-card border border-rule bg-surface-raised overflow-hidden font-sans text-xs">
             <div className="p-4 border-b border-rule bg-surface/50">
               <h3 className="font-serif text-base text-content">Most Engaging Articles</h3>
             </div>
 
             <table className="w-full text-left">
-              <thead>
-                <tr className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
-                  <th className="p-3">Article</th>
-                  <th className="p-3">Estimated Length</th>
-                  <th className="p-3">Total Readers</th>
-                  <th className="p-3">Completion Rate</th>
-                  <th className="p-3 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-rule/50">
+              <THead>
+                <TR className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
+                  <TH className="p-3">Article</TH>
+                  <TH className="p-3">Estimated Length</TH>
+                  <TH className="p-3">Total Readers</TH>
+                  <TH className="p-3">Completion Rate</TH>
+                  <TH className="p-3 text-right">Action</TH>
+                </TR>
+              </THead>
+              <TBody className="divide-y divide-rule/50">
                 {data.topEngagedPieces.map((piece) => (
-                  <tr key={piece.id} className="hover:bg-surface/50 transition">
-                    <td className="p-3 max-w-sm">
+                  <TR key={piece.id} className="hover:bg-surface/50 transition">
+                    <TD className="p-3 max-w-sm">
                       <p className="font-medium text-content font-bengali text-sm" lang="bn">
                         {piece.titleBn}
                       </p>
                       <span className="font-mono text-[10px] text-content-faint">/{piece.slug}</span>
-                    </td>
-                    <td className="p-3 font-mono text-content-soft">{piece.avgMinutes} min read</td>
-                    <td className="p-3 font-mono text-content">{piece.views.toLocaleString()}</td>
-                    <td className="p-3">
+                    </TD>
+                    <TD className="p-3 font-mono text-content-soft">{piece.avgMinutes} min read</TD>
+                    <TD className="p-3 font-mono text-content">{piece.views.toLocaleString()}</TD>
+                    <TD className="p-3">
                       <span className="font-mono font-bold text-success">
                         {piece.estimatedCompletionRate}%
                       </span>
-                    </td>
-                    <td className="p-3 text-right">
+                    </TD>
+                    <TD className="p-3 text-right">
                       <Link
                         href={`/admin/pieces/${piece.id}`}
                         className="text-accent hover:underline inline-flex items-center gap-1 font-medium"
                       >
                         Inspect <ArrowRight className="h-3 w-3" />
                       </Link>
-                    </td>
-                  </tr>
+                    </TD>
+                  </TR>
                 ))}
-              </tbody>
+              </TBody>
             </table>
           </div>
         </>

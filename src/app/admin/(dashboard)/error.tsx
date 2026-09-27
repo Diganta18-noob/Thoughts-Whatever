@@ -19,7 +19,7 @@ export default function AdminDashboardError({
   const safeError = normalizeError(error, "We encountered an issue loading this administrative view. Please try again.");
 
   return (
-    <div className="rounded-lg border border-rule bg-surface p-10 text-center space-y-4 max-w-lg mx-auto my-12">
+    <div className="rounded-card border border-rule bg-surface p-10 text-center space-y-4 max-w-lg mx-auto my-12">
       <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
         <AlertCircle className="h-6 w-6" />
       </div>

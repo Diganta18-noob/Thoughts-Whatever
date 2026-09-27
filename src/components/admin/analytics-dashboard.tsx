@@ -111,7 +111,7 @@ export function AnalyticsDashboard({ initialData }: AnalyticsDashboardProps) {
             {t("admin.dashboard.title")}
           </h2>
         </div>
-        <div className="flex items-center gap-1.5 rounded-sm border border-rule p-1 bg-surface">
+        <div className="flex items-center gap-1.5 rounded-card border border-rule p-1 bg-surface">
           {(["7d", "30d", "all"] as const).map((p) => (
             <button
               key={p}

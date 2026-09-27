@@ -138,7 +138,7 @@ export default function PieceRevisionHistoryPage() {
           Loading version timeline and snapshots...
         </div>
       ) : revisions.length === 0 ? (
-        <div className="rounded-sm border border-rule bg-surface-raised p-12 text-center">
+        <div className="rounded-card border border-rule bg-surface-raised p-12 text-center">
           <History className="h-8 w-8 text-content-faint mx-auto mb-3" />
           <h3 className="font-serif text-lg font-normal text-content">
             No Historical Snapshots Yet
@@ -161,7 +161,7 @@ export default function PieceRevisionHistoryPage() {
               Snapshot Timeline
             </h2>
 
-            <div className="rounded-sm border border-rule bg-surface-raised divide-y divide-rule/70 max-h-[700px] overflow-y-auto">
+            <div className="rounded-card border border-rule bg-surface-raised divide-y divide-rule/70 max-h-[700px] overflow-y-auto">
               {revisions.map((rev, idx) => {
                 const isSelectedA = versionA?.id === rev.id;
                 const isSelectedB = versionB?.id === rev.id;
@@ -277,18 +277,18 @@ export default function PieceRevisionHistoryPage() {
                 />
 
                 {/* Metadata differences */}
-                <div className="rounded-sm border border-rule bg-surface-raised p-4 space-y-3 font-sans text-xs">
+                <div className="rounded-card border border-rule bg-surface-raised p-4 space-y-3 font-sans text-xs">
                   <h4 className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
                     Metadata Comparison
                   </h4>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-3 bg-surface rounded border border-rule/50 space-y-1">
+                    <div className="p-3 bg-surface rounded-card border border-rule/50 space-y-1">
                       <span className="font-mono text-[10px] text-content-faint">Base: v{versionA.version}</span>
                       <p className="font-bold text-content">{versionA.titleBn}</p>
                       {versionA.dekBn && <p className="text-content-soft">{versionA.dekBn}</p>}
                     </div>
 
-                    <div className="p-3 bg-surface rounded border border-rule/50 space-y-1">
+                    <div className="p-3 bg-surface rounded-card border border-rule/50 space-y-1">
                       <span className="font-mono text-[10px] text-content-faint">Target: v{versionB.version}</span>
                       <p className="font-bold text-content">{versionB.titleBn}</p>
                       {versionB.dekBn && <p className="text-content-soft">{versionB.dekBn}</p>}
@@ -297,7 +297,7 @@ export default function PieceRevisionHistoryPage() {
                 </div>
               </div>
             ) : (
-              <div className="rounded-sm border border-rule bg-surface-raised p-12 text-center font-sans text-xs text-content-faint">
+              <div className="rounded-card border border-rule bg-surface-raised p-12 text-center font-sans text-xs text-content-faint">
                 Select a Base (A) and Target (B) snapshot from the timeline to compare changes.
               </div>
             )}

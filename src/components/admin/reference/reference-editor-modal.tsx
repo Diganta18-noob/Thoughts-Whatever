@@ -9,7 +9,7 @@ import {
 } from "@prisma/client";
 import { BookOpen, X, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import toast from "react-hot-toast";
-import { Button, Input, Textarea } from "@/components/ui";
+import { Button, Input, NativeSelect, Textarea } from "@/components/ui";
 
 interface ReferenceEditorModalProps {
   isOpen: boolean;
@@ -269,7 +269,7 @@ export function ReferenceEditorModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-3xl bg-surface border border-rule rounded-xl shadow-2xl p-6 text-content-faint my-8">
+      <div className="relative w-full max-w-3xl bg-surface border border-rule rounded-card shadow-2xl p-6 text-content-faint my-8">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-content-faint hover:text-content-faint/80 p-1.5 rounded-lg hover:bg-surface-raised/60"
@@ -361,10 +361,9 @@ export function ReferenceEditorModal({
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     সম্পর্কিত সাহিত্যিক / লেখক (Author Dossier)
                   </label>
-                  <select
+                  <NativeSelect
                     value={authorId}
                     onChange={(e) => setAuthorId(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   >
                     <option value="">-- কোনো লেখক যুক্ত নেই --</option>
                     {authors.map((a) => (
@@ -372,7 +371,7 @@ export function ReferenceEditorModal({
                         {a.nameBn} ({a.slug})
                       </option>
                     ))}
-                  </select>
+                  </NativeSelect>
                 </div>
               </div>
 
@@ -381,10 +380,9 @@ export function ReferenceEditorModal({
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     উপাদানের ধরন (Type)
                   </label>
-                  <select
+                  <NativeSelect
                     value={type}
                     onChange={(e) => setType(e.target.value as ReferenceType)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   >
                     <option value="BOOK">BOOK (বই / গ্রন্থ)</option>
                     <option value="DOCUMENT">DOCUMENT (ঐতিহাসিক নথি)</option>
@@ -394,17 +392,16 @@ export function ReferenceEditorModal({
                     <option value="TRANSCRIPT">TRANSCRIPT (অনুলিপি)</option>
                     <option value="ARCHIVE">ARCHIVE (সংগ্রহশালা)</option>
                     <option value="OTHER">OTHER (অন্যান্য)</option>
-                  </select>
+                  </NativeSelect>
                 </div>
 
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     ভাষা (Language)
                   </label>
-                  <select
+                  <NativeSelect
                     value={language}
                     onChange={(e) => setLanguage(e.target.value as ReferenceLanguage)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   >
                     <option value="BENGALI">বাংলা (Bengali)</option>
                     <option value="SANSKRIT">সংস্কৃত (Sanskrit)</option>
@@ -412,7 +409,7 @@ export function ReferenceEditorModal({
                     <option value="HINDI">হিন্দি (Hindi)</option>
                     <option value="URDU">উর্দু (Urdu)</option>
                     <option value="OTHER">অন্যান্য (Other)</option>
-                  </select>
+                  </NativeSelect>
                 </div>
 
                 <div>
@@ -628,7 +625,7 @@ export function ReferenceEditorModal({
                 <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   স্বত্ব স্থিতি (Rights Status) *
                 </label>
-                <select
+                <NativeSelect
                   value={rightsStatus}
                   onChange={(e) => {
                     const next = e.target.value as ReferenceRightsStatus;
@@ -637,7 +634,6 @@ export function ReferenceEditorModal({
                       setHostingMode("EXTERNAL");
                     }
                   }}
-                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                 >
                   <option value="RIGHTS_UNVERIFIED">
                     RIGHTS_UNVERIFIED (স্বত্ব অপরীক্ষিত — ডিফল্ট বহিরাগত উৎস)
@@ -654,11 +650,11 @@ export function ReferenceEditorModal({
                   <option value="RESTRICTED">
                     RESTRICTED (সংরক্ষিত কপিরাইট — কেবল গ্রন্থপঞ্জি তথ্য)
                   </option>
-                </select>
+                </NativeSelect>
               </div>
 
               {/* Hosting Mode Selection with Invariant Guard */}
-              <div className="p-4 bg-surface-raised/60 border border-rule rounded-lg space-y-3">
+              <div className="p-4 bg-surface-raised/60 border border-rule rounded-card space-y-3">
                 <label className="block text-xs font-mono uppercase tracking-wider text-content-faint">
                   হোস্টিং মডেল (Hosting Architecture)
                 </label>

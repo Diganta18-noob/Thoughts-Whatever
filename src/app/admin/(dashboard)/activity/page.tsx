@@ -130,7 +130,7 @@ export default function ActivityFeedPage() {
       </div>
 
       {/* Timeline */}
-      <div className="rounded-sm border border-rule bg-surface-raised p-6">
+      <div className="rounded-card border border-rule bg-surface-raised p-6">
         {loading ? (
           <div className="py-16 text-center font-sans text-xs text-content-faint">
             Loading activity stream...

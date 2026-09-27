@@ -64,7 +64,7 @@ export function TransliterationTester() {
             <label className="block text-sm font-medium text-content">
               Output (English)
             </label>
-            <div className="mt-1 w-full rounded-sm border border-rule bg-surface-raised px-3 py-2 font-mono text-sm text-accent">
+            <div className="mt-1 w-full rounded-card border border-rule bg-surface-raised px-3 py-2 font-mono text-sm text-accent">
               {outputEn || <span className="text-content-faint">—</span>}
             </div>
           </div>
@@ -97,7 +97,7 @@ export function TransliterationTester() {
             <label className="block text-sm font-medium text-content">
               Output (Bengali)
             </label>
-            <div className="mt-1 w-full rounded-sm border border-rule bg-surface-raised px-3 py-2 font-bengali text-sm text-accent">
+            <div className="mt-1 w-full rounded-card border border-rule bg-surface-raised px-3 py-2 font-bengali text-sm text-accent">
               {outputBn || <span className="text-content-faint">—</span>}
             </div>
           </div>
@@ -132,7 +132,7 @@ export function TransliterationTester() {
             </label>
             <div className="mt-1 flex items-center gap-2">
               <span className="text-sm text-content-faint">/</span>
-              <div className="flex-1 rounded-sm border border-rule bg-surface-raised px-3 py-2 font-mono text-sm text-accent">
+              <div className="flex-1 rounded-card border border-rule bg-surface-raised px-3 py-2 font-mono text-sm text-accent">
                 {slugOutput || <span className="text-content-faint">—</span>}
               </div>
             </div>

@@ -194,7 +194,7 @@ export default function SEODashboardOverviewPage() {
             <h1 className="font-sans text-xl font-bold tracking-tight text-content">
               {activeWebsite?.name || "SEO Growth Engine"} Dashboard
             </h1>
-            <span className="rounded bg-surface-raised px-2 py-0.5 font-mono text-[10px] text-content-faint border border-rule">
+            <span className="rounded-card bg-surface-raised px-2 py-0.5 font-mono text-[10px] text-content-faint border border-rule">
               {activeWebsite?.domain || "No Project Selected"}
             </span>
           </div>
@@ -204,7 +204,7 @@ export default function SEODashboardOverviewPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center rounded-lg border border-rule bg-surface p-1 text-xs">
+          <div className="flex items-center rounded-card border border-rule bg-surface p-1 text-xs">
             {["7d", "30d", "90d", "All"].map((range) => (
               <button
                 key={range}
@@ -224,7 +224,7 @@ export default function SEODashboardOverviewPage() {
 
           <Link
             href="/admin/seo-engine/websites"
-            className="flex items-center gap-1.5 rounded-lg border border-rule bg-surface px-3 py-1.5 text-xs font-medium text-content hover:bg-surface-raised transition shadow-2xs"
+            className="flex items-center gap-1.5 rounded-card border border-rule bg-surface px-3 py-1.5 text-xs font-medium text-content hover:bg-surface-raised transition shadow-2xs"
           >
             <Layers className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Manage Websites</span>
@@ -240,7 +240,7 @@ export default function SEODashboardOverviewPage() {
             <Link
               key={idx}
               href={card.href}
-              className="group relative rounded-xl border border-rule bg-surface p-4 shadow-xs transition hover:border-accent/40 hover:shadow-sm flex flex-col justify-between"
+              className="group relative rounded-card border border-rule bg-surface p-4 shadow-card transition hover:border-accent/40 hover:shadow-sm flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-start justify-between">
@@ -266,7 +266,7 @@ export default function SEODashboardOverviewPage() {
                   {card.subtext}
                 </div>
                 <div className="flex items-center justify-between pt-0.5">
-                  <span className="inline-flex items-center gap-1 rounded bg-surface-raised/80 px-1.5 py-0.5 font-mono text-[9px] font-medium text-content-faint border border-rule/50">
+                  <span className="inline-flex items-center gap-1 rounded-card bg-surface-raised/80 px-1.5 py-0.5 font-mono text-[9px] font-medium text-content-faint border border-rule/50">
                     <Database className="h-2.5 w-2.5 text-accent" />
                     {card.sourceTag}
                   </span>
@@ -288,7 +288,7 @@ export default function SEODashboardOverviewPage() {
       {/* Two Column Section: Recent Acquired Backlinks & Active Campaigns */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Backlinks Table */}
-        <div className="rounded-xl border border-rule bg-surface p-5 shadow-xs">
+        <div className="rounded-card border border-rule bg-surface p-5 shadow-card">
           <div className="flex items-center justify-between border-b border-rule pb-3">
             <div className="flex items-center gap-2">
               <Link2 className="h-4 w-4 text-success" />
@@ -358,7 +358,7 @@ export default function SEODashboardOverviewPage() {
         </div>
 
         {/* Active Outreach Campaigns & Opportunities Pipeline */}
-        <div className="rounded-xl border border-rule bg-surface p-5 shadow-xs">
+        <div className="rounded-card border border-rule bg-surface p-5 shadow-card">
           <div className="flex items-center justify-between border-b border-rule pb-3">
             <div className="flex items-center gap-2">
               <Send className="h-4 w-4 text-special" />
@@ -394,7 +394,7 @@ export default function SEODashboardOverviewPage() {
               data.tables.activeCampaigns.map((c: any) => (
                 <div
                   key={c.id}
-                  className="rounded-lg border border-rule bg-surface-raised/30 p-3 flex items-center justify-between gap-3 text-xs"
+                  className="rounded-card border border-rule bg-surface-raised/30 p-3 flex items-center justify-between gap-3 text-xs"
                 >
                   <div>
                     <div className="flex items-center gap-2">
@@ -410,7 +410,7 @@ export default function SEODashboardOverviewPage() {
 
                   <Link
                     href={`/admin/seo-engine/campaigns?id=${c.id}`}
-                    className="rounded-md border border-rule bg-surface px-2.5 py-1 text-[11px] font-medium text-content hover:bg-surface-raised transition shadow-2xs"
+                    className="rounded-card border border-rule bg-surface px-2.5 py-1 text-[11px] font-medium text-content hover:bg-surface-raised transition shadow-2xs"
                   >
                     View
                   </Link>

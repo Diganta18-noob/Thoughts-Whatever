@@ -27,7 +27,7 @@ export default async function SEOGrowthEngineLayout({
     <SEOWebsiteProvider initialWebsites={websites}>
       <div className="space-y-6">
         {/* SEO Header Toolbar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-rule bg-surface-raised/40 p-4 backdrop-blur shadow-2xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-card border border-rule bg-surface-raised/40 p-4 backdrop-blur shadow-2xs">
           <div className="flex items-center gap-3">
             <WebsiteSwitcher />
             <span className="hidden md:inline h-4 w-[1px] bg-rule" />
@@ -42,7 +42,7 @@ export default async function SEOGrowthEngineLayout({
           <div className="flex items-center gap-2 self-end sm:self-auto">
             <Link
               href="/admin/seo-engine/ai-assistant"
-              className="flex items-center gap-1.5 rounded-md border border-rule bg-surface px-3 py-1.5 text-xs font-medium text-content hover:bg-surface-raised transition shadow-2xs"
+              className="flex items-center gap-1.5 rounded-card border border-rule bg-surface px-3 py-1.5 text-xs font-medium text-content hover:bg-surface-raised transition shadow-2xs"
             >
               <Bot className="h-3.5 w-3.5 text-accent" />
               <span>AI Advisor</span>
@@ -50,7 +50,7 @@ export default async function SEOGrowthEngineLayout({
 
             <Link
               href="/admin/seo-engine/opportunities"
-              className="flex items-center gap-1.5 rounded-md bg-accent px-3.5 py-1.5 text-xs font-semibold text-surface hover:opacity-90 transition shadow-xs"
+              className="flex items-center gap-1.5 rounded-md bg-accent px-3.5 py-1.5 text-xs font-semibold text-surface hover:opacity-90 transition shadow-card"
             >
               <Sparkles className="h-3.5 w-3.5" />
               <span>Discover Links</span>

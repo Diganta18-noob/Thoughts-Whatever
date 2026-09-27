@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { AutomationDashboard } from "@/components/admin/automation-dashboard";
 import { confirmToast } from "@/lib/confirm-toast";
-import { Button } from "@/components/ui";
+import { Button, TBody, TD, TH, THead, TR } from "@/components/ui";
 
 export default function SystemHealthPage() {
   const [health, setHealth] = useState<any>(null);
@@ -151,7 +151,7 @@ export default function SystemHealthPage() {
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg border border-rule bg-surface p-4">
+        <div className="rounded-card border border-rule bg-surface p-4">
           <span className="font-sans text-xs text-content-faint">Overall Status</span>
           <div className="mt-2 flex items-center justify-between">
             <span className={`rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold ${statusColor}`}>
@@ -160,17 +160,17 @@ export default function SystemHealthPage() {
           </div>
         </div>
 
-        <div className="rounded-lg border border-rule bg-surface p-4">
+        <div className="rounded-card border border-rule bg-surface p-4">
           <span className="font-sans text-xs text-content-faint">Disk Space</span>
           <p className="mt-1 font-mono text-sm text-content">{health?.checks?.diskSpace?.details}</p>
         </div>
 
-        <div className="rounded-lg border border-rule bg-surface p-4">
+        <div className="rounded-card border border-rule bg-surface p-4">
           <span className="font-sans text-xs text-content-faint">Last Backup</span>
           <p className="mt-1 font-mono text-xs text-content">{health?.checks?.lastBackup?.details}</p>
         </div>
 
-        <div className="rounded-lg border border-rule bg-surface p-4">
+        <div className="rounded-card border border-rule bg-surface p-4">
           <span className="font-sans text-xs text-content-faint">R2 Cloud Storage</span>
           <p className="mt-1 font-mono text-xs text-content">{health?.checks?.r2Connectivity?.details}</p>
         </div>
@@ -178,7 +178,7 @@ export default function SystemHealthPage() {
 
       {/* Maintenance Tasks Breakdown */}
       {health?.lastMaintenanceReport && (
-        <div className="rounded-lg border border-rule bg-surface p-6">
+        <div className="rounded-card border border-rule bg-surface p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-serif text-lg text-content">Last Maintenance Tasks Report</h2>
             <span className="font-sans text-xs text-content-faint">
@@ -188,19 +188,19 @@ export default function SystemHealthPage() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left font-sans text-xs">
-              <thead>
-                <tr className="border-b border-rule text-content-faint">
-                  <th className="py-2">Task</th>
-                  <th className="py-2">Status</th>
-                  <th className="py-2">Duration</th>
-                  <th className="py-2">Details</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-rule">
+              <THead>
+                <TR className="border-b border-rule text-content-faint">
+                  <TH className="py-2">Task</TH>
+                  <TH className="py-2">Status</TH>
+                  <TH className="py-2">Duration</TH>
+                  <TH className="py-2">Details</TH>
+                </TR>
+              </THead>
+              <TBody className="divide-y divide-rule">
                 {health.lastMaintenanceReport.tasks?.map((t: any) => (
-                  <tr key={t.taskName} className="hover:bg-surface-hover/50">
-                    <td className="py-2.5 font-medium text-content">{t.taskName}</td>
-                    <td className="py-2.5">
+                  <TR key={t.taskName} className="hover:bg-surface-hover/50">
+                    <TD className="py-2.5 font-medium text-content">{t.taskName}</TD>
+                    <TD className="py-2.5">
                       <span
                         className={`rounded px-2 py-0.5 font-mono text-[0.6875rem] font-semibold ${
                           t.status === "SUCCESS"
@@ -214,19 +214,19 @@ export default function SystemHealthPage() {
                       >
                         {t.status}
                       </span>
-                    </td>
-                    <td className="py-2.5 font-mono text-content-soft">{t.durationMs}ms</td>
-                    <td className="py-2.5 text-content-soft">{t.message}</td>
-                  </tr>
+                    </TD>
+                    <TD className="py-2.5 font-mono text-content-soft">{t.durationMs}ms</TD>
+                    <TD className="py-2.5 text-content-soft">{t.message}</TD>
+                  </TR>
                 ))}
-              </tbody>
+              </TBody>
             </table>
           </div>
         </div>
       )}
 
       {/* Backup Browser */}
-      <div className="rounded-lg border border-rule bg-surface p-6">
+      <div className="rounded-card border border-rule bg-surface p-6">
         <h2 className="font-serif text-lg text-content mb-4">Available Backups ({backups.length})</h2>
         <div className="divide-y divide-rule">
           {backups.map((b) => (

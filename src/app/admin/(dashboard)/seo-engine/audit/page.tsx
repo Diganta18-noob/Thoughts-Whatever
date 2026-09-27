@@ -21,7 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { toast } from "@/lib/toast";
 import type { SiteAuditSummary, AuditIssue } from "@/lib/seo-engine/audit-scanner";
-import { Button, Input } from "@/components/ui";
+import { Button, Input, NativeSelect } from "@/components/ui";
 
 export default function TechnicalSEOAuditPage() {
   const { activeWebsite, activeWebsiteId } = useSEOWebsite();
@@ -143,7 +143,7 @@ export default function TechnicalSEOAuditPage() {
           <Button variant="primary"
             onClick={handleRunAudit}
             disabled={scanning}
-            className="shadow-xs"
+            className="shadow-card"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", scanning && "animate-spin")} />
             <span>{scanning ? "Crawling Pages..." : "Run Full Site Audit"}</span>
@@ -154,7 +154,7 @@ export default function TechnicalSEOAuditPage() {
       {/* Health Score and Category Breakdown Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {/* Overall Health Score Card */}
-        <div className="lg:col-span-2 rounded-xl border border-rule bg-surface p-5 shadow-xs flex flex-col justify-between">
+        <div className="lg:col-span-2 rounded-card border border-rule bg-surface p-5 shadow-card flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="font-mono text-[11px] uppercase tracking-wider text-content-faint">
               Technical Health Score
@@ -190,7 +190,7 @@ export default function TechnicalSEOAuditPage() {
           { label: "Link Health", score: audit?.categoryScores.linkHealth ?? 95, desc: "Outbound & Broken URLs" },
           { label: "Image Alt", score: audit?.categoryScores.imageOptimization ?? 88, desc: "Bilingual Alt Tags" },
         ].map((cat, idx) => (
-          <div key={idx} className="rounded-xl border border-rule bg-surface p-4 shadow-xs flex flex-col justify-between">
+          <div key={idx} className="rounded-card border border-rule bg-surface p-4 shadow-card flex flex-col justify-between">
             <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
               {cat.label}
             </span>
@@ -216,7 +216,7 @@ export default function TechnicalSEOAuditPage() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="rounded-xl border border-rule bg-surface p-4 shadow-xs space-y-3">
+      <div className="rounded-card border border-rule bg-surface p-4 shadow-card space-y-3">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           {/* Search Box */}
           <div className="relative flex-1 max-w-md">
@@ -229,7 +229,7 @@ export default function TechnicalSEOAuditPage() {
           </div>
 
           {/* Severity Tabs */}
-          <div className="flex items-center rounded-lg border border-rule bg-surface-raised/40 p-1 text-xs overflow-x-auto">
+          <div className="flex items-center rounded-card border border-rule bg-surface-raised/40 p-1 text-xs overflow-x-auto">
             {[
               { key: "ALL", label: "All Severities" },
               { key: "CRITICAL", label: "🔥 Critical" },
@@ -255,23 +255,23 @@ export default function TechnicalSEOAuditPage() {
 
           {/* Status Filter */}
           <div className="flex items-center gap-1">
-            <select
+            <NativeSelect
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="rounded-lg border border-rule bg-surface px-3 py-1.5 text-xs font-medium text-content focus:border-accent focus:outline-none"
+              className="font-medium"
             >
               <option value="ALL">All Statuses</option>
               <option value="OPEN">Open Issues</option>
               <option value="IN_PROGRESS">In Progress</option>
               <option value="RESOLVED">Resolved</option>
               <option value="IGNORED">Ignored</option>
-            </select>
+            </NativeSelect>
           </div>
         </div>
       </div>
 
       {/* Issues Table */}
-      <div className="rounded-xl border border-rule bg-surface shadow-xs overflow-hidden">
+      <div className="rounded-card border border-rule bg-surface shadow-card overflow-hidden">
         <div className="px-5 py-3 border-b border-rule bg-surface-raised/30 flex items-center justify-between">
           <span className="font-sans text-xs font-semibold text-content">
             Detected Technical Issues ({filteredIssues.length})
@@ -359,7 +359,7 @@ export default function TechnicalSEOAuditPage() {
                   </div>
 
                   {/* Why it Matters & Recommended Fix Box */}
-                  <div className="rounded-lg border border-rule bg-surface-raised/40 p-3 space-y-1.5 text-xs">
+                  <div className="rounded-card border border-rule bg-surface-raised/40 p-3 space-y-1.5 text-xs">
                     <div>
                       <strong className="font-mono text-[10px] uppercase text-content-faint block">
                         Why it matters:

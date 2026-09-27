@@ -156,7 +156,7 @@ export default function SecurityCenterPage() {
 
       {/* Security Overview Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-sm border border-rule bg-surface-raised p-4">
+        <div className="rounded-card border border-rule bg-surface-raised p-4">
           <div className="flex items-center justify-between">
             <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
               Active Sessions
@@ -171,7 +171,7 @@ export default function SecurityCenterPage() {
           </p>
         </div>
 
-        <div className="rounded-sm border border-rule bg-surface-raised p-4">
+        <div className="rounded-card border border-rule bg-surface-raised p-4">
           <div className="flex items-center justify-between">
             <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
               Failed Logins (24h)
@@ -186,7 +186,7 @@ export default function SecurityCenterPage() {
           </p>
         </div>
 
-        <div className="rounded-sm border border-rule bg-surface-raised p-4">
+        <div className="rounded-card border border-rule bg-surface-raised p-4">
           <div className="flex items-center justify-between">
             <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
               JWT Policy
@@ -201,7 +201,7 @@ export default function SecurityCenterPage() {
           </p>
         </div>
 
-        <div className="rounded-sm border border-rule bg-surface-raised p-4">
+        <div className="rounded-card border border-rule bg-surface-raised p-4">
           <div className="flex items-center justify-between">
             <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
               Cookie Armor
@@ -248,7 +248,7 @@ export default function SecurityCenterPage() {
           </button>
         </div>
 
-        <div className="rounded-sm border border-rule bg-surface-raised divide-y divide-rule/70">
+        <div className="rounded-card border border-rule bg-surface-raised divide-y divide-rule/70">
           {sessions.length === 0 ? (
             <p className="p-8 text-center font-sans text-xs text-content-faint">
               No active sessions found.
@@ -262,7 +262,7 @@ export default function SecurityCenterPage() {
                   className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 hover:bg-surface/30 transition"
                 >
                   <div className="flex items-start gap-3 min-w-0">
-                    <div className="mt-0.5 rounded-sm border border-rule bg-surface p-2 text-content-soft">
+                    <div className="mt-0.5 rounded-card border border-rule bg-surface p-2 text-content-soft">
                       <DeviceIcon className="h-4 w-4" />
                     </div>
                     <div className="min-w-0">
@@ -307,7 +307,7 @@ export default function SecurityCenterPage() {
           Recent Security Audit Trail
         </h2>
 
-        <div className="rounded-sm border border-rule bg-surface-raised divide-y divide-rule/70">
+        <div className="rounded-card border border-rule bg-surface-raised divide-y divide-rule/70">
           {audits.length === 0 ? (
             <p className="p-8 text-center font-sans text-xs text-content-faint">
               No recent security incidents logged.

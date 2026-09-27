@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Plus, X, Sparkles } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { Button, Input } from "@/components/ui";
+import { Button, Input, NativeSelect } from "@/components/ui";
 
 interface PromptFormProps {
   initialData?: {
@@ -97,7 +97,7 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
         <div className="flex items-center gap-3">
           <Link
             href="/admin/prompts"
-            className="flex items-center justify-center rounded-sm border border-rule bg-surface p-1.5 text-content-soft hover:text-content transition"
+            className="flex items-center justify-center rounded-card border border-rule bg-surface p-1.5 text-content-soft hover:text-content transition"
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>
@@ -134,7 +134,7 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
               placeholder="Paste or type the full prompt text here..."
               value={text}
               onChange={(e) => setText(e.target.value)}
-              className="w-full rounded-sm border border-rule bg-surface-raised p-3 font-mono text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
+              className="w-full rounded-card border border-rule bg-surface-raised p-3 font-mono text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
             />
           </div>
 
@@ -162,13 +162,13 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
               placeholder="Add your own notes, links, or context about how this was implemented..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full rounded-sm border border-rule bg-surface-raised p-3 font-sans text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
+              className="w-full rounded-card border border-rule bg-surface-raised p-3 font-sans text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
             />
           </div>
         </div>
 
         {/* Right Column - Metadata Controls */}
-        <div className="rounded-sm border border-rule bg-surface p-4 space-y-5">
+        <div className="rounded-card border border-rule bg-surface p-4 space-y-5">
           <h3 className="font-sans text-xs font-semibold text-content border-b border-rule pb-2">
             Metadata & Classification
           </h3>
@@ -176,25 +176,23 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
           {/* Source */}
           <div className="space-y-1.5">
             <label className="block font-sans text-xs font-medium text-content">Source Tool</label>
-            <select
+            <NativeSelect
               value={source}
               onChange={(e) => setSource(e.target.value)}
-              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             >
               <option value="kiro">Kiro</option>
               <option value="antigravity">Antigravity</option>
               <option value="manual">Manual Entry</option>
               <option value="other">Other Tool</option>
-            </select>
+            </NativeSelect>
           </div>
 
           {/* Category */}
           <div className="space-y-1.5">
             <label className="block font-sans text-xs font-medium text-content">Category</label>
-            <select
+            <NativeSelect
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             >
               <option value="feature">Feature Request</option>
               <option value="design">Design System / Style</option>
@@ -202,23 +200,22 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
               <option value="plan">Plan / Architecture</option>
               <option value="question">Question / Inquiry</option>
               <option value="other">Other</option>
-            </select>
+            </NativeSelect>
           </div>
 
           {/* Status */}
           <div className="space-y-1.5">
             <label className="block font-sans text-xs font-medium text-content">Status</label>
-            <select
+            <NativeSelect
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content focus:border-accent focus:outline-none"
             >
               <option value="idea">💡 Idea</option>
               <option value="planned">🟡 Planned</option>
               <option value="in-progress">🔵 In Progress</option>
               <option value="done">🟢 Done</option>
               <option value="rejected">🔴 Rejected</option>
-            </select>
+            </NativeSelect>
           </div>
 
           {/* Linked Item */}
@@ -263,7 +260,7 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 rounded-sm border border-rule/60 bg-surface-raised px-2 py-0.5 font-mono text-[11px] text-content"
+                  className="inline-flex items-center gap-1 rounded-card border border-rule/60 bg-surface-raised px-2 py-0.5 font-mono text-[11px] text-content"
                 >
                   {tag}
                   <button
