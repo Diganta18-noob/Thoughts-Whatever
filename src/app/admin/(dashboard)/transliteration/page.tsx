@@ -10,6 +10,7 @@
 
 import { Metadata } from "next";
 import { TransliterationTester } from "./transliteration-tester";
+import { Button } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Transliteration Settings",
@@ -67,12 +68,11 @@ export default function TransliterationSettingsPage() {
           <RuleRow bengali="হোয়াটেভার" english="whatever" />
         </div>
         <div className="mt-6">
-          <button
-            type="button"
-            className="rounded-sm border border-rule px-4 py-2 text-sm font-medium text-content transition hover:bg-content/5"
+          <Button variant="secondary"
+            className="hover:bg-content/5"
           >
             Add New Rule
-          </button>
+          </Button>
         </div>
       </div>
 

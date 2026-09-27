@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { MessageSquarePlus, X, Save, Sparkles } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { Button, Input } from "@/components/ui";
 
 export function QuickAddPromptModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,14 +60,14 @@ export function QuickAddPromptModal() {
   return (
     <>
       {/* Floating Action Button */}
-      <button
+      <Button variant="primary" size="lg"
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-accent px-4 py-3 font-sans text-xs font-semibold text-surface shadow-lg transition hover:scale-105 hover:bg-accent/90"
+        className="fixed bottom-6 right-6 z-40 rounded-full py-3 shadow-lg hover:scale-105"
         title="Quick Capture Prompt to Library"
       >
         <MessageSquarePlus className="h-4 w-4" />
         <span>Capture Prompt</span>
-      </button>
+      </Button>
 
       {/* Modal Dialog */}
       {isOpen && (
@@ -138,31 +139,28 @@ export function QuickAddPromptModal() {
                 <label className="block font-sans text-xs font-medium text-content mb-1">
                   Tags <span className="text-content-soft">(comma separated)</span>
                 </label>
-                <input
+                <Input
                   type="text"
                   placeholder="e.g. backup, layout, instagram"
                   value={tags}
                   onChange={(e) => setTags(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-mono text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
+                  className="font-mono placeholder:text-content-soft"
                 />
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-2 border-t border-rule">
-                <button
-                  type="button"
+                <Button variant="secondary" size="sm"
                   onClick={() => setIsOpen(false)}
-                  className="rounded-sm border border-rule bg-surface-raised px-4 py-1.5 font-sans text-xs text-content-soft hover:text-content transition"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button variant="primary" size="sm"
                   type="submit"
                   disabled={submitting}
-                  className="flex items-center gap-1.5 rounded-sm bg-accent px-4 py-1.5 font-sans text-xs font-medium text-surface transition hover:bg-accent/90 disabled:opacity-50"
                 >
                   <Save className="h-3.5 w-3.5" />
                   {submitting ? "Saving..." : "Save to Library"}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

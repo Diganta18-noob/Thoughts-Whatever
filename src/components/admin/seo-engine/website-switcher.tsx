@@ -5,6 +5,7 @@ import { useSEOWebsite } from "@/contexts/seo-website-context";
 import { Globe, ChevronDown, Plus, Check, ExternalLink, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui";
 
 export function WebsiteSwitcher() {
   const { websites, activeWebsite, activeWebsiteId, setActiveWebsiteId } = useSEOWebsite();
@@ -23,10 +24,9 @@ export function WebsiteSwitcher() {
 
   return (
     <div className="relative inline-block text-left" ref={dropdownRef}>
-      <button
-        type="button"
+      <Button variant="secondary" size="sm"
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2.5 rounded-md border border-rule bg-surface px-3 py-1.5 text-xs font-medium text-content hover:bg-surface-raised transition shadow-2xs"
+        className="shadow-2xs"
       >
         <div className="flex h-5 w-5 items-center justify-center rounded bg-accent/10 text-accent">
           <Globe className="h-3.5 w-3.5" />
@@ -40,7 +40,7 @@ export function WebsiteSwitcher() {
           </span>
         </div>
         <ChevronDown className={cn("h-3.5 w-3.5 text-content-soft transition", open && "rotate-180")} />
-      </button>
+      </Button>
 
       {open && (
         <div className="absolute left-0 mt-1.5 w-72 rounded-lg border border-rule bg-surface p-1.5 shadow-xl z-50 animate-fade-in">

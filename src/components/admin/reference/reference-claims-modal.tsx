@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { TakedownStatus } from "@prisma/client";
 import { ShieldAlert, X, Loader2, CheckCircle2, XCircle, Clock } from "lucide-react";
 import toast from "react-hot-toast";
+import { Button } from "@/components/ui";
 
 interface ReferenceClaimsModalProps {
   isOpen: boolean;
@@ -147,13 +148,12 @@ export function ReferenceClaimsModal({
                     </button>
                   )}
                   {c.status !== "REJECTED" && (
-                    <button
+                    <Button variant="secondary" size="sm"
                       disabled={updatingId === c.id}
                       onClick={() => handleStatusUpdate(c.id, "REJECTED")}
-                      className="px-3 py-1 bg-surface-raised hover:bg-surface-raised/85 border border-rule text-content-faint rounded text-xs flex items-center gap-1"
                     >
                       <XCircle className="w-3.5 h-3.5" /> Reject Claim
-                    </button>
+                    </Button>
                   )}
                 </div>
               </div>
@@ -162,13 +162,12 @@ export function ReferenceClaimsModal({
         )}
 
         <div className="flex justify-end pt-4 border-t border-rule mt-4">
-          <button
-            type="button"
+          <Button variant="secondary"
             onClick={onClose}
-            className="px-4 py-2 text-sm text-content-faint hover:text-content-faint/80 border border-rule rounded-lg hover:bg-surface-raised/50"
+            className="hover:text-content-faint/80"
           >
             Close
-          </button>
+          </Button>
         </div>
       </div>
     </div>

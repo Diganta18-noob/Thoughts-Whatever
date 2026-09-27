@@ -21,6 +21,7 @@ import {
 import { toast } from "react-hot-toast";
 import { PromptCard, PromptItem } from "./prompt-card";
 import { confirmToast } from "@/lib/confirm-toast";
+import { Button } from "@/components/ui";
 
 export function PromptsDashboard() {
   const [prompts, setPrompts] = useState<PromptItem[]>([]);
@@ -188,21 +189,19 @@ export function PromptsDashboard() {
             {autoRefresh ? "Auto (30s)" : "Auto-refresh"}
           </button>
 
-          <button
+          <Button variant="secondary" size="sm"
             onClick={() => handleExport("json")}
-            className="flex items-center gap-1.5 rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content hover:bg-surface transition"
           >
             <Download className="h-3.5 w-3.5" />
             JSON
-          </button>
+          </Button>
 
-          <button
+          <Button variant="secondary" size="sm"
             onClick={() => handleExport("markdown")}
-            className="flex items-center gap-1.5 rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content hover:bg-surface transition"
           >
             <Download className="h-3.5 w-3.5" />
             Markdown
-          </button>
+          </Button>
 
           <Link
             href="/admin/prompts/new"
@@ -382,23 +381,21 @@ export function PromptsDashboard() {
         </span>
 
         <div className="flex items-center gap-2">
-          <button
+          <Button variant="secondary" size="sm"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="flex items-center gap-1 rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:bg-surface-raised disabled:opacity-40 disabled:hover:bg-surface transition"
           >
             <ChevronLeft className="h-3.5 w-3.5" />
             Previous
-          </button>
+          </Button>
 
-          <button
+          <Button variant="secondary" size="sm"
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page >= totalPages}
-            className="flex items-center gap-1 rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:bg-surface-raised disabled:opacity-40 disabled:hover:bg-surface transition"
           >
             Next
             <ChevronRight className="h-3.5 w-3.5" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

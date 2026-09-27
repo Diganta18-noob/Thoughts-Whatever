@@ -14,6 +14,7 @@ import {
   Filter,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui";
 
 interface ActivityItem {
   id: string;
@@ -88,15 +89,14 @@ export default function ActivityFeedPage() {
           </p>
         </div>
 
-        <button
-          type="button"
+        <Button variant="secondary" size="sm"
           onClick={fetchActivities}
           disabled={loading}
-          className="flex items-center gap-1.5 rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:border-accent hover:text-accent transition disabled:opacity-50"
+          className="hover:text-accent"
         >
           <RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin")} />
           Refresh
-        </button>
+        </Button>
       </div>
 
       {/* Category Tabs */}
@@ -186,25 +186,21 @@ export default function ActivityFeedPage() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-8 flex items-center justify-between border-t border-rule pt-4 text-xs font-sans">
-            <button
-              type="button"
+            <Button variant="secondary" size="sm"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="rounded-sm border border-rule px-3 py-1 hover:border-accent disabled:opacity-30"
             >
               Previous
-            </button>
+            </Button>
             <span className="font-mono text-content-faint">
               Page {page} of {totalPages}
             </span>
-            <button
-              type="button"
+            <Button variant="secondary" size="sm"
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="rounded-sm border border-rule px-3 py-1 hover:border-accent disabled:opacity-30"
             >
               Next
-            </button>
+            </Button>
           </div>
         )}
       </div>

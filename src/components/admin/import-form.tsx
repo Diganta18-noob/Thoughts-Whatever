@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Loader2, Upload, FileSpreadsheet, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "@/components/providers/language-provider";
 import { toast } from "@/lib/toast";
+import { Button } from "@/components/ui";
 
 interface ParsedRow {
   kind?: "RACHANA" | "BLOG" | "DOCUMENTARY";
@@ -183,14 +184,14 @@ export function ImportForm() {
               </h3>
             </div>
 
-            <button
+            <Button variant="primary"
               onClick={handleImport}
               disabled={importing}
-              className="inline-flex items-center gap-2 rounded-sm bg-accent px-5 py-2 font-sans text-sm text-surface transition hover:opacity-90 disabled:opacity-50"
+              className="px-5"
             >
               {importing ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileSpreadsheet className="h-4 w-4" />}
               {t("admin.import.startBtn")} ({parsedRows.length})
-            </button>
+            </Button>
           </div>
 
           <div className="overflow-x-auto">

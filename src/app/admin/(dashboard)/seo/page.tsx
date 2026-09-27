@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui";
 
 interface SEOScanResult {
   overallScore: number;
@@ -135,15 +136,13 @@ export default function SEOScannerPage() {
           </p>
         </div>
 
-        <button
-          type="button"
+        <Button variant="primary"
           onClick={handleRunScan}
           disabled={scanning}
-          className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition disabled:opacity-50"
         >
           <RefreshCw className={cn("h-4 w-4", scanning && "animate-spin")} />
           {scanning ? "Scanning Articles..." : "Run SEO Audit Now"}
-        </button>
+        </Button>
       </div>
 
       {loading ? (

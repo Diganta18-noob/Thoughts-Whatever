@@ -9,6 +9,7 @@ import {
 } from "@prisma/client";
 import { BookOpen, X, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { Button, Input, Textarea } from "@/components/ui";
 
 interface ReferenceEditorModalProps {
   isOpen: boolean;
@@ -321,25 +322,23 @@ export function ReferenceEditorModal({
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     বাংলা শিরোনাম (Title Bn) *
                   </label>
-                  <input
+                  <Input
                     type="text"
                     required
                     placeholder="যেমন: কালিকাপুরাণ"
                     value={titleBn}
                     onChange={(e) => setTitleBn(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     English Title
                   </label>
-                  <input
+                  <Input
                     type="text"
                     placeholder="e.g. Kalika Purana"
                     value={titleEn}
                     onChange={(e) => setTitleEn(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
               </div>
@@ -349,13 +348,13 @@ export function ReferenceEditorModal({
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     স্লাগ (URL Slug) *
                   </label>
-                  <input
+                  <Input
                     type="text"
                     required
                     placeholder="যেমন: kalika-purana বা কালিকাপুরাণ"
                     value={slug}
                     onChange={(e) => setSlug(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success font-mono"
+                    className="font-mono"
                   />
                 </div>
                 <div>
@@ -420,12 +419,11 @@ export function ReferenceEditorModal({
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     ঐতিহাসিক কালখণ্ড (Era)
                   </label>
-                  <input
+                  <Input
                     type="text"
                     placeholder="যেমন: ঊনবিংশ শতাব্দী, ১৯২০"
                     value={era}
                     onChange={(e) => setEra(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
               </div>
@@ -434,12 +432,12 @@ export function ReferenceEditorModal({
                 <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   সংক্ষিপ্ত বিবরণ (Description Bn)
                 </label>
-                <textarea
+                <Textarea
                   rows={3}
                   placeholder="উপাদানটির বিষয়বস্তু ও ঐতিহাসিক গুরুত্বের সারসংক্ষেপ..."
                   value={descriptionBn}
                   onChange={(e) => setDescriptionBn(e.target.value)}
-                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success resize-none"
+                  className="resize-none"
                 />
               </div>
 
@@ -473,36 +471,33 @@ export function ReferenceEditorModal({
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     সম্পাদক (Editor)
                   </label>
-                  <input
+                  <Input
                     type="text"
                     placeholder="যেমন: পঞ্চানন তর্করত্ন"
                     value={editor}
                     onChange={(e) => setEditor(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     অনুবাদক (Translator)
                   </label>
-                  <input
+                  <Input
                     type="text"
                     placeholder="অনুবাদকের নাম..."
                     value={translator}
                     onChange={(e) => setTranslator(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     প্রকাশক (Publisher)
                   </label>
-                  <input
+                  <Input
                     type="text"
                     placeholder="যেমন: বঙ্গবাসী স্টিম প্রেস"
                     value={publisher}
                     onChange={(e) => setPublisher(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
               </div>
@@ -512,36 +507,33 @@ export function ReferenceEditorModal({
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     প্রকাশনার সাল (Publication Year)
                   </label>
-                  <input
+                  <Input
                     type="number"
                     placeholder="যেমন: 1909"
                     value={publicationYear}
                     onChange={(e) => setPublicationYear(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     প্রকাশনার স্থান (Place)
                   </label>
-                  <input
+                  <Input
                     type="text"
                     placeholder="যেমন: কলকাতা"
                     value={publicationPlace}
                     onChange={(e) => setPublicationPlace(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     মোট পৃষ্ঠা (Pages)
                   </label>
-                  <input
+                  <Input
                     type="number"
                     placeholder="যেমন: 540"
                     value={pages}
                     onChange={(e) => setPages(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
               </div>
@@ -550,12 +542,11 @@ export function ReferenceEditorModal({
                 <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   প্রচ্ছদ ছবি URL (Cover Image URL)
                 </label>
-                <input
+                <Input
                   type="url"
                   placeholder="https://... (Cloudinary / Image URL)"
                   value={coverImage}
                   onChange={(e) => setCoverImage(e.target.value)}
-                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                 />
               </div>
 
@@ -563,12 +554,12 @@ export function ReferenceEditorModal({
                 <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   সংস্করণ সংক্রান্ত টীকা (Bibliographic Notes)
                 </label>
-                <textarea
+                <Textarea
                   rows={2}
                   placeholder="গ্রন্থপঞ্জি বা বিশেষ টীকা..."
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success resize-none"
+                  className="resize-none"
                 />
               </div>
             </div>
@@ -581,26 +572,24 @@ export function ReferenceEditorModal({
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     উৎস বা প্রতিষ্ঠানের নাম (Source Name) *
                   </label>
-                  <input
+                  <Input
                     type="text"
                     required
                     placeholder="e.g. Internet Archive, National Library, University of Calcutta"
                     value={sourceName}
                     onChange={(e) => setSourceName(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     মূল ডিজিটাল উৎসের URL (Source URL) *
                   </label>
-                  <input
+                  <Input
                     type="url"
                     required
                     placeholder="https://archive.org/details/..."
                     value={sourceUrl}
                     onChange={(e) => setSourceUrl(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
               </div>
@@ -609,12 +598,12 @@ export function ReferenceEditorModal({
                 <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   বাহ্যিক শনাক্তকারী (External ID / ARK / Barcode)
                 </label>
-                <input
+                <Input
                   type="text"
                   placeholder="e.g. ark:/13960/t4km8f73b or 2990100012345"
                   value={externalId}
                   onChange={(e) => setExternalId(e.target.value)}
-                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success font-mono"
+                  className="font-mono"
                 />
               </div>
 
@@ -622,12 +611,12 @@ export function ReferenceEditorModal({
                 <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   উৎস সংক্রান্ত বিবরণ (Source Description)
                 </label>
-                <textarea
+                <Textarea
                   rows={2}
                   placeholder="ডিজিটাইজেশন বা সংগ্রহশালার তথ্য..."
                   value={sourceDescription}
                   onChange={(e) => setSourceDescription(e.target.value)}
-                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success resize-none"
+                  className="resize-none"
                 />
               </div>
             </div>
@@ -740,24 +729,22 @@ export function ReferenceEditorModal({
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     লাইসেন্স (License)
                   </label>
-                  <input
+                  <Input
                     type="text"
                     placeholder="e.g. Public Domain Mark 1.0, CC BY-SA 4.0"
                     value={license}
                     onChange={(e) => setLicense(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     স্বত্বাধিকারী / প্রকাশক (Rights Holder)
                   </label>
-                  <input
+                  <Input
                     type="text"
                     placeholder="e.g. Public Domain / Author Estate"
                     value={rightsHolder}
                     onChange={(e) => setRightsHolder(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
               </div>
@@ -766,12 +753,11 @@ export function ReferenceEditorModal({
                 <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   প্রমাণপত্র বা আর্কাইভ দলিল URL (Evidence URL)
                 </label>
-                <input
+                <Input
                   type="url"
                   placeholder="https://archive.org/... or copyright registry link"
                   value={evidenceUrl}
                   onChange={(e) => setEvidenceUrl(e.target.value)}
-                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                 />
               </div>
 
@@ -779,12 +765,12 @@ export function ReferenceEditorModal({
                 <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   স্বত্ব পরীক্ষণ সংক্রান্ত টীকা (Verification Notes)
                 </label>
-                <textarea
+                <Textarea
                   rows={2}
                   placeholder="ভারতীয় কপিরাইট আইন বা পাবলিক ডোমেইনের মেয়াদ উত্তীর্ণের প্রমাণ..."
                   value={verificationNotes}
                   onChange={(e) => setVerificationNotes(e.target.value)}
-                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success resize-none"
+                  className="resize-none"
                 />
               </div>
             </div>
@@ -793,17 +779,16 @@ export function ReferenceEditorModal({
           <div className="flex items-center justify-between pt-4 border-t border-rule">
             <div className="flex items-center gap-2">
               {activeTab !== "basic" && (
-                <button
-                  type="button"
+                <Button variant="secondary" size="sm"
                   onClick={() => {
                     if (activeTab === "edition") setActiveTab("basic");
                     if (activeTab === "source") setActiveTab("edition");
                     if (activeTab === "rights") setActiveTab("source");
                   }}
-                  className="px-3 py-1.5 text-xs font-mono text-content-faint hover:text-content-faint/80 border border-rule rounded"
+                  className="font-mono hover:text-content-faint/80"
                 >
                   ← Previous Step
-                </button>
+                </Button>
               )}
               {activeTab !== "rights" && (
                 <button
@@ -821,21 +806,20 @@ export function ReferenceEditorModal({
             </div>
 
             <div className="flex items-center gap-3">
-              <button
-                type="button"
+              <Button variant="secondary"
                 onClick={onClose}
-                className="px-4 py-2 text-sm text-content-faint hover:text-content-faint/80 border border-rule rounded-lg hover:bg-surface-raised/50"
+                className="hover:text-content-faint/80"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button variant="success"
                 type="submit"
                 disabled={isSubmitting}
-                className="px-5 py-2 text-sm font-semibold text-content bg-success hover:bg-success/85 rounded-lg flex items-center gap-2 disabled:opacity-50"
+                className="px-5"
               >
                 {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 {initialData ? "Update Resource" : "Create Reference"}
-              </button>
+              </Button>
             </div>
           </div>
         </form>

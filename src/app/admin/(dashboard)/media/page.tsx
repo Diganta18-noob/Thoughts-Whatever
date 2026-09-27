@@ -24,6 +24,7 @@ import {
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { confirmToast } from "@/lib/confirm-toast";
+import { Button } from "@/components/ui";
 
 interface MediaItem {
   id: string;
@@ -245,24 +246,21 @@ export default function MediaLibraryPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            type="button"
+          <Button variant="secondary" size="sm"
             onClick={handleSyncUsages}
-            className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-1.5 font-sans text-xs font-medium text-content-soft hover:text-accent transition"
+            className="hover:text-accent"
             title="Scan articles and series to refresh usage references"
           >
             <RefreshCw className="h-3.5 w-3.5" /> Sync Usage Tracker
-          </button>
+          </Button>
 
-          <button
-            type="button"
+          <Button variant="primary"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition disabled:opacity-50"
           >
             <UploadCloud className="h-4 w-4" />
             {uploading ? "Uploading..." : "Upload Files"}
-          </button>
+          </Button>
           <input
             ref={fileInputRef}
             type="file"
@@ -563,14 +561,13 @@ export default function MediaLibraryPage() {
 
           {/* Quick Actions */}
           <div className="flex items-center gap-2">
-            <button
-              type="button"
+            <Button variant="secondary"
               onClick={() => handleCopyUrl(selectedMedia.url)}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-sm border border-rule px-3 py-2 font-sans text-xs font-medium text-content hover:border-accent hover:text-accent transition"
+              className="flex-1 hover:text-accent"
             >
               {copiedUrl ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
               {copiedUrl ? "Copied!" : "Copy Asset URL"}
-            </button>
+            </Button>
 
             <a
               href={selectedMedia.url}

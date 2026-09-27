@@ -10,6 +10,7 @@ import { ImageUpload } from "@/components/admin/image-upload";
 import { toast } from "react-hot-toast";
 import { confirmToast } from "@/lib/confirm-toast";
 import { normalizeError } from "@/lib/errors";
+import { Button } from "@/components/ui";
 
 /**
  * One editor for authors, tags, and series.
@@ -232,22 +233,20 @@ export function TaxonomyManager({
       )}
 
       <div className="flex items-center gap-2 pt-1">
-        <button
-          type="button"
+        <Button variant="primary" size="sm"
           onClick={() => void submit()}
           disabled={busy}
-          className="inline-flex items-center gap-2 rounded-sm bg-accent px-3.5 py-1.5 font-bengali text-[0.9375rem] text-surface transition hover:opacity-90 disabled:opacity-50"
+          className="font-bengali text-[0.9375rem]"
         >
           {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
           {t("common.save")}
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button variant="secondary" size="sm"
           onClick={cancel}
-          className="rounded-sm border border-rule px-3.5 py-1.5 font-bengali text-[0.9375rem] text-content-soft transition hover:text-content"
+          className="font-bengali text-[0.9375rem]"
         >
           {t("common.cancel")}
-        </button>
+        </Button>
       </div>
     </div>
   );

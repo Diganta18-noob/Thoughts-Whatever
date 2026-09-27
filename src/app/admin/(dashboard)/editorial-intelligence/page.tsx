@@ -22,6 +22,7 @@ import {
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import type { EditorialIntelligenceData } from "@/lib/editorial-intelligence";
+import { Button } from "@/components/ui";
 
 export default function EditorialIntelligencePage() {
   const [data, setData] = useState<EditorialIntelligenceData | null>(null);
@@ -67,15 +68,13 @@ export default function EditorialIntelligencePage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            type="button"
+          <Button variant="secondary" size="sm"
             onClick={fetchIntelligence}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content-soft hover:text-content hover:border-accent/40 transition disabled:opacity-50"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin text-accent")} />
             {loading ? "Analyzing..." : "Refresh Insights"}
-          </button>
+          </Button>
 
           <Link
             href="/admin/pieces/new"

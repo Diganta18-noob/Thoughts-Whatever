@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { Button, Input, Textarea } from "@/components/ui";
 
 interface Incident {
   id: string;
@@ -159,13 +160,12 @@ export default function IncidentsCenterPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
+          <Button variant="primary"
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-2 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-surface transition hover:opacity-90"
           >
             <Plus className="h-4 w-4" />
             Declare Incident
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -348,44 +348,40 @@ export default function IncidentsCenterPage() {
 
               {/* Add Note */}
               <div className="flex gap-2">
-                <input
+                <Input
                   type="text"
                   placeholder="Add timeline investigation note..."
                   value={timelineNote}
                   onChange={(e) => setTimelineNote(e.target.value)}
-                  className="flex-1 rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content outline-none focus:border-accent"
+                  className="flex-1"
                 />
-                <button
-                  type="button"
+                <Button variant="secondary" size="sm"
                   onClick={() => handleUpdateStatus(activeIncident.status)}
                   disabled={updating || !timelineNote.trim()}
-                  className="rounded-sm border border-rule px-3 py-1.5 font-sans text-xs text-content hover:border-accent disabled:opacity-50"
                 >
                   Post Note
-                </button>
+                </Button>
               </div>
 
               {/* Root Cause & Resolution for Resolving */}
               <div className="grid gap-3 sm:grid-cols-2 pt-2">
                 <div>
                   <label className="label block mb-1">Root Cause</label>
-                  <textarea
+                  <Textarea
                     rows={2}
                     placeholder="Identify why the incident happened..."
                     value={rootCauseText}
                     onChange={(e) => setRootCauseText(e.target.value)}
-                    className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-xs text-content outline-none focus:border-accent"
                   />
                 </div>
 
                 <div>
                   <label className="label block mb-1">Resolution Summary</label>
-                  <textarea
+                  <Textarea
                     rows={2}
                     placeholder="Describe how the issue was mitigated..."
                     value={resolutionText}
                     onChange={(e) => setResolutionText(e.target.value)}
-                    className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-xs text-content outline-none focus:border-accent"
                   />
                 </div>
               </div>
@@ -394,29 +390,27 @@ export default function IncidentsCenterPage() {
             {/* Action Bar */}
             <div className="flex items-center justify-between border-t border-rule pt-4">
               <div className="flex items-center gap-2">
-                <button
+                <Button variant="secondary" size="sm"
                   onClick={() => handleUpdateStatus("INVESTIGATING")}
                   disabled={updating}
-                  className="rounded-sm border border-rule px-3 py-1.5 font-sans text-xs text-content hover:border-warning"
+                  className="hover:border-warning"
                 >
                   Mark Investigating
-                </button>
+                </Button>
 
-                <button
+                <Button variant="success" size="sm"
                   onClick={() => handleUpdateStatus("RESOLVED")}
                   disabled={updating}
-                  className="rounded-sm bg-success px-3.5 py-1.5 font-sans text-xs font-medium text-surface transition hover:opacity-90"
                 >
                   Resolve Incident
-                </button>
+                </Button>
               </div>
 
-              <button
+              <Button variant="secondary" size="sm"
                 onClick={() => setActiveIncident(null)}
-                className="rounded-sm border border-rule px-4 py-1.5 font-sans text-xs text-content hover:border-content-soft"
               >
                 Close
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -441,13 +435,12 @@ export default function IncidentsCenterPage() {
             <form onSubmit={handleCreateIncident} className="space-y-4">
               <div>
                 <label className="label block mb-1">Incident Title</label>
-                <input
+                <Input
                   type="text"
                   required
                   placeholder="e.g. Database connection timeouts during peak traffic"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-xs text-content outline-none focus:border-accent"
                 />
               </div>
 
@@ -484,30 +477,26 @@ export default function IncidentsCenterPage() {
 
               <div>
                 <label className="label block mb-1">Description</label>
-                <textarea
+                <Textarea
                   rows={3}
                   placeholder="Provide context on symptoms, error logs, and impact..."
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-xs text-content outline-none focus:border-accent"
                 />
               </div>
 
               <div className="flex justify-end gap-3 pt-3 border-t border-rule">
-                <button
-                  type="button"
+                <Button variant="secondary" size="sm"
                   onClick={() => setShowAddModal(false)}
-                  className="rounded-sm border border-rule px-4 py-1.5 font-sans text-xs text-content hover:border-content-soft"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button variant="primary" size="sm"
                   type="submit"
                   disabled={submitting}
-                  className="rounded-sm bg-accent px-4 py-1.5 font-sans text-xs font-medium text-surface transition hover:opacity-90 disabled:opacity-50"
                 >
                   {submitting ? "Declaring..." : "Declare Incident"}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

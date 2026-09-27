@@ -14,11 +14,14 @@ export const buttonVariants = cva(
           "border border-rule bg-surface-raised text-content shadow-card hover:bg-rule/40",
         ghost: "text-content-soft hover:bg-rule/40 hover:text-content",
         danger: "bg-danger text-surface shadow-card hover:bg-danger/90",
+        success: "bg-success text-surface shadow-card hover:bg-success/90",
+        warning: "bg-warning text-surface shadow-card hover:bg-warning/90",
       },
       size: {
         sm: "h-8 px-3 text-step-0",
         md: "h-9 px-4 text-step-0",
         lg: "h-11 px-6 text-step-1",
+        icon: "h-9 w-9",
       },
     },
     defaultVariants: {

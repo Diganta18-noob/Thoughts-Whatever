@@ -18,6 +18,7 @@ import {
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { confirmToast } from "@/lib/confirm-toast";
+import { Button, Input } from "@/components/ui";
 
 interface TeamMember {
   id: string;
@@ -210,8 +211,7 @@ export default function TeamManagementPage() {
           </p>
         </div>
 
-        <button
-          type="button"
+        <Button variant="primary" size="sm"
           onClick={() => {
             setShowAddModal(true);
             setFormEmail("");
@@ -219,11 +219,10 @@ export default function TeamManagementPage() {
             setFormNameBn("");
             setFormRole("EDITOR");
           }}
-          className="flex items-center gap-1.5 rounded-sm bg-accent px-3 py-1.5 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition shadow-sm"
         >
           <UserPlus className="h-3.5 w-3.5" />
           Add Team Member
-        </button>
+        </Button>
       </div>
 
       {/* Navigation tabs */}
@@ -434,36 +433,33 @@ export default function TeamManagementPage() {
             <form onSubmit={handleCreateMember} className="mt-4 space-y-4 font-sans text-xs">
               <div>
                 <label className="label block mb-1">Email Address</label>
-                <input
+                <Input
                   type="email"
                   required
                   value={formEmail}
                   onChange={(e) => setFormEmail(e.target.value)}
                   placeholder="editor@thoughts-whatever.com"
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 text-content focus:border-accent focus:outline-none"
                 />
               </div>
 
               <div>
                 <label className="label block mb-1">Bengali / Display Name (Optional)</label>
-                <input
+                <Input
                   type="text"
                   value={formNameBn}
                   onChange={(e) => setFormNameBn(e.target.value)}
                   placeholder="যেমন: অনির্বাণ সেন"
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 text-content focus:border-accent focus:outline-none"
                 />
               </div>
 
               <div>
                 <label className="label block mb-1">Initial Password (min 8 chars)</label>
-                <input
+                <Input
                   type="password"
                   required
                   minLength={8}
                   value={formPassword}
                   onChange={(e) => setFormPassword(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 text-content focus:border-accent focus:outline-none"
                 />
               </div>
 
@@ -486,20 +482,17 @@ export default function TeamManagementPage() {
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-rule">
-                <button
-                  type="button"
+                <Button variant="secondary" size="sm"
                   onClick={() => setShowAddModal(false)}
-                  className="rounded-sm border border-rule px-3 py-1.5 text-content-soft hover:text-content"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button variant="primary" size="sm"
                   type="submit"
                   disabled={submitting}
-                  className="rounded-sm bg-accent px-4 py-1.5 text-surface hover:bg-accent/90 disabled:opacity-50"
                 >
                   {submitting ? "Creating..." : "Create Member"}
-                </button>
+                </Button>
               </div>
             </form>
           </div>
@@ -526,11 +519,10 @@ export default function TeamManagementPage() {
             <form onSubmit={handleUpdateMember} className="mt-4 space-y-4 font-sans text-xs">
               <div>
                 <label className="label block mb-1">Bengali / Display Name</label>
-                <input
+                <Input
                   type="text"
                   value={formNameBn}
                   onChange={(e) => setFormNameBn(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 text-content focus:border-accent focus:outline-none"
                 />
               </div>
 
@@ -566,30 +558,26 @@ export default function TeamManagementPage() {
 
               <div>
                 <label className="label block mb-1">Reset Password (leave blank to keep current)</label>
-                <input
+                <Input
                   type="password"
                   placeholder="New password (min 8 chars)"
                   value={formPassword}
                   onChange={(e) => setFormPassword(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 text-content focus:border-accent focus:outline-none"
                 />
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-rule">
-                <button
-                  type="button"
+                <Button variant="secondary" size="sm"
                   onClick={() => setShowEditModal(null)}
-                  className="rounded-sm border border-rule px-3 py-1.5 text-content-soft hover:text-content"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button variant="primary" size="sm"
                   type="submit"
                   disabled={submitting}
-                  className="rounded-sm bg-accent px-4 py-1.5 text-surface hover:bg-accent/90 disabled:opacity-50"
                 >
                   {submitting ? "Saving..." : "Save Changes"}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

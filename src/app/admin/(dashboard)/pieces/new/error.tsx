@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { AlertCircle, ArrowLeft } from 'lucide-react';
 import { normalizeError } from '@/lib/errors';
+import { Button } from "@/components/ui";
 
 export default function NewPieceError({
   error,
@@ -39,12 +40,11 @@ export default function NewPieceError({
               {safeError.message}
             </p>
             <div className="mt-4 flex gap-3">
-              <button
+              <Button variant="primary"
                 onClick={reset}
-                className="rounded-sm bg-accent px-4 py-2 text-sm text-surface transition hover:opacity-90"
               >
                 Try again
-              </button>
+              </Button>
               <Link
                 href="/admin"
                 className="rounded-sm border border-rule px-4 py-2 text-sm text-content-soft transition hover:text-content"

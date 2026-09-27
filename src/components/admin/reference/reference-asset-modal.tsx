@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { ReferenceAssetKind, ReferenceRightsStatus } from "@prisma/client";
 import { UploadCloud, X, Loader2, AlertCircle } from "lucide-react";
 import toast from "react-hot-toast";
+import { Button, Input, Textarea } from "@/components/ui";
 
 interface ReferenceAssetModalProps {
   isOpen: boolean;
@@ -122,13 +123,12 @@ export function ReferenceAssetModal({
               Please conduct a formal Rights Evaluation review to elevate this item before adding hosted files.
             </p>
             <div className="flex justify-end pt-2">
-              <button
-                type="button"
+              <Button variant="secondary"
                 onClick={onClose}
-                className="px-4 py-2 text-xs font-mono text-content-faint border border-rule rounded-lg hover:bg-surface-raised"
+                className="font-mono"
               >
                 Close & Review Rights
-              </button>
+              </Button>
             </div>
           </div>
         ) : (
@@ -155,13 +155,12 @@ export function ReferenceAssetModal({
                 <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   Asset Title *
                 </label>
-                <input
+                <Input
                   type="text"
                   required
                   placeholder="e.g. Complete Historical Edition (PDF)"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                 />
               </div>
             </div>
@@ -170,13 +169,12 @@ export function ReferenceAssetModal({
               <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                 Hosted File URL *
               </label>
-              <input
+              <Input
                 type="url"
                 required
                 placeholder="https://... (Cloudinary, S3, or verified archive link)"
                 value={fileUrl}
                 onChange={(e) => setFileUrl(e.target.value)}
-                className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
               />
             </div>
 
@@ -186,24 +184,22 @@ export function ReferenceAssetModal({
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     Duration (Seconds)
                   </label>
-                  <input
+                  <Input
                     type="number"
                     placeholder="e.g. 1820"
                     value={durationSec}
                     onChange={(e) => setDurationSec(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     Narrator / Reader
                   </label>
-                  <input
+                  <Input
                     type="text"
                     placeholder="e.g. Thoughts.Whatever Voice Archive"
                     value={narrator}
                     onChange={(e) => setNarrator(e.target.value)}
-                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
               </div>
@@ -214,12 +210,12 @@ export function ReferenceAssetModal({
                 <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   Full Bengali Transcript / OCR Text
                 </label>
-                <textarea
+                <Textarea
                   rows={4}
                   placeholder="সম্পূর্ণ অনুলিপি বা পাঠ্য..."
                   value={transcriptText}
                   onChange={(e) => setTranscriptText(e.target.value)}
-                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success font-serif"
+                  className="font-serif"
                 />
               </div>
             )}
@@ -246,21 +242,20 @@ export function ReferenceAssetModal({
             </div>
 
             <div className="flex items-center justify-end gap-3 pt-4 border-t border-rule">
-              <button
-                type="button"
+              <Button variant="secondary"
                 onClick={onClose}
-                className="px-4 py-2 text-sm text-content-faint hover:text-content-faint/80 border border-rule rounded-lg hover:bg-surface-raised/50"
+                className="hover:text-content-faint/80"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button variant="success"
                 type="submit"
                 disabled={isSubmitting}
-                className="px-5 py-2 text-sm font-semibold text-content bg-success hover:bg-success/85 rounded-lg flex items-center gap-2 disabled:opacity-50"
+                className="px-5"
               >
                 {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 Save Archival Asset
-              </button>
+              </Button>
             </div>
           </form>
         )}

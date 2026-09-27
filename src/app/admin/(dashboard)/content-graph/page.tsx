@@ -20,6 +20,7 @@ import {
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import type { ContentGraphData, GraphNode, GraphLink } from "@/lib/content-graph";
+import { Button } from "@/components/ui";
 
 interface SimNode extends GraphNode {
   x: number;
@@ -349,15 +350,13 @@ export default function ContentGraphPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            type="button"
+          <Button variant="secondary" size="sm"
             onClick={fetchGraph}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-sans text-xs text-content-soft hover:text-content hover:border-accent/40 transition"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin text-accent")} />
             Reset Layout
-          </button>
+          </Button>
         </div>
       </div>
 

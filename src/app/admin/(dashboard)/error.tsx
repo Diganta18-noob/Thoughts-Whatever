@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { AlertCircle, RotateCcw } from "lucide-react";
 import { normalizeError } from "@/lib/errors";
+import { Button } from "@/components/ui";
 
 export default function AdminDashboardError({
   error,
@@ -34,13 +35,12 @@ export default function AdminDashboardError({
         </p>
       )}
       <div>
-        <button
+        <Button variant="primary"
           onClick={reset}
-          className="inline-flex items-center gap-1.5 rounded bg-accent px-4 py-2 font-sans text-xs font-medium text-surface shadow transition hover:opacity-90"
         >
           <RotateCcw className="h-3.5 w-3.5" />
           <span>Try again</span>
-        </button>
+        </Button>
       </div>
     </div>
   );

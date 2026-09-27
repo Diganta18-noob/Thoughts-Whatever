@@ -21,6 +21,7 @@ import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import type { RecommendationItem } from "@/lib/recommendations";
 import { confirmToast } from "@/lib/confirm-toast";
+import { Button } from "@/components/ui";
 
 export default function RecommendationsPage() {
   const [recommendations, setRecommendations] = useState<RecommendationItem[]>([]);
@@ -161,15 +162,13 @@ export default function RecommendationsPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            type="button"
+          <Button variant="primary" size="sm"
             onClick={handleRecomputeAll}
             disabled={recomputing || loading}
-            className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-3 py-1.5 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition disabled:opacity-50"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", recomputing && "animate-spin")} />
             {recomputing ? "Recomputing Vectors..." : "Recompute All"}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -267,13 +266,11 @@ export default function RecommendationsPage() {
           <p className="font-sans text-xs text-content-soft max-w-md mx-auto">
             Click &ldquo;Recompute All&rdquo; to calculate cosine affinities and taxonomy overlap for all published essays and documentary pieces.
           </p>
-          <button
-            type="button"
+          <Button variant="primary"
             onClick={handleRecomputeAll}
-            className="rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition"
           >
             Run Initial Computation
-          </button>
+          </Button>
         </div>
       ) : (
         <div className="rounded-sm border border-rule bg-surface-raised overflow-hidden">

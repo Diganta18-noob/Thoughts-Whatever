@@ -19,6 +19,7 @@ import {
 import { cn } from "@/lib/utils";
 
 import { toast, confirmToast } from "@/lib/toast";
+import { Button, Input } from "@/components/ui";
 
 export default function WebsitesManagementPage() {
   const { websites, activeWebsiteId, setActiveWebsiteId, refreshWebsites, isLoading } = useSEOWebsite();
@@ -147,14 +148,13 @@ export default function WebsitesManagementPage() {
           </p>
         </div>
 
-        <button
-          type="button"
+        <Button variant="primary"
           onClick={handleOpenAdd}
-          className="flex items-center gap-1.5 rounded-lg bg-accent px-3.5 py-2 text-xs font-semibold text-surface hover:opacity-90 transition shadow-xs self-start"
+          className="shadow-xs self-start"
         >
           <Plus className="h-4 w-4" />
           <span>Add New Website</span>
-        </button>
+        </Button>
       </div>
 
       {/* Grid of Websites */}
@@ -335,13 +335,12 @@ export default function WebsitesManagementPage() {
                 <label className="block font-mono text-[11px] uppercase tracking-wider text-content-faint mb-1">
                   Website Name
                 </label>
-                <input
+                <Input
                   type="text"
                   required
                   placeholder="e.g. Thoughts Whatever"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full rounded-md border border-rule bg-surface-raised px-3 py-2 text-content placeholder:text-content-faint focus:border-accent focus:outline-none"
                 />
               </div>
 
@@ -349,13 +348,12 @@ export default function WebsitesManagementPage() {
                 <label className="block font-mono text-[11px] uppercase tracking-wider text-content-faint mb-1">
                   Domain Name
                 </label>
-                <input
+                <Input
                   type="text"
                   required
                   placeholder="e.g. thoughtswhatever.in"
                   value={formData.domain}
                   onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
-                  className="w-full rounded-md border border-rule bg-surface-raised px-3 py-2 text-content placeholder:text-content-faint focus:border-accent focus:outline-none"
                 />
               </div>
 
@@ -363,13 +361,12 @@ export default function WebsitesManagementPage() {
                 <label className="block font-mono text-[11px] uppercase tracking-wider text-content-faint mb-1">
                   Homepage URL
                 </label>
-                <input
+                <Input
                   type="url"
                   required
                   placeholder="https://www.thoughtswhatever.in"
                   value={formData.homepageUrl}
                   onChange={(e) => setFormData({ ...formData, homepageUrl: e.target.value })}
-                  className="w-full rounded-md border border-rule bg-surface-raised px-3 py-2 text-content placeholder:text-content-faint focus:border-accent focus:outline-none"
                 />
               </div>
 
@@ -377,13 +374,12 @@ export default function WebsitesManagementPage() {
                 <label className="block font-mono text-[11px] uppercase tracking-wider text-content-faint mb-1">
                   Industry / Niche
                 </label>
-                <input
+                <Input
                   type="text"
                   required
                   placeholder="e.g. Literature, AI Tools, Technology"
                   value={formData.niche}
                   onChange={(e) => setFormData({ ...formData, niche: e.target.value })}
-                  className="w-full rounded-md border border-rule bg-surface-raised px-3 py-2 text-content placeholder:text-content-faint focus:border-accent focus:outline-none"
                 />
               </div>
 
@@ -392,22 +388,20 @@ export default function WebsitesManagementPage() {
                   <label className="block font-mono text-[11px] uppercase tracking-wider text-content-faint mb-1">
                     Target Country
                   </label>
-                  <input
+                  <Input
                     type="text"
                     value={formData.targetCountry}
                     onChange={(e) => setFormData({ ...formData, targetCountry: e.target.value })}
-                    className="w-full rounded-md border border-rule bg-surface-raised px-3 py-2 text-content focus:border-accent focus:outline-none"
                   />
                 </div>
                 <div>
                   <label className="block font-mono text-[11px] uppercase tracking-wider text-content-faint mb-1">
                     Language
                   </label>
-                  <input
+                  <Input
                     type="text"
                     value={formData.targetLanguage}
                     onChange={(e) => setFormData({ ...formData, targetLanguage: e.target.value })}
-                    className="w-full rounded-md border border-rule bg-surface-raised px-3 py-2 text-content focus:border-accent focus:outline-none"
                   />
                 </div>
               </div>
@@ -426,20 +420,17 @@ export default function WebsitesManagementPage() {
               </div>
 
               <div className="mt-5 flex items-center justify-end gap-2 pt-3 border-t border-rule">
-                <button
-                  type="button"
+                <Button variant="secondary" size="sm"
                   onClick={() => setModalOpen(false)}
-                  className="rounded-lg border border-rule px-3.5 py-1.5 text-xs text-content-soft hover:bg-surface-raised transition"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button variant="primary" size="sm"
                   type="submit"
                   disabled={submitting}
-                  className="rounded-lg bg-accent px-4 py-1.5 text-xs font-semibold text-surface hover:opacity-90 transition disabled:opacity-50"
                 >
                   {submitting ? "Saving..." : editingId ? "Save Changes" : "Create Project"}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

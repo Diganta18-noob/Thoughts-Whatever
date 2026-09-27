@@ -18,6 +18,7 @@ import {
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { confirmToast } from "@/lib/confirm-toast";
+import { Button } from "@/components/ui";
 
 interface ActiveSession {
   id: string;
@@ -286,14 +287,13 @@ export default function SecurityCenterPage() {
                     </div>
                   </div>
 
-                  <button
-                    type="button"
+                  <Button variant="secondary" size="sm"
                     onClick={() => revokeSession(s.id)}
-                    className="self-end sm:self-center flex items-center gap-1 rounded-sm border border-rule px-2.5 py-1 font-sans text-xs text-content-soft hover:border-danger hover:text-danger transition"
+                    className="self-end sm:self-center hover:border-danger hover:text-danger"
                   >
                     <Trash2 className="h-3 w-3" />
                     Revoke
-                  </button>
+                  </Button>
                 </div>
               );
             })

@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui";
 
 interface AnalyticsData {
   period: string;
@@ -145,20 +146,18 @@ export default function AdvancedAnalyticsPage() {
           </div>
 
           {/* Export Actions */}
-          <button
-            type="button"
+          <Button variant="secondary" size="sm"
             onClick={handleExportCSV}
-            className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-1.5 font-sans text-xs font-medium text-content-soft hover:text-content hover:border-content transition"
+            className="hover:border-content"
           >
             <Download className="h-3.5 w-3.5" /> CSV
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button variant="secondary" size="sm"
             onClick={handleExportJSON}
-            className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-1.5 font-sans text-xs font-medium text-content-soft hover:text-content hover:border-content transition"
+            className="hover:border-content"
           >
             <Download className="h-3.5 w-3.5" /> JSON
-          </button>
+          </Button>
         </div>
       </div>
 

@@ -22,6 +22,7 @@ import { ReferenceEditorModal } from "@/components/admin/reference/reference-edi
 import { ReferenceAssetModal } from "@/components/admin/reference/reference-asset-modal";
 import { ReferenceClaimsModal } from "@/components/admin/reference/reference-claims-modal";
 import toast from "react-hot-toast";
+import { Button } from "@/components/ui";
 
 interface ReferenceAdminClientProps {
   initialWorks: any[];
@@ -124,24 +125,23 @@ export function ReferenceAdminClient({ initialWorks, initialStats }: ReferenceAd
         </div>
 
         <div className="flex items-center gap-3">
-          <button
+          <Button variant="secondary"
             onClick={() => setIsClaimsOpen(true)}
-            className="px-3.5 py-2 text-xs font-mono text-content-faint hover:text-content-faint/80 border border-rule rounded-lg hover:bg-surface-raised flex items-center gap-1.5 transition-colors"
+            className="font-mono hover:text-content-faint/80"
           >
             <ShieldAlert className="w-4 h-4 text-warning" />
             Takedown Claims
-          </button>
+          </Button>
 
-          <button
+          <Button variant="success"
             onClick={() => {
               setEditingWork(null);
               setIsEditorOpen(true);
             }}
-            className="px-4 py-2 text-xs font-semibold text-content bg-success hover:bg-success/85 rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
           >
             <Plus className="w-4 h-4" />
             Add Reference
-          </button>
+          </Button>
         </div>
       </div>
 

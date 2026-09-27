@@ -15,6 +15,7 @@ import { ImageUpload } from "@/components/admin/image-upload";
 import { AudioTranscribe } from "@/components/admin/audio-transcribe";
 import { PieceSourcesEditor } from "./piece-editor/piece-sources-editor";
 import { PieceTimelineEditor } from "./piece-editor/piece-timeline-editor";
+import { Button } from "@/components/ui";
 
 
 /**
@@ -479,32 +480,29 @@ export function PieceEditor({
                 History
               </Link>
 
-              <button
-                type="button"
+              <Button variant="secondary"
                 onClick={handleSharePreview}
                 disabled={previewLoading}
-                className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-2 font-serif text-sm text-content-soft transition hover:text-accent disabled:opacity-50"
+                className="font-serif hover:text-accent"
                 title="Open temporary staging preview for review"
               >
                 {previewLoading ? "Generating..." : "Staging Preview"}
-              </button>
+              </Button>
             </>
           )}
 
-          <button
-            type="button"
+          <Button variant="secondary"
             onClick={() => setShowPreview((v) => !v)}
-            className="rounded-sm border border-rule px-3 py-2 font-serif text-sm text-content-soft transition hover:text-content"
+            className="font-serif"
             lang="en"
           >
             {showPreview ? "Hide preview" : "Show preview"}
-          </button>
+          </Button>
 
-          <button
-            type="button"
+          <Button variant="primary"
             onClick={() => void save()}
             disabled={busy}
-            className="inline-flex items-center gap-2 rounded-sm bg-accent px-4 py-2 text-[0.9375rem] text-surface transition hover:opacity-90 disabled:opacity-50"
+            className="text-[0.9375rem]"
           >
             {busy && <Loader2 className="h-4 w-4 animate-spin" />}
             {form.status === "PUBLISHED"
@@ -512,7 +510,7 @@ export function PieceEditor({
               : form.status === "ARCHIVED"
               ? "Save Archived"
               : t("admin.editor.publishBtn")}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -586,14 +584,13 @@ export function PieceEditor({
               <span className="text-xs text-content-faint">
                 Supports mixed Bengali-English Markdown content
               </span>
-              <button
-                type="button"
+              <Button variant="secondary" size="sm"
                 onClick={() => setShowTranscriber(!showTranscriber)}
-                className="inline-flex items-center gap-1.5 rounded-sm border border-accent/30 bg-accent/10 px-3 py-1.5 text-xs font-medium text-accent transition hover:bg-accent/20"
+                className="border-accent/30 text-accent"
               >
                 <Mic className="h-3.5 w-3.5" />
                 {showTranscriber ? "Hide Transcriber" : "🎙️ Transcribe Audio Narration / Reel"}
-              </button>
+              </Button>
             </div>
 
             {showTranscriber && (

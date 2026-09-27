@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui";
 
 interface NotificationItem {
   id: string;
@@ -121,14 +122,13 @@ export default function NotificationsPage() {
         </div>
 
         {unreadCount > 0 && (
-          <button
-            type="button"
+          <Button variant="secondary" size="sm"
             onClick={markAllAsRead}
-            className="flex items-center gap-1.5 rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:border-accent hover:text-accent transition"
+            className="hover:text-accent"
           >
             <CheckCheck className="h-3.5 w-3.5" />
             Mark all read
-          </button>
+          </Button>
         )}
       </div>
 

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui";
 
 export default function SystemMonitoringPage() {
   const [data, setData] = useState<any>(null);
@@ -75,14 +76,13 @@ export default function SystemMonitoringPage() {
             Auto-refresh (10s)
           </label>
 
-          <button
+          <Button variant="secondary" size="sm"
             onClick={() => fetchMetrics(false)}
             disabled={loading}
-            className="inline-flex items-center gap-2 rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content transition hover:border-accent disabled:opacity-50"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin")} />
             Refresh
-          </button>
+          </Button>
         </div>
       </div>
 

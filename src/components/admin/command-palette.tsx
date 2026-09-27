@@ -21,6 +21,7 @@ import {
 import { NavIcon } from "@/components/admin/nav-icon";
 import { useBodyScrollLock } from "@/lib/hooks/use-body-scroll-lock";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui";
 
 interface SearchResultItem {
   id?: string;
@@ -254,13 +255,12 @@ export function CommandPalette() {
 
   return (
     <>
-      <button
+      <Button variant="secondary" size="sm"
         ref={triggerRef}
-        type="button"
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="hidden md:flex items-center gap-2 rounded-sm border border-rule/80 bg-surface/60 px-2.5 py-1.5 font-sans text-xs text-content-faint transition hover:border-accent hover:text-content"
+        className="hidden md:flex"
         title="Search & Command Palette (Ctrl+K)"
       >
         <Search className="h-3.5 w-3.5 text-content-faint" aria-hidden />
@@ -268,7 +268,7 @@ export function CommandPalette() {
         <kbd className="rounded border border-rule bg-surface-raised px-1.5 py-0.5 font-mono text-[10px] text-content-soft">
           Ctrl K
         </kbd>
-      </button>
+      </Button>
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-16 sm:pt-24 animate-fade-in">

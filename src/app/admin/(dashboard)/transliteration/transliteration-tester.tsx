@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from "react";
 import { banglaToEnglish, englishToBangla, toEnglishSlug } from "@/lib/transliterate";
+import { Input, Textarea } from "@/components/ui";
 
 export function TransliterationTester() {
   const [inputBn, setInputBn] = useState("থট্‌স হোয়াটেভার");
@@ -50,12 +51,12 @@ export function TransliterationTester() {
             <label htmlFor="bn-input" className="block text-sm font-medium text-content">
               Input (Bengali)
             </label>
-            <textarea
+            <Textarea
               id="bn-input"
               value={inputBn}
               onChange={(e) => setInputBn(e.target.value)}
               rows={3}
-              className="mt-1 w-full rounded-sm border border-rule bg-surface px-3 py-2 font-bengali text-sm text-content focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+              className="mt-1 font-bengali"
               placeholder="থট্‌স হোয়াটেভার"
             />
           </div>
@@ -83,12 +84,12 @@ export function TransliterationTester() {
             <label htmlFor="en-input" className="block text-sm font-medium text-content">
               Input (English)
             </label>
-            <textarea
+            <Textarea
               id="en-input"
               value={inputEn}
               onChange={(e) => setInputEn(e.target.value)}
               rows={3}
-              className="mt-1 w-full rounded-sm border border-rule bg-surface px-3 py-2 font-mono text-sm text-content focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+              className="mt-1 font-mono"
               placeholder="thoughts whatever"
             />
           </div>
@@ -116,12 +117,12 @@ export function TransliterationTester() {
             <label htmlFor="slug-input" className="block text-sm font-medium text-content">
               Input (Mixed/Bengali)
             </label>
-            <input
+            <Input
               id="slug-input"
               type="text"
               value={slugInput}
               onChange={(e) => setSlugInput(e.target.value)}
-              className="mt-1 w-full rounded-sm border border-rule bg-surface px-3 py-2 font-bengali text-sm text-content focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+              className="mt-1 font-bengali"
               placeholder="থট্‌স হোয়াটেভার নতুন লেখা"
             />
           </div>

@@ -34,6 +34,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui";
 
 export interface SEONavItem {
   href: string;
@@ -176,10 +177,9 @@ export function SEOSidebar({ onClose, className }: SEOSidebarProps) {
 
           return (
             <div key={group.name} className="space-y-1">
-              <button
-                type="button"
+              <Button variant="ghost" size="sm"
                 onClick={() => toggleGroup(group.name)}
-                className="flex w-full items-center justify-between px-2 py-1 text-left font-mono text-[10px] uppercase tracking-wider text-content-faint hover:text-content transition"
+                className="justify-between text-left font-mono text-[10px] uppercase tracking-wider"
               >
                 <span>{group.name}</span>
                 {isCollapsed ? (
@@ -187,7 +187,7 @@ export function SEOSidebar({ onClose, className }: SEOSidebarProps) {
                 ) : (
                   <ChevronDown className="h-3 w-3" />
                 )}
-              </button>
+              </Button>
 
               {!isCollapsed && (
                 <div className="space-y-0.5 pt-0.5">

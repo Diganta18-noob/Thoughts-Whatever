@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Plus, X, Sparkles } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { Button, Input } from "@/components/ui";
 
 interface PromptFormProps {
   initialData?: {
@@ -108,14 +109,14 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
           </div>
         </div>
 
-        <button
+        <Button variant="primary"
           type="submit"
           disabled={submitting}
-          className="flex items-center gap-2 rounded-sm bg-accent px-5 py-2 font-sans text-xs font-medium text-surface transition hover:bg-accent/90 disabled:opacity-50"
+          className="px-5"
         >
           <Save className="h-4 w-4" />
           {submitting ? "Saving..." : isEditing ? "Save Changes" : "Store Prompt"}
-        </button>
+        </Button>
       </div>
 
       {/* Main Grid */}
@@ -142,12 +143,12 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
             <label className="block font-sans text-xs font-medium text-content">
               Summary / Short Title <span className="text-content-soft">(Optional)</span>
             </label>
-            <input
+            <Input
               type="text"
               placeholder="e.g. Premium Editorial Image Layout System"
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
-              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-2 font-sans text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
+              className="placeholder:text-content-soft"
             />
           </div>
 
@@ -225,12 +226,12 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
             <label className="block font-sans text-xs font-medium text-content">
               Linked Entity <span className="text-content-soft">(Slug / Feature)</span>
             </label>
-            <input
+            <Input
               type="text"
               placeholder="e.g. backup, image-layout, roktokorobi"
               value={linkedTo}
               onChange={(e) => setLinkedTo(e.target.value)}
-              className="w-full rounded-sm border border-rule bg-surface-raised px-3 py-1.5 font-mono text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
+              className="font-mono placeholder:text-content-soft"
             />
           </div>
 
@@ -238,7 +239,7 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
           <div className="space-y-2">
             <label className="block font-sans text-xs font-medium text-content">Tags</label>
             <div className="flex items-center gap-2">
-              <input
+              <Input
                 type="text"
                 placeholder="Type & press Enter"
                 value={tagInput}
@@ -249,15 +250,13 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
                     handleAddTag();
                   }
                 }}
-                className="flex-1 rounded-sm border border-rule bg-surface-raised px-2.5 py-1 font-mono text-xs text-content placeholder:text-content-soft focus:border-accent focus:outline-none"
+                className="flex-1 font-mono placeholder:text-content-soft"
               />
-              <button
-                type="button"
+              <Button variant="secondary" size="sm"
                 onClick={handleAddTag}
-                className="rounded-sm border border-rule bg-surface-raised px-2.5 py-1 font-sans text-xs text-content hover:bg-surface transition"
               >
                 Add
-              </button>
+              </Button>
             </div>
 
             <div className="flex flex-wrap gap-1.5 pt-1">

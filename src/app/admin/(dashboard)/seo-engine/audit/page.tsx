@@ -21,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { toast } from "@/lib/toast";
 import type { SiteAuditSummary, AuditIssue } from "@/lib/seo-engine/audit-scanner";
+import { Button, Input } from "@/components/ui";
 
 export default function TechnicalSEOAuditPage() {
   const { activeWebsite, activeWebsiteId } = useSEOWebsite();
@@ -139,15 +140,14 @@ export default function TechnicalSEOAuditPage() {
         </div>
 
         <div className="flex items-center gap-2.5">
-          <button
-            type="button"
+          <Button variant="primary"
             onClick={handleRunAudit}
             disabled={scanning}
-            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-xs font-semibold text-surface hover:opacity-90 transition shadow-xs disabled:opacity-50"
+            className="shadow-xs"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", scanning && "animate-spin")} />
             <span>{scanning ? "Crawling Pages..." : "Run Full Site Audit"}</span>
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -220,12 +220,11 @@ export default function TechnicalSEOAuditPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           {/* Search Box */}
           <div className="relative flex-1 max-w-md">
-            <input
+            <Input
               type="text"
               placeholder="Search by URL, issue title, or description..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-rule bg-surface-raised px-3.5 py-1.5 text-xs text-content placeholder:text-content-faint focus:border-accent focus:outline-none"
             />
           </div>
 
@@ -379,44 +378,39 @@ export default function TechnicalSEOAuditPage() {
                 {/* Right: Quick Action Controls */}
                 <div className="flex lg:flex-col items-center gap-2 self-start shrink-0">
                   {issue.status !== "RESOLVED" ? (
-                    <button
-                      type="button"
+                    <Button variant="success" size="sm"
                       onClick={() => issue.id && handleUpdateStatus(issue.id, "RESOLVED")}
-                      className="flex items-center gap-1.5 rounded-lg bg-success px-3 py-1.5 text-xs font-semibold text-surface hover:bg-success/85 transition shadow-2xs"
+                      className="shadow-2xs"
                     >
                       <Check className="h-3.5 w-3.5" />
                       <span>Mark Resolved</span>
-                    </button>
+                    </Button>
                   ) : (
-                    <button
-                      type="button"
+                    <Button variant="secondary" size="sm"
                       onClick={() => issue.id && handleUpdateStatus(issue.id, "OPEN")}
-                      className="flex items-center gap-1.5 rounded-lg border border-rule bg-surface px-3 py-1.5 text-xs font-medium text-content hover:bg-surface-raised transition shadow-2xs"
+                      className="shadow-2xs"
                     >
                       <RefreshCw className="h-3 w-3" />
                       <span>Reopen</span>
-                    </button>
+                    </Button>
                   )}
 
                   {issue.status === "OPEN" && (
-                    <button
-                      type="button"
+                    <Button variant="secondary" size="sm"
                       onClick={() => issue.id && handleUpdateStatus(issue.id, "IN_PROGRESS")}
-                      className="flex items-center gap-1.5 rounded-lg border border-rule bg-surface px-3 py-1.5 text-xs font-medium text-content hover:bg-surface-raised transition shadow-2xs"
+                      className="shadow-2xs"
                     >
                       <Clock className="h-3 w-3 text-info" />
                       <span>In Progress</span>
-                    </button>
+                    </Button>
                   )}
 
                   {issue.status !== "IGNORED" && (
-                    <button
-                      type="button"
+                    <Button variant="secondary" size="sm"
                       onClick={() => issue.id && handleUpdateStatus(issue.id, "IGNORED")}
-                      className="rounded-lg px-2.5 py-1 text-xs text-content-faint hover:text-content-soft hover:bg-surface-raised transition"
                     >
                       Ignore
-                    </button>
+                    </Button>
                   )}
                 </div>
               </div>

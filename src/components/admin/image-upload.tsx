@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { Upload, X, Loader2, Check, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatErrorMessage } from "@/lib/error-formatter";
+import { Input } from "@/components/ui";
 
 interface ImageUploadProps {
   value?: string;
@@ -221,11 +222,11 @@ export function ImageUpload({
             <Check className="h-4 w-4 text-surface" />
           </div>
 
-          <input
+          <Input
             type="text"
             value={preview}
             readOnly
-            className="mt-2 w-full rounded-sm border border-rule bg-surface-raised px-3 py-2 font-mono text-xs text-content-faint"
+            className="mt-2 font-mono"
           />
         </div>
       ) : (
@@ -283,7 +284,7 @@ export function ImageUpload({
           <summary className="cursor-pointer text-xs text-content-faint hover:text-content">
             Or enter URL manually
           </summary>
-          <input
+          <Input
             type="text"
             value={value || ""}
             onChange={(e) => {
@@ -291,7 +292,7 @@ export function ImageUpload({
               setPreview(e.target.value);
             }}
             placeholder="https://..."
-            className="mt-2 w-full rounded-sm border border-rule bg-surface px-3 py-2 font-mono text-xs text-content"
+            className="mt-2 font-mono"
           />
         </details>
       )}

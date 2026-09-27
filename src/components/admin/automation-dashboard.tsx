@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import { normalizeError } from "@/lib/errors";
+import { Button } from "@/components/ui";
 
 export interface AutomationState {
   isRunning: boolean;
@@ -156,15 +157,14 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
       {error && !data && (
         <div className="flex items-center justify-between p-4 bg-warning/10 border border-warning/30 rounded-lg text-xs font-mono text-warning">
           <span>⚠️ Automation status temporarily unavailable: {error}</span>
-          <button
+          <Button variant="warning" size="sm"
             onClick={() => {
               setLoading(true);
               fetchStatus(true);
             }}
-            className="px-3 py-1 bg-warning text-surface rounded hover:bg-warning/85 transition-colors"
           >
             Retry
-          </button>
+          </Button>
         </div>
       )}
 
@@ -181,13 +181,13 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
             </span>
           </p>
         </div>
-        <button
+        <Button variant="primary"
           onClick={runPipelineNow}
           disabled={triggering || data?.isRunning}
-          className="px-4 py-2 bg-journal-vermilion hover:bg-journal-vermilionSoft text-surface font-medium text-xs rounded transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+          className="bg-journal-vermilion hover:bg-journal-vermilionSoft"
         >
           {triggering || data?.isRunning ? "⚡ Pipeline Executing..." : "▶️ Run Full Pipeline Now"}
-        </button>
+        </Button>
       </div>
 
       {/* ── Status Grid ── */}

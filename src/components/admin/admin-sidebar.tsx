@@ -11,6 +11,7 @@ import {
 } from "@/lib/admin-nav";
 import { NavIcon } from "@/components/admin/nav-icon";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui";
 
 const COLLAPSE_STORAGE_KEY = "tw:admin:collapsed-nav-groups";
 
@@ -99,12 +100,11 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
 
           return (
             <div key={group.name} className="space-y-1">
-              <button
-                type="button"
+              <Button variant="ghost" size="sm"
                 onClick={() => toggleGroup(group.name)}
                 aria-expanded={!isCollapsed}
                 aria-controls={panelId}
-                className="flex w-full items-center justify-between px-2.5 py-1 text-left font-mono text-[10px] uppercase tracking-wider text-content-faint hover:text-content transition"
+                className="justify-between text-left font-mono text-[10px] uppercase tracking-wider"
               >
                 <span>{group.name}</span>
                 <span className="flex items-center gap-1.5">
@@ -118,7 +118,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
                     <ChevronDown className="h-3 w-3" aria-hidden />
                   )}
                 </span>
-              </button>
+              </Button>
 
               {!isCollapsed && (
                 <div id={panelId} className="space-y-0.5 pt-0.5">

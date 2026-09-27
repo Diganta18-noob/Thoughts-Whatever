@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui";
 
 interface Issue {
   type: string;
@@ -113,14 +114,13 @@ export default function ContentHealthPage() {
           </p>
         </div>
 
-        <button
-          type="button"
+        <Button variant="secondary" size="sm"
           onClick={fetchHealth}
           disabled={loading}
-          className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-1.5 font-sans text-xs font-medium text-content-soft hover:text-content hover:border-content transition disabled:opacity-50"
+          className="hover:border-content"
         >
           <RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin")} /> Re-evaluate Health
-        </button>
+        </Button>
       </div>
 
       {loading ? (

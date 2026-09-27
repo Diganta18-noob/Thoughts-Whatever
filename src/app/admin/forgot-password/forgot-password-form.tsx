@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Loader2, CheckCircle2, ArrowLeft } from "lucide-react";
 import { useTranslation } from "@/components/providers/language-provider";
 import { normalizeError } from "@/lib/errors";
+import { Button } from "@/components/ui";
 
 export function ForgotPasswordForm() {
   const t = useTranslation();
@@ -111,15 +112,15 @@ export function ForgotPasswordForm() {
         </p>
       )}
 
-      <button
+      <Button variant="primary" size="lg"
         type="submit"
         disabled={busy}
         data-testid="forgot-submit"
-        className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2.5 text-[0.9375rem] text-surface transition hover:opacity-90 disabled:opacity-50"
+        className="text-[0.9375rem]"
       >
         {busy && <Loader2 className="h-4 w-4 animate-spin" />}
         {busy ? t("admin.forgot.submitting") : t("admin.forgot.submit")}
-      </button>
+      </Button>
 
       <div className="pt-2 text-center">
         <Link

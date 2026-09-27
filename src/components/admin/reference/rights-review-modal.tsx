@@ -5,6 +5,7 @@ import { ReferenceRightsStatus } from "@prisma/client";
 import { RightsBadge } from "./rights-badge";
 import { ShieldCheck, AlertTriangle, History, X, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { Button, Input, Textarea } from "@/components/ui";
 
 interface RightsReviewModalProps {
   isOpen: boolean;
@@ -157,24 +158,22 @@ export function RightsReviewModal({
               <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                 License Designation
               </label>
-              <input
+              <Input
                 type="text"
                 placeholder="e.g. Public Domain Mark 1.0, CC BY-SA 4.0"
                 value={license}
                 onChange={(e) => setLicense(e.target.value)}
-                className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
               />
             </div>
             <div>
               <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                 Rights Holder / Authority
               </label>
-              <input
+              <Input
                 type="text"
                 placeholder="e.g. Estate of author, Publisher, Public Domain"
                 value={rightsHolder}
                 onChange={(e) => setRightsHolder(e.target.value)}
-                className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
               />
             </div>
           </div>
@@ -183,12 +182,11 @@ export function RightsReviewModal({
             <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
               Evidence URL (Catalog / Gazette / Copyright Record)
             </label>
-            <input
+            <Input
               type="url"
               placeholder="https://archive.org/... or https://copyright.gov.in/..."
               value={evidenceUrl}
               onChange={(e) => setEvidenceUrl(e.target.value)}
-              className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
             />
           </div>
 
@@ -196,13 +194,12 @@ export function RightsReviewModal({
             <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
               Decision Reason (Mandatory for Audit Trail) *
             </label>
-            <input
+            <Input
               type="text"
               required
               placeholder="e.g. Author died in 1941, 60-year post-mortem term expired under Section 22"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
             />
           </div>
 
@@ -210,12 +207,12 @@ export function RightsReviewModal({
             <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
               Verification Notes & Archival Context
             </label>
-            <textarea
+            <Textarea
               rows={2}
               placeholder="Additional legal justification, edition comparison, or institutional notes..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success resize-none"
+              className="resize-none"
             />
           </div>
 
@@ -247,21 +244,20 @@ export function RightsReviewModal({
           )}
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-rule">
-            <button
-              type="button"
+            <Button variant="secondary"
               onClick={onClose}
-              className="px-4 py-2 text-sm text-content-faint hover:text-content-faint/80 border border-rule rounded-lg hover:bg-surface-raised/50"
+              className="hover:text-content-faint/80"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button variant="success"
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 text-sm font-semibold text-content bg-success hover:bg-success/85 rounded-lg flex items-center gap-2 disabled:opacity-50"
+              className="px-5"
             >
               {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
               Commit Rights Decision
-            </button>
+            </Button>
           </div>
         </form>
       </div>

@@ -18,6 +18,7 @@ import {
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { confirmToast } from "@/lib/confirm-toast";
+import { Button, Input } from "@/components/ui";
 
 interface APIKeyItem {
   id: string;
@@ -211,24 +212,22 @@ export default function DeveloperAPICenterPage() {
 
         <div className="flex items-center gap-3">
           {activeTab === "keys" ? (
-            <button
+            <Button variant="primary"
               onClick={() => {
                 setNewlyGeneratedSecret(null);
                 setShowKeyModal(true);
               }}
-              className="inline-flex items-center gap-2 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-surface transition hover:opacity-90"
             >
               <Plus className="h-4 w-4" />
               Generate API Key
-            </button>
+            </Button>
           ) : (
-            <button
+            <Button variant="primary"
               onClick={() => setShowWebhookModal(true)}
-              className="inline-flex items-center gap-2 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-surface transition hover:opacity-90"
             >
               <Plus className="h-4 w-4" />
               Register Webhook
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -307,12 +306,12 @@ export default function DeveloperAPICenterPage() {
 
                   <div className="shrink-0">
                     {!k.revoked && (
-                      <button
+                      <Button variant="secondary" size="sm"
                         onClick={() => handleRevokeKey(k.id)}
-                        className="rounded-sm border border-rule px-3 py-1.5 font-sans text-xs text-danger hover:border-danger"
+                        className="text-danger hover:border-danger"
                       >
                         Revoke Key
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -363,13 +362,12 @@ export default function DeveloperAPICenterPage() {
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <button
+                    <Button variant="secondary" size="sm"
                       onClick={() => handleTestWebhook(wh.id)}
-                      className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-1.5 font-sans text-xs text-content-soft hover:border-content-soft hover:text-content"
                     >
                       <Send className="h-3.5 w-3.5" />
                       Test Ping
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -408,25 +406,23 @@ export default function DeveloperAPICenterPage() {
                 </div>
 
                 <div className="text-right pt-2">
-                  <button
+                  <Button variant="primary" size="sm"
                     onClick={() => setShowKeyModal(false)}
-                    className="rounded-sm bg-accent px-4 py-1.5 font-sans text-xs font-medium text-surface"
                   >
                     Done
-                  </button>
+                  </Button>
                 </div>
               </div>
             ) : (
               <form onSubmit={handleCreateKey} className="space-y-4">
                 <div>
                   <label className="label block mb-1">Key Name</label>
-                  <input
+                  <Input
                     type="text"
                     required
                     placeholder="e.g. Analytics Exporter Script"
                     value={keyName}
                     onChange={(e) => setKeyName(e.target.value)}
-                    className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-xs text-content outline-none focus:border-accent"
                   />
                 </div>
 
@@ -465,20 +461,17 @@ export default function DeveloperAPICenterPage() {
                 </div>
 
                 <div className="flex justify-end gap-3 pt-3 border-t border-rule">
-                  <button
-                    type="button"
+                  <Button variant="secondary" size="sm"
                     onClick={() => setShowKeyModal(false)}
-                    className="rounded-sm border border-rule px-4 py-1.5 font-sans text-xs text-content hover:border-content-soft"
                   >
                     Cancel
-                  </button>
-                  <button
+                  </Button>
+                  <Button variant="primary" size="sm"
                     type="submit"
                     disabled={submitting}
-                    className="rounded-sm bg-accent px-4 py-1.5 font-sans text-xs font-medium text-surface transition hover:opacity-90 disabled:opacity-50"
                   >
                     {submitting ? "Generating..." : "Generate Key"}
-                  </button>
+                  </Button>
                 </div>
               </form>
             )}
@@ -502,25 +495,24 @@ export default function DeveloperAPICenterPage() {
             <form onSubmit={handleCreateWebhook} className="space-y-4">
               <div>
                 <label className="label block mb-1">Name / Receiver Service</label>
-                <input
+                <Input
                   type="text"
                   required
                   placeholder="e.g. Discord Notifications"
                   value={webhookName}
                   onChange={(e) => setWebhookName(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-xs text-content outline-none focus:border-accent"
                 />
               </div>
 
               <div>
                 <label className="label block mb-1">Endpoint URL</label>
-                <input
+                <Input
                   type="url"
                   required
                   placeholder="https://api.yourdomain.com/webhook"
                   value={webhookUrl}
                   onChange={(e) => setWebhookUrl(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-mono text-xs text-content outline-none focus:border-accent"
+                  className="font-mono"
                 />
               </div>
 
@@ -545,20 +537,17 @@ export default function DeveloperAPICenterPage() {
               </div>
 
               <div className="flex justify-end gap-3 pt-3 border-t border-rule">
-                <button
-                  type="button"
+                <Button variant="secondary" size="sm"
                   onClick={() => setShowWebhookModal(false)}
-                  className="rounded-sm border border-rule px-4 py-1.5 font-sans text-xs text-content hover:border-content-soft"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button variant="primary" size="sm"
                   type="submit"
                   disabled={submitting}
-                  className="rounded-sm bg-accent px-4 py-1.5 font-sans text-xs font-medium text-surface transition hover:opacity-90 disabled:opacity-50"
                 >
                   {submitting ? "Registering..." : "Register Webhook"}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

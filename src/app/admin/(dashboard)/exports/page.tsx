@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui";
 
 interface ExportJobItem {
   id: string;
@@ -183,14 +184,14 @@ export default function DataExportCenterPage() {
             </div>
           </div>
 
-          <button
+          <Button variant="primary"
             onClick={triggerExport}
             disabled={exporting}
-            className="inline-flex items-center gap-2 rounded-sm bg-accent px-5 py-2 font-sans text-xs font-medium text-surface transition hover:opacity-90 disabled:opacity-50"
+            className="px-5"
           >
             <Download className={cn("h-4 w-4", exporting && "animate-bounce")} />
             {exporting ? "Generating Export..." : `Export ${selectedEntity} (${selectedFormat})`}
-          </button>
+          </Button>
         </div>
       </div>
 

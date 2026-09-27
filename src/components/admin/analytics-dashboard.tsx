@@ -8,6 +8,7 @@ import { AnalyticsSkeleton } from "./analytics-skeleton";
 import { toBengaliNumber } from "@/lib/bengali";
 import { Eye, Users, Bookmark, ExternalLink, AlertTriangle, RotateCcw } from "lucide-react";
 import { useTranslation, useLanguage } from "@/components/providers/language-provider";
+import { Button } from "@/components/ui";
 
 export interface AnalyticsData {
   overview?: {
@@ -143,13 +144,12 @@ export function AnalyticsDashboard({ initialData }: AnalyticsDashboardProps) {
             <p className="font-sans text-sm font-medium">Analytics Unavailable</p>
           </div>
           <p className="font-sans text-xs text-content-soft">{error}</p>
-          <button
+          <Button variant="primary" size="sm"
             onClick={() => setRetryKey((k) => k + 1)}
-            className="inline-flex items-center gap-1.5 rounded bg-accent px-3 py-1.5 text-xs text-surface font-medium transition hover:opacity-90"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             <span>Retry</span>
-          </button>
+          </Button>
         </div>
       )}
 

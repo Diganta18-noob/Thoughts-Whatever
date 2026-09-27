@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Loader2, CheckCircle2, AlertCircle, ArrowRight, RefreshCw } from "lucide-react";
 import { useTranslation } from "@/components/providers/language-provider";
 import { normalizeError } from "@/lib/errors";
+import { Button } from "@/components/ui";
 
 export function ResetPasswordForm() {
   const t = useTranslation();
@@ -229,15 +230,15 @@ export function ResetPasswordForm() {
         </p>
       )}
 
-      <button
+      <Button variant="primary" size="lg"
         type="submit"
         disabled={busy}
         data-testid="reset-submit"
-        className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2.5 text-[0.9375rem] text-surface transition hover:opacity-90 disabled:opacity-50"
+        className="text-[0.9375rem]"
       >
         {busy && <Loader2 className="h-4 w-4 animate-spin" />}
         {busy ? t("admin.reset.submitting") : t("admin.reset.submit")}
-      </button>
+      </Button>
 
       <div className="pt-2 text-center">
         <Link

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { AutomationDashboard } from "@/components/admin/automation-dashboard";
 import { confirmToast } from "@/lib/confirm-toast";
+import { Button } from "@/components/ui";
 
 export default function SystemHealthPage() {
   const [health, setHealth] = useState<any>(null);
@@ -126,20 +127,19 @@ export default function SystemHealthPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
+          <Button variant="secondary"
             onClick={handleRunMaintenance}
             disabled={isProcessing}
-            className="rounded bg-surface-hover px-4 py-2 font-sans text-xs font-medium text-content transition hover:bg-rule disabled:opacity-50"
+            className="bg-surface-hover"
           >
             Run Maintenance
-          </button>
-          <button
+          </Button>
+          <Button variant="primary"
             onClick={handleRunBackup}
             disabled={isProcessing}
-            className="rounded bg-accent px-4 py-2 font-sans text-xs font-medium text-surface transition hover:bg-accent/90 disabled:opacity-50"
           >
             Create Backup Now
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -243,13 +243,13 @@ export default function SystemHealthPage() {
                 <span className="font-sans text-xs text-content-soft">
                   {b.verified ? "Verified ✅" : "Unverified ⚠️"}
                 </span>
-                <button
+                <Button variant="secondary" size="sm"
                   onClick={() => handleRestore(b.backupId)}
                   disabled={isProcessing}
-                  className="rounded border border-rule px-3 py-1 font-sans text-xs transition hover:bg-surface-hover disabled:opacity-50"
+                  className="hover:bg-surface-hover"
                 >
                   Restore
-                </button>
+                </Button>
               </div>
             </div>
           ))}

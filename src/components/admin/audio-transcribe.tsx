@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { countBengaliWords, readingMinutes } from "@/lib/bengali";
 import { formatErrorMessage } from "@/lib/error-formatter";
 import { getErrorDetails } from "@/lib/transcription-errors";
+import { Button } from "@/components/ui";
 
 type TranscriptionState =
   | "idle"           // No file selected
@@ -558,14 +559,12 @@ export function AudioTranscribe({
           )}
 
           {state === "ready" && (
-            <button
-              type="button"
+            <Button variant="primary" size="lg"
               onClick={() => handleTranscribe(false)}
-              className="w-full inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2.5 text-sm font-medium text-surface transition hover:opacity-90"
             >
               <Mic className="h-4 w-4" />
               Start AI Transcription & Review
-            </button>
+            </Button>
           )}
         </div>
       )}
@@ -619,14 +618,12 @@ export function AudioTranscribe({
                 {state === "complete" ? "Inserted into Piece!" : "Accept & Insert into Piece"}
               </button>
 
-              <button
-                type="button"
+              <Button variant="secondary"
                 onClick={handleCopyText}
-                className="inline-flex items-center gap-1.5 rounded-sm border border-rule bg-surface px-3 py-2 text-sm text-content-soft transition hover:text-content"
               >
                 <Copy className="h-3.5 w-3.5" />
                 {copied ? "Copied!" : "Copy"}
-              </button>
+              </Button>
             </div>
 
             <button

@@ -22,6 +22,7 @@ import {
   CheckCircle2
 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { Button, Input } from "@/components/ui";
 
 interface AuditLogItem {
   id: string;
@@ -214,13 +215,12 @@ export function AuditLogDashboard() {
             {autoRefresh ? "Auto-refreshing (30s)" : "Auto-refresh"}
           </button>
 
-          <button
+          <Button variant="primary" size="sm"
             onClick={handleExportCSV}
-            className="flex items-center gap-2 rounded-sm bg-accent px-4 py-1.5 font-sans text-xs font-medium text-surface transition hover:bg-accent/90"
           >
             <Download className="h-3.5 w-3.5" />
             Export CSV
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -331,12 +331,12 @@ export function AuditLogDashboard() {
           {/* Clear Button */}
           <div className="flex items-center gap-2">
             {(search || actionFilter || entityFilter || severityFilter || dateFrom || dateTo) && (
-              <button
+              <Button variant="secondary" size="sm"
                 onClick={clearFilters}
-                className="w-full rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content-soft hover:text-content transition text-center"
+                className="text-center"
               >
                 Clear Filters
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -347,18 +347,16 @@ export function AuditLogDashboard() {
             <Calendar className="h-3.5 w-3.5" />
             <span>Date Range:</span>
           </div>
-          <input
+          <Input
             type="date"
             value={dateFrom}
             onChange={(e) => setDateFrom(e.target.value)}
-            className="rounded-sm border border-rule bg-surface-raised px-2.5 py-1 font-sans text-xs text-content"
           />
           <span className="text-xs text-content-soft">to</span>
-          <input
+          <Input
             type="date"
             value={dateTo}
             onChange={(e) => setDateTo(e.target.value)}
-            className="rounded-sm border border-rule bg-surface-raised px-2.5 py-1 font-sans text-xs text-content"
           />
         </div>
       </div>
@@ -518,23 +516,21 @@ export function AuditLogDashboard() {
         </span>
 
         <div className="flex items-center gap-2">
-          <button
+          <Button variant="secondary" size="sm"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="flex items-center gap-1 rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:bg-surface-raised disabled:opacity-40 disabled:hover:bg-surface transition"
           >
             <ChevronLeft className="h-3.5 w-3.5" />
             Previous
-          </button>
+          </Button>
 
-          <button
+          <Button variant="secondary" size="sm"
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page >= totalPages}
-            className="flex items-center gap-1 rounded-sm border border-rule bg-surface px-3 py-1.5 font-sans text-xs text-content hover:bg-surface-raised disabled:opacity-40 disabled:hover:bg-surface transition"
           >
             Next
             <ChevronRight className="h-3.5 w-3.5" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

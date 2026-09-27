@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Loader2, Download, Key, UserPlus, Globe } from "lucide-react";
 import { useLanguage, useTranslation } from "@/components/providers/language-provider";
 import { toast } from "@/lib/toast";
+import { Button, Input } from "@/components/ui";
 
 interface AdminUserItem {
   id: string;
@@ -196,12 +197,12 @@ export function SettingsForm({ adminUsers, currentAdminEmail }: SettingsFormProp
             <label className="label block mb-1">
               {t("admin.settings.currentPassword")}
             </label>
-            <input
+            <Input
               type="password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               required
-              className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-mono text-xs text-content outline-none focus:border-accent"
+              className="font-mono"
             />
           </div>
 
@@ -209,24 +210,23 @@ export function SettingsForm({ adminUsers, currentAdminEmail }: SettingsFormProp
             <label className="label block mb-1">
               {t("admin.settings.newPassword")}
             </label>
-            <input
+            <Input
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               required
-              className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-mono text-xs text-content outline-none focus:border-accent"
+              className="font-mono"
             />
           </div>
         </div>
 
-        <button
+        <Button variant="primary"
           type="submit"
           disabled={passwordBusy}
-          className="inline-flex items-center gap-2 rounded-sm bg-accent px-4 py-2 font-sans text-sm text-surface transition hover:opacity-90 disabled:opacity-50"
         >
           {passwordBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Key className="h-4 w-4" />}
           {t("admin.settings.updatePasswordBtn")}
-        </button>
+        </Button>
       </form>
 
       {/* Add Admin User */}
@@ -251,13 +251,13 @@ export function SettingsForm({ adminUsers, currentAdminEmail }: SettingsFormProp
             <label className="label block mb-1">
               {t("admin.settings.emailAddress")}
             </label>
-            <input
+            <Input
               type="email"
               value={newAdminEmail}
               onChange={(e) => setNewAdminEmail(e.target.value)}
               required
               placeholder="admin@example.com"
-              className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-mono text-xs text-content outline-none focus:border-accent"
+              className="font-mono"
             />
           </div>
 
@@ -265,12 +265,11 @@ export function SettingsForm({ adminUsers, currentAdminEmail }: SettingsFormProp
             <label className="label block mb-1">
               {t("admin.settings.nameBengali")}
             </label>
-            <input
+            <Input
               type="text"
               value={newAdminName}
               onChange={(e) => setNewAdminName(e.target.value)}
               placeholder={t("admin.editor.namePlaceholder")}
-              className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-sm text-content outline-none focus:border-accent"
             />
           </div>
         </div>
@@ -279,23 +278,22 @@ export function SettingsForm({ adminUsers, currentAdminEmail }: SettingsFormProp
           <label className="label block mb-1">
             {t("admin.settings.newPassword")}
           </label>
-          <input
+          <Input
             type="password"
             value={newAdminPassword}
             onChange={(e) => setNewAdminPassword(e.target.value)}
             required
-            className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-mono text-xs text-content outline-none focus:border-accent"
+            className="font-mono"
           />
         </div>
 
-        <button
+        <Button variant="primary"
           type="submit"
           disabled={adminBusy}
-          className="inline-flex items-center gap-2 rounded-sm bg-accent px-4 py-2 font-sans text-sm text-surface transition hover:opacity-90 disabled:opacity-50"
         >
           {adminBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />}
           {t("admin.settings.addAdminBtn")}
-        </button>
+        </Button>
 
         {/* Existing Admin list */}
         <div className="pt-4 border-t border-rule space-y-2">
