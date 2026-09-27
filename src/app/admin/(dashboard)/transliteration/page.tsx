@@ -162,7 +162,7 @@ function RuleRow({ bengali, english, primary }: { bengali: string; english: stri
         </button>
         <button
           type="button"
-          className="text-xs text-content-faint hover:text-red-500"
+          className="text-xs text-content-faint hover:text-danger"
         >
           Remove
         </button>
@@ -177,7 +177,7 @@ function StatusRow({ label, status, description }: { label: string; status: stri
       <div>
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-content">{label}</span>
-          <span className="rounded-full bg-green-500/20 px-2 py-0.5 text-xs text-green-600 dark:text-green-400">
+          <span className="rounded-full bg-success/20 px-2 py-0.5 text-xs text-success">
             {status}
           </span>
         </div>

@@ -110,10 +110,10 @@ export default function SystemHealthPage() {
 
   const statusColor =
     health?.status === "HEALTHY"
-      ? "text-emerald-500 bg-emerald-500/10"
+      ? "text-success bg-success/10"
       : health?.status === "DEGRADED"
-      ? "text-amber-500 bg-amber-500/10"
-      : "text-rose-500 bg-rose-500/10";
+      ? "text-warning bg-warning/10"
+      : "text-danger bg-danger/10";
 
   return (
     <div className="p-6 space-y-8 max-w-7xl mx-auto">
@@ -136,7 +136,7 @@ export default function SystemHealthPage() {
           <button
             onClick={handleRunBackup}
             disabled={isProcessing}
-            className="rounded bg-accent px-4 py-2 font-sans text-xs font-medium text-white transition hover:bg-accent/90 disabled:opacity-50"
+            className="rounded bg-accent px-4 py-2 font-sans text-xs font-medium text-surface transition hover:bg-accent/90 disabled:opacity-50"
           >
             Create Backup Now
           </button>
@@ -204,12 +204,12 @@ export default function SystemHealthPage() {
                       <span
                         className={`rounded px-2 py-0.5 font-mono text-[0.6875rem] font-semibold ${
                           t.status === "SUCCESS"
-                            ? "bg-emerald-500/10 text-emerald-500"
+                            ? "bg-success/10 text-success"
                             : t.status === "WARNING"
-                            ? "bg-amber-500/10 text-amber-500"
+                            ? "bg-warning/10 text-warning"
                             : t.status === "SKIPPED"
                             ? "bg-surface-hover text-content-soft"
-                            : "bg-rose-500/10 text-rose-500"
+                            : "bg-danger/10 text-danger"
                         }`}
                       >
                         {t.status}

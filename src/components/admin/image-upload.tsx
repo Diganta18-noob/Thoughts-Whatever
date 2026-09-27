@@ -211,14 +211,14 @@ export function ImageUpload({
           <button
             type="button"
             onClick={handleRemove}
-            className="absolute top-3 right-3 rounded-full bg-red-500 p-1.5 text-white opacity-90 transition hover:opacity-100 shadow-md"
+            className="absolute top-3 right-3 rounded-full bg-danger p-1.5 text-surface opacity-90 transition hover:opacity-100 shadow-md"
             title="Remove image"
           >
             <X className="h-4 w-4" />
           </button>
 
-          <div className="absolute top-3 left-3 rounded-full bg-green-500 p-1.5 shadow-md">
-            <Check className="h-4 w-4 text-white" />
+          <div className="absolute top-3 left-3 rounded-full bg-success p-1.5 shadow-md">
+            <Check className="h-4 w-4 text-surface" />
           </div>
 
           <input
@@ -272,7 +272,7 @@ export function ImageUpload({
       )}
 
       {error && (
-        <div className="mt-2 flex items-center gap-2 text-xs text-red-500">
+        <div className="mt-2 flex items-center gap-2 text-xs text-danger">
           <AlertCircle className="h-4 w-4 shrink-0" />
           <span>{error}</span>
         </div>

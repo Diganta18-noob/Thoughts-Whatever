@@ -129,10 +129,10 @@ export default function SecurityCenterPage() {
               className={cn(
                 "rounded px-2 py-0.5 font-mono text-xs font-semibold uppercase",
                 score >= 85
-                  ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+                  ? "bg-success/10 text-success"
                   : score >= 60
-                  ? "bg-amber-500/10 text-amber-700 dark:text-amber-400"
-                  : "bg-red-500/10 text-red-700 dark:text-red-400"
+                  ? "bg-warning/10 text-warning"
+                  : "bg-danger/10 text-danger"
               )}
             >
               SECURITY HEALTH: {score}/100
@@ -146,7 +146,7 @@ export default function SecurityCenterPage() {
         <button
           type="button"
           onClick={revokeAllSessions}
-          className="flex items-center gap-1.5 rounded-sm border border-red-300 dark:border-red-900 bg-red-50 dark:bg-red-950/40 px-3 py-1.5 font-sans text-xs text-red-700 dark:text-red-400 hover:bg-red-100 transition"
+          className="flex items-center gap-1.5 rounded-sm border border-danger/40 bg-danger/10 bg-danger/40 px-3 py-1.5 font-sans text-xs text-danger hover:bg-danger/10 transition"
         >
           <Trash2 className="h-3.5 w-3.5" />
           Revoke All Active Sessions
@@ -175,7 +175,7 @@ export default function SecurityCenterPage() {
             <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
               Failed Logins (24h)
             </span>
-            <ShieldAlert className="h-4 w-4 text-amber-600" />
+            <ShieldAlert className="h-4 w-4 text-warning" />
           </div>
           <p className="mt-2 font-mono text-2xl font-bold text-content">
             {metrics.failedLogins24h ?? 0}
@@ -190,7 +190,7 @@ export default function SecurityCenterPage() {
             <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
               JWT Policy
             </span>
-            <Lock className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <Lock className="h-4 w-4 text-success" />
           </div>
           <p className="mt-2 font-sans text-sm font-semibold text-content">
             HS256 Dual-Token
@@ -205,7 +205,7 @@ export default function SecurityCenterPage() {
             <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
               Cookie Armor
             </span>
-            <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <CheckCircle className="h-4 w-4 text-success" />
           </div>
           <p className="mt-2 font-sans text-sm font-semibold text-content">
             HTTPOnly &bull; Lax
@@ -218,12 +218,12 @@ export default function SecurityCenterPage() {
 
       {/* Issues & Warnings Bar (if any) */}
       {issues.length > 0 && (
-        <div className="rounded-sm border border-amber-300 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30 p-4 space-y-1">
-          <div className="flex items-center gap-2 font-sans text-xs font-semibold text-amber-900 dark:text-amber-300">
-            <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" />
+        <div className="rounded-sm border border-warning/40 bg-warning/10 bg-warning/30 p-4 space-y-1">
+          <div className="flex items-center gap-2 font-sans text-xs font-semibold text-warning">
+            <AlertTriangle className="h-4 w-4 shrink-0 text-warning" />
             Security Observations & Recommendations
           </div>
-          <ul className="list-disc list-inside text-xs font-sans text-amber-800 dark:text-amber-400 pl-6 space-y-0.5">
+          <ul className="list-disc list-inside text-xs font-sans text-warning pl-6 space-y-0.5">
             {issues.map((iss, i) => (
               <li key={i}>{iss}</li>
             ))}
@@ -289,7 +289,7 @@ export default function SecurityCenterPage() {
                   <button
                     type="button"
                     onClick={() => revokeSession(s.id)}
-                    className="self-end sm:self-center flex items-center gap-1 rounded-sm border border-rule px-2.5 py-1 font-sans text-xs text-content-soft hover:border-red-500 hover:text-red-600 transition"
+                    className="self-end sm:self-center flex items-center gap-1 rounded-sm border border-rule px-2.5 py-1 font-sans text-xs text-content-soft hover:border-danger hover:text-danger transition"
                   >
                     <Trash2 className="h-3 w-3" />
                     Revoke
@@ -323,10 +323,10 @@ export default function SecurityCenterPage() {
                     className={cn(
                       "h-2 w-2 rounded-full shrink-0",
                       a.severity === "critical"
-                        ? "bg-red-600"
+                        ? "bg-danger"
                         : a.severity === "warning"
-                        ? "bg-amber-600"
-                        : "bg-emerald-600"
+                        ? "bg-warning"
+                        : "bg-success"
                     )}
                   />
                   <div className="min-w-0">

@@ -85,47 +85,47 @@ export function ReferenceAssetModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-xl bg-zinc-950 border border-zinc-800 rounded-xl shadow-2xl p-6 text-zinc-100 my-8">
+      <div className="relative w-full max-w-xl bg-surface border border-rule rounded-xl shadow-2xl p-6 text-content-faint my-8">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-100 p-1.5 rounded-lg hover:bg-zinc-800/60"
+          className="absolute top-4 right-4 text-content-faint hover:text-content-faint/80 p-1.5 rounded-lg hover:bg-surface-raised/60"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-3 border-b border-zinc-800 pb-4 mb-5">
-          <div className="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-800/40 text-emerald-400">
+        <div className="flex items-center gap-3 border-b border-rule pb-4 mb-5">
+          <div className="p-2.5 rounded-lg bg-success/40 border border-success/40 text-success">
             <UploadCloud className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-serif text-lg font-bold text-zinc-100">
+            <h2 className="font-serif text-lg font-bold text-content-faint">
               Attach Digital Archival Asset
             </h2>
-            <p className="text-xs text-zinc-400 line-clamp-1">{workTitle}</p>
+            <p className="text-xs text-content-faint line-clamp-1">{workTitle}</p>
           </div>
         </div>
 
         {!isRightsVerified ? (
-          <div className="p-4 bg-rose-950/30 border border-rose-800/50 rounded-lg space-y-3">
-            <div className="flex items-start gap-2.5 text-rose-300 text-sm">
+          <div className="p-4 bg-danger/30 border border-danger/50 rounded-lg space-y-3">
+            <div className="flex items-start gap-2.5 text-danger text-sm">
               <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
               <div>
                 <strong className="block font-semibold">Asset Upload Guard Active</strong>
-                <p className="text-xs text-rose-300/90 mt-1 leading-relaxed">
+                <p className="text-xs text-danger/90 mt-1 leading-relaxed">
                   This work is currently marked as{" "}
-                  <code className="bg-rose-950/80 px-1 py-0.5 rounded font-mono">{rightsStatus}</code>.
+                  <code className="bg-danger/80 px-1 py-0.5 rounded font-mono">{rightsStatus}</code>.
                   Under the Thoughts.Whatever rights architecture, hosting digital files (PDF, Audio, EPUB) is restricted to verified <strong>PUBLIC_DOMAIN</strong> or <strong>LICENSED</strong> materials.
                 </p>
               </div>
             </div>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-content-faint">
               Please conduct a formal Rights Evaluation review to elevate this item before adding hosted files.
             </p>
             <div className="flex justify-end pt-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-xs font-mono text-zinc-300 border border-zinc-700 rounded-lg hover:bg-zinc-800"
+                className="px-4 py-2 text-xs font-mono text-content-faint border border-rule rounded-lg hover:bg-surface-raised"
               >
                 Close & Review Rights
               </button>
@@ -135,13 +135,13 @@ export function ReferenceAssetModal({
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
+                <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   Asset Kind *
                 </label>
                 <select
                   value={kind}
                   onChange={(e) => setKind(e.target.value as ReferenceAssetKind)}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                 >
                   <option value="PDF">PDF (Digitized Book / Document)</option>
                   <option value="EPUB">EPUB (Digital Reader File)</option>
@@ -152,7 +152,7 @@ export function ReferenceAssetModal({
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
+                <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   Asset Title *
                 </label>
                 <input
@@ -161,13 +161,13 @@ export function ReferenceAssetModal({
                   placeholder="e.g. Complete Historical Edition (PDF)"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
+              <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                 Hosted File URL *
               </label>
               <input
@@ -176,14 +176,14 @@ export function ReferenceAssetModal({
                 placeholder="https://... (Cloudinary, S3, or verified archive link)"
                 value={fileUrl}
                 onChange={(e) => setFileUrl(e.target.value)}
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
               />
             </div>
 
             {kind === "AUDIO" && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
+                  <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     Duration (Seconds)
                   </label>
                   <input
@@ -191,11 +191,11 @@ export function ReferenceAssetModal({
                     placeholder="e.g. 1820"
                     value={durationSec}
                     onChange={(e) => setDurationSec(e.target.value)}
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
+                  <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                     Narrator / Reader
                   </label>
                   <input
@@ -203,7 +203,7 @@ export function ReferenceAssetModal({
                     placeholder="e.g. Thoughts.Whatever Voice Archive"
                     value={narrator}
                     onChange={(e) => setNarrator(e.target.value)}
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
                   />
                 </div>
               </div>
@@ -211,7 +211,7 @@ export function ReferenceAssetModal({
 
             {kind === "TRANSCRIPT" && (
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
+                <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                   Full Bengali Transcript / OCR Text
                 </label>
                 <textarea
@@ -219,44 +219,44 @@ export function ReferenceAssetModal({
                   placeholder="সম্পূর্ণ অনুলিপি বা পাঠ্য..."
                   value={transcriptText}
                   onChange={(e) => setTranscriptText(e.target.value)}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-emerald-500 font-serif"
+                  className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success font-serif"
                 />
               </div>
             )}
 
             <div className="flex items-center gap-6 pt-2">
-              <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
+              <label className="flex items-center gap-2 text-xs text-content-faint cursor-pointer">
                 <input
                   type="checkbox"
                   checked={isDownloadable}
                   onChange={(e) => setIsDownloadable(e.target.checked)}
-                  className="rounded border-zinc-700 text-emerald-500 focus:ring-emerald-500"
+                  className="rounded border-rule text-success focus:ring-success"
                 />
                 Allow Direct Download
               </label>
-              <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
+              <label className="flex items-center gap-2 text-xs text-content-faint cursor-pointer">
                 <input
                   type="checkbox"
                   checked={isOnlineReadable}
                   onChange={(e) => setIsOnlineReadable(e.target.checked)}
-                  className="rounded border-zinc-700 text-emerald-500 focus:ring-emerald-500"
+                  className="rounded border-rule text-success focus:ring-success"
                 />
                 Available in Online Reader
               </label>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-800">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-rule">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-sm text-zinc-400 hover:text-zinc-100 border border-zinc-800 rounded-lg hover:bg-zinc-800/50"
+                className="px-4 py-2 text-sm text-content-faint hover:text-content-faint/80 border border-rule rounded-lg hover:bg-surface-raised/50"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-5 py-2 text-sm font-semibold text-zinc-950 bg-emerald-400 hover:bg-emerald-300 rounded-lg flex items-center gap-2 disabled:opacity-50"
+                className="px-5 py-2 text-sm font-semibold text-content bg-success hover:bg-success/85 rounded-lg flex items-center gap-2 disabled:opacity-50"
               >
                 {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 Save Archival Asset

@@ -146,7 +146,7 @@ export default function ContentHealthPage() {
                 <div
                   className={cn(
                     "h-full transition-all",
-                    data.averageScore >= 80 ? "bg-emerald-600" : data.averageScore >= 50 ? "bg-amber-500" : "bg-rose-600"
+                    data.averageScore >= 80 ? "bg-success" : data.averageScore >= 50 ? "bg-warning" : "bg-danger"
                   )}
                   style={{ width: `${data.averageScore}%` }}
                 />
@@ -157,17 +157,17 @@ export default function ContentHealthPage() {
             <div
               onClick={() => setFilterGrade(filterGrade === "healthy" ? "all" : "healthy")}
               className={cn(
-                "cursor-pointer rounded-sm border border-rule bg-surface-raised p-5 space-y-1 transition hover:border-emerald-500/50",
-                filterGrade === "healthy" && "ring-2 ring-emerald-500"
+                "cursor-pointer rounded-sm border border-rule bg-surface-raised p-5 space-y-1 transition hover:border-success/50",
+                filterGrade === "healthy" && "ring-2 ring-success"
               )}
             >
               <div className="flex items-center justify-between">
                 <span className="label">
                   Healthy
                 </span>
-                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
               </div>
-              <div className="font-serif text-3xl font-normal text-emerald-700 dark:text-emerald-400">
+              <div className="font-serif text-3xl font-normal text-success">
                 {data.healthyCount}
               </div>
               <p className="font-sans text-[11px] text-content-soft">Score 80–100 (Optimal)</p>
@@ -177,17 +177,17 @@ export default function ContentHealthPage() {
             <div
               onClick={() => setFilterGrade(filterGrade === "needs_attention" ? "all" : "needs_attention")}
               className={cn(
-                "cursor-pointer rounded-sm border border-rule bg-surface-raised p-5 space-y-1 transition hover:border-amber-500/50",
-                filterGrade === "needs_attention" && "ring-2 ring-amber-500"
+                "cursor-pointer rounded-sm border border-rule bg-surface-raised p-5 space-y-1 transition hover:border-warning/50",
+                filterGrade === "needs_attention" && "ring-2 ring-warning"
               )}
             >
               <div className="flex items-center justify-between">
                 <span className="label">
                   Needs Attention
                 </span>
-                <AlertCircle className="h-4 w-4 text-amber-600" />
+                <AlertCircle className="h-4 w-4 text-warning" />
               </div>
-              <div className="font-serif text-3xl font-normal text-amber-700 dark:text-amber-400">
+              <div className="font-serif text-3xl font-normal text-warning">
                 {data.needsAttentionCount}
               </div>
               <p className="font-sans text-[11px] text-content-soft">Score 50–79 (Missing elements)</p>
@@ -197,17 +197,17 @@ export default function ContentHealthPage() {
             <div
               onClick={() => setFilterGrade(filterGrade === "critical" ? "all" : "critical")}
               className={cn(
-                "cursor-pointer rounded-sm border border-rule bg-surface-raised p-5 space-y-1 transition hover:border-rose-500/50",
-                filterGrade === "critical" && "ring-2 ring-rose-500"
+                "cursor-pointer rounded-sm border border-rule bg-surface-raised p-5 space-y-1 transition hover:border-danger/50",
+                filterGrade === "critical" && "ring-2 ring-danger"
               )}
             >
               <div className="flex items-center justify-between">
                 <span className="label">
                   Critical
                 </span>
-                <AlertTriangle className="h-4 w-4 text-rose-600" />
+                <AlertTriangle className="h-4 w-4 text-danger" />
               </div>
-              <div className="font-serif text-3xl font-normal text-rose-700 dark:text-rose-400">
+              <div className="font-serif text-3xl font-normal text-danger">
                 {data.criticalCount}
               </div>
               <p className="font-sans text-[11px] text-content-soft">Score &lt; 50 (Major issues)</p>
@@ -303,9 +303,9 @@ export default function ContentHealthPage() {
                         <span
                           className={cn(
                             "inline-flex items-center justify-center font-mono text-xs font-bold px-2 py-0.5 rounded-sm border",
-                            isHealthy && "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
-                            piece.grade === "needs_attention" && "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
-                            isCritical && "bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20"
+                            isHealthy && "bg-success/10 text-success border-success/20",
+                            piece.grade === "needs_attention" && "bg-warning/10 text-warning border-warning/20",
+                            isCritical && "bg-danger/10 text-danger border-danger/20"
                           )}
                         >
                           {piece.score}
@@ -327,7 +327,7 @@ export default function ContentHealthPage() {
                       {/* Issues Pills */}
                       <td className="p-3">
                         {piece.issues.length === 0 ? (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">
+                          <span className="inline-flex items-center gap-1 text-[11px] text-success font-medium">
                             <CheckCircle2 className="h-3 w-3" /> All criteria satisfied
                           </span>
                         ) : (
@@ -337,8 +337,8 @@ export default function ContentHealthPage() {
                                 key={i}
                                 className={cn(
                                   "rounded px-1.5 py-0.5 font-sans text-[10px]",
-                                  iss.severity === "critical" && "bg-rose-500/10 text-rose-700 dark:text-rose-400",
-                                  iss.severity === "warning" && "bg-amber-500/10 text-amber-800 dark:text-amber-400",
+                                  iss.severity === "critical" && "bg-danger/10 text-danger",
+                                  iss.severity === "warning" && "bg-warning/10 text-warning",
                                   iss.severity === "info" && "bg-surface text-content-soft border border-rule/50"
                                 )}
                               >

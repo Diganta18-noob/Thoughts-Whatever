@@ -63,34 +63,34 @@ export function ReferenceClaimsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-3xl bg-zinc-950 border border-zinc-800 rounded-xl shadow-2xl p-6 text-zinc-100 my-8">
+      <div className="relative w-full max-w-3xl bg-surface border border-rule rounded-xl shadow-2xl p-6 text-content-faint my-8">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-100 p-1.5 rounded-lg hover:bg-zinc-800/60"
+          className="absolute top-4 right-4 text-content-faint hover:text-content-faint/80 p-1.5 rounded-lg hover:bg-surface-raised/60"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-3 border-b border-zinc-800 pb-4 mb-5">
-          <div className="p-2.5 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-400">
+        <div className="flex items-center gap-3 border-b border-rule pb-4 mb-5">
+          <div className="p-2.5 rounded-lg bg-danger/40 border border-danger/40 text-danger">
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-serif text-lg font-bold text-zinc-100">
+            <h2 className="font-serif text-lg font-bold text-content-faint">
               Copyright Inquiries & Takedown Claims
             </h2>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-content-faint">
               Community and rights-holder notices under Indian Copyright Act
             </p>
           </div>
         </div>
 
         {isLoading ? (
-          <div className="py-12 flex justify-center items-center text-zinc-400">
+          <div className="py-12 flex justify-center items-center text-content-faint">
             <Loader2 className="w-6 h-6 animate-spin mr-2" /> Loading claims...
           </div>
         ) : claims.length === 0 ? (
-          <div className="py-12 text-center text-zinc-500 text-sm">
+          <div className="py-12 text-center text-content-faint text-sm">
             No copyright inquiries or takedown claims submitted.
           </div>
         ) : (
@@ -98,41 +98,41 @@ export function ReferenceClaimsModal({
             {claims.map((c) => (
               <div
                 key={c.id}
-                className="p-4 bg-zinc-900/60 border border-zinc-800 rounded-lg space-y-2"
+                className="p-4 bg-surface-raised/60 border border-rule rounded-lg space-y-2"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-sm text-zinc-200">
+                  <span className="font-semibold text-sm text-content-faint">
                     {c.resourceTitle}
                   </span>
                   <span
                     className={`text-[0.65rem] font-mono px-2 py-0.5 rounded uppercase ${
                       c.status === "OPEN"
-                        ? "bg-amber-950/60 text-amber-400 border border-amber-800/40"
+                        ? "bg-warning/60 text-warning border border-warning/40"
                         : c.status === "RESOLVED"
-                        ? "bg-emerald-950/60 text-emerald-400 border border-emerald-800/40"
-                        : "bg-zinc-800 text-zinc-400"
+                        ? "bg-success/60 text-success border border-success/40"
+                        : "bg-surface-raised text-content-soft"
                     }`}
                   >
                     {c.status}
                   </span>
                 </div>
 
-                <div className="text-xs text-zinc-400 flex flex-wrap gap-x-4 gap-y-1">
-                  <span>Claimant: <strong className="text-zinc-300">{c.claimantName}</strong> ({c.claimantEmail})</span>
+                <div className="text-xs text-content-faint flex flex-wrap gap-x-4 gap-y-1">
+                  <span>Claimant: <strong className="text-content-faint">{c.claimantName}</strong> ({c.claimantEmail})</span>
                   <span>Date: {new Date(c.createdAt).toLocaleDateString()}</span>
                   {c.supportingUrl && (
                     <a
                       href={c.supportingUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-emerald-400 hover:underline"
+                      className="text-success hover:underline"
                     >
                       Evidence Link ↗
                     </a>
                   )}
                 </div>
 
-                <p className="text-xs text-zinc-300 bg-zinc-950/60 p-2.5 rounded border border-zinc-800/80">
+                <p className="text-xs text-content-faint bg-surface/60 p-2.5 rounded border border-rule/80">
                   {c.message}
                 </p>
 
@@ -141,7 +141,7 @@ export function ReferenceClaimsModal({
                     <button
                       disabled={updatingId === c.id}
                       onClick={() => handleStatusUpdate(c.id, "RESOLVED")}
-                      className="px-3 py-1 bg-emerald-950/60 hover:bg-emerald-900/80 border border-emerald-800 text-emerald-400 rounded text-xs flex items-center gap-1"
+                      className="px-3 py-1 bg-success/60 hover:bg-success/80 border border-success/40 text-success rounded text-xs flex items-center gap-1"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5" /> Resolve Claim
                     </button>
@@ -150,7 +150,7 @@ export function ReferenceClaimsModal({
                     <button
                       disabled={updatingId === c.id}
                       onClick={() => handleStatusUpdate(c.id, "REJECTED")}
-                      className="px-3 py-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 rounded text-xs flex items-center gap-1"
+                      className="px-3 py-1 bg-surface-raised hover:bg-surface-raised/85 border border-rule text-content-faint rounded text-xs flex items-center gap-1"
                     >
                       <XCircle className="w-3.5 h-3.5" /> Reject Claim
                     </button>
@@ -161,11 +161,11 @@ export function ReferenceClaimsModal({
           </div>
         )}
 
-        <div className="flex justify-end pt-4 border-t border-zinc-800 mt-4">
+        <div className="flex justify-end pt-4 border-t border-rule mt-4">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm text-zinc-400 hover:text-zinc-100 border border-zinc-800 rounded-lg hover:bg-zinc-800/50"
+            className="px-4 py-2 text-sm text-content-faint hover:text-content-faint/80 border border-rule rounded-lg hover:bg-surface-raised/50"
           >
             Close
           </button>

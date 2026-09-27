@@ -121,7 +121,7 @@ export default function EngagementIntelligencePage() {
 
             <div className="rounded-sm border border-rule bg-surface-raised p-5 space-y-1">
               <span className="label">Midpoint Retention (50%)</span>
-              <div className="font-serif text-3xl font-normal text-emerald-700 dark:text-emerald-400">
+              <div className="font-serif text-3xl font-normal text-success">
                 {data.depthFunnel[2]?.pct}%
               </div>
               <p className="font-mono text-[11px] text-content-faint">Readers reaching middle of essay</p>
@@ -156,7 +156,7 @@ export default function EngagementIntelligencePage() {
                     <div
                       className={cn(
                         "h-full rounded-sm transition-all",
-                        idx === 0 ? "bg-content" : idx <= 2 ? "bg-emerald-600" : "bg-accent"
+                        idx === 0 ? "bg-content" : idx <= 2 ? "bg-success" : "bg-accent"
                       )}
                       style={{ width: `${step.pct}%` }}
                     />
@@ -194,7 +194,7 @@ export default function EngagementIntelligencePage() {
                     <td className="p-3 font-mono text-content-soft">{piece.avgMinutes} min read</td>
                     <td className="p-3 font-mono text-content">{piece.views.toLocaleString()}</td>
                     <td className="p-3">
-                      <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400">
+                      <span className="font-mono font-bold text-success">
                         {piece.estimatedCompletionRate}%
                       </span>
                     </td>

@@ -258,7 +258,7 @@ export default function MediaLibraryPage() {
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-white hover:bg-accent/90 transition disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition disabled:opacity-50"
           >
             <UploadCloud className="h-4 w-4" />
             {uploading ? "Uploading..." : "Upload Files"}
@@ -518,7 +518,7 @@ export default function MediaLibraryPage() {
                         e.stopPropagation();
                         handleDeleteMedia(media);
                       }}
-                      className="p-1 text-content-soft hover:text-rose-600 transition"
+                      className="p-1 text-content-soft hover:text-danger transition"
                       title="Delete"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -568,7 +568,7 @@ export default function MediaLibraryPage() {
               onClick={() => handleCopyUrl(selectedMedia.url)}
               className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-sm border border-rule px-3 py-2 font-sans text-xs font-medium text-content hover:border-accent hover:text-accent transition"
             >
-              {copiedUrl ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
+              {copiedUrl ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
               {copiedUrl ? "Copied!" : "Copy Asset URL"}
             </button>
 
@@ -585,7 +585,7 @@ export default function MediaLibraryPage() {
             <button
               type="button"
               onClick={() => handleDeleteMedia(selectedMedia)}
-              className="p-2 rounded-sm border border-rose-200 text-rose-600 hover:bg-rose-50 transition"
+              className="p-2 rounded-sm border border-danger/40 text-danger hover:bg-danger/10 transition"
               title="Delete Asset"
             >
               <Trash2 className="h-4 w-4" />

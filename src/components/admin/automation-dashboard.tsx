@@ -154,14 +154,14 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
     <div className="space-y-6">
       {/* ── Error Banner if any ── */}
       {error && !data && (
-        <div className="flex items-center justify-between p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg text-xs font-mono text-amber-600">
+        <div className="flex items-center justify-between p-4 bg-warning/10 border border-warning/30 rounded-lg text-xs font-mono text-warning">
           <span>⚠️ Automation status temporarily unavailable: {error}</span>
           <button
             onClick={() => {
               setLoading(true);
               fetchStatus(true);
             }}
-            className="px-3 py-1 bg-amber-600 text-white rounded hover:bg-amber-700 transition-colors"
+            className="px-3 py-1 bg-warning text-surface rounded hover:bg-warning/85 transition-colors"
           >
             Retry
           </button>
@@ -176,7 +176,7 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
           </h2>
           <p className="text-xs text-journal-inkSoft mt-1 font-mono">
             Self-maintaining SaaS maintenance engine • Status:{" "}
-            <span className={isHealthy ? "text-emerald-600 font-bold" : "text-amber-600 font-bold"}>
+            <span className={isHealthy ? "text-success font-bold" : "text-warning font-bold"}>
               {data?.health?.status || "HEALTHY"}
             </span>
           </p>
@@ -184,7 +184,7 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
         <button
           onClick={runPipelineNow}
           disabled={triggering || data?.isRunning}
-          className="px-4 py-2 bg-journal-vermilion hover:bg-journal-vermilionSoft text-white font-medium text-xs rounded transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+          className="px-4 py-2 bg-journal-vermilion hover:bg-journal-vermilionSoft text-surface font-medium text-xs rounded transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {triggering || data?.isRunning ? "⚡ Pipeline Executing..." : "▶️ Run Full Pipeline Now"}
         </button>
@@ -258,7 +258,7 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
                     <td className="py-2 font-bold text-journal-ink">{step.name}</td>
                     <td className="py-2">
                       <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
-                        step.status === "SUCCESS" ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"
+                        step.status === "SUCCESS" ? "bg-success/10 text-success" : "bg-danger/10 text-danger"
                       }`}>
                         {step.status}
                       </span>
@@ -282,7 +282,7 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
         <div className="max-h-60 overflow-y-auto space-y-1 font-mono text-[11px] leading-relaxed select-text">
           {data?.logs && data.logs.length > 0 ? (
             data.logs.map((log, idx) => (
-              <div key={idx} className="whitespace-pre-wrap text-emerald-400/90">
+              <div key={idx} className="whitespace-pre-wrap text-success/90">
                 {log}
               </div>
             ))

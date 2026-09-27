@@ -4,7 +4,7 @@ import { extendTailwindMerge } from "tailwind-merge";
 const customTwMerge = extendTailwindMerge({
   extend: {
     classGroups: {
-      rounded: ["rounded-card"],
+      rounded: ["rounded-card", "rounded-xs"],
       shadow: ["shadow-card"],
       "font-family": [
         "font-display",

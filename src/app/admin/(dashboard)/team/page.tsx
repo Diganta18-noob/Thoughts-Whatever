@@ -180,13 +180,13 @@ export default function TeamManagementPage() {
       case "SUPER_ADMIN":
         return "bg-accent/15 text-accent border-accent/30";
       case "ADMIN":
-        return "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30";
+        return "bg-warning/10 text-warning border-warning/30";
       case "EDITOR":
-        return "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30";
+        return "bg-info/10 text-info border-info/30";
       case "AUTHOR":
-        return "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30";
+        return "bg-success/10 text-success border-success/30";
       case "ANALYST":
-        return "bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/30";
+        return "bg-special/10 text-special border-special/30";
       default:
         return "bg-content/5 text-content-soft border-rule";
     }
@@ -219,7 +219,7 @@ export default function TeamManagementPage() {
             setFormNameBn("");
             setFormRole("EDITOR");
           }}
-          className="flex items-center gap-1.5 rounded-sm bg-accent px-3 py-1.5 font-sans text-xs font-medium text-white hover:bg-accent/90 transition shadow-sm"
+          className="flex items-center gap-1.5 rounded-sm bg-accent px-3 py-1.5 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition shadow-sm"
         >
           <UserPlus className="h-3.5 w-3.5" />
           Add Team Member
@@ -305,14 +305,14 @@ export default function TeamManagementPage() {
                         className={cn(
                           "inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider",
                           m.status === "active"
-                            ? "text-emerald-700 dark:text-emerald-400"
+                            ? "text-success"
                             : "text-content-faint"
                         )}
                       >
                         <span
                           className={cn(
                             "h-1.5 w-1.5 rounded-full",
-                            m.status === "active" ? "bg-emerald-600 dark:bg-emerald-400" : "bg-content-faint"
+                            m.status === "active" ? "bg-success" : "bg-content-faint"
                           )}
                         />
                         {m.status}
@@ -346,7 +346,7 @@ export default function TeamManagementPage() {
                           <button
                             type="button"
                             onClick={() => handleDeleteMember(m.id, m.email)}
-                            className="rounded-sm p-1 text-content-faint hover:text-red-600 transition"
+                            className="rounded-sm p-1 text-content-faint hover:text-danger transition"
                             title="Remove member"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -400,7 +400,7 @@ export default function TeamManagementPage() {
                     return (
                       <td key={r} className="px-3 py-2.5 text-center">
                         {granted ? (
-                          <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 mx-auto" />
+                          <Check className="h-3.5 w-3.5 text-success mx-auto" />
                         ) : (
                           <span className="text-rule text-sm select-none">&mdash;</span>
                         )}
@@ -496,7 +496,7 @@ export default function TeamManagementPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="rounded-sm bg-accent px-4 py-1.5 text-white hover:bg-accent/90 disabled:opacity-50"
+                  className="rounded-sm bg-accent px-4 py-1.5 text-surface hover:bg-accent/90 disabled:opacity-50"
                 >
                   {submitting ? "Creating..." : "Create Member"}
                 </button>
@@ -586,7 +586,7 @@ export default function TeamManagementPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="rounded-sm bg-accent px-4 py-1.5 text-white hover:bg-accent/90 disabled:opacity-50"
+                  className="rounded-sm bg-accent px-4 py-1.5 text-surface hover:bg-accent/90 disabled:opacity-50"
                 >
                   {submitting ? "Saving..." : "Save Changes"}
                 </button>

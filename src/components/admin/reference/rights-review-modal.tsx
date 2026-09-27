@@ -91,40 +91,40 @@ export function RightsReviewModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-zinc-950 border border-zinc-800 rounded-xl shadow-2xl p-6 text-zinc-100 my-8">
+      <div className="relative w-full max-w-2xl bg-surface border border-rule rounded-xl shadow-2xl p-6 text-content-faint my-8">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-100 p-1.5 rounded-lg hover:bg-zinc-800/60"
+          className="absolute top-4 right-4 text-content-faint hover:text-content-faint/80 p-1.5 rounded-lg hover:bg-surface-raised/60"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-3 border-b border-zinc-800 pb-4 mb-5">
-          <div className="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-800/40 text-emerald-400">
+        <div className="flex items-center gap-3 border-b border-rule pb-4 mb-5">
+          <div className="p-2.5 rounded-lg bg-success/40 border border-success/40 text-success">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-serif text-lg font-bold text-zinc-100">
+            <h2 className="font-serif text-lg font-bold text-content-faint">
               Rights Evaluation & Legal Review
             </h2>
-            <p className="text-xs text-zinc-400 line-clamp-1">{workTitle}</p>
+            <p className="text-xs text-content-faint line-clamp-1">{workTitle}</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="bg-zinc-900/60 border border-zinc-800/80 rounded-lg p-3.5 flex items-center justify-between">
-            <span className="text-xs text-zinc-400">Current Rights State:</span>
+          <div className="bg-surface-raised/60 border border-rule/80 rounded-lg p-3.5 flex items-center justify-between">
+            <span className="text-xs text-content-faint">Current Rights State:</span>
             <RightsBadge status={currentStatus} />
           </div>
 
           <div>
-            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1.5">
+            <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1.5">
               New Rights Decision Status *
             </label>
             <select
               value={newStatus}
               onChange={(e) => setNewStatus(e.target.value as ReferenceRightsStatus)}
-              className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-emerald-500"
+              className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
             >
               <option value="PUBLIC_DOMAIN">PUBLIC_DOMAIN (Verified Free of Restrictions)</option>
               <option value="LICENSED">LICENSED (Explicit License / Rights Holder Permission)</option>
@@ -135,7 +135,7 @@ export function RightsReviewModal({
           </div>
 
           {newStatus === "RIGHTS_UNVERIFIED" && (
-            <div className="p-3 bg-amber-950/30 border border-amber-800/40 rounded-lg flex items-start gap-2 text-amber-300 text-xs">
+            <div className="p-3 bg-warning/30 border border-warning/40 rounded-lg flex items-start gap-2 text-warning text-xs">
               <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
               <span>
                 <strong>Invariant Active:</strong> Unverified items cannot host downloaded files on Thoughts.Whatever. Users will only be able to view the bibliographic entry and external source link.
@@ -144,7 +144,7 @@ export function RightsReviewModal({
           )}
 
           {newStatus === "RESTRICTED" && (
-            <div className="p-3 bg-rose-950/30 border border-rose-800/40 rounded-lg flex items-start gap-2 text-rose-300 text-xs">
+            <div className="p-3 bg-danger/30 border border-danger/40 rounded-lg flex items-start gap-2 text-danger text-xs">
               <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
               <span>
                 <strong>Invariant Active:</strong> Restricted works cannot expose hosted downloads or online reader files. External hosting mode will be enforced.
@@ -154,7 +154,7 @@ export function RightsReviewModal({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
+              <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                 License Designation
               </label>
               <input
@@ -162,11 +162,11 @@ export function RightsReviewModal({
                 placeholder="e.g. Public Domain Mark 1.0, CC BY-SA 4.0"
                 value={license}
                 onChange={(e) => setLicense(e.target.value)}
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
               />
             </div>
             <div>
-              <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
+              <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
                 Rights Holder / Authority
               </label>
               <input
@@ -174,13 +174,13 @@ export function RightsReviewModal({
                 placeholder="e.g. Estate of author, Publisher, Public Domain"
                 value={rightsHolder}
                 onChange={(e) => setRightsHolder(e.target.value)}
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
+            <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
               Evidence URL (Catalog / Gazette / Copyright Record)
             </label>
             <input
@@ -188,12 +188,12 @@ export function RightsReviewModal({
               placeholder="https://archive.org/... or https://copyright.gov.in/..."
               value={evidenceUrl}
               onChange={(e) => setEvidenceUrl(e.target.value)}
-              className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-emerald-500"
+              className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
+            <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
               Decision Reason (Mandatory for Audit Trail) *
             </label>
             <input
@@ -202,12 +202,12 @@ export function RightsReviewModal({
               placeholder="e.g. Author died in 1941, 60-year post-mortem term expired under Section 22"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-emerald-500"
+              className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
+            <label className="block text-xs font-mono uppercase tracking-wider text-content-faint mb-1">
               Verification Notes & Archival Context
             </label>
             <textarea
@@ -215,49 +215,49 @@ export function RightsReviewModal({
               placeholder="Additional legal justification, edition comparison, or institutional notes..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-emerald-500 resize-none"
+              className="w-full bg-surface-raised border border-rule rounded-lg px-3 py-2 text-sm text-content-faint focus:outline-none focus:border-success resize-none"
             />
           </div>
 
           {auditLogs.length > 0 && (
-            <div className="mt-4 pt-4 border-t border-zinc-800">
-              <h4 className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-zinc-400 mb-2">
+            <div className="mt-4 pt-4 border-t border-rule">
+              <h4 className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-content-faint mb-2">
                 <History className="w-3.5 h-3.5" /> Immutable Rights History
               </h4>
               <div className="space-y-2 max-h-32 overflow-y-auto pr-1">
                 {auditLogs.map((log) => (
                   <div
                     key={log.id}
-                    className="p-2 bg-zinc-900/50 border border-zinc-800/60 rounded text-xs space-y-1"
+                    className="p-2 bg-surface-raised/50 border border-rule/60 rounded text-xs space-y-1"
                   >
-                    <div className="flex items-center justify-between text-zinc-400">
+                    <div className="flex items-center justify-between text-content-faint">
                       <span>{log.changedBy}</span>
                       <span>{new Date(log.createdAt).toLocaleDateString()}</span>
                     </div>
-                    <div className="text-zinc-200">
-                      <span className="font-mono text-zinc-400">{log.previousStatus}</span>
+                    <div className="text-content-faint">
+                      <span className="font-mono text-content-faint">{log.previousStatus}</span>
                       {" → "}
-                      <span className="font-mono font-medium text-emerald-400">{log.newStatus}</span>
+                      <span className="font-mono font-medium text-success">{log.newStatus}</span>
                     </div>
-                    <p className="text-zinc-300 italic">{log.reason}</p>
+                    <p className="text-content-faint italic">{log.reason}</p>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-rule">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm text-zinc-400 hover:text-zinc-100 border border-zinc-800 rounded-lg hover:bg-zinc-800/50"
+              className="px-4 py-2 text-sm text-content-faint hover:text-content-faint/80 border border-rule rounded-lg hover:bg-surface-raised/50"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 text-sm font-semibold text-zinc-950 bg-emerald-400 hover:bg-emerald-300 rounded-lg flex items-center gap-2 disabled:opacity-50"
+              className="px-5 py-2 text-sm font-semibold text-content bg-success hover:bg-success/85 rounded-lg flex items-center gap-2 disabled:opacity-50"
             >
               {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
               Commit Rights Decision

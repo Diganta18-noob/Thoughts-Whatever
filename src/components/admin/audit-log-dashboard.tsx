@@ -158,19 +158,19 @@ export function AuditLogDashboard() {
     switch (severity) {
       case "critical":
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-0.5 font-mono text-xs font-medium text-red-400 border border-red-500/20">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-danger/10 px-2.5 py-0.5 font-mono text-xs font-medium text-danger border border-danger/20">
             <AlertTriangle className="h-3 w-3" /> critical
           </span>
         );
       case "warning":
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-2.5 py-0.5 font-mono text-xs font-medium text-amber-400 border border-amber-500/20">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-warning/10 px-2.5 py-0.5 font-mono text-xs font-medium text-warning border border-warning/20">
             <Info className="h-3 w-3" /> warning
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 font-mono text-xs font-medium text-emerald-400 border border-emerald-500/20">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-0.5 font-mono text-xs font-medium text-success border border-success/20">
             <CheckCircle2 className="h-3 w-3" /> info
           </span>
         );
@@ -178,10 +178,10 @@ export function AuditLogDashboard() {
   };
 
   const getActionBadgeColor = (action: string) => {
-    if (action.includes("create") || action.includes("publish")) return "bg-blue-500/10 text-blue-400 border-blue-500/20";
-    if (action.includes("update") || action.includes("reorder")) return "bg-amber-500/10 text-amber-400 border-amber-500/20";
-    if (action.includes("delete") || action.includes("archive")) return "bg-rose-500/10 text-rose-400 border-rose-500/20";
-    if (action.includes("login")) return "bg-purple-500/10 text-purple-400 border-purple-500/20";
+    if (action.includes("create") || action.includes("publish")) return "bg-info/10 text-info border-info/20";
+    if (action.includes("update") || action.includes("reorder")) return "bg-warning/10 text-warning border-warning/20";
+    if (action.includes("delete") || action.includes("archive")) return "bg-danger/10 text-danger border-danger/20";
+    if (action.includes("login")) return "bg-special/10 text-special border-special/20";
     return "bg-surface-raised text-content-soft border-rule";
   };
 
@@ -239,7 +239,7 @@ export function AuditLogDashboard() {
         <div className="rounded-sm border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
             <span className="font-sans text-xs">Today&apos;s Activity</span>
-            <Clock className="h-4 w-4 text-blue-400" />
+            <Clock className="h-4 w-4 text-info" />
           </div>
           <p className="mt-2 font-mono text-2xl font-semibold text-content">
             {stats.todayCount.toLocaleString()}
@@ -249,7 +249,7 @@ export function AuditLogDashboard() {
         <div className="rounded-sm border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
             <span className="font-sans text-xs">Critical Alerts</span>
-            <ShieldAlert className="h-4 w-4 text-red-400" />
+            <ShieldAlert className="h-4 w-4 text-danger" />
           </div>
           <p className="mt-2 font-mono text-2xl font-semibold text-content">
             {stats.criticalCount.toLocaleString()}

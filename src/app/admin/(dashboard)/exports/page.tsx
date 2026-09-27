@@ -228,7 +228,7 @@ export default function DataExportCenterPage() {
                     <span className="bg-surface-raised border border-rule px-1.5 py-0.5 rounded text-[10px] text-content-soft font-semibold">
                       {job.format}
                     </span>
-                    <span className="text-emerald-600 dark:text-emerald-400 font-semibold text-[10px] uppercase">
+                    <span className="text-success font-semibold text-[10px] uppercase">
                       {job.status}
                     </span>
                   </div>

@@ -125,7 +125,7 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
           {/* Prompt Text (Required) */}
           <div className="space-y-1.5">
             <label className="block font-sans text-xs font-medium text-content">
-              Prompt Text <span className="text-red-400">*</span>
+              Prompt Text <span className="text-danger">*</span>
             </label>
             <textarea
               required
@@ -270,7 +270,7 @@ export function PromptForm({ initialData, isEditing = false }: PromptFormProps) 
                   <button
                     type="button"
                     onClick={() => handleRemoveTag(tag)}
-                    className="text-content-soft hover:text-red-400 transition"
+                    className="text-content-soft hover:text-danger transition"
                   >
                     <X className="h-3 w-3" />
                   </button>

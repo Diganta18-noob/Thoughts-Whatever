@@ -191,7 +191,7 @@ export default function AdvancedAnalyticsPage() {
               <div className="font-serif text-2xl font-normal text-content">
                 {data.overview.returningVisitors.toLocaleString()}
               </div>
-              <p className="font-mono text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold">Loyal audience</p>
+              <p className="font-mono text-[10px] text-success font-semibold">Loyal audience</p>
             </div>
 
             <div className="rounded-sm border border-rule bg-surface-raised p-4 space-y-1">
@@ -345,7 +345,7 @@ export default function AdvancedAnalyticsPage() {
                     </div>
                     <div>
                       <span className="text-content-faint">Completion:</span>
-                      <p className="font-bold text-emerald-700 dark:text-emerald-400">{s.completionRate}%</p>
+                      <p className="font-bold text-success">{s.completionRate}%</p>
                     </div>
                   </div>
 

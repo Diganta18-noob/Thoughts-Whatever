@@ -159,11 +159,11 @@ export function SEOSidebar({ onClose, className }: SEOSidebarProps) {
           )}
         </div>
         <div className="mt-2 flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
           <span className="font-mono text-xs font-semibold uppercase tracking-wider text-content">
             SEO Growth Engine
           </span>
-          <span className="ml-auto rounded bg-emerald-500/10 px-1.5 py-0.5 font-mono text-[9px] font-bold text-emerald-600 dark:text-emerald-400">
+          <span className="ml-auto rounded bg-success/10 px-1.5 py-0.5 font-mono text-[9px] font-bold text-success">
             PRO
           </span>
         </div>
@@ -237,7 +237,7 @@ export function SEOSidebar({ onClose, className }: SEOSidebarProps) {
       {/* Sidebar Footer */}
       <div className="shrink-0 border-t border-rule p-3 font-mono text-[10px] text-content-faint text-center flex items-center justify-between">
         <span>White-Hat Organic SEO</span>
-        <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Active</span>
+        <span className="text-success font-semibold">Active</span>
       </div>
     </aside>
   );

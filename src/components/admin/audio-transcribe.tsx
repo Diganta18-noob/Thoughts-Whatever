@@ -424,16 +424,16 @@ export function AudioTranscribe({
   // Pre-flight unavailable state
   if (apiStatus === "unavailable") {
     return (
-      <div className="rounded-sm border border-red-500/20 bg-red-500/5 p-5">
+      <div className="rounded-sm border border-danger/20 bg-danger/5 p-5">
         <div className="flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
+          <AlertCircle className="h-5 w-5 text-danger shrink-0 mt-0.5" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-red-500">Transcription Service Unavailable</p>
-            <p className="mt-1 text-xs text-red-500/80">{apiError}</p>
+            <p className="text-sm font-medium text-danger">Transcription Service Unavailable</p>
+            <p className="mt-1 text-xs text-danger/80">{apiError}</p>
             <button
               type="button"
               onClick={checkApiAvailability}
-              className="mt-3 inline-flex items-center gap-1.5 rounded-sm bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-500 transition hover:bg-red-500/20"
+              className="mt-3 inline-flex items-center gap-1.5 rounded-sm bg-danger/10 px-3 py-1.5 text-xs font-medium text-danger transition hover:bg-danger/20"
             >
               <RefreshCw className="h-3.5 w-3.5" />
               Retry Check
@@ -453,7 +453,7 @@ export function AudioTranscribe({
           <h3 className="font-serif text-sm font-semibold text-content" lang="en">
             {state === "reviewing" || state === "complete" ? "Transcription Final Review" : label}
           </h3>
-          <span className="rounded-full bg-green-500/10 px-2 py-0.5 text-[0.65rem] font-medium text-green-500">
+          <span className="rounded-full bg-success/10 px-2 py-0.5 text-[0.65rem] font-medium text-success">
             {provider || "Whisper AI Ready"}
           </span>
         </div>
@@ -589,7 +589,7 @@ export function AudioTranscribe({
               <span>·</span>
               <span>~{readTime} min read</span>
               <span>·</span>
-              <span className="text-green-500 font-medium">Cost: FREE</span>
+              <span className="text-success font-medium">Cost: FREE</span>
             </div>
           </div>
 
@@ -611,7 +611,7 @@ export function AudioTranscribe({
                 className={cn(
                   "inline-flex items-center gap-2 rounded-sm px-4 py-2 text-sm font-medium transition",
                   state === "complete"
-                    ? "bg-green-600 text-white"
+                    ? "bg-success text-surface"
                     : "bg-accent text-surface hover:opacity-90"
                 )}
               >
@@ -643,12 +643,12 @@ export function AudioTranscribe({
 
       {/* Error display (ONLY when state === 'error' or error exists outside transcribing) */}
       {error && state !== "transcribing" && (
-        <div className="flex items-start gap-2.5 text-xs text-red-500 rounded-sm border border-red-500/20 bg-red-500/5 p-3">
+        <div className="flex items-start gap-2.5 text-xs text-danger rounded-sm border border-danger/20 bg-danger/5 p-3">
           <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
           <div className="flex-1 space-y-1.5">
             <p className="font-medium break-words">{error}</p>
             {errorCode && getErrorDetails(errorCode)?.solution && (
-              <p className="text-red-500/80">{getErrorDetails(errorCode).solution}</p>
+              <p className="text-danger/80">{getErrorDetails(errorCode).solution}</p>
             )}
 
             <div className="mt-2 flex items-center gap-2">
@@ -656,7 +656,7 @@ export function AudioTranscribe({
                 <button
                   type="button"
                   onClick={() => handleTranscribe(true)}
-                  className="inline-flex items-center gap-1.5 rounded-sm bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-500 transition hover:bg-red-500/20"
+                  className="inline-flex items-center gap-1.5 rounded-sm bg-danger/10 px-2.5 py-1 text-xs font-medium text-danger transition hover:bg-danger/20"
                 >
                   <RefreshCw className="h-3 w-3" />
                   Retry Transcription {retryCount > 0 ? `(Attempt ${retryCount + 1}/${MAX_RETRIES})` : ""}
@@ -677,7 +677,7 @@ export function AudioTranscribe({
           <button
             type="button"
             onClick={dismissError}
-            className="text-red-400 hover:text-red-600 transition"
+            className="text-danger hover:text-danger/80 transition"
             aria-label="Close error"
           >
             <X className="h-4 w-4" />
@@ -687,7 +687,7 @@ export function AudioTranscribe({
 
       {/* Auto-Recovery Success Banner */}
       {autoFixed && state === "reviewing" && (
-        <div className="flex items-center gap-2 rounded-sm border border-green-500/20 bg-green-500/5 px-3 py-2 text-xs text-green-500">
+        <div className="flex items-center gap-2 rounded-sm border border-success/20 bg-success/5 px-3 py-2 text-xs text-success">
           <Zap className="h-4 w-4 shrink-0" />
           <span className="font-medium">
             ⚡ Auto-recovered using {provider} after {recoveryAttempts} recovery attempt{recoveryAttempts !== 1 ? "s" : ""}.
@@ -695,7 +695,7 @@ export function AudioTranscribe({
           <button
             type="button"
             onClick={() => setShowActivityLog(!showActivityLog)}
-            className="ml-auto text-green-500/70 hover:text-green-500 transition"
+            className="ml-auto text-success/70 hover:text-success transition"
           >
             {showActivityLog ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
           </button>
@@ -729,14 +729,14 @@ export function AudioTranscribe({
                   AUTO_FIX: "🔧",
                 };
                 const colors: Record<string, string> = {
-                  ATTEMPT: "text-blue-400",
-                  RETRY: "text-yellow-400",
-                  SKIP: "text-orange-400",
-                  FALLBACK: "text-purple-400",
-                  SUCCESS: "text-green-400",
-                  ERROR: "text-red-400",
-                  CIRCUIT_OPEN: "text-red-500",
-                  AUTO_FIX: "text-green-500",
+                  ATTEMPT: "text-info",
+                  RETRY: "text-warning",
+                  SKIP: "text-warning",
+                  FALLBACK: "text-special",
+                  SUCCESS: "text-success",
+                  ERROR: "text-danger",
+                  CIRCUIT_OPEN: "text-danger",
+                  AUTO_FIX: "text-success",
                 };
                 const time = new Date(event.timestamp).toLocaleTimeString();
                 return (

@@ -98,13 +98,13 @@ export default function SystemMonitoringPage() {
             <div className="border border-rule bg-surface p-5 space-y-2">
               <div className="flex items-center justify-between text-content-faint">
                 <span className="font-mono text-[11px] uppercase tracking-wider">Edge API</span>
-                <Zap className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                <Zap className="h-4 w-4 text-success" />
               </div>
               <div className="flex items-baseline gap-2">
                 <span className="font-serif text-2xl font-bold text-content">
                   {data?.api?.latencyMs}ms
                 </span>
-                <span className="font-sans text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-medium">
+                <span className="font-sans text-xs text-success flex items-center gap-1 font-medium">
                   <CheckCircle2 className="h-3 w-3" /> Healthy
                 </span>
               </div>
@@ -123,7 +123,7 @@ export default function SystemMonitoringPage() {
                 <span className="font-serif text-2xl font-bold text-content">
                   {data?.database?.latencyMs}ms
                 </span>
-                <span className="font-sans text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-medium">
+                <span className="font-sans text-xs text-success flex items-center gap-1 font-medium">
                   <CheckCircle2 className="h-3 w-3" /> Connected
                 </span>
               </div>
@@ -159,7 +159,7 @@ export default function SystemMonitoringPage() {
             <div className="border border-rule bg-surface p-5 space-y-2">
               <div className="flex items-center justify-between text-content-faint">
                 <span className="font-mono text-[11px] uppercase tracking-wider">Active Alerts</span>
-                <AlertTriangle className={cn("h-4 w-4", data?.summary?.activeIncidentsCount > 0 ? "text-amber-600" : "text-content-faint")} />
+                <AlertTriangle className={cn("h-4 w-4", data?.summary?.activeIncidentsCount > 0 ? "text-warning" : "text-content-faint")} />
               </div>
               <div className="flex items-baseline gap-2">
                 <span className="font-serif text-2xl font-bold text-content">
@@ -223,7 +223,7 @@ export default function SystemMonitoringPage() {
                       <div className="flex items-center gap-2">
                         <span className={cn(
                           "font-mono text-[10px] uppercase px-1.5 py-0.5 rounded-xs font-bold",
-                          err.severity === "critical" ? "bg-red-500/10 text-red-600 dark:text-red-400" : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                          err.severity === "critical" ? "bg-danger/10 text-danger" : "bg-warning/10 text-warning"
                         )}>
                           {err.severity}
                         </span>

@@ -28,9 +28,9 @@ export default function NewPieceError({
         Back to dashboard
       </Link>
 
-      <div className="rounded-sm border border-red-500/20 bg-red-500/5 p-6">
+      <div className="rounded-sm border border-danger/20 bg-danger/5 p-6">
         <div className="flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 shrink-0 text-red-500" />
+          <AlertCircle className="h-5 w-5 shrink-0 text-danger" />
           <div>
             <h2 className="font-serif text-lg font-semibold text-content">
               Failed to load editor

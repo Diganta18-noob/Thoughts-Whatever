@@ -101,8 +101,8 @@ export default function SEODashboardOverviewPage() {
       subtext: activeWebsite ? `${activeWebsite.name} (Active Scope)` : `${websites.length} Active Projects`,
       sourceTag: "System Registry",
       icon: Globe,
-      color: "text-blue-500",
-      bg: "bg-blue-500/10",
+      color: "text-info",
+      bg: "bg-info/10",
       href: "/admin/seo-engine/websites",
     },
     {
@@ -119,8 +119,8 @@ export default function SEODashboardOverviewPage() {
         : "Requires Google Search Console",
       sourceTag: data?.dataSources.isLiveTrafficVerified ? "Verified Telemetry" : "SERP Estimated",
       icon: TrendingUp,
-      color: "text-emerald-500",
-      bg: "bg-emerald-500/10",
+      color: "text-success",
+      bg: "bg-success/10",
       href: "/admin/seo-engine/keywords",
     },
     {
@@ -139,8 +139,8 @@ export default function SEODashboardOverviewPage() {
       subtext: stats ? `${stats.totalReferringDomains} Unique Root Domains` : "0 Domains",
       sourceTag: "Database Verified",
       icon: Network,
-      color: "text-cyan-500",
-      bg: "bg-cyan-500/10",
+      color: "text-info",
+      bg: "bg-info/10",
       href: "/admin/seo-engine/backlinks",
     },
     {
@@ -149,8 +149,8 @@ export default function SEODashboardOverviewPage() {
       subtext: "Detected in Past 30 Days",
       sourceTag: "Database Verified",
       icon: PlusCircle,
-      color: "text-emerald-600 dark:text-emerald-400",
-      bg: "bg-emerald-500/10",
+      color: "text-success",
+      bg: "bg-success/10",
       href: "/admin/seo-engine/backlinks?filter=new",
     },
     {
@@ -159,8 +159,8 @@ export default function SEODashboardOverviewPage() {
       subtext: stats && stats.lostBacklinks30d > 0 ? "Review for Recovery" : "Zero Lost Links",
       sourceTag: "Database Monitored",
       icon: AlertTriangle,
-      color: stats && stats.lostBacklinks30d > 0 ? "text-amber-500" : "text-content-soft",
-      bg: "bg-amber-500/10",
+      color: stats && stats.lostBacklinks30d > 0 ? "text-warning" : "text-content-soft",
+      bg: "bg-warning/10",
       href: "/admin/seo-engine/backlinks?filter=lost",
     },
     {
@@ -169,8 +169,8 @@ export default function SEODashboardOverviewPage() {
       subtext: stats ? `${stats.qualifiedOpportunitiesCount} Qualified Prospects` : "0 Active Campaigns",
       sourceTag: "Outreach CRM",
       icon: Send,
-      color: "text-purple-500",
-      bg: "bg-purple-500/10",
+      color: "text-special",
+      bg: "bg-special/10",
       href: "/admin/seo-engine/campaigns",
     },
     {
@@ -179,8 +179,8 @@ export default function SEODashboardOverviewPage() {
       subtext: stats && stats.totalKeywords > 0 ? `Across ${stats.totalKeywords} Tracked Keywords` : "Add keywords to track",
       sourceTag: "Database Rank Tracker",
       icon: Target,
-      color: "text-indigo-500",
-      bg: "bg-indigo-500/10",
+      color: "text-special",
+      bg: "bg-special/10",
       href: "/admin/seo-engine/keywords",
     },
   ];
@@ -291,7 +291,7 @@ export default function SEODashboardOverviewPage() {
         <div className="rounded-xl border border-rule bg-surface p-5 shadow-xs">
           <div className="flex items-center justify-between border-b border-rule pb-3">
             <div className="flex items-center gap-2">
-              <Link2 className="h-4 w-4 text-emerald-500" />
+              <Link2 className="h-4 w-4 text-success" />
               <h3 className="font-sans text-sm font-semibold text-content">
                 Monitored Active Backlinks
               </h3>
@@ -333,7 +333,7 @@ export default function SEODashboardOverviewPage() {
                       </span>
                       <span className={cn(
                         "rounded px-1.5 py-0.2 font-mono text-[9px] font-semibold",
-                        link.isFollow ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" : "bg-rule/60 text-content-faint"
+                        link.isFollow ? "bg-success/10 text-success" : "bg-rule/60 text-content-faint"
                       )}>
                         {link.isFollow ? "Dofollow" : "Nofollow"}
                       </span>
@@ -361,7 +361,7 @@ export default function SEODashboardOverviewPage() {
         <div className="rounded-xl border border-rule bg-surface p-5 shadow-xs">
           <div className="flex items-center justify-between border-b border-rule pb-3">
             <div className="flex items-center gap-2">
-              <Send className="h-4 w-4 text-purple-500" />
+              <Send className="h-4 w-4 text-special" />
               <h3 className="font-sans text-sm font-semibold text-content">
                 Active Outreach Campaigns
               </h3>
@@ -399,7 +399,7 @@ export default function SEODashboardOverviewPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-semibold text-content truncate">{c.name}</span>
-                      <span className="rounded bg-purple-500/10 px-1.5 py-0.2 font-mono text-[9px] font-semibold text-purple-600 dark:text-purple-400">
+                      <span className="rounded bg-special/10 px-1.5 py-0.2 font-mono text-[9px] font-semibold text-special">
                         {c.campaignType}
                       </span>
                     </div>

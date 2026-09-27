@@ -43,6 +43,8 @@ const config: Config = {
         danger: "rgb(var(--danger) / <alpha-value>)",
         success: "rgb(var(--success) / <alpha-value>)",
         warning: "rgb(var(--warning) / <alpha-value>)",
+        info: "rgb(var(--info) / <alpha-value>)",
+        special: "rgb(var(--special) / <alpha-value>)",
         // ─── shadcn bridge ──────────────────────────────────
         border: "rgb(var(--rule) / <alpha-value>)",
         input: "rgb(var(--rule) / <alpha-value>)",
@@ -118,9 +120,15 @@ const config: Config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        xs: "calc(var(--radius) - 6px)",
       },
       boxShadow: {
         card: "var(--shadow-card)",
+      },
+      // Tailwind 3 has no `xs` step on this scale, so the `backdrop-blur-xs`
+      // already used by the admin modal scrims was compiling to nothing.
+      backdropBlur: {
+        xs: "2px",
       },
       keyframes: {
         "fade-up": {
@@ -135,11 +143,19 @@ const config: Config = {
           from: { transform: "translateY(100%)" },
           to: { transform: "translateY(0)" },
         },
+        // Modal entrance. Starts at 0.97 rather than something smaller: a
+        // dialog that visibly grows reads as slow the tenth time you open it,
+        // and these are opened all day.
+        "scale-up": {
+          from: { opacity: "0", transform: "scale(0.97)" },
+          to: { opacity: "1", transform: "scale(1)" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.5s ease-out both",
         "fade-in": "fade-in 0.4s ease-out both",
         "slide-up": "slide-up 0.28s cubic-bezier(0.32, 0.72, 0, 1) both",
+        "scale-up": "scale-up 0.18s cubic-bezier(0.16, 1, 0.3, 1) both",
       },
     },
   },

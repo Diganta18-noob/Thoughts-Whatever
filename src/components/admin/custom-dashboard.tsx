@@ -142,7 +142,7 @@ export function CustomDashboard({
             className={cn(
               "inline-flex items-center gap-1.5 rounded-sm border px-3 py-1.5 font-sans text-xs transition",
               customizing
-                ? "bg-accent text-white border-accent"
+                ? "bg-accent text-surface border-accent"
                 : "border-rule bg-surface-raised text-content-soft hover:text-content hover:border-accent/40"
             )}
           >
@@ -152,7 +152,7 @@ export function CustomDashboard({
 
           <Link
             href="/admin/pieces/new"
-            className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-3 py-1.5 font-sans text-xs font-medium text-white hover:bg-accent/90 transition"
+            className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-3 py-1.5 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition"
           >
             <Plus className="h-4 w-4" />
             New Piece
@@ -277,7 +277,7 @@ export function CustomDashboard({
 
                   <div className="p-3 bg-surface rounded border border-rule/50 space-y-1">
                     <span className="font-mono text-[10px] uppercase text-content-faint">Knowledge Graph</span>
-                    <div className="font-serif text-base font-bold text-emerald-700 dark:text-emerald-400">
+                    <div className="font-serif text-base font-bold text-success">
                       Topology Active
                     </div>
                     <Link href="/admin/content-graph" className="text-accent hover:underline text-[11px] block mt-0.5">

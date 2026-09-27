@@ -114,9 +114,9 @@ export function RevisionDiffViewer({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-emerald-700 dark:text-emerald-400 font-bold">+{stats.added}</span>
+          <span className="text-success font-bold">+{stats.added}</span>
           <span className="text-rule">/</span>
-          <span className="text-rose-700 dark:text-rose-400 font-bold">-{stats.removed}</span>
+          <span className="text-danger font-bold">-{stats.removed}</span>
         </div>
       </div>
 
@@ -127,8 +127,8 @@ export function RevisionDiffViewer({
             key={idx}
             className={cn(
               "flex items-start px-2 py-0.5 border-b border-rule/30 transition",
-              line.type === "added" && "bg-emerald-500/10 text-emerald-900 dark:text-emerald-300 font-medium",
-              line.type === "removed" && "bg-rose-500/10 text-rose-900 dark:text-rose-300 line-through opacity-80",
+              line.type === "added" && "bg-success/10 text-success font-medium",
+              line.type === "removed" && "bg-danger/10 text-danger line-through opacity-80",
               line.type === "unchanged" && "text-content-soft hover:bg-surface"
             )}
           >

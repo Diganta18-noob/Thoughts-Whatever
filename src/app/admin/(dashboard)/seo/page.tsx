@@ -139,7 +139,7 @@ export default function SEOScannerPage() {
           type="button"
           onClick={handleRunScan}
           disabled={scanning}
-          className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-white hover:bg-accent/90 transition disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition disabled:opacity-50"
         >
           <RefreshCw className={cn("h-4 w-4", scanning && "animate-spin")} />
           {scanning ? "Scanning Articles..." : "Run SEO Audit Now"}
@@ -168,7 +168,7 @@ export default function SEOScannerPage() {
                 <div
                   className={cn(
                     "h-full transition-all",
-                    data.overallScore >= 80 ? "bg-emerald-600" : data.overallScore >= 60 ? "bg-amber-500" : "bg-rose-600"
+                    data.overallScore >= 80 ? "bg-success" : data.overallScore >= 60 ? "bg-warning" : "bg-danger"
                   )}
                   style={{ width: `${data.overallScore}%` }}
                 />
@@ -193,9 +193,9 @@ export default function SEOScannerPage() {
                 <span className="label">
                   Dead / Broken Links
                 </span>
-                <Link2Off className="h-4 w-4 text-rose-600" />
+                <Link2Off className="h-4 w-4 text-danger" />
               </div>
-              <div className="font-serif text-3xl font-normal text-rose-700 dark:text-rose-400">
+              <div className="font-serif text-3xl font-normal text-danger">
                 {data.brokenLinksCount}
               </div>
               <p className="font-sans text-[11px] text-content-soft">Requires URL repair</p>
@@ -206,7 +206,7 @@ export default function SEOScannerPage() {
                 <span className="label">
                   Image Alt Optimization
                 </span>
-                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
               </div>
               <div className="font-serif text-3xl font-normal text-content">
                 {data.categoryScores.imageOptimization}%
@@ -256,9 +256,9 @@ export default function SEOScannerPage() {
                         <span
                           className={cn(
                             "inline-flex items-center justify-center font-mono text-xs font-bold px-2 py-0.5 rounded-sm border",
-                            piece.score >= 80 && "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
-                            piece.score >= 60 && piece.score < 80 && "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
-                            piece.score < 60 && "bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20"
+                            piece.score >= 80 && "bg-success/10 text-success border-success/20",
+                            piece.score >= 60 && piece.score < 80 && "bg-warning/10 text-warning border-warning/20",
+                            piece.score < 60 && "bg-danger/10 text-danger border-danger/20"
                           )}
                         >
                           {piece.score}
@@ -274,7 +274,7 @@ export default function SEOScannerPage() {
 
                       <td className="p-3">
                         {piece.issues.length === 0 ? (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">
+                          <span className="inline-flex items-center gap-1 text-[11px] text-success font-medium">
                             <CheckCircle2 className="h-3 w-3" /> Fully optimized
                           </span>
                         ) : (
@@ -284,8 +284,8 @@ export default function SEOScannerPage() {
                                 key={i}
                                 className={cn(
                                   "rounded px-1.5 py-0.5 font-sans text-[10px]",
-                                  iss.severity === "critical" && "bg-rose-500/10 text-rose-700 dark:text-rose-400",
-                                  iss.severity === "warning" && "bg-amber-500/10 text-amber-800 dark:text-amber-400",
+                                  iss.severity === "critical" && "bg-danger/10 text-danger",
+                                  iss.severity === "warning" && "bg-warning/10 text-warning",
                                   iss.severity === "info" && "bg-surface text-content-soft border border-rule/50"
                                 )}
                               >
@@ -316,7 +316,7 @@ export default function SEOScannerPage() {
             <div className="rounded-sm border border-rule bg-surface-raised overflow-hidden">
               {data.brokenLinks.length === 0 ? (
                 <div className="p-12 text-center font-sans text-xs text-content-soft">
-                  <CheckCircle2 className="h-8 w-8 text-emerald-600 mx-auto mb-2" />
+                  <CheckCircle2 className="h-8 w-8 text-success mx-auto mb-2" />
                   <p className="font-serif text-base text-content">No Dead or Broken Links Detected</p>
                   <p className="text-content-faint mt-1">All internal and external references passed syntax and protocol verification.</p>
                 </div>
@@ -334,7 +334,7 @@ export default function SEOScannerPage() {
                   <tbody className="divide-y divide-rule/50">
                     {data.brokenLinks.map((link) => (
                       <tr key={link.id} className={cn("hover:bg-surface/50 transition", link.ignored && "opacity-40")}>
-                        <td className="p-3 font-mono text-[11px] text-rose-700 dark:text-rose-400 truncate max-w-xs">
+                        <td className="p-3 font-mono text-[11px] text-danger truncate max-w-xs">
                           {link.url}
                         </td>
                         <td className="p-3 font-medium text-content">

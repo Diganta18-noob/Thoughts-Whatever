@@ -54,9 +54,10 @@ export function StatsCard({ labelEn, labelBn, value, subtext, icon, trend }: Sta
           <span
             className={cn(
               "inline-flex shrink-0 items-center gap-1 font-mono text-xs font-semibold",
-              rising
-                ? "text-emerald-600 dark:text-emerald-400"
-                : "text-rose-600 dark:text-rose-400"
+              // `success`/`danger` rather than emerald/rose: these are the only
+              // greens and reds that re-resolve per theme, and the night
+              // palette needs a far lighter pair than cream does.
+              rising ? "text-success" : "text-danger"
             )}
           >
             {/* The arrow carries the direction for anyone who cannot separate

@@ -79,7 +79,7 @@ export default function EditorialIntelligencePage() {
 
           <Link
             href="/admin/pieces/new"
-            className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-3 py-1.5 font-sans text-xs font-medium text-white hover:bg-accent/90 transition"
+            className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-3 py-1.5 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition"
           >
             <FileEdit className="h-3.5 w-3.5" />
             New Commission
@@ -160,7 +160,7 @@ export default function EditorialIntelligencePage() {
             {/* Rising Topics */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="label flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
+                <h2 className="label flex items-center gap-2 text-success">
                   <TrendingUp className="h-3.5 w-3.5" />
                   Surging Literary Topics (30-Day Velocity)
                 </h2>
@@ -189,7 +189,7 @@ export default function EditorialIntelligencePage() {
                       </div>
 
                       <div className="text-right">
-                        <span className="inline-flex items-center gap-1 rounded bg-emerald-500/10 px-2 py-0.5 font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                        <span className="inline-flex items-center gap-1 rounded bg-success/10 px-2 py-0.5 font-mono text-xs font-bold text-success">
                           +{topic.growthPercent}%
                         </span>
                       </div>
@@ -202,7 +202,7 @@ export default function EditorialIntelligencePage() {
             {/* Declining Topics */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="label flex items-center gap-2 text-amber-700 dark:text-amber-400">
+                <h2 className="label flex items-center gap-2 text-warning">
                   <TrendingDown className="h-3.5 w-3.5" />
                   Declining / Cooling Topics
                 </h2>
@@ -231,7 +231,7 @@ export default function EditorialIntelligencePage() {
                       </div>
 
                       <div className="text-right">
-                        <span className="inline-flex items-center gap-1 rounded bg-amber-500/10 px-2 py-0.5 font-mono text-xs font-bold text-amber-700 dark:text-amber-400">
+                        <span className="inline-flex items-center gap-1 rounded bg-warning/10 px-2 py-0.5 font-mono text-xs font-bold text-warning">
                           {topic.growthPercent}%
                         </span>
                       </div>

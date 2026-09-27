@@ -284,8 +284,8 @@ export default function DeveloperAPICenterPage() {
                       <span className={cn(
                         "font-mono text-[10px] uppercase px-1.5 py-0.5 rounded-xs font-bold",
                         k.revoked
-                          ? "bg-red-500/10 text-red-600 dark:text-red-400"
-                          : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                          ? "bg-danger/10 text-danger"
+                          : "bg-success/10 text-success"
                       )}>
                         {k.revoked ? "REVOKED" : "ACTIVE"}
                       </span>
@@ -309,7 +309,7 @@ export default function DeveloperAPICenterPage() {
                     {!k.revoked && (
                       <button
                         onClick={() => handleRevokeKey(k.id)}
-                        className="rounded-sm border border-rule px-3 py-1.5 font-sans text-xs text-red-600 dark:text-red-400 hover:border-red-600"
+                        className="rounded-sm border border-rule px-3 py-1.5 font-sans text-xs text-danger hover:border-danger"
                       >
                         Revoke Key
                       </button>
@@ -338,7 +338,7 @@ export default function DeveloperAPICenterPage() {
                       <h3 className="font-serif text-base font-bold text-content">
                         {wh.name}
                       </h3>
-                      <span className="font-mono text-[10px] uppercase bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-xs font-bold">
+                      <span className="font-mono text-[10px] uppercase bg-success/10 text-success px-1.5 py-0.5 rounded-xs font-bold">
                         ACTIVE
                       </span>
                     </div>
@@ -403,7 +403,7 @@ export default function DeveloperAPICenterPage() {
                     onClick={() => handleCopy(newlyGeneratedSecret, "API Key")}
                     className="p-1 text-content-soft hover:text-content shrink-0"
                   >
-                    {copiedText === newlyGeneratedSecret ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
+                    {copiedText === newlyGeneratedSecret ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
                   </button>
                 </div>
 

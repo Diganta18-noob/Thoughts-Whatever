@@ -32,8 +32,8 @@ export default async function SEOGrowthEngineLayout({
             <WebsiteSwitcher />
             <span className="hidden md:inline h-4 w-[1px] bg-rule" />
             <div className="hidden md:flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-success">
+                <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
                 White-Hat Engine
               </span>
             </div>
@@ -50,7 +50,7 @@ export default async function SEOGrowthEngineLayout({
 
             <Link
               href="/admin/seo-engine/opportunities"
-              className="flex items-center gap-1.5 rounded-md bg-accent px-3.5 py-1.5 text-xs font-semibold text-white hover:opacity-90 transition shadow-xs"
+              className="flex items-center gap-1.5 rounded-md bg-accent px-3.5 py-1.5 text-xs font-semibold text-surface hover:opacity-90 transition shadow-xs"
             >
               <Sparkles className="h-3.5 w-3.5" />
               <span>Discover Links</span>

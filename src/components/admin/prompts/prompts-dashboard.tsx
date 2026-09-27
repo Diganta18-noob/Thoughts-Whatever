@@ -229,7 +229,7 @@ export function PromptsDashboard() {
         <div className="rounded-sm border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
             <span className="font-sans text-xs">Completed (Done)</span>
-            <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+            <CheckCircle2 className="h-4 w-4 text-success" />
           </div>
           <p className="mt-2 font-mono text-2xl font-semibold text-content">
             {doneCount}
@@ -239,7 +239,7 @@ export function PromptsDashboard() {
         <div className="rounded-sm border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
             <span className="font-sans text-xs">Planned / In Progress</span>
-            <Sparkles className="h-4 w-4 text-amber-400" />
+            <Sparkles className="h-4 w-4 text-warning" />
           </div>
           <p className="mt-2 font-mono text-2xl font-semibold text-content">
             {plannedCount}
@@ -249,7 +249,7 @@ export function PromptsDashboard() {
         <div className="rounded-sm border border-rule bg-surface p-4">
           <div className="flex items-center justify-between text-content-soft">
             <span className="font-sans text-xs">Ideas / Backlog</span>
-            <Layers className="h-4 w-4 text-purple-400" />
+            <Layers className="h-4 w-4 text-special" />
           </div>
           <p className="mt-2 font-mono text-2xl font-semibold text-content">
             {ideaCount}

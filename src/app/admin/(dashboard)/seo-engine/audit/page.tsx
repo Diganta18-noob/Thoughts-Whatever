@@ -143,7 +143,7 @@ export default function TechnicalSEOAuditPage() {
             type="button"
             onClick={handleRunAudit}
             disabled={scanning}
-            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-xs font-semibold text-white hover:opacity-90 transition shadow-xs disabled:opacity-50"
+            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-xs font-semibold text-surface hover:opacity-90 transition shadow-xs disabled:opacity-50"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", scanning && "animate-spin")} />
             <span>{scanning ? "Crawling Pages..." : "Run Full Site Audit"}</span>
@@ -167,7 +167,7 @@ export default function TechnicalSEOAuditPage() {
           <div className="my-3 flex items-baseline gap-3">
             <span className={cn(
               "font-sans text-4xl font-extrabold tracking-tight",
-              healthScore >= 85 ? "text-emerald-600 dark:text-emerald-400" : healthScore >= 70 ? "text-amber-500" : "text-red-500"
+              healthScore >= 85 ? "text-success" : healthScore >= 70 ? "text-warning" : "text-danger"
             )}>
               {loading ? "--" : `${healthScore}/100`}
             </span>
@@ -177,9 +177,9 @@ export default function TechnicalSEOAuditPage() {
           </div>
 
           <div className="flex items-center justify-between text-xs text-content-soft pt-2 border-t border-rule/60">
-            <span>Critical Issues: <strong className="text-red-500">{audit?.criticalIssuesCount || 0}</strong></span>
-            <span>Warnings: <strong className="text-amber-500">{audit?.highIssuesCount || 0}</strong></span>
-            <span>Resolved: <strong className="text-emerald-500">{audit?.resolvedIssuesCount || 0}</strong></span>
+            <span>Critical Issues: <strong className="text-danger">{audit?.criticalIssuesCount || 0}</strong></span>
+            <span>Warnings: <strong className="text-warning">{audit?.highIssuesCount || 0}</strong></span>
+            <span>Resolved: <strong className="text-success">{audit?.resolvedIssuesCount || 0}</strong></span>
           </div>
         </div>
 
@@ -202,7 +202,7 @@ export default function TechnicalSEOAuditPage() {
                 <div
                   className={cn(
                     "h-full rounded-full transition-all",
-                    cat.score >= 85 ? "bg-emerald-500" : cat.score >= 70 ? "bg-amber-500" : "bg-red-500"
+                    cat.score >= 85 ? "bg-success" : cat.score >= 70 ? "bg-warning" : "bg-danger"
                   )}
                   style={{ width: `${cat.score}%` }}
                 />
@@ -285,7 +285,7 @@ export default function TechnicalSEOAuditPage() {
         <div className="divide-y divide-rule/60">
           {filteredIssues.length === 0 ? (
             <div className="p-12 text-center">
-              <CheckCircle2 className="mx-auto h-8 w-8 text-emerald-500" />
+              <CheckCircle2 className="mx-auto h-8 w-8 text-success" />
               <h3 className="mt-2 font-sans text-sm font-semibold text-content">
                 No issues match your current filters!
               </h3>
@@ -306,18 +306,18 @@ export default function TechnicalSEOAuditPage() {
                     <span className={cn(
                       "rounded px-2 py-0.5 font-mono text-[10px] font-bold uppercase",
                       issue.severity === "CRITICAL"
-                        ? "bg-red-500/10 text-red-600 dark:text-red-400"
+                        ? "bg-danger/10 text-danger"
                         : issue.severity === "HIGH"
-                        ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                        ? "bg-warning/10 text-warning"
                         : issue.severity === "MEDIUM"
-                        ? "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"
-                        : "bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                        ? "bg-warning/10 text-warning"
+                        : "bg-info/10 text-info"
                     )}>
                       {issue.severity}
                     </span>
 
                     {/* Priority Score Tag */}
-                    <span className="inline-flex items-center gap-1 rounded bg-purple-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-purple-600 dark:text-purple-400">
+                    <span className="inline-flex items-center gap-1 rounded bg-special/10 px-2 py-0.5 font-mono text-[10px] font-bold text-special">
                       <Flame className="h-3 w-3" />
                       Priority {issue.priorityScore}/100
                     </span>
@@ -326,12 +326,12 @@ export default function TechnicalSEOAuditPage() {
                     <span className={cn(
                       "rounded px-2 py-0.5 font-mono text-[10px] font-medium",
                       issue.status === "RESOLVED"
-                        ? "bg-emerald-500/10 text-emerald-600"
+                        ? "bg-success/10 text-success"
                         : issue.status === "IN_PROGRESS"
-                        ? "bg-blue-500/10 text-blue-600"
+                        ? "bg-info/10 text-info"
                         : issue.status === "IGNORED"
                         ? "bg-surface-raised text-content-faint"
-                        : "bg-red-500/10 text-red-600"
+                        : "bg-danger/10 text-danger"
                     )}>
                       {issue.status}
                     </span>
@@ -382,7 +382,7 @@ export default function TechnicalSEOAuditPage() {
                     <button
                       type="button"
                       onClick={() => issue.id && handleUpdateStatus(issue.id, "RESOLVED")}
-                      className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 transition shadow-2xs"
+                      className="flex items-center gap-1.5 rounded-lg bg-success px-3 py-1.5 text-xs font-semibold text-surface hover:bg-success/85 transition shadow-2xs"
                     >
                       <Check className="h-3.5 w-3.5" />
                       <span>Mark Resolved</span>
@@ -404,7 +404,7 @@ export default function TechnicalSEOAuditPage() {
                       onClick={() => issue.id && handleUpdateStatus(issue.id, "IN_PROGRESS")}
                       className="flex items-center gap-1.5 rounded-lg border border-rule bg-surface px-3 py-1.5 text-xs font-medium text-content hover:bg-surface-raised transition shadow-2xs"
                     >
-                      <Clock className="h-3 w-3 text-blue-500" />
+                      <Clock className="h-3 w-3 text-info" />
                       <span>In Progress</span>
                     </button>
                   )}

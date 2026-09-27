@@ -91,11 +91,11 @@ export function confirmToast(
                 hotToast.error(err?.message || "Action failed");
               }
             }}
-            className={`rounded-md px-3.5 py-1.5 font-semibold text-white text-[11px] transition shadow-xs focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-surface ${
+            className={`rounded-md px-3.5 py-1.5 font-semibold text-surface text-[11px] transition shadow-xs focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-surface ${
               isDanger
-                ? "bg-rose-600 hover:bg-rose-700 focus:ring-rose-500"
+                ? "bg-danger hover:opacity-90 focus:ring-danger"
                 : isWarning
-                ? "bg-amber-600 hover:bg-amber-700 focus:ring-amber-500"
+                ? "bg-warning hover:opacity-90 focus:ring-warning"
                 : "bg-accent hover:opacity-90 focus:ring-accent"
             }`}
           >

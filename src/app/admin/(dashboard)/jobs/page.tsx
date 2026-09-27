@@ -5,16 +5,24 @@ import {
   Clock,
   Play,
   Pause,
-  CheckCircle2,
-  AlertTriangle,
   RefreshCw,
   Plus,
-  X,
-  FileText,
   Terminal,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import {
+  Badge,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+  EmptyState,
+  Input,
+  PageHeader,
+  Textarea,
+} from "@/components/ui";
 
 interface ScheduledJob {
   id: string;
@@ -146,51 +154,53 @@ export default function ScheduledJobsCenterPage() {
 
   return (
     <div className="space-y-8 animate-fade-in max-w-6xl pb-12">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-rule pb-5">
-        <div>
-          <span className="label block mb-1 font-mono uppercase tracking-widest text-[11px] text-content-faint">
-            Automation & Task Schedulers
-          </span>
-          <h1 className="font-serif text-2xl font-bold tracking-tight text-content">
-            Scheduled Jobs Center
-          </h1>
-          <p className="font-sans text-xs text-content-soft mt-1">
-            Configure automated cron tasks, trigger immediate maintenance pipelines, and inspect execution histories.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-2 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-surface transition hover:opacity-90"
-          >
+      <PageHeader
+        title="Scheduled Jobs Center"
+        subtitle="Configure automated cron tasks, trigger immediate maintenance pipelines, and inspect execution histories."
+        className="border-b border-rule"
+        actions={
+          <Button onClick={() => setShowAddModal(true)}>
             <Plus className="h-4 w-4" />
             Register Job
-          </button>
-        </div>
-      </div>
+          </Button>
+        }
+      />
 
       {/* Jobs Table / List */}
-      <div className="border border-rule bg-surface">
+      <div className="rounded-card border border-rule bg-surface">
         <div className="border-b border-rule px-6 py-4 flex items-center justify-between">
           <h2 className="label font-mono uppercase tracking-widest text-[11px]">
             Active Scheduler Registry ({jobs.length})
           </h2>
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={fetchJobs}
             disabled={loading}
-            className="p-1 text-content-soft hover:text-content"
-            title="Refresh jobs"
+            aria-label="Refresh jobs"
+            className="px-2"
           >
             <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
-          </button>
+          </Button>
         </div>
 
         {loading && jobs.length === 0 ? (
           <div className="py-20 text-center font-sans text-xs text-content-soft">
             Loading scheduled jobs...
           </div>
+        ) : jobs.length === 0 ? (
+          <EmptyState
+            className="border-0"
+            icon={<Clock className="h-6 w-6" />}
+            title="No scheduled jobs yet"
+            description="Register a cron task to automate maintenance pipelines and recurring editorial checks."
+            action={
+              <Button onClick={() => setShowAddModal(true)}>
+                <Plus className="h-4 w-4" />
+                Register Job
+              </Button>
+            }
+          />
         ) : (
           <div className="divide-y divide-rule">
             {jobs.map((job) => {
@@ -202,16 +212,18 @@ export default function ScheduledJobsCenterPage() {
                       <h3 className="font-serif text-base font-bold text-content">
                         {job.name}
                       </h3>
-                      <span className={cn(
-                        "font-mono text-[10px] uppercase px-2 py-0.5 rounded-xs font-semibold",
-                        !job.enabled
-                          ? "bg-content-faint/10 text-content-faint"
-                          : job.lastStatus === "FAILED"
-                          ? "bg-red-500/10 text-red-600 dark:text-red-400"
-                          : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                      )}>
+                      <Badge
+                        tone={
+                          !job.enabled
+                            ? "neutral"
+                            : job.lastStatus === "FAILED"
+                            ? "danger"
+                            : "success"
+                        }
+                        className="font-mono uppercase"
+                      >
                         {!job.enabled ? "PAUSED" : job.lastStatus || "READY"}
-                      </span>
+                      </Badge>
                     </div>
 
                     <p className="font-sans text-xs text-content-soft leading-relaxed">
@@ -233,31 +245,29 @@ export default function ScheduledJobsCenterPage() {
                   {/* Actions */}
                   <div className="flex items-center gap-2 shrink-0">
                     {job.executions && job.executions.length > 0 && job.executions[0].logs && (
-                      <button
+                      <Button
+                        variant="secondary"
+                        size="sm"
                         onClick={() => setSelectedLogs({ jobName: job.name, logs: job.executions![0].logs as string[] })}
-                        className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-1.5 font-sans text-xs text-content-soft hover:border-content-soft hover:text-content"
                       >
                         <Terminal className="h-3.5 w-3.5" />
                         Logs
-                      </button>
+                      </Button>
                     )}
 
-                    <button
-                      onClick={() => handleToggleJob(job)}
-                      className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-1.5 font-sans text-xs text-content-soft hover:border-content-soft hover:text-content"
-                    >
+                    <Button variant="secondary" size="sm" onClick={() => handleToggleJob(job)}>
                       {job.enabled ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
                       {job.enabled ? "Pause" : "Resume"}
-                    </button>
+                    </Button>
 
-                    <button
+                    <Button
+                      size="sm"
                       onClick={() => handleRunJob(job)}
                       disabled={isRunning || !job.enabled}
-                      className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-3.5 py-1.5 font-sans text-xs font-medium text-surface transition hover:opacity-90 disabled:opacity-50"
                     >
                       <Play className={cn("h-3.5 w-3.5", isRunning && "animate-spin")} />
                       {isRunning ? "Running..." : "Run Now"}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               );
@@ -267,120 +277,101 @@ export default function ScheduledJobsCenterPage() {
       </div>
 
       {/* Execution Logs Modal */}
-      {selectedLogs && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-content/40 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-2xl border border-rule bg-surface shadow-2xl p-6 space-y-4 animate-scale-up">
-            <div className="flex items-center justify-between border-b border-rule pb-3">
-              <div className="flex items-center gap-2">
-                <Terminal className="h-4 w-4 text-accent" />
-                <h3 className="font-serif text-base font-bold text-content">
-                  Execution Output — {selectedLogs.jobName}
-                </h3>
+      <Dialog
+        open={selectedLogs !== null}
+        onOpenChange={(next) => {
+          if (!next) setSelectedLogs(null);
+        }}
+      >
+        <DialogContent className="max-w-2xl">
+          <DialogTitle className="flex items-center gap-2 border-b border-rule pb-3 pr-8">
+            <Terminal className="h-4 w-4 shrink-0 text-accent" />
+            Execution Output — {selectedLogs?.jobName}
+          </DialogTitle>
+
+          <div className="mt-4 max-h-96 space-y-1.5 overflow-y-auto rounded-card bg-surface p-4 font-mono text-xs text-content">
+            {selectedLogs?.logs.map((line, idx) => (
+              <div key={idx} className="flex gap-2">
+                <span className="select-none text-content-faint">[{idx + 1}]</span>
+                <span>{line}</span>
               </div>
-              <button
-                onClick={() => setSelectedLogs(null)}
-                className="text-content-soft hover:text-content"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="bg-surface-raised p-4 rounded-sm font-mono text-xs text-content space-y-1.5 max-h-96 overflow-y-auto">
-              {selectedLogs.logs.map((line, idx) => (
-                <div key={idx} className="flex gap-2">
-                  <span className="text-content-faint select-none">[{idx + 1}]</span>
-                  <span>{line}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="text-right pt-2">
-              <button
-                onClick={() => setSelectedLogs(null)}
-                className="rounded-sm border border-rule px-4 py-1.5 font-sans text-xs text-content hover:border-accent"
-              >
-                Close Output
-              </button>
-            </div>
+            ))}
           </div>
-        </div>
-      )}
+
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setSelectedLogs(null)}>
+              Close Output
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Register Job Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-content/40 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-lg border border-rule bg-surface shadow-2xl p-6 space-y-4 animate-scale-up">
-            <div className="flex items-center justify-between border-b border-rule pb-3">
-              <h3 className="font-serif text-base font-bold text-content">
-                Register New Scheduled Job
-              </h3>
-              <button
-                onClick={() => setShowAddModal(false)}
-                className="text-content-soft hover:text-content"
-              >
-                <X className="h-5 w-5" />
-              </button>
+      <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
+        <DialogContent>
+          <DialogTitle className="border-b border-rule pb-3 pr-8">
+            Register New Scheduled Job
+          </DialogTitle>
+
+          <form onSubmit={handleCreateJob} className="mt-4 space-y-4">
+            <div>
+              <label htmlFor="job-name" className="label mb-1 block">
+                Job Name
+              </label>
+              <Input
+                id="job-name"
+                required
+                placeholder="e.g. Weekly Content Audit"
+                value={newJobName}
+                onChange={(e) => setNewJobName(e.target.value)}
+              />
             </div>
 
-            <form onSubmit={handleCreateJob} className="space-y-4">
-              <div>
-                <label className="label block mb-1">Job Name</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Weekly Content Audit"
-                  value={newJobName}
-                  onChange={(e) => setNewJobName(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-xs text-content outline-none focus:border-accent"
-                />
-              </div>
+            <div>
+              <label htmlFor="job-desc" className="label mb-1 block">
+                Description
+              </label>
+              <Textarea
+                id="job-desc"
+                rows={2}
+                placeholder="Explain what this scheduled automation accomplishes..."
+                value={newJobDesc}
+                onChange={(e) => setNewJobDesc(e.target.value)}
+              />
+            </div>
 
-              <div>
-                <label className="label block mb-1">Description</label>
-                <textarea
-                  rows={2}
-                  placeholder="Explain what this scheduled automation accomplishes..."
-                  value={newJobDesc}
-                  onChange={(e) => setNewJobDesc(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-sans text-xs text-content outline-none focus:border-accent"
-                />
-              </div>
+            <div>
+              <label htmlFor="job-schedule" className="label mb-1 block">
+                Cron Expression / Schedule
+              </label>
+              <Input
+                id="job-schedule"
+                required
+                placeholder="0 2 * * *"
+                value={newJobSchedule}
+                onChange={(e) => setNewJobSchedule(e.target.value)}
+                aria-describedby="job-schedule-hint"
+                className="font-mono"
+              />
+              <span
+                id="job-schedule-hint"
+                className="mt-1 block font-mono text-[10px] text-content-faint"
+              >
+                Format: minute hour day-of-month month day-of-week
+              </span>
+            </div>
 
-              <div>
-                <label className="label block mb-1">Cron Expression / Schedule</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="0 2 * * *"
-                  value={newJobSchedule}
-                  onChange={(e) => setNewJobSchedule(e.target.value)}
-                  className="w-full rounded-sm border border-rule bg-surface px-3 py-2 font-mono text-xs text-content outline-none focus:border-accent"
-                />
-                <span className="font-mono text-[10px] text-content-faint block mt-1">
-                  Format: minute hour day-of-month month day-of-week
-                </span>
-              </div>
-
-              <div className="flex justify-end gap-3 pt-3 border-t border-rule">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="rounded-sm border border-rule px-4 py-1.5 font-sans text-xs text-content hover:border-content-soft"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="rounded-sm bg-accent px-4 py-1.5 font-sans text-xs font-medium text-surface transition hover:opacity-90 disabled:opacity-50"
-                >
-                  {submitting ? "Registering..." : "Register Job"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+            <DialogFooter className="border-t border-rule pt-3">
+              <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Registering..." : "Register Job"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

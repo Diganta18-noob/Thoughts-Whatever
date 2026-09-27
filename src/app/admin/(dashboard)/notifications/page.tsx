@@ -191,9 +191,9 @@ export default function NotificationsPage() {
                 <div className="flex items-start gap-3 min-w-0">
                   <div className="mt-0.5 shrink-0">
                     {n.severity === "critical" ? (
-                      <AlertCircle className="h-4 w-4 text-red-600" />
+                      <AlertCircle className="h-4 w-4 text-danger" />
                     ) : n.severity === "warning" ? (
-                      <AlertTriangle className="h-4 w-4 text-amber-600" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                     ) : (
                       <Info className="h-4 w-4 text-accent" />
                     )}
@@ -245,7 +245,7 @@ export default function NotificationsPage() {
                   <button
                     type="button"
                     onClick={() => deleteItem(n.id)}
-                    className="rounded-sm p-1 text-content-faint hover:text-red-600 transition"
+                    className="rounded-sm p-1 text-content-faint hover:text-danger transition"
                     title="Delete notification"
                     aria-label="Delete notification"
                   >

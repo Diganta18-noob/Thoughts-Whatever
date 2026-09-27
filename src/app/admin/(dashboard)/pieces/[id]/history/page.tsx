@@ -148,7 +148,7 @@ export default function PieceRevisionHistoryPage() {
           </p>
           <Link
             href={`/admin/pieces/${pieceId}`}
-            className="mt-4 inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-white hover:bg-accent/90 transition"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition"
           >
             Open in Editor
           </Link>
@@ -181,7 +181,7 @@ export default function PieceRevisionHistoryPage() {
                           v{rev.version}
                         </span>
                         {isLatest && (
-                          <span className="rounded bg-emerald-500/10 px-1.5 py-0.2 font-mono text-[9px] font-bold text-emerald-700 dark:text-emerald-400">
+                          <span className="rounded bg-success/10 px-1.5 py-0.2 font-mono text-[9px] font-bold text-success">
                             CURRENT
                           </span>
                         )}
@@ -232,7 +232,7 @@ export default function PieceRevisionHistoryPage() {
                         className={cn(
                           "px-2 py-0.5 rounded border transition",
                           isSelectedB
-                            ? "bg-accent text-white font-semibold border-accent"
+                            ? "bg-accent text-surface font-semibold border-accent"
                             : "border-rule text-content-soft hover:border-accent"
                         )}
                       >

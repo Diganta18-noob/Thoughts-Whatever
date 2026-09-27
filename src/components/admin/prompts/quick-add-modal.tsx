@@ -90,7 +90,7 @@ export function QuickAddPromptModal() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1">
                 <label className="block font-sans text-xs font-medium text-content">
-                  Prompt Text <span className="text-red-400">*</span>
+                  Prompt Text <span className="text-danger">*</span>
                 </label>
                 <textarea
                   required

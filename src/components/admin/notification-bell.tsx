@@ -98,7 +98,7 @@ export function NotificationBell() {
       >
         <Bell className="h-4 w-4" />
         {unreadCount > 0 && (
-          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 font-mono text-[10px] font-bold text-white shadow-sm">
+          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 font-mono text-[10px] font-bold text-surface shadow-sm">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
@@ -146,9 +146,9 @@ export function NotificationBell() {
                 >
                   <div className="mt-0.5 shrink-0">
                     {n.severity === "critical" ? (
-                      <AlertCircle className="h-4 w-4 text-red-600" />
+                      <AlertCircle className="h-4 w-4 text-danger" />
                     ) : n.severity === "warning" ? (
-                      <AlertTriangle className="h-4 w-4 text-amber-600" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                     ) : (
                       <Info className="h-4 w-4 text-accent" />
                     )}

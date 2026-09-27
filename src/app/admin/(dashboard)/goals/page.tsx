@@ -1,19 +1,25 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Target,
-  Plus,
-  Trash2,
-  CheckCircle2,
-  AlertTriangle,
-  Clock,
-  TrendingUp,
-  X,
-} from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { confirmToast } from "@/lib/confirm-toast";
+import {
+  Badge,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+  Input,
+  PageHeader,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui";
 
 interface Goal {
   id: string;
@@ -118,30 +124,21 @@ export default function GoalsKPITrackingPage() {
 
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-rule pb-6">
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="font-serif text-2xl font-normal text-content">
-              Editorial Goals & KPI Tracking
-            </h1>
-            <span className="rounded bg-accent/10 px-2 py-0.5 font-mono text-xs font-semibold text-accent uppercase">
-              {goals.length} ACTIVE GOALS
-            </span>
-          </div>
-          <p className="mt-1 font-sans text-xs text-content-soft">
-            Define publication growth targets, track monthly readership milestones, and monitor pacing.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-white hover:bg-accent/90 transition"
-        >
-          <Plus className="h-4 w-4" /> Add Editorial Goal
-        </button>
-      </div>
+      <PageHeader
+        title="Editorial Goals & KPI Tracking"
+        subtitle="Define publication growth targets, track monthly readership milestones, and monitor pacing."
+        className="border-b border-rule"
+        actions={
+          <>
+            <Badge tone="accent" className="font-mono uppercase">
+              {goals.length} Active
+            </Badge>
+            <Button onClick={() => setShowAddModal(true)}>
+              <Plus className="h-4 w-4" /> Add Editorial Goal
+            </Button>
+          </>
+        }
+      />
 
       {loading ? (
         <div className="p-16 text-center font-sans text-xs text-content-faint">
@@ -151,7 +148,6 @@ export default function GoalsKPITrackingPage() {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {goals.map((goal) => {
             const isOnTrack = goal.status === "ON_TRACK";
-            const isBehind = goal.status === "BEHIND";
 
             return (
               <div
@@ -160,25 +156,28 @@ export default function GoalsKPITrackingPage() {
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-2">
-                    <span
-                      className={cn(
-                        "rounded px-2 py-0.5 font-mono text-[10px] font-bold uppercase",
-                        isOnTrack && "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
-                        goal.status === "AT_RISK" && "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-                        isBehind && "bg-rose-500/10 text-rose-700 dark:text-rose-400"
-                      )}
+                    <Badge
+                      tone={
+                        isOnTrack
+                          ? "success"
+                          : goal.status === "AT_RISK"
+                          ? "warning"
+                          : "danger"
+                      }
+                      className="font-mono font-bold uppercase"
                     >
                       {goal.status.replace("_", " ")}
-                    </span>
+                    </Badge>
 
-                    <button
-                      type="button"
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => handleDeleteGoal(goal.id)}
-                      className="text-content-faint hover:text-rose-600 transition"
-                      title="Delete goal"
+                      aria-label={`Delete goal: ${goal.title}`}
+                      className="px-2 hover:text-danger"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
-                    </button>
+                    </Button>
                   </div>
 
                   <div>
@@ -213,11 +212,18 @@ export default function GoalsKPITrackingPage() {
                       <span className="text-content-soft">Progress</span>
                       <span className="font-bold text-content">{goal.progressPct}%</span>
                     </div>
-                    <div className="h-2 w-full bg-rule/40 rounded-full overflow-hidden">
+                    <div
+                      role="progressbar"
+                      aria-valuenow={goal.progressPct}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-label={`${goal.title} progress`}
+                      className="h-2 w-full bg-rule/40 rounded-full overflow-hidden"
+                    >
                       <div
                         className={cn(
                           "h-full rounded-full transition-all",
-                          isOnTrack ? "bg-emerald-600" : goal.status === "AT_RISK" ? "bg-amber-500" : "bg-rose-600"
+                          isOnTrack ? "bg-success" : goal.status === "AT_RISK" ? "bg-warning" : "bg-danger"
                         )}
                         style={{ width: `${goal.progressPct}%` }}
                       />
@@ -236,116 +242,100 @@ export default function GoalsKPITrackingPage() {
       )}
 
       {/* Add Goal Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-sm border border-rule bg-surface p-6 shadow-2xl space-y-4 animate-fade-in font-sans text-xs">
-            <div className="flex items-center justify-between border-b border-rule pb-3">
-              <h3 className="font-serif text-lg text-content">Set New Editorial Target</h3>
-              <button
-                type="button"
-                onClick={() => setShowAddModal(false)}
-                className="text-content-soft hover:text-content"
-              >
-                <X className="h-4 w-4" />
-              </button>
+      <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
+        <DialogContent className="max-w-md">
+          <DialogTitle className="border-b border-rule pb-3 pr-8">
+            Set New Editorial Target
+          </DialogTitle>
+
+          <form onSubmit={handleCreateGoal} className="mt-4 space-y-4">
+            <div>
+              <label htmlFor="goal-title" className="label mb-1 block">
+                Goal Title
+              </label>
+              <Input
+                id="goal-title"
+                required
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="e.g. Monthly Reader Growth Target"
+              />
             </div>
 
-            <form onSubmit={handleCreateGoal} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="label">
-                  Goal Title
+                <label htmlFor="goal-metric" className="label mb-1 block">
+                  Metric
                 </label>
-                <input
-                  type="text"
+                <Select value={metricKey} onValueChange={setMetricKey}>
+                  <SelectTrigger id="goal-metric">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pageviews">Page Views</SelectItem>
+                    <SelectItem value="articles_published">Articles Published</SelectItem>
+                    <SelectItem value="subscribers">Subscribers</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label htmlFor="goal-target" className="label mb-1 block">
+                  Target Value
+                </label>
+                <Input
+                  id="goal-target"
+                  type="number"
                   required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g. Monthly Reader Growth Target"
-                  className="w-full p-2 rounded-sm border border-rule bg-surface text-content focus:outline-none focus:border-accent"
+                  value={targetValue}
+                  onChange={(e) => setTargetValue(e.target.value)}
+                  className="font-mono"
                 />
               </div>
+            </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="label">
-                    Metric
-                  </label>
-                  <select
-                    value={metricKey}
-                    onChange={(e) => setMetricKey(e.target.value)}
-                    className="w-full p-2 rounded-sm border border-rule bg-surface text-content focus:outline-none focus:border-accent"
-                  >
-                    <option value="pageviews">Page Views</option>
-                    <option value="articles_published">Articles Published</option>
-                    <option value="subscribers">Subscribers</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="label">
-                    Target Value
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    value={targetValue}
-                    onChange={(e) => setTargetValue(e.target.value)}
-                    className="w-full p-2 rounded-sm border border-rule bg-surface text-content focus:outline-none focus:border-accent font-mono"
-                  />
-                </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="goal-period" className="label mb-1 block">
+                  Time Period
+                </label>
+                <Select value={period} onValueChange={setPeriod}>
+                  <SelectTrigger id="goal-period">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="cumulative">All-Time Milestone</SelectItem>
+                    <SelectItem value="monthly">Monthly Target</SelectItem>
+                    <SelectItem value="quarterly">Quarterly Target</SelectItem>
+                    <SelectItem value="annual">Annual Target</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="label">
-                    Time Period
-                  </label>
-                  <select
-                    value={period}
-                    onChange={(e) => setPeriod(e.target.value)}
-                    className="w-full p-2 rounded-sm border border-rule bg-surface text-content focus:outline-none focus:border-accent"
-                  >
-                    <option value="cumulative">All-Time Milestone</option>
-                    <option value="monthly">Monthly Target</option>
-                    <option value="quarterly">Quarterly Target</option>
-                    <option value="annual">Annual Target</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="label">
-                    Owner
-                  </label>
-                  <input
-                    type="text"
-                    value={owner}
-                    onChange={(e) => setOwner(e.target.value)}
-                    placeholder="Editorial Team"
-                    className="w-full p-2 rounded-sm border border-rule bg-surface text-content focus:outline-none focus:border-accent"
-                  />
-                </div>
+              <div>
+                <label htmlFor="goal-owner" className="label mb-1 block">
+                  Owner
+                </label>
+                <Input
+                  id="goal-owner"
+                  value={owner}
+                  onChange={(e) => setOwner(e.target.value)}
+                  placeholder="Editorial Team"
+                />
               </div>
+            </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-rule">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-3 py-1.5 rounded-sm border border-rule text-content-soft hover:text-content"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-4 py-1.5 rounded-sm bg-accent font-medium text-white hover:bg-accent/90 disabled:opacity-50"
-                >
-                  {submitting ? "Creating..." : "Create Goal"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+            <DialogFooter className="border-t border-rule pt-3">
+              <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Creating..." : "Create Goal"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

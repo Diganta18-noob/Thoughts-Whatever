@@ -61,12 +61,12 @@ export function SEOGrowthCharts({ trafficData, backlinkData, isEstimated = false
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-rule pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-emerald-500" />
+            <TrendingUp className="h-4 w-4 text-success" />
             <h3 className="font-sans text-sm font-semibold text-content">
               Organic Growth & Link Velocity
             </h3>
             {isEstimated && (
-              <span className="rounded bg-amber-500/10 px-1.5 py-0.2 font-mono text-[9px] font-semibold text-amber-600 dark:text-amber-400">
+              <span className="rounded bg-warning/10 px-1.5 py-0.2 font-mono text-[9px] font-semibold text-warning">
                 SERP Estimated
               </span>
             )}
@@ -100,7 +100,7 @@ export function SEOGrowthCharts({ trafficData, backlinkData, isEstimated = false
                 : "text-content-soft hover:text-content"
             }`}
           >
-            <Link2 className="h-3 w-3 text-emerald-500" />
+            <Link2 className="h-3 w-3 text-success" />
             <span>Backlinks & Domains</span>
           </button>
         </div>
@@ -196,15 +196,15 @@ export function SEOGrowthCharts({ trafficData, backlinkData, isEstimated = false
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-4 text-[11px] font-mono">
                   <div className="flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                    <span className="h-2 w-2 rounded-full bg-success" />
                     <span className="text-content-soft">Active Backlinks</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-cyan-500" />
+                    <span className="h-2 w-2 rounded-full bg-info" />
                     <span className="text-content-soft">Referring Domains</span>
                   </div>
                 </div>
-                <span className="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
+                <span className="font-mono text-xs text-success font-semibold">
                   Verified Data
                 </span>
               </div>
@@ -228,8 +228,8 @@ export function SEOGrowthCharts({ trafficData, backlinkData, isEstimated = false
                   {/* Points */}
                   {backlinkPoints.map((p, i) => (
                     <g key={i} className="group cursor-pointer">
-                      <circle cx={p.x} cy={p.yB} r="3.5" className="fill-surface stroke-emerald-500 stroke-2 group-hover:r-5 transition-all" />
-                      <circle cx={p.x} cy={p.yR} r="3" className="fill-surface stroke-cyan-500 stroke-2 group-hover:r-4 transition-all" />
+                      <circle cx={p.x} cy={p.yB} r="3.5" className="fill-surface stroke-success stroke-2 group-hover:r-5 transition-all" />
+                      <circle cx={p.x} cy={p.yR} r="3" className="fill-surface stroke-info stroke-2 group-hover:r-4 transition-all" />
                       <text
                         x={p.x}
                         y={chartHeight - 2}
@@ -242,7 +242,7 @@ export function SEOGrowthCharts({ trafficData, backlinkData, isEstimated = false
                         x={p.x}
                         y={p.yB - 8}
                         textAnchor="middle"
-                        className="fill-emerald-600 dark:fill-emerald-400 font-mono text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="fill-success font-mono text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         {p.backlinks}
                       </text>

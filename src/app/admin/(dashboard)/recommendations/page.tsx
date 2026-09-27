@@ -165,7 +165,7 @@ export default function RecommendationsPage() {
             type="button"
             onClick={handleRecomputeAll}
             disabled={recomputing || loading}
-            className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-3 py-1.5 font-sans text-xs font-medium text-white hover:bg-accent/90 transition disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-sm bg-accent px-3 py-1.5 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition disabled:opacity-50"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", recomputing && "animate-spin")} />
             {recomputing ? "Recomputing Vectors..." : "Recompute All"}
@@ -206,7 +206,7 @@ export default function RecommendationsPage() {
           <span className="font-mono text-[10px] uppercase tracking-wider text-content-faint">
             Algorithm Precision
           </span>
-          <div className="font-serif text-2xl font-bold text-emerald-700 dark:text-emerald-400 mt-1">
+          <div className="font-serif text-2xl font-bold text-success mt-1">
             94.2%
           </div>
         </div>
@@ -270,7 +270,7 @@ export default function RecommendationsPage() {
           <button
             type="button"
             onClick={handleRecomputeAll}
-            className="rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-white hover:bg-accent/90 transition"
+            className="rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition"
           >
             Run Initial Computation
           </button>
@@ -352,7 +352,7 @@ export default function RecommendationsPage() {
                           className={cn(
                             "rounded p-1.5 transition border",
                             item.pinned
-                              ? "bg-accent text-white border-accent"
+                              ? "bg-accent text-surface border-accent"
                               : "border-rule text-content-soft hover:text-accent"
                           )}
                           title={item.pinned ? "Unpin recommendation" : "Pin recommendation"}
@@ -366,8 +366,8 @@ export default function RecommendationsPage() {
                           className={cn(
                             "rounded p-1.5 transition border",
                             item.excluded
-                              ? "bg-amber-700 text-white border-amber-700"
-                              : "border-rule text-content-soft hover:text-amber-600"
+                              ? "bg-warning text-surface border-warning/40"
+                              : "border-rule text-content-soft hover:text-warning"
                           )}
                           title={item.excluded ? "Restore recommendation" : "Exclude recommendation"}
                         >

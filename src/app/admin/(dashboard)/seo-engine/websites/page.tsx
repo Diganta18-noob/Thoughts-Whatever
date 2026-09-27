@@ -150,7 +150,7 @@ export default function WebsitesManagementPage() {
         <button
           type="button"
           onClick={handleOpenAdd}
-          className="flex items-center gap-1.5 rounded-lg bg-accent px-3.5 py-2 text-xs font-semibold text-white hover:opacity-90 transition shadow-xs self-start"
+          className="flex items-center gap-1.5 rounded-lg bg-accent px-3.5 py-2 text-xs font-semibold text-surface hover:opacity-90 transition shadow-xs self-start"
         >
           <Plus className="h-4 w-4" />
           <span>Add New Website</span>
@@ -196,8 +196,8 @@ export default function WebsitesManagementPage() {
                   </div>
 
                   {w.isDefault && (
-                    <span className="inline-flex items-center gap-1 rounded bg-amber-500/10 px-2 py-0.5 font-mono text-[9px] font-bold text-amber-600 dark:text-amber-400">
-                      <Star className="h-2.5 w-2.5 fill-amber-500" />
+                    <span className="inline-flex items-center gap-1 rounded bg-warning/10 px-2 py-0.5 font-mono text-[9px] font-bold text-warning">
+                      <Star className="h-2.5 w-2.5 fill-warning" />
                       Default
                     </span>
                   )}
@@ -225,13 +225,13 @@ export default function WebsitesManagementPage() {
                     <div className="flex items-center gap-2 font-mono text-[10px]">
                       <span className={cn(
                         "inline-flex items-center gap-1 rounded px-1.5 py-0.2",
-                        w.gscConnected ? "bg-emerald-500/10 text-emerald-600" : "bg-surface-raised text-content-faint"
+                        w.gscConnected ? "bg-success/10 text-success" : "bg-surface-raised text-content-faint"
                       )}>
                         GSC {w.gscConnected ? "✓" : "–"}
                       </span>
                       <span className={cn(
                         "inline-flex items-center gap-1 rounded px-1.5 py-0.2",
-                        w.gaConnected ? "bg-emerald-500/10 text-emerald-600" : "bg-surface-raised text-content-faint"
+                        w.gaConnected ? "bg-success/10 text-success" : "bg-surface-raised text-content-faint"
                       )}>
                         GA {w.gaConnected ? "✓" : "–"}
                       </span>
@@ -300,7 +300,7 @@ export default function WebsitesManagementPage() {
                     <button
                       type="button"
                       onClick={() => handleDelete(w.id, w.name)}
-                      className="rounded p-1.5 text-content-soft hover:bg-red-500/10 hover:text-red-500 transition"
+                      className="rounded p-1.5 text-content-soft hover:bg-danger/10 hover:text-danger transition"
                       title="Delete Website"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
@@ -325,7 +325,7 @@ export default function WebsitesManagementPage() {
             </p>
 
             {errorMessage && (
-              <div className="mt-3 rounded-lg bg-red-500/10 p-2.5 text-xs text-red-600 dark:text-red-400 font-medium">
+              <div className="mt-3 rounded-lg bg-danger/10 p-2.5 text-xs text-danger font-medium">
                 {errorMessage}
               </div>
             )}
@@ -436,7 +436,7 @@ export default function WebsitesManagementPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="rounded-lg bg-accent px-4 py-1.5 text-xs font-semibold text-white hover:opacity-90 transition disabled:opacity-50"
+                  className="rounded-lg bg-accent px-4 py-1.5 text-xs font-semibold text-surface hover:opacity-90 transition disabled:opacity-50"
                 >
                   {submitting ? "Saving..." : editingId ? "Save Changes" : "Create Project"}
                 </button>

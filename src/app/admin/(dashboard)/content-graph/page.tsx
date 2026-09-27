@@ -430,7 +430,7 @@ export default function ContentGraphPage() {
               </p>
               <Link
                 href="/admin/pieces/new"
-                className="mt-4 inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-white hover:bg-accent/90 transition"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-sm bg-accent px-4 py-2 font-sans text-xs font-medium text-surface hover:bg-accent/90 transition"
               >
                 Create First Piece
               </Link>
@@ -517,7 +517,7 @@ export default function ContentGraphPage() {
                 {selectedNode.type === "piece" && (
                   <Link
                     href={`/admin/pieces/${selectedNode.id}`}
-                    className="flex w-full items-center justify-center gap-1.5 rounded-sm bg-accent px-3 py-2 font-medium text-white hover:bg-accent/90 transition"
+                    className="flex w-full items-center justify-center gap-1.5 rounded-sm bg-accent px-3 py-2 font-medium text-surface hover:bg-accent/90 transition"
                   >
                     Open in Piece Editor <ExternalLink className="h-3 w-3" />
                   </Link>

@@ -52,24 +52,24 @@ export function PromptCard({ prompt, onStatusChange, onDelete }: PromptCardProps
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "done":
-        return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+        return "bg-success/10 text-success border-success/20";
       case "in-progress":
-        return "bg-blue-500/10 text-blue-400 border-blue-500/20";
+        return "bg-info/10 text-info border-info/20";
       case "planned":
-        return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+        return "bg-warning/10 text-warning border-warning/20";
       case "rejected":
-        return "bg-rose-500/10 text-rose-400 border-rose-500/20";
+        return "bg-danger/10 text-danger border-danger/20";
       default: // idea
-        return "bg-purple-500/10 text-purple-400 border-purple-500/20";
+        return "bg-special/10 text-special border-special/20";
     }
   };
 
   const getSourceBadge = (source: string) => {
     switch (source.toLowerCase()) {
       case "kiro":
-        return "bg-indigo-500/10 text-indigo-400 border-indigo-500/20";
+        return "bg-special/10 text-special border-special/20";
       case "antigravity":
-        return "bg-cyan-500/10 text-cyan-400 border-cyan-500/20";
+        return "bg-info/10 text-info border-info/20";
       case "manual":
         return "bg-surface-raised text-content-soft border-rule";
       default:
@@ -132,7 +132,7 @@ export function PromptCard({ prompt, onStatusChange, onDelete }: PromptCardProps
             title="Copy prompt text"
             className="flex items-center gap-1 hover:text-content transition"
           >
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+            {copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
           </button>
 
           <Link
@@ -146,7 +146,7 @@ export function PromptCard({ prompt, onStatusChange, onDelete }: PromptCardProps
           {onDelete && (
             <button
               onClick={() => onDelete(prompt.id)}
-              className="hover:text-red-400 transition"
+              className="hover:text-danger transition"
               title="Delete prompt"
             >
               <Trash2 className="h-3.5 w-3.5" />
