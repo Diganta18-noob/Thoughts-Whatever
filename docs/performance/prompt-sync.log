@@ -1,0 +1,11 @@
+
+> thoughts-whatever@0.1.0 save-prompts
+> tsx scripts/save-prompt-history.ts
+
+🔄 Starting Auto Prompt Saver...
+
+📂 Brain Directory: C:\Users\digan\.gemini\antigravity-ide\brain
+📋 Total Prompts Extracted across sessions: 431
+💾 Saved 0 new prompts into database PromptLog.
+
+✨ Auto Prompt Saver completed! (Scanned: 431, Newly Stored: 0)

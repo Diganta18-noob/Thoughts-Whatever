@@ -1,0 +1,3549 @@
+{
+  "base": "https://www.thoughtswhatever.in",
+  "label": "production-baseline",
+  "mode": "http",
+  "runs": 20,
+  "createdAt": "2026-09-27T17:57:02.681Z",
+  "samples": [
+    {
+      "route": "/",
+      "run": 0,
+      "status": 200,
+      "dns": 43.376999999999995,
+      "tcp": 107.40299999999999,
+      "tls": 221.776,
+      "ttfb": 359.519,
+      "total": 490.411,
+      "bytes": 165860,
+      "headers": {
+        "age": "338",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "STALE",
+        "x-vercel-id": "bom1::bom1::cbk47-1790531747996-441e7841a7f8"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 0,
+      "status": 200,
+      "dns": 18.943,
+      "tcp": 66.608,
+      "tls": 160.36800000000002,
+      "ttfb": 265.666,
+      "total": 307.712,
+      "bytes": 81694,
+      "headers": {
+        "age": "224",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::qps8x-1790531748448-de91d16d297d"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 0,
+      "status": 200,
+      "dns": 11.511000000000001,
+      "tcp": 64.688,
+      "tls": 165.223,
+      "ttfb": 402.339,
+      "total": 528.196,
+      "bytes": 181241,
+      "headers": {
+        "age": "0",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "bom1::bom1::8kt9f-1790531748798-324804e9923b"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 0,
+      "status": 200,
+      "dns": 6.087000000000001,
+      "tcp": 83.225,
+      "tls": 173.27200000000002,
+      "ttfb": 336.865,
+      "total": 398.856,
+      "bytes": 85247,
+      "headers": {
+        "age": "4818",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "STALE",
+        "x-vercel-id": "bom1::bom1::92rwm-1790531749368-ce0d750e4321"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 0,
+      "status": 200,
+      "dns": 11.294,
+      "tcp": 58.793,
+      "tls": 158.805,
+      "ttfb": 536.263,
+      "total": 585.228,
+      "bytes": 68543,
+      "headers": {
+        "age": "0",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "PRERENDER",
+        "x-vercel-id": "bom1::qps8x-1790531749779-15a7eba9af4d"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 0,
+      "status": 200,
+      "dns": 19.087,
+      "tcp": 69.412,
+      "tls": 171.657,
+      "ttfb": 386.366,
+      "total": 456.667,
+      "bytes": 55553,
+      "headers": {
+        "age": "0",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "bom1::bom1::9cjqs-1790531750402-5c82ea8eaf68"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 0,
+      "status": 200,
+      "dns": 10.584,
+      "tcp": 73.551,
+      "tls": 181.314,
+      "ttfb": 323.33099999999996,
+      "total": 405.021,
+      "bytes": 77188,
+      "headers": {
+        "age": "0",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "bom1::bom1::c2scx-1790531750901-a8b6020374ff"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 0,
+      "status": 200,
+      "dns": 10.684000000000001,
+      "tcp": 67.01400000000001,
+      "tls": 166.819,
+      "ttfb": 1170.862,
+      "total": 1171.324,
+      "bytes": 24143,
+      "headers": {
+        "age": "0",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "bom1::bom1::wgj5l-1790531751322-8c48323d03a0"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 0,
+      "status": 307,
+      "dns": 18.168,
+      "tcp": 84.41,
+      "tls": 195.973,
+      "ttfb": 330.5,
+      "total": 330.62,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::7rhqm-1790531752556-ce97de38534d"
+      }
+    },
+    {
+      "route": "/",
+      "run": 1,
+      "status": 200,
+      "dns": 44.737,
+      "tcp": 122.708,
+      "tls": 230.328,
+      "ttfb": 370.442,
+      "total": 504.26000000000005,
+      "bytes": 165860,
+      "headers": {
+        "age": "4",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::pk658-1790531752949-3f66932ec528"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 1,
+      "status": 200,
+      "dns": 17.21,
+      "tcp": 112.038,
+      "tls": 214.72299999999998,
+      "ttfb": 356.266,
+      "total": 427.937,
+      "bytes": 81694,
+      "headers": {
+        "age": "229",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::7rhqm-1790531753460-8924f1113880"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 1,
+      "status": 200,
+      "dns": 20.823,
+      "tcp": 60.17,
+      "tls": 150.18300000000002,
+      "ttfb": 242.816,
+      "total": 324.964,
+      "bytes": 181241,
+      "headers": {
+        "age": "4",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::s662m-1790531753835-d9550c65caf3"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 1,
+      "status": 200,
+      "dns": 7.88,
+      "tcp": 69.529,
+      "tls": 176.238,
+      "ttfb": 332.681,
+      "total": 388.986,
+      "bytes": 85247,
+      "headers": {
+        "age": "4",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::zbd94-1790531754228-980d0a4552be"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 1,
+      "status": 200,
+      "dns": 13.363,
+      "tcp": 74.73599999999999,
+      "tls": 148.63199999999998,
+      "ttfb": 271.1,
+      "total": 316.54900000000004,
+      "bytes": 68543,
+      "headers": {
+        "age": "4",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::xxr4g-1790531754608-ef0e59fcfbc7"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 1,
+      "status": 200,
+      "dns": 21.232,
+      "tcp": 99.028,
+      "tls": 190.088,
+      "ttfb": 294.65400000000005,
+      "total": 354.411,
+      "bytes": 55553,
+      "headers": {
+        "age": "5",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::2tjwg-1790531754981-48064de57ce5"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 1,
+      "status": 200,
+      "dns": 15.772000000000002,
+      "tcp": 60.742999999999995,
+      "tls": 160.108,
+      "ttfb": 257.525,
+      "total": 304.223,
+      "bytes": 77188,
+      "headers": {
+        "age": "4",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::nv5f6-1790531755333-802bf2954cba"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 1,
+      "status": 200,
+      "dns": 6.675999999999999,
+      "tcp": 80.054,
+      "tls": 198.14399999999998,
+      "ttfb": 318.481,
+      "total": 318.55899999999997,
+      "bytes": 24143,
+      "headers": {
+        "age": "3",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::rlvn5-1790531755699-89bd4ff4f53b"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 1,
+      "status": 307,
+      "dns": 14.144,
+      "tcp": 86.828,
+      "tls": 201.99200000000002,
+      "ttfb": 312.964,
+      "total": 313.136,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::plg9p-1790531756036-d318e3d58ed2"
+      }
+    },
+    {
+      "route": "/",
+      "run": 2,
+      "status": 200,
+      "dns": 7.332,
+      "tcp": 53.094,
+      "tls": 143.755,
+      "ttfb": 247.192,
+      "total": 349.25800000000004,
+      "bytes": 165860,
+      "headers": {
+        "age": "7",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::7rzvj-1790531756319-6df35673fcfd"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 2,
+      "status": 200,
+      "dns": 13.742,
+      "tcp": 68.355,
+      "tls": 168.93,
+      "ttfb": 270.52799999999996,
+      "total": 326.945,
+      "bytes": 81694,
+      "headers": {
+        "age": "232",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::gg4rr-1790531756713-2e564ff0e0f1"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 2,
+      "status": 200,
+      "dns": 18.62,
+      "tcp": 95.374,
+      "tls": 178.098,
+      "ttfb": 281.843,
+      "total": 400.29900000000004,
+      "bytes": 181241,
+      "headers": {
+        "age": "8",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::qp7gn-1790531757080-ee06f71a670b"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 2,
+      "status": 200,
+      "dns": 19.709999999999997,
+      "tcp": 64.827,
+      "tls": 156.311,
+      "ttfb": 258.202,
+      "total": 308.64599999999996,
+      "bytes": 85247,
+      "headers": {
+        "age": "7",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::qn5md-1790531757472-c623019a1777"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 2,
+      "status": 200,
+      "dns": 48.77,
+      "tcp": 99.846,
+      "tls": 189.527,
+      "ttfb": 311.927,
+      "total": 359.536,
+      "bytes": 68543,
+      "headers": {
+        "age": "7",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::kxdwm-1790531757832-6e9419156a58"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 2,
+      "status": 200,
+      "dns": 9.978000000000002,
+      "tcp": 76.969,
+      "tls": 188.494,
+      "ttfb": 307.75,
+      "total": 374.527,
+      "bytes": 55553,
+      "headers": {
+        "age": "8",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::6zkbz-1790531758209-0c405f5528d8"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 2,
+      "status": 200,
+      "dns": 11.209,
+      "tcp": 75.719,
+      "tls": 186.175,
+      "ttfb": 300.385,
+      "total": 366.389,
+      "bytes": 77188,
+      "headers": {
+        "age": "7",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::x2csh-1790531758605-d107c3660e26"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 2,
+      "status": 200,
+      "dns": 12.616,
+      "tcp": 84.402,
+      "tls": 194.744,
+      "ttfb": 315.623,
+      "total": 315.775,
+      "bytes": 24143,
+      "headers": {
+        "age": "7",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::zbtbz-1790531759000-8bcf0ad9bf95"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 2,
+      "status": 307,
+      "dns": 16.285999999999998,
+      "tcp": 88.984,
+      "tls": 204.7,
+      "ttfb": 319.32899999999995,
+      "total": 319.96999999999997,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::kxdwm-1790531759354-a2b9279b05d9"
+      }
+    },
+    {
+      "route": "/",
+      "run": 3,
+      "status": 200,
+      "dns": 4.709,
+      "tcp": 47,
+      "tls": 132.86100000000002,
+      "ttfb": 221.541,
+      "total": 310.65700000000004,
+      "bytes": 165860,
+      "headers": {
+        "age": "11",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::x2csh-1790531759608-fb09c6bcda80"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 3,
+      "status": 200,
+      "dns": 4.332,
+      "tcp": 99.32199999999999,
+      "tls": 205.42499999999998,
+      "ttfb": 331.402,
+      "total": 406.011,
+      "bytes": 81694,
+      "headers": {
+        "age": "236",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::gg4rr-1790531760020-44dccf04cef1"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 3,
+      "status": 200,
+      "dns": 19.189999999999998,
+      "tcp": 67.61699999999999,
+      "tls": 158.792,
+      "ttfb": 260.206,
+      "total": 357.68899999999996,
+      "bytes": 181241,
+      "headers": {
+        "age": "11",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::cbk47-1790531760388-85cff134afce"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 3,
+      "status": 200,
+      "dns": 19.239,
+      "tcp": 80.889,
+      "tls": 157.17000000000002,
+      "ttfb": 253.295,
+      "total": 300.899,
+      "bytes": 85247,
+      "headers": {
+        "age": "11",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::4pnhn-1790531760760-1063027dd221"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 3,
+      "status": 200,
+      "dns": 14.527999999999999,
+      "tcp": 84.924,
+      "tls": 204.95499999999998,
+      "ttfb": 328.05899999999997,
+      "total": 400.432,
+      "bytes": 68543,
+      "headers": {
+        "age": "10",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::6zkbz-1790531761132-6cdac4a19faa"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 3,
+      "status": 200,
+      "dns": 12.073,
+      "tcp": 73.976,
+      "tls": 179.25,
+      "ttfb": 290.091,
+      "total": 353.659,
+      "bytes": 55553,
+      "headers": {
+        "age": "11",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::5z56t-1790531761517-51ec9e350d8a"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 3,
+      "status": 200,
+      "dns": 11.705,
+      "tcp": 70.438,
+      "tls": 171.239,
+      "ttfb": 281.82,
+      "total": 341.643,
+      "bytes": 77188,
+      "headers": {
+        "age": "10",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::wx6j7-1790531761872-3b630d57db1e"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 3,
+      "status": 200,
+      "dns": 9.94,
+      "tcp": 54.586999999999996,
+      "tls": 149.54600000000002,
+      "ttfb": 250.77899999999997,
+      "total": 251.32500000000002,
+      "bytes": 24143,
+      "headers": {
+        "age": "10",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::qsxtf-1790531762213-676bbea33ecf"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 3,
+      "status": 307,
+      "dns": 16.895,
+      "tcp": 63.330999999999996,
+      "tls": 155.79999999999998,
+      "ttfb": 247.42600000000002,
+      "total": 247.57000000000002,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::j86t4-1790531762490-8ed30b2d3889"
+      }
+    },
+    {
+      "route": "/",
+      "run": 4,
+      "status": 200,
+      "dns": 17.864,
+      "tcp": 94.426,
+      "tls": 220.125,
+      "ttfb": 339.517,
+      "total": 492.533,
+      "bytes": 165860,
+      "headers": {
+        "age": "14",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::rs6vd-1790531762824-1c5711551fb3"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 4,
+      "status": 200,
+      "dns": 45.907000000000004,
+      "tcp": 99.778,
+      "tls": 199.83,
+      "ttfb": 306.46000000000004,
+      "total": 368.568,
+      "bytes": 81694,
+      "headers": {
+        "age": "239",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::g7f9r-1790531763315-e41dad025bfc"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 4,
+      "status": 200,
+      "dns": 6.229,
+      "tcp": 47.326,
+      "tls": 131.722,
+      "ttfb": 219.249,
+      "total": 308.201,
+      "bytes": 181241,
+      "headers": {
+        "age": "14",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::plg9p-1790531763621-edad5a7b905e"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 4,
+      "status": 200,
+      "dns": 20.349,
+      "tcp": 83.74900000000001,
+      "tls": 190.668,
+      "ttfb": 302.836,
+      "total": 367.305,
+      "bytes": 85247,
+      "headers": {
+        "age": "14",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::vpsqr-1790531764008-6904de3143aa"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 4,
+      "status": 200,
+      "dns": 11.524,
+      "tcp": 88.431,
+      "tls": 192.92000000000002,
+      "ttfb": 321.287,
+      "total": 387.058,
+      "bytes": 68543,
+      "headers": {
+        "age": "14",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::mpdb9-1790531764393-c3e322af7fa4"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 4,
+      "status": 200,
+      "dns": 8.417,
+      "tcp": 69.565,
+      "tls": 170.149,
+      "ttfb": 273.34000000000003,
+      "total": 330.992,
+      "bytes": 55553,
+      "headers": {
+        "age": "14",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::x867c-1790531764769-a5d4c108a83e"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 4,
+      "status": 200,
+      "dns": 10.241,
+      "tcp": 57.639,
+      "tls": 153.141,
+      "ttfb": 247.178,
+      "total": 293.68100000000004,
+      "bytes": 77188,
+      "headers": {
+        "age": "14",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::wmxg2-1790531765111-156bc9a5525a"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 4,
+      "status": 200,
+      "dns": 22.269000000000002,
+      "tcp": 78.771,
+      "tls": 177.621,
+      "ttfb": 273.703,
+      "total": 273.822,
+      "bytes": 24143,
+      "headers": {
+        "age": "13",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::d4z8b-1790531765448-23ed48c80afc"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 4,
+      "status": 307,
+      "dns": 20.983999999999998,
+      "tcp": 76.918,
+      "tls": 182.96499999999997,
+      "ttfb": 272.901,
+      "total": 273.069,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::s662m-1790531765758-6685c425b0ab"
+      }
+    },
+    {
+      "route": "/",
+      "run": 5,
+      "status": 200,
+      "dns": 14.013,
+      "tcp": 65.621,
+      "tls": 160.87099999999998,
+      "ttfb": 277.518,
+      "total": 383.838,
+      "bytes": 165860,
+      "headers": {
+        "age": "17",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::vpsqr-1790531766033-8df5334bca3c"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 5,
+      "status": 200,
+      "dns": 13.49,
+      "tcp": 91.195,
+      "tls": 213.375,
+      "ttfb": 336.11600000000004,
+      "total": 415.43600000000004,
+      "bytes": 81694,
+      "headers": {
+        "age": "242",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::c2scx-1790531766495-d8996d0cbe7a"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 5,
+      "status": 200,
+      "dns": 19.302,
+      "tcp": 96.11500000000001,
+      "tls": 181.23700000000002,
+      "ttfb": 289.211,
+      "total": 405.387,
+      "bytes": 181241,
+      "headers": {
+        "age": "17",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::d4z8b-1790531766886-703f01fcfd31"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 5,
+      "status": 200,
+      "dns": 12.429,
+      "tcp": 69.273,
+      "tls": 171.717,
+      "ttfb": 275.357,
+      "total": 334.881,
+      "bytes": 85247,
+      "headers": {
+        "age": "17",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::c28n4-1790531767307-ed316733ee8f"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 5,
+      "status": 200,
+      "dns": 5.3870000000000005,
+      "tcp": 97.041,
+      "tls": 194.28,
+      "ttfb": 314.01,
+      "total": 383.164,
+      "bytes": 68543,
+      "headers": {
+        "age": "17",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::vzvwm-1790531767671-809d3da3fe93"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 5,
+      "status": 200,
+      "dns": 43.464999999999996,
+      "tcp": 92.652,
+      "tls": 191.11800000000002,
+      "ttfb": 320.496,
+      "total": 370.61100000000005,
+      "bytes": 55553,
+      "headers": {
+        "age": "18",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::g7f9r-1790531768099-00051157b2ac"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 5,
+      "status": 200,
+      "dns": 13.252999999999998,
+      "tcp": 74.27799999999999,
+      "tls": 157.505,
+      "ttfb": 251.74400000000003,
+      "total": 305.082,
+      "bytes": 77188,
+      "headers": {
+        "age": "17",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::4245f-1790531768420-829c363a94fb"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 5,
+      "status": 200,
+      "dns": 15.565000000000001,
+      "tcp": 65.251,
+      "tls": 166.46099999999998,
+      "ttfb": 256.78000000000003,
+      "total": 256.99,
+      "bytes": 24143,
+      "headers": {
+        "age": "16",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::kzf8z-1790531768750-4678b6c0be99"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 5,
+      "status": 307,
+      "dns": 7.276000000000001,
+      "tcp": 57.912,
+      "tls": 157.379,
+      "ttfb": 252.517,
+      "total": 252.68400000000003,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::gwrfs-1790531769026-00a8ad230937"
+      }
+    },
+    {
+      "route": "/",
+      "run": 6,
+      "status": 200,
+      "dns": 17.532,
+      "tcp": 69.48400000000001,
+      "tls": 165.364,
+      "ttfb": 262.898,
+      "total": 366.166,
+      "bytes": 165860,
+      "headers": {
+        "age": "20",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::w8hkl-1790531769291-d1203aa96763"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 6,
+      "status": 200,
+      "dns": 8.158,
+      "tcp": 58.351,
+      "tls": 153.696,
+      "ttfb": 254.84400000000002,
+      "total": 305.38599999999997,
+      "bytes": 81694,
+      "headers": {
+        "age": "245",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::nsndz-1790531769665-1c11a6002b00"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 6,
+      "status": 200,
+      "dns": 11.481,
+      "tcp": 83.869,
+      "tls": 201.68900000000002,
+      "ttfb": 321.167,
+      "total": 472.537,
+      "bytes": 181241,
+      "headers": {
+        "age": "21",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::9sp9l-1790531770037-06b3e65b0684"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 6,
+      "status": 200,
+      "dns": 12.93,
+      "tcp": 71.563,
+      "tls": 171.387,
+      "ttfb": 283.962,
+      "total": 338.94800000000004,
+      "bytes": 85247,
+      "headers": {
+        "age": "20",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::55gg2-1790531770491-2b17b370d910"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 6,
+      "status": 200,
+      "dns": 14.808,
+      "tcp": 71.399,
+      "tls": 170.149,
+      "ttfb": 274.163,
+      "total": 328.101,
+      "bytes": 68543,
+      "headers": {
+        "age": "20",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::phqbm-1790531770854-4693beaf3f18"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 6,
+      "status": 200,
+      "dns": 7.36,
+      "tcp": 51.763999999999996,
+      "tls": 142,
+      "ttfb": 236.964,
+      "total": 280.979,
+      "bytes": 55553,
+      "headers": {
+        "age": "21",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::9g9fs-1790531771165-ce31205f28f8"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 6,
+      "status": 200,
+      "dns": 17.111,
+      "tcp": 64.32000000000001,
+      "tls": 156.849,
+      "ttfb": 255.27100000000002,
+      "total": 308.365,
+      "bytes": 77188,
+      "headers": {
+        "age": "20",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::jwmwf-1790531771479-66465840f6be"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 6,
+      "status": 200,
+      "dns": 16.531,
+      "tcp": 78.502,
+      "tls": 152.93200000000002,
+      "ttfb": 236.241,
+      "total": 236.655,
+      "bytes": 24143,
+      "headers": {
+        "age": "19",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::jwmwf-1790531771793-cda070369706"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 6,
+      "status": 307,
+      "dns": 8.59,
+      "tcp": 47.547,
+      "tls": 134.916,
+      "ttfb": 213.452,
+      "total": 213.596,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::s662m-1790531772032-776d058654c6"
+      }
+    },
+    {
+      "route": "/",
+      "run": 7,
+      "status": 200,
+      "dns": 20.368000000000002,
+      "tcp": 63.528,
+      "tls": 149.838,
+      "ttfb": 272.414,
+      "total": 357.711,
+      "bytes": 165860,
+      "headers": {
+        "age": "23",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::9r6fm-1790531772283-80775b1fa88e"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 7,
+      "status": 200,
+      "dns": 14.824,
+      "tcp": 106.848,
+      "tls": 209.32600000000002,
+      "ttfb": 335.536,
+      "total": 409.729,
+      "bytes": 81694,
+      "headers": {
+        "age": "248",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::9r6fm-1790531772728-84995002f524"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 7,
+      "status": 200,
+      "dns": 40.622,
+      "tcp": 103.87,
+      "tls": 215.836,
+      "ttfb": 339.671,
+      "total": 469.283,
+      "bytes": 181241,
+      "headers": {
+        "age": "24",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::w8hkl-1790531773157-041675a18ddf"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 7,
+      "status": 200,
+      "dns": 18.727,
+      "tcp": 80.68400000000001,
+      "tls": 165.781,
+      "ttfb": 273.10200000000003,
+      "total": 324.067,
+      "bytes": 85247,
+      "headers": {
+        "age": "24",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::qgtzv-1790531773591-93d7e420260e"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 7,
+      "status": 200,
+      "dns": 16.845,
+      "tcp": 78.27099999999999,
+      "tls": 158.025,
+      "ttfb": 258.346,
+      "total": 304.794,
+      "bytes": 68543,
+      "headers": {
+        "age": "23",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::czqzm-1790531773920-39a66f1b03d3"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 7,
+      "status": 200,
+      "dns": 9.658,
+      "tcp": 69.56099999999999,
+      "tls": 173.133,
+      "ttfb": 278.67900000000003,
+      "total": 340.924,
+      "bytes": 55553,
+      "headers": {
+        "age": "24",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::9sp9l-1790531774260-be19a8489e8e"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 7,
+      "status": 200,
+      "dns": 6.846,
+      "tcp": 53.921,
+      "tls": 145.514,
+      "ttfb": 237.607,
+      "total": 287.464,
+      "bytes": 77188,
+      "headers": {
+        "age": "23",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::9vf7f-1790531774584-ca29fce74767"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 7,
+      "status": 200,
+      "dns": 18.821,
+      "tcp": 77.349,
+      "tls": 179.27,
+      "ttfb": 278.54200000000003,
+      "total": 279.665,
+      "bytes": 24143,
+      "headers": {
+        "age": "22",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::l8cwq-1790531774954-b615f0001bc9"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 7,
+      "status": 307,
+      "dns": 17.274,
+      "tcp": 72.56400000000001,
+      "tls": 167.18099999999998,
+      "ttfb": 252.34099999999998,
+      "total": 252.842,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::6zkbz-1790531775230-dbed931eba29"
+      }
+    },
+    {
+      "route": "/",
+      "run": 8,
+      "status": 200,
+      "dns": 9.929,
+      "tcp": 61.974000000000004,
+      "tls": 157.286,
+      "ttfb": 256.002,
+      "total": 366.20799999999997,
+      "bytes": 165860,
+      "headers": {
+        "age": "27",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::9vf7f-1790531775486-2451b5543742"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 8,
+      "status": 200,
+      "dns": 14.454,
+      "tcp": 57.733,
+      "tls": 141.946,
+      "ttfb": 232.87199999999999,
+      "total": 279.023,
+      "bytes": 81694,
+      "headers": {
+        "age": "251",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::9sp9l-1790531775853-097b368d0da7"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 8,
+      "status": 200,
+      "dns": 12.520999999999999,
+      "tcp": 61.06,
+      "tls": 154.548,
+      "ttfb": 315.15500000000003,
+      "total": 417.691,
+      "bytes": 181241,
+      "headers": {
+        "age": "27",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::wc7rx-1790531776164-2b2eea3c3a00"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 8,
+      "status": 200,
+      "dns": 17.995,
+      "tcp": 73.88799999999999,
+      "tls": 170.86,
+      "ttfb": 306.738,
+      "total": 364.252,
+      "bytes": 85247,
+      "headers": {
+        "age": "27",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::nsndz-1790531776625-f771b4379d6f"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 8,
+      "status": 200,
+      "dns": 11.561,
+      "tcp": 70.037,
+      "tls": 171.24200000000002,
+      "ttfb": 279.658,
+      "total": 338.963,
+      "bytes": 68543,
+      "headers": {
+        "age": "26",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::bshmp-1790531777009-f4d4ba7942e0"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 8,
+      "status": 200,
+      "dns": 13.178,
+      "tcp": 71.556,
+      "tls": 178.507,
+      "ttfb": 288.585,
+      "total": 348.017,
+      "bytes": 55553,
+      "headers": {
+        "age": "27",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::wthj7-1790531777369-1b1047b9c20b"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 8,
+      "status": 200,
+      "dns": 9.375,
+      "tcp": 56.678,
+      "tls": 148.374,
+      "ttfb": 257.918,
+      "total": 305.703,
+      "bytes": 77188,
+      "headers": {
+        "age": "26",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::cbk47-1790531777696-8c5bc03fd772"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 8,
+      "status": 200,
+      "dns": 51.085,
+      "tcp": 105.54299999999999,
+      "tls": 205.898,
+      "ttfb": 313.753,
+      "total": 314.17400000000004,
+      "bytes": 24143,
+      "headers": {
+        "age": "26",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::d4z8b-1790531778082-6d2cbce181de"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 8,
+      "status": 307,
+      "dns": 10.001,
+      "tcp": 65.265,
+      "tls": 169.518,
+      "ttfb": 267.354,
+      "total": 267.459,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::m99ld-1790531778374-d86aa0ec4504"
+      }
+    },
+    {
+      "route": "/",
+      "run": 9,
+      "status": 200,
+      "dns": 8.955,
+      "tcp": 79.343,
+      "tls": 195.93,
+      "ttfb": 339.74199999999996,
+      "total": 481.43,
+      "bytes": 165860,
+      "headers": {
+        "age": "30",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::2tjwg-1790531778691-9da1c9e89229"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 9,
+      "status": 200,
+      "dns": 16.743000000000002,
+      "tcp": 108.34100000000001,
+      "tls": 210.984,
+      "ttfb": 337.976,
+      "total": 406.154,
+      "bytes": 81694,
+      "headers": {
+        "age": "255",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::8b2gp-1790531779210-97bfc2b4aa06"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 9,
+      "status": 200,
+      "dns": 11.372,
+      "tcp": 83.143,
+      "tls": 196.661,
+      "ttfb": 357.02099999999996,
+      "total": 505.37100000000004,
+      "bytes": 181241,
+      "headers": {
+        "age": "30",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::4245f-1790531779621-c7386d25d038"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 9,
+      "status": 200,
+      "dns": 15.308,
+      "tcp": 67.87899999999999,
+      "tls": 162.323,
+      "ttfb": 264.38800000000003,
+      "total": 314.35699999999997,
+      "bytes": 85247,
+      "headers": {
+        "age": "30",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::d4z8b-1790531780099-018061187ccd"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 9,
+      "status": 200,
+      "dns": 8.671999999999999,
+      "tcp": 60.156,
+      "tls": 153.9,
+      "ttfb": 254.043,
+      "total": 308.791,
+      "bytes": 68543,
+      "headers": {
+        "age": "30",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::rlvn5-1790531780422-0db56995e80b"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 9,
+      "status": 200,
+      "dns": 8.222,
+      "tcp": 50.101,
+      "tls": 133.604,
+      "ttfb": 278.902,
+      "total": 324.90000000000003,
+      "bytes": 55553,
+      "headers": {
+        "age": "30",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::d4z8b-1790531780732-0c45d2737f3f"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 9,
+      "status": 200,
+      "dns": 7.006,
+      "tcp": 61.761,
+      "tls": 162.03500000000003,
+      "ttfb": 276.92699999999996,
+      "total": 332.93,
+      "bytes": 77188,
+      "headers": {
+        "age": "30",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::7ssqd-1790531781110-47c0876a1ce7"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 9,
+      "status": 200,
+      "dns": 11.801,
+      "tcp": 60.244,
+      "tls": 152.409,
+      "ttfb": 248.891,
+      "total": 249.053,
+      "bytes": 24143,
+      "headers": {
+        "age": "29",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::vcss8-1790531781443-dbaff4d738b3"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 9,
+      "status": 307,
+      "dns": 6.14,
+      "tcp": 64.624,
+      "tls": 164.874,
+      "ttfb": 272.808,
+      "total": 272.901,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::2nt5c-1790531781739-d4bf3e135db4"
+      }
+    },
+    {
+      "route": "/",
+      "run": 10,
+      "status": 200,
+      "dns": 10.335,
+      "tcp": 60.894999999999996,
+      "tls": 160,
+      "ttfb": 260.40200000000004,
+      "total": 362.40299999999996,
+      "bytes": 165860,
+      "headers": {
+        "age": "33",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::67g87-1790531782009-79df39ce440e"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 10,
+      "status": 200,
+      "dns": 5.133,
+      "tcp": 48.275999999999996,
+      "tls": 131.65699999999998,
+      "ttfb": 220.18599999999998,
+      "total": 264.787,
+      "bytes": 81694,
+      "headers": {
+        "age": "258",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::8kt9f-1790531782352-8d5f3b565d50"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 10,
+      "status": 200,
+      "dns": 19.912,
+      "tcp": 70.643,
+      "tls": 162.978,
+      "ttfb": 262.99,
+      "total": 366.63800000000003,
+      "bytes": 181241,
+      "headers": {
+        "age": "33",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::lqnmr-1790531782671-52e7c49f77a8"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 10,
+      "status": 200,
+      "dns": 51.341,
+      "tcp": 128.286,
+      "tls": 211.76500000000001,
+      "ttfb": 321.083,
+      "total": 376.669,
+      "bytes": 85247,
+      "headers": {
+        "age": "33",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::2d7vw-1790531783113-72f55e7bdae5"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 10,
+      "status": 200,
+      "dns": 19.417,
+      "tcp": 77.931,
+      "tls": 177.114,
+      "ttfb": 275.49,
+      "total": 332.259,
+      "bytes": 68543,
+      "headers": {
+        "age": "33",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::cxxrl-1790531783469-b7ebec1e3d0c"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 10,
+      "status": 200,
+      "dns": 12.542,
+      "tcp": 59.707,
+      "tls": 151.344,
+      "ttfb": 242.303,
+      "total": 288.96500000000003,
+      "bytes": 55553,
+      "headers": {
+        "age": "33",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::x2csh-1790531783785-e3a5bb36b7ab"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 10,
+      "status": 200,
+      "dns": 14.961,
+      "tcp": 60.278,
+      "tls": 148.89,
+      "ttfb": 240.368,
+      "total": 288.07700000000006,
+      "bytes": 77188,
+      "headers": {
+        "age": "33",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::qwvd5-1790531784084-bd431c6db648"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 10,
+      "status": 200,
+      "dns": 16.906000000000002,
+      "tcp": 62.58800000000001,
+      "tls": 157.82299999999998,
+      "ttfb": 256.748,
+      "total": 256.907,
+      "bytes": 24143,
+      "headers": {
+        "age": "32",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::hk7v9-1790531784408-ead2c61fb210"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 10,
+      "status": 307,
+      "dns": 8.861,
+      "tcp": 52.204,
+      "tls": 143.18900000000002,
+      "ttfb": 224.678,
+      "total": 224.801,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::qps8x-1790531784674-6449cf1ba875"
+      }
+    },
+    {
+      "route": "/",
+      "run": 11,
+      "status": 200,
+      "dns": 11.695,
+      "tcp": 75.16799999999999,
+      "tls": 182.925,
+      "ttfb": 298.511,
+      "total": 427.575,
+      "bytes": 165860,
+      "headers": {
+        "age": "36",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::nv5f6-1790531784954-33d2c49901fb"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 11,
+      "status": 200,
+      "dns": 14.356,
+      "tcp": 81.545,
+      "tls": 190.588,
+      "ttfb": 313.388,
+      "total": 378.81399999999996,
+      "bytes": 81694,
+      "headers": {
+        "age": "261",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::2tjwg-1790531785413-be0e4b3e7964"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 11,
+      "status": 200,
+      "dns": 7.31,
+      "tcp": 55.593999999999994,
+      "tls": 146.94899999999998,
+      "ttfb": 239.16899999999998,
+      "total": 337.481,
+      "bytes": 181241,
+      "headers": {
+        "age": "36",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::wgj5l-1790531785759-4934224b6d50"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 11,
+      "status": 200,
+      "dns": 11.023,
+      "tcp": 66.636,
+      "tls": 167.196,
+      "ttfb": 270.617,
+      "total": 330.425,
+      "bytes": 85247,
+      "headers": {
+        "age": "36",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::s662m-1790531786142-b5dec0255ab4"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 11,
+      "status": 200,
+      "dns": 10.959999999999999,
+      "tcp": 59.572,
+      "tls": 152.468,
+      "ttfb": 443.543,
+      "total": 504.14599999999996,
+      "bytes": 68543,
+      "headers": {
+        "age": "36",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::vvg9p-1790531786638-f44c0bff2a6e"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 11,
+      "status": 200,
+      "dns": 6.74,
+      "tcp": 48.643,
+      "tls": 135.882,
+      "ttfb": 224.531,
+      "total": 265.583,
+      "bytes": 55553,
+      "headers": {
+        "age": "36",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::wrntm-1790531786963-9d31a2c758de"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 11,
+      "status": 200,
+      "dns": 17.69,
+      "tcp": 65.433,
+      "tls": 158.14800000000002,
+      "ttfb": 261.637,
+      "total": 312.909,
+      "bytes": 77188,
+      "headers": {
+        "age": "36",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::wthj7-1790531787272-dbed1d505a24"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 11,
+      "status": 200,
+      "dns": 14.619,
+      "tcp": 62.60300000000001,
+      "tls": 156.11700000000002,
+      "ttfb": 251.728,
+      "total": 252.291,
+      "bytes": 24143,
+      "headers": {
+        "age": "35",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::plg9p-1790531787595-eb2c076d32b2"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 11,
+      "status": 307,
+      "dns": 44.73,
+      "tcp": 108.49000000000001,
+      "tls": 219.673,
+      "ttfb": 332.61400000000003,
+      "total": 332.779,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::fs8c5-1790531787939-55fec4eb7c51"
+      }
+    },
+    {
+      "route": "/",
+      "run": 12,
+      "status": 200,
+      "dns": 12.102,
+      "tcp": 53.817,
+      "tls": 141.373,
+      "ttfb": 287.13,
+      "total": 371.822,
+      "bytes": 165860,
+      "headers": {
+        "age": "39",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::gwrfs-1790531788211-4d0399f5fb7d"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 12,
+      "status": 200,
+      "dns": 18.714000000000002,
+      "tcp": 63.554,
+      "tls": 152.851,
+      "ttfb": 241.19899999999998,
+      "total": 286.343,
+      "bytes": 81694,
+      "headers": {
+        "age": "264",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::9g9fs-1790531788615-db9c14df0842"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 12,
+      "status": 200,
+      "dns": 5.845999999999999,
+      "tcp": 82.917,
+      "tls": 167.443,
+      "ttfb": 271.80199999999996,
+      "total": 394.54,
+      "bytes": 181241,
+      "headers": {
+        "age": "39",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::smn4v-1790531788946-ef9b3e5545d9"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 12,
+      "status": 200,
+      "dns": 9.243,
+      "tcp": 57.71,
+      "tls": 149.542,
+      "ttfb": 250.193,
+      "total": 303.52000000000004,
+      "bytes": 85247,
+      "headers": {
+        "age": "39",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::rlrhf-1790531789332-3124c2c4df0e"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 12,
+      "status": 200,
+      "dns": 10.099,
+      "tcp": 68.41600000000001,
+      "tls": 169.247,
+      "ttfb": 275.451,
+      "total": 336.672,
+      "bytes": 68543,
+      "headers": {
+        "age": "39",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::rlrhf-1790531789678-08d86b3d7bcb"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 12,
+      "status": 200,
+      "dns": 19.843,
+      "tcp": 79.05,
+      "tls": 188.028,
+      "ttfb": 309.107,
+      "total": 381.79999999999995,
+      "bytes": 55553,
+      "headers": {
+        "age": "40",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::7rzvj-1790531790064-31e9d1e3be63"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 12,
+      "status": 200,
+      "dns": 15.706000000000001,
+      "tcp": 92.991,
+      "tls": 212.17600000000002,
+      "ttfb": 339.67900000000003,
+      "total": 414.12,
+      "bytes": 77188,
+      "headers": {
+        "age": "39",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::9cjqs-1790531790500-4b84057ad6f9"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 12,
+      "status": 200,
+      "dns": 13.546000000000001,
+      "tcp": 56.723000000000006,
+      "tls": 147.748,
+      "ttfb": 235.988,
+      "total": 237.503,
+      "bytes": 24143,
+      "headers": {
+        "age": "38",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::b9xl4-1790531790852-9775dcc14919"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 12,
+      "status": 307,
+      "dns": 17.471,
+      "tcp": 71.839,
+      "tls": 175.927,
+      "ttfb": 271.83000000000004,
+      "total": 272.026,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::x867c-1790531791146-86cbc0468888"
+      }
+    },
+    {
+      "route": "/",
+      "run": 13,
+      "status": 200,
+      "dns": 7.87,
+      "tcp": 70.476,
+      "tls": 144.96300000000002,
+      "ttfb": 248.144,
+      "total": 334.403,
+      "bytes": 165860,
+      "headers": {
+        "age": "43",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::gwrfs-1790531791408-2262c41483e5"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 13,
+      "status": 200,
+      "dns": 11.212,
+      "tcp": 65.672,
+      "tls": 165.7,
+      "ttfb": 293.792,
+      "total": 350.514,
+      "bytes": 81694,
+      "headers": {
+        "age": "267",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::qzvb5-1790531791789-70748702abe5"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 13,
+      "status": 200,
+      "dns": 12.949,
+      "tcp": 69.87100000000001,
+      "tls": 169.42,
+      "ttfb": 275.45300000000003,
+      "total": 395.715,
+      "bytes": 181241,
+      "headers": {
+        "age": "43",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::zbd94-1790531792160-402f3bec13dd"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 13,
+      "status": 200,
+      "dns": 18.861,
+      "tcp": 68.292,
+      "tls": 162.36800000000002,
+      "ttfb": 285.966,
+      "total": 345.194,
+      "bytes": 85247,
+      "headers": {
+        "age": "43",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::z2j92-1790531792564-885262a8b3da"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 13,
+      "status": 200,
+      "dns": 47.953,
+      "tcp": 99.584,
+      "tls": 197.055,
+      "ttfb": 318.97999999999996,
+      "total": 369.97,
+      "bytes": 68543,
+      "headers": {
+        "age": "42",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::cf5d6-1790531792976-b9de343e6e82"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 13,
+      "status": 200,
+      "dns": 13.154,
+      "tcp": 74.929,
+      "tls": 154.888,
+      "ttfb": 251.608,
+      "total": 298.26399999999995,
+      "bytes": 55553,
+      "headers": {
+        "age": "43",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::l8cwq-1790531793315-45c766a9c03a"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 13,
+      "status": 200,
+      "dns": 20.903000000000002,
+      "tcp": 85.658,
+      "tls": 195.02700000000002,
+      "ttfb": 326.47900000000004,
+      "total": 403.442,
+      "bytes": 77188,
+      "headers": {
+        "age": "42",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::kzf8z-1790531793674-604c4effcf6a"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 13,
+      "status": 200,
+      "dns": 19.503,
+      "tcp": 70.23400000000001,
+      "tls": 164.804,
+      "ttfb": 257.33299999999997,
+      "total": 257.63399999999996,
+      "bytes": 24143,
+      "headers": {
+        "age": "42",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::wc7rx-1790531794070-d8322b4ea0c7"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 13,
+      "status": 307,
+      "dns": 9.774,
+      "tcp": 64.22999999999999,
+      "tls": 164.321,
+      "ttfb": 253.88899999999998,
+      "total": 254.069,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::zbd94-1790531794356-9d7d70c993fc"
+      }
+    },
+    {
+      "route": "/",
+      "run": 14,
+      "status": 200,
+      "dns": 11.329,
+      "tcp": 80.318,
+      "tls": 191.591,
+      "ttfb": 313.153,
+      "total": 448.995,
+      "bytes": 165860,
+      "headers": {
+        "age": "46",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::jhdqr-1790531794665-563c2997ba07"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 14,
+      "status": 200,
+      "dns": 7.822000000000001,
+      "tcp": 76.869,
+      "tls": 187.57299999999998,
+      "ttfb": 318.49300000000005,
+      "total": 391.657,
+      "bytes": 81694,
+      "headers": {
+        "age": "271",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::8b2gp-1790531795132-204384fb6ab4"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 14,
+      "status": 200,
+      "dns": 13.921,
+      "tcp": 75.663,
+      "tls": 164.907,
+      "ttfb": 274.271,
+      "total": 380.38899999999995,
+      "bytes": 181241,
+      "headers": {
+        "age": "46",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::2d7vw-1790531795522-c7b5bb6b5fe6"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 14,
+      "status": 200,
+      "dns": 13.34,
+      "tcp": 72.187,
+      "tls": 175.293,
+      "ttfb": 293.17199999999997,
+      "total": 357.65799999999996,
+      "bytes": 85247,
+      "headers": {
+        "age": "46",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::2d7vw-1790531795934-985bd710f9e6"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 14,
+      "status": 200,
+      "dns": 6.316000000000001,
+      "tcp": 55.012,
+      "tls": 143.09,
+      "ttfb": 245.856,
+      "total": 290.217,
+      "bytes": 68543,
+      "headers": {
+        "age": "46",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::xdh9l-1790531796269-2e2f515718e5"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 14,
+      "status": 200,
+      "dns": 13.997,
+      "tcp": 57.17,
+      "tls": 145.48,
+      "ttfb": 235.804,
+      "total": 279.626,
+      "bytes": 55553,
+      "headers": {
+        "age": "46",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::fwpvl-1790531796585-d69b266d4d52"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 14,
+      "status": 200,
+      "dns": 12.793000000000001,
+      "tcp": 74.813,
+      "tls": 181.239,
+      "ttfb": 295.531,
+      "total": 359.206,
+      "bytes": 77188,
+      "headers": {
+        "age": "45",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::j86t4-1790531796918-498645e86734"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 14,
+      "status": 200,
+      "dns": 6.929,
+      "tcp": 55.355000000000004,
+      "tls": 149.644,
+      "ttfb": 274.566,
+      "total": 274.875,
+      "bytes": 24143,
+      "headers": {
+        "age": "45",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::cf5d6-1790531797270-13f5e655542b"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 14,
+      "status": 307,
+      "dns": 7.64,
+      "tcp": 51.352000000000004,
+      "tls": 143.104,
+      "ttfb": 224.395,
+      "total": 224.864,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::4pnhn-1790531797560-8bf1f50a28c1"
+      }
+    },
+    {
+      "route": "/",
+      "run": 15,
+      "status": 200,
+      "dns": 50.476,
+      "tcp": 111.04899999999999,
+      "tls": 187.917,
+      "ttfb": 283.56100000000004,
+      "total": 371.446,
+      "bytes": 165860,
+      "headers": {
+        "age": "49",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::gbmmq-1790531797852-e7ca9b63836a"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 15,
+      "status": 200,
+      "dns": 12.852,
+      "tcp": 62.1,
+      "tls": 160.97,
+      "ttfb": 258.988,
+      "total": 309.608,
+      "bytes": 81694,
+      "headers": {
+        "age": "274",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::sh8ml-1790531798220-065efe9cbb4d"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 15,
+      "status": 200,
+      "dns": 14.568,
+      "tcp": 65.474,
+      "tls": 168.409,
+      "ttfb": 273.15299999999996,
+      "total": 373.832,
+      "bytes": 181241,
+      "headers": {
+        "age": "49",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::6fk2l-1790531798564-1ed13532853e"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 15,
+      "status": 200,
+      "dns": 16.395,
+      "tcp": 82.09700000000001,
+      "tls": 192.769,
+      "ttfb": 302.995,
+      "total": 375.114,
+      "bytes": 85247,
+      "headers": {
+        "age": "49",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::4pnhn-1790531798988-230b183cd30f"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 15,
+      "status": 200,
+      "dns": 13.148,
+      "tcp": 74.572,
+      "tls": 181.30599999999998,
+      "ttfb": 296.059,
+      "total": 357.89300000000003,
+      "bytes": 68543,
+      "headers": {
+        "age": "49",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::4bhlp-1790531799383-2705f2e10893"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 15,
+      "status": 200,
+      "dns": 19.852,
+      "tcp": 74.788,
+      "tls": 176.566,
+      "ttfb": 303.761,
+      "total": 357.54999999999995,
+      "bytes": 55553,
+      "headers": {
+        "age": "49",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::jjg5h-1790531799760-7b1bc15ad057"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 15,
+      "status": 200,
+      "dns": 7.651,
+      "tcp": 76.942,
+      "tls": 191.439,
+      "ttfb": 307.556,
+      "total": 377.997,
+      "bytes": 77188,
+      "headers": {
+        "age": "49",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::kjlwk-1790531800147-fdeb45786e8f"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 15,
+      "status": 200,
+      "dns": 12.873000000000001,
+      "tcp": 76.536,
+      "tls": 183.59900000000002,
+      "ttfb": 319.31,
+      "total": 320.173,
+      "bytes": 24143,
+      "headers": {
+        "age": "48",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::x2csh-1790531800545-eb02403a7d22"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 15,
+      "status": 307,
+      "dns": 12.276,
+      "tcp": 70.388,
+      "tls": 178.053,
+      "ttfb": 272.733,
+      "total": 272.896,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::qgtzv-1790531800867-1aa90e07d36d"
+      }
+    },
+    {
+      "route": "/",
+      "run": 16,
+      "status": 200,
+      "dns": 13.652,
+      "tcp": 68.742,
+      "tls": 167.133,
+      "ttfb": 311.645,
+      "total": 418.666,
+      "bytes": 165860,
+      "headers": {
+        "age": "52",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::vpsqr-1790531801158-448b734b573c"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 16,
+      "status": 200,
+      "dns": 6.617,
+      "tcp": 82.491,
+      "tls": 166.002,
+      "ttfb": 268.15099999999995,
+      "total": 323.399,
+      "bytes": 81694,
+      "headers": {
+        "age": "277",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::s662m-1790531801603-3458d8fb10a7"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 16,
+      "status": 200,
+      "dns": 7.215,
+      "tcp": 71.67999999999999,
+      "tls": 179.90300000000002,
+      "ttfb": 296.15599999999995,
+      "total": 440.72499999999997,
+      "bytes": 181241,
+      "headers": {
+        "age": "52",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::wstcn-1790531801946-2e9c2e95b582"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 16,
+      "status": 200,
+      "dns": 7.64,
+      "tcp": 72.864,
+      "tls": 182.40300000000002,
+      "ttfb": 321.569,
+      "total": 387.659,
+      "bytes": 85247,
+      "headers": {
+        "age": "52",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::vvg9p-1790531802414-c865b9f1e0af"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 16,
+      "status": 200,
+      "dns": 7.149,
+      "tcp": 54.364999999999995,
+      "tls": 147.95,
+      "ttfb": 244.204,
+      "total": 294.382,
+      "bytes": 68543,
+      "headers": {
+        "age": "52",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::ss7s2-1790531802781-e70c3d6e3ae6"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 16,
+      "status": 200,
+      "dns": 37.842,
+      "tcp": 82.662,
+      "tls": 171.069,
+      "ttfb": 265.83099999999996,
+      "total": 312.386,
+      "bytes": 55553,
+      "headers": {
+        "age": "53",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::czqzm-1790531803113-27c956c4bba5"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 16,
+      "status": 200,
+      "dns": 9.56,
+      "tcp": 75.409,
+      "tls": 187.696,
+      "ttfb": 311.795,
+      "total": 379.338,
+      "bytes": 77188,
+      "headers": {
+        "age": "52",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::92rwm-1790531803461-5c604fbfd24e"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 16,
+      "status": 200,
+      "dns": 10.342,
+      "tcp": 71.81400000000001,
+      "tls": 156.115,
+      "ttfb": 257.248,
+      "total": 258.354,
+      "bytes": 24143,
+      "headers": {
+        "age": "51",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::6zkbz-1790531803843-dd3af20825fa"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 16,
+      "status": 307,
+      "dns": 7.348000000000001,
+      "tcp": 69.53,
+      "tls": 146.965,
+      "ttfb": 229.44500000000002,
+      "total": 229.609,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::vzvwm-1790531804098-37e34ef171ec"
+      }
+    },
+    {
+      "route": "/",
+      "run": 17,
+      "status": 200,
+      "dns": 10.36,
+      "tcp": 79.31299999999999,
+      "tls": 198.75,
+      "ttfb": 326.305,
+      "total": 468.10400000000004,
+      "bytes": 165860,
+      "headers": {
+        "age": "56",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::6fk2l-1790531804416-ec979b812a80"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 17,
+      "status": 200,
+      "dns": 8.7,
+      "tcp": 63.56199999999999,
+      "tls": 165.056,
+      "ttfb": 269.942,
+      "total": 327.511,
+      "bytes": 81694,
+      "headers": {
+        "age": "280",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::xdh9l-1790531804873-9376e618bea5"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 17,
+      "status": 200,
+      "dns": 15.959999999999999,
+      "tcp": 68.58200000000001,
+      "tls": 169.79,
+      "ttfb": 292.996,
+      "total": 397.827,
+      "bytes": 181241,
+      "headers": {
+        "age": "56",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::smn4v-1790531805215-b6aa0d0b3840"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 17,
+      "status": 200,
+      "dns": 16.919,
+      "tcp": 72.13300000000001,
+      "tls": 163.548,
+      "ttfb": 265.20899999999995,
+      "total": 316.475,
+      "bytes": 85247,
+      "headers": {
+        "age": "56",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::jv92b-1790531805629-2860ca46cb08"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 17,
+      "status": 200,
+      "dns": 21.526,
+      "tcp": 68.417,
+      "tls": 155.295,
+      "ttfb": 246.257,
+      "total": 291.57899999999995,
+      "bytes": 68543,
+      "headers": {
+        "age": "55",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::2nt5c-1790531805951-07aa3a99aab5"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 17,
+      "status": 200,
+      "dns": 5.51,
+      "tcp": 72.99,
+      "tls": 190.336,
+      "ttfb": 302.92400000000004,
+      "total": 369.738,
+      "bytes": 55553,
+      "headers": {
+        "age": "56",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::2d7vw-1790531806292-5b14f850a909"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 17,
+      "status": 200,
+      "dns": 15.578,
+      "tcp": 66.51899999999999,
+      "tls": 164.89000000000001,
+      "ttfb": 262.095,
+      "total": 312.324,
+      "bytes": 77188,
+      "headers": {
+        "age": "55",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::9g9fs-1790531806662-897833961790"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 17,
+      "status": 200,
+      "dns": 10.895,
+      "tcp": 62.940999999999995,
+      "tls": 159.77700000000002,
+      "ttfb": 262.308,
+      "total": 263.012,
+      "bytes": 24143,
+      "headers": {
+        "age": "55",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::qn5md-1790531806978-789acdb5ebd9"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 17,
+      "status": 307,
+      "dns": 10.102,
+      "tcp": 56.704,
+      "tls": 147.905,
+      "ttfb": 227.941,
+      "total": 228.18099999999998,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::75rt9-1790531807244-ec5c92cb2087"
+      }
+    },
+    {
+      "route": "/",
+      "run": 18,
+      "status": 200,
+      "dns": 12.165000000000001,
+      "tcp": 74.997,
+      "tls": 152.453,
+      "ttfb": 246.674,
+      "total": 349.374,
+      "bytes": 165860,
+      "headers": {
+        "age": "59",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::xxr4g-1790531807498-1890b92854fa"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 18,
+      "status": 200,
+      "dns": 50.519,
+      "tcp": 96.848,
+      "tls": 190.443,
+      "ttfb": 285.582,
+      "total": 328.39099999999996,
+      "bytes": 81694,
+      "headers": {
+        "age": "283",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::qr729-1790531807902-7f54bf97bb06"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 18,
+      "status": 200,
+      "dns": 19.168999999999997,
+      "tcp": 80.813,
+      "tls": 186.507,
+      "ttfb": 292.73199999999997,
+      "total": 416.942,
+      "bytes": 181241,
+      "headers": {
+        "age": "59",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::wx6j7-1790531808248-95d1ea33f1a5"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 18,
+      "status": 200,
+      "dns": 20.006,
+      "tcp": 81.40899999999999,
+      "tls": 157.164,
+      "ttfb": 248.34300000000002,
+      "total": 294.746,
+      "bytes": 85247,
+      "headers": {
+        "age": "59",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::gwrfs-1790531808642-9bfc5bece346"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 18,
+      "status": 200,
+      "dns": 17.066000000000003,
+      "tcp": 78.857,
+      "tls": 185.56,
+      "ttfb": 299.785,
+      "total": 362.448,
+      "bytes": 68543,
+      "headers": {
+        "age": "58",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::9vf7f-1790531808981-3751ec57be48"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 18,
+      "status": 200,
+      "dns": 21.405,
+      "tcp": 82.59700000000001,
+      "tls": 156.242,
+      "ttfb": 250.64799999999997,
+      "total": 295.336,
+      "bytes": 55553,
+      "headers": {
+        "age": "59",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::xfm85-1790531809332-f609efe498f0"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 18,
+      "status": 200,
+      "dns": 13.125,
+      "tcp": 75.461,
+      "tls": 155.68,
+      "ttfb": 318.29600000000005,
+      "total": 368.477,
+      "bytes": 77188,
+      "headers": {
+        "age": "58",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::wgj5l-1790531809646-c3795442ef33"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 18,
+      "status": 200,
+      "dns": 12.176,
+      "tcp": 64.879,
+      "tls": 160.153,
+      "ttfb": 270.409,
+      "total": 270.99,
+      "bytes": 24143,
+      "headers": {
+        "age": "58",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::q49kt-1790531810043-5e79c6939caf"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 18,
+      "status": 307,
+      "dns": 18.546,
+      "tcp": 98.08,
+      "tls": 213.79999999999998,
+      "ttfb": 321.493,
+      "total": 321.60499999999996,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::4bhlp-1790531810387-2840da526378"
+      }
+    },
+    {
+      "route": "/",
+      "run": 19,
+      "status": 200,
+      "dns": 14.023000000000001,
+      "tcp": 76.946,
+      "tls": 159.405,
+      "ttfb": 262.88800000000003,
+      "total": 368.212,
+      "bytes": 165860,
+      "headers": {
+        "age": "62",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::8b2gp-1790531810666-d649aeca1125"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 19,
+      "status": 200,
+      "dns": 43.498000000000005,
+      "tcp": 83.937,
+      "tls": 140.41600000000003,
+      "ttfb": 216.01000000000002,
+      "total": 256.859,
+      "bytes": 81694,
+      "headers": {
+        "age": "287",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::7rzvj-1790531811023-ffe492358811"
+      }
+    },
+    {
+      "route": "/archive",
+      "run": 19,
+      "status": 200,
+      "dns": 18.646,
+      "tcp": 61.865,
+      "tls": 117.051,
+      "ttfb": 194.39600000000002,
+      "total": 288.623,
+      "bytes": 181241,
+      "headers": {
+        "age": "62",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::jhdqr-1790531811273-a6fc931496b4"
+      }
+    },
+    {
+      "route": "/series",
+      "run": 19,
+      "status": 200,
+      "dns": 19.958,
+      "tcp": 81.922,
+      "tls": 138.459,
+      "ttfb": 213.076,
+      "total": 255.36999999999998,
+      "bytes": 85247,
+      "headers": {
+        "age": "62",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::qgtzv-1790531811603-7abed917bef9"
+      }
+    },
+    {
+      "route": "/authors",
+      "run": 19,
+      "status": 200,
+      "dns": 11.155,
+      "tcp": 51.756,
+      "tls": 104.872,
+      "ttfb": 178.965,
+      "total": 221.56799999999998,
+      "bytes": 68543,
+      "headers": {
+        "age": "61",
+        "cache-control": "s-maxage=300, stale-while-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::jhdqr-1790531811842-551984846813"
+      }
+    },
+    {
+      "route": "/search",
+      "run": 19,
+      "status": 200,
+      "dns": 19.817,
+      "tcp": 81.5,
+      "tls": 129.858,
+      "ttfb": 207.337,
+      "total": 243.974,
+      "bytes": 55553,
+      "headers": {
+        "age": "62",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::fs8c5-1790531812104-8f1ef14a43ca"
+      }
+    },
+    {
+      "route": "/reference?type=AUDIO",
+      "run": 19,
+      "status": 200,
+      "dns": 6.498,
+      "tcp": 42.153000000000006,
+      "tls": 91.453,
+      "ttfb": 195.11800000000002,
+      "total": 234.536,
+      "bytes": 77188,
+      "headers": {
+        "age": "61",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::cf5d6-1790531812322-316b7852d409"
+      }
+    },
+    {
+      "route": "/api/search-index",
+      "run": 19,
+      "status": 200,
+      "dns": 5.757,
+      "tcp": 70.00399999999999,
+      "tls": 129.007,
+      "ttfb": 196.261,
+      "total": 197.239,
+      "bytes": 24143,
+      "headers": {
+        "age": "60",
+        "cache-control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        "server": "Vercel",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "bom1::bom1::jjg5h-1790531812614-6824c83bf9eb"
+      }
+    },
+    {
+      "route": "/admin",
+      "run": 19,
+      "status": 307,
+      "dns": 53.599000000000004,
+      "tcp": 116.15899999999999,
+      "tls": 165.822,
+      "ttfb": 221.40699999999998,
+      "total": 221.558,
+      "bytes": 15,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "location": "/admin/login?from=%2Fadmin",
+        "server": "Vercel",
+        "x-vercel-id": "bom1::6fk2l-1790531812861-918dabb4ca26"
+      }
+    }
+  ]
+}

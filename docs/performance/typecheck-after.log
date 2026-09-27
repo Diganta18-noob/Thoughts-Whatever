@@ -1,0 +1,5 @@
+
+> thoughts-whatever@0.1.0 typecheck
+> tsc --noEmit
+
+scripts/perf-benchmark.ts(212,18): error TS2353: Object literal may only specify known properties, and 'featured' does not exist in type 'SeriesWhereInput'.

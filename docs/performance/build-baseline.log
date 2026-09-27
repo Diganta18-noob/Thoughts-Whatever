@@ -1,0 +1,208 @@
+
+> thoughts-whatever@0.1.0 build
+> node --max-old-space-size=4096 ./node_modules/next/dist/bin/next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/141) ...
+   Generating static pages (35/141) 
+   Generating static pages (70/141) 
+   Generating static pages (105/141) 
+ ✓ Generating static pages (141/141)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                  Size     First Load JS
+┌ ○ /                                        14.8 kB         263 kB
+├ ○ /_not-found                              187 B          87.6 kB
+├ ○ /about                                   3.05 kB         201 kB
+├ ƒ /admin                                   13.9 kB         300 kB
+├ ƒ /admin/activity                          2.72 kB         152 kB
+├ ƒ /admin/analytics                         3.11 kB         158 kB
+├ ƒ /admin/audit-log                         4.63 kB         159 kB
+├ ƒ /admin/content-graph                     4.44 kB         159 kB
+├ ƒ /admin/content-health                    3.56 kB         158 kB
+├ ƒ /admin/developer                         5.05 kB         160 kB
+├ ƒ /admin/developer/ui                      1.93 kB         151 kB
+├ ƒ /admin/editorial-intelligence            4.59 kB         159 kB
+├ ƒ /admin/engagement                        2.14 kB         157 kB
+├ ƒ /admin/exports                           2.9 kB          157 kB
+├ ○ /admin/forgot-password                   4.31 kB         241 kB
+├ ƒ /admin/geography                         1.86 kB         156 kB
+├ ƒ /admin/goals                             3.62 kB         158 kB
+├ ƒ /admin/import                            2.84 kB         249 kB
+├ ƒ /admin/incidents                         3.48 kB         158 kB
+├ ƒ /admin/jobs                              3.13 kB         158 kB
+├ ƒ /admin/login                             4.54 kB         242 kB
+├ ƒ /admin/media                             7.22 kB         167 kB
+├ ƒ /admin/notifications                     2.64 kB         157 kB
+├ ƒ /admin/pieces                            5.45 kB         248 kB
+├ ƒ /admin/pieces/[id]                       1.87 kB         307 kB
+├ ƒ /admin/pieces/[id]/history               5.76 kB         116 kB
+├ ƒ /admin/pieces/new                        220 B           306 kB
+├ ƒ /admin/prompts                           6.3 kB          161 kB
+├ ƒ /admin/prompts/[id]                      157 B           157 kB
+├ ƒ /admin/prompts/new                       157 B           157 kB
+├ ƒ /admin/recommendations                   4.76 kB         159 kB
+├ ƒ /admin/reference                         13.8 kB         168 kB
+├ ○ /admin/reset-password                    4.87 kB         242 kB
+├ ƒ /admin/security                          4.28 kB         159 kB
+├ ƒ /admin/seo                               3.17 kB         158 kB
+├ ƒ /admin/seo-engine                        7.73 kB         113 kB
+├ ƒ /admin/seo-engine/audit                  4.88 kB         163 kB
+├ ƒ /admin/seo-engine/websites               4.35 kB         163 kB
+├ ƒ /admin/series                            3.68 kB         246 kB
+├ ƒ /admin/settings                          2.45 kB         248 kB
+├ ƒ /admin/subscribers                       2.24 kB         177 kB
+├ ƒ /admin/system                            7.33 kB         162 kB
+├ ƒ /admin/system/monitoring                 3.13 kB         158 kB
+├ ƒ /admin/taxonomy                          4.28 kB         252 kB
+├ ƒ /admin/team                              4.94 kB         159 kB
+├ ƒ /admin/transliteration                   1.4 kB          151 kB
+├ ƒ /api/admin/activity                      0 B                0 B
+├ ƒ /api/admin/analytics                     0 B                0 B
+├ ƒ /api/admin/audit-log                     0 B                0 B
+├ ƒ /api/admin/authors                       0 B                0 B
+├ ƒ /api/admin/authors/[id]                  0 B                0 B
+├ ƒ /api/admin/automation                    0 B                0 B
+├ ƒ /api/admin/backup                        0 B                0 B
+├ ƒ /api/admin/content-graph                 0 B                0 B
+├ ƒ /api/admin/content-health                0 B                0 B
+├ ƒ /api/admin/dashboard/widgets             0 B                0 B
+├ ƒ /api/admin/developer/keys                0 B                0 B
+├ ƒ /api/admin/developer/webhooks            0 B                0 B
+├ ƒ /api/admin/editorial-intelligence        0 B                0 B
+├ ƒ /api/admin/engagement                    0 B                0 B
+├ ƒ /api/admin/exports                       0 B                0 B
+├ ƒ /api/admin/forgot-password               0 B                0 B
+├ ƒ /api/admin/geography                     0 B                0 B
+├ ƒ /api/admin/goals                         0 B                0 B
+├ ƒ /api/admin/import                        0 B                0 B
+├ ƒ /api/admin/incidents                     0 B                0 B
+├ ƒ /api/admin/incidents/[id]                0 B                0 B
+├ ƒ /api/admin/jobs                          0 B                0 B
+├ ƒ /api/admin/jobs/[id]/run                 0 B                0 B
+├ ƒ /api/admin/login                         0 B                0 B
+├ ƒ /api/admin/logout                        0 B                0 B
+├ ƒ /api/admin/maintenance                   0 B                0 B
+├ ƒ /api/admin/media                         0 B                0 B
+├ ƒ /api/admin/media/[id]                    0 B                0 B
+├ ƒ /api/admin/media/sync-usage              0 B                0 B
+├ ƒ /api/admin/notifications                 0 B                0 B
+├ ƒ /api/admin/pieces                        0 B                0 B
+├ ƒ /api/admin/pieces/[id]                   0 B                0 B
+├ ƒ /api/admin/pieces/[id]/preview           0 B                0 B
+├ ƒ /api/admin/pieces/[id]/review            0 B                0 B
+├ ƒ /api/admin/pieces/[id]/revisions         0 B                0 B
+├ ƒ /api/admin/prompts                       0 B                0 B
+├ ƒ /api/admin/prompts/[id]                  0 B                0 B
+├ ƒ /api/admin/recommendations               0 B                0 B
+├ ƒ /api/admin/reference                     0 B                0 B
+├ ƒ /api/admin/reference/[id]                0 B                0 B
+├ ƒ /api/admin/reference/[id]/assets         0 B                0 B
+├ ƒ /api/admin/reference/[id]/rights-review  0 B                0 B
+├ ƒ /api/admin/reference/claims              0 B                0 B
+├ ƒ /api/admin/refresh                       0 B                0 B
+├ ƒ /api/admin/reset-password                0 B                0 B
+├ ƒ /api/admin/restore                       0 B                0 B
+├ ƒ /api/admin/search                        0 B                0 B
+├ ƒ /api/admin/security                      0 B                0 B
+├ ƒ /api/admin/seo                           0 B                0 B
+├ ƒ /api/admin/seo-engine/audit              0 B                0 B
+├ ƒ /api/admin/seo-engine/audit/issues/[id]  0 B                0 B
+├ ƒ /api/admin/seo-engine/dashboard          0 B                0 B
+├ ƒ /api/admin/seo-engine/websites           0 B                0 B
+├ ƒ /api/admin/seo-engine/websites/[id]      0 B                0 B
+├ ƒ /api/admin/seo/broken-links              0 B                0 B
+├ ƒ /api/admin/series                        0 B                0 B
+├ ƒ /api/admin/series/[id]                   0 B                0 B
+├ ƒ /api/admin/series/[id]/reorder           0 B                0 B
+├ ƒ /api/admin/settings                      0 B                0 B
+├ ƒ /api/admin/subscribers                   0 B                0 B
+├ ƒ /api/admin/sync-instagram-reels          0 B                0 B
+├ ƒ /api/admin/system-health                 0 B                0 B
+├ ƒ /api/admin/system/monitoring             0 B                0 B
+├ ƒ /api/admin/tags                          0 B                0 B
+├ ƒ /api/admin/tags/[id]                     0 B                0 B
+├ ƒ /api/admin/team                          0 B                0 B
+├ ƒ /api/admin/transcribe                    0 B                0 B
+├ ƒ /api/admin/transcribe/check              0 B                0 B
+├ ƒ /api/admin/upload                        0 B                0 B
+├ ƒ /api/analytics/event                     0 B                0 B
+├ ƒ /api/cover/[owner]/[slug]                0 B                0 B
+├ ƒ /api/cron/automation                     0 B                0 B
+├ ƒ /api/health                              0 B                0 B
+├ ƒ /api/markdown-negotiate                  0 B                0 B
+├ ƒ /api/quote-card                          0 B                0 B
+├ ƒ /api/reference                           0 B                0 B
+├ ƒ /api/reference/[slug]                    0 B                0 B
+├ ƒ /api/reference/takedown                  0 B                0 B
+├ ƒ /api/revalidate                          0 B                0 B
+├ ƒ /api/search-index                        0 B                0 B
+├ ƒ /api/subscribe                           0 B                0 B
+├ ƒ /api/unsubscribe                         0 B                0 B
+├ ƒ /archive                                 3.25 kB         204 kB
+├ ○ /authors                                 1.14 kB         196 kB
+├ ● /authors/[slug]                          217 B           249 kB
+├   ├ /authors/রবীন্দ্রনাথ-ঠাকুর
+├   ├ /authors/কাজী-নজরুল-ইসলাম
+├   ├ /authors/জীবনানন্দ-দাশ
+├   └ [+7 more paths]
+├ ○ /blog                                    1.9 kB          251 kB
+├ ● /blog/[slug]                             176 B           317 kB
+├ ○ /bookmarks                               4.6 kB          101 kB
+├ ○ /contact                                 3.05 kB         201 kB
+├ ○ /documentary                             645 B           250 kB
+├ ● /documentary/[slug]                      174 B           317 kB
+├   ├ /documentary/চিত্ত-যেথা-ভয়-শুন্য
+├   ├ /documentary/কপালকুন্ডলা
+├   ├ /documentary/পথের-দাবী-3
+├   └ [+7 more paths]
+├ ○ /forgot-password                         187 B          87.6 kB
+├ ○ /icon.svg                                0 B                0 B
+├ ○ /letter                                  3.11 kB         196 kB
+├ ƒ /letter/unsubscribe                      2.45 kB         195 kB
+├ ○ /llms.txt                                0 B                0 B
+├ ƒ /login                                   187 B          87.6 kB
+├ ○ /manifest.webmanifest                    0 B                0 B
+├ ƒ /preview/[token]                         191 B           102 kB
+├ ○ /privacy                                 1.24 kB         194 kB
+├ ƒ /reference                               4.11 kB         202 kB
+├ ƒ /reference/[slug]                        4.48 kB         120 kB
+├ ƒ /reference/[slug]/listen                 12.1 kB         122 kB
+├ ƒ /reference/[slug]/read                   9.9 kB          120 kB
+├ ○ /reference/rights                        5.58 kB         189 kB
+├ ƒ /reset-password                          187 B          87.6 kB
+├ ○ /resource/bangla-sahityer-timeline       15.3 kB         111 kB
+├ ○ /robots.txt                              0 B                0 B
+├ ƒ /rss.xml                                 0 B                0 B
+├ ƒ /search                                  2.54 kB         120 kB
+├ ○ /series                                  1.14 kB         196 kB
+├ ● /series/[slug]                           5.88 kB         206 kB
+├   ├ /series/পথের-দাবী
+├   ├ /series/crime-and-punishment
+├   ├ /series/নীলদর্পণ
+├   └ [+3 more paths]
+├ ƒ /sitemap.xml                             0 B                0 B
+├ ○ /unauthorized                            179 B          96.4 kB
+├ ○ /writing                                 645 B           250 kB
+└ ● /writing/[slug]                          175 B           317 kB
+    └ /writing/কপালকুণ্ডলা
++ First Load JS shared by all                87.5 kB
+  ├ chunks/2117-0f63675fbe0c2bb6.js          31.9 kB
+  ├ chunks/fd9d1056-a54b849b28273ff4.js      53.6 kB
+  └ other shared chunks (total)              1.92 kB
+
+
+ƒ Middleware                                 27.9 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses getStaticProps)
+ƒ  (Dynamic)  server-rendered on demand
+

@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 export default async function AdminReferencePage() {
-  const [works, statsGroup] = await Promise.all([
+  const [works, [totalCount, rightsGroups]] = await Promise.all([
     prisma.referenceWork.findMany({
       orderBy: { createdAt: "desc" },
       include: {
@@ -29,11 +29,10 @@ export default async function AdminReferencePage() {
     }),
     Promise.all([
       prisma.referenceWork.count(),
-      prisma.referenceRights.count({ where: { status: "PUBLIC_DOMAIN" } }),
-      prisma.referenceRights.count({ where: { status: "LICENSED" } }),
-      prisma.referenceRights.count({ where: { status: "EXTERNAL_SOURCE" } }),
-      prisma.referenceRights.count({ where: { status: "RIGHTS_UNVERIFIED" } }),
-      prisma.referenceRights.count({ where: { status: "RESTRICTED" } }),
+      prisma.referenceRights.groupBy({
+        by: ["status"],
+        _count: { _all: true },
+      }),
     ]),
   ]);
 
@@ -48,14 +47,18 @@ export default async function AdminReferencePage() {
     })),
   }));
 
+  const rightsMap = new Map(rightsGroups.map((g) => [g.status, g._count._all]));
+  const unverified = rightsMap.get("RIGHTS_UNVERIFIED") ?? 0;
+  const restricted = rightsMap.get("RESTRICTED") ?? 0;
+
   const stats = {
-    total: statsGroup[0],
-    publicDomain: statsGroup[1],
-    licensed: statsGroup[2],
-    external: statsGroup[3],
-    unverified: statsGroup[4],
-    restricted: statsGroup[5],
-    reviewRequired: statsGroup[4] + statsGroup[5],
+    total: totalCount,
+    publicDomain: rightsMap.get("PUBLIC_DOMAIN") ?? 0,
+    licensed: rightsMap.get("LICENSED") ?? 0,
+    external: rightsMap.get("EXTERNAL_SOURCE") ?? 0,
+    unverified,
+    restricted,
+    reviewRequired: unverified + restricted,
   };
 
   return <ReferenceAdminClient initialWorks={serializedWorks} initialStats={stats} />;

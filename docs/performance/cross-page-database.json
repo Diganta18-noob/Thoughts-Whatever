@@ -1,0 +1,985 @@
+{
+  "environment": "workstation; no React request cache; no authentication or render included",
+  "samples": [
+    {
+      "route": "home-initial-loaders",
+      "run": 0,
+      "wallMs": 789.5083,
+      "bytes": 42968,
+      "serializationMs": 1.6533999999999196
+    },
+    {
+      "route": "archive-loaders",
+      "run": 0,
+      "wallMs": 411.5158000000001,
+      "bytes": 38110,
+      "serializationMs": 0.4030999999999949
+    },
+    {
+      "route": "series-loader",
+      "run": 0,
+      "wallMs": 485.17999999999984,
+      "bytes": 26422,
+      "serializationMs": 0.24289999999973588
+    },
+    {
+      "route": "authors-loader",
+      "run": 0,
+      "wallMs": 187.30420000000004,
+      "bytes": 2003,
+      "serializationMs": 0.04710000000022774
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 0,
+      "wallMs": 650.5627,
+      "bytes": 9443,
+      "serializationMs": 0.10640000000012151
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 0,
+      "wallMs": 838.6585999999998,
+      "bytes": 4505,
+      "serializationMs": 0.06700000000000728
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 0,
+      "wallMs": 567.5475000000006,
+      "bytes": 7851,
+      "serializationMs": 0.10519999999996799
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 1,
+      "wallMs": 537.6439,
+      "bytes": 42968,
+      "serializationMs": 0.2863999999999578
+    },
+    {
+      "route": "archive-loaders",
+      "run": 1,
+      "wallMs": 411.7537000000002,
+      "bytes": 38110,
+      "serializationMs": 0.29390000000057626
+    },
+    {
+      "route": "series-loader",
+      "run": 1,
+      "wallMs": 478.64429999999993,
+      "bytes": 26422,
+      "serializationMs": 0.15650000000005093
+    },
+    {
+      "route": "authors-loader",
+      "run": 1,
+      "wallMs": 183.97779999999966,
+      "bytes": 2003,
+      "serializationMs": 0.05269999999927677
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 1,
+      "wallMs": 706.9587000000001,
+      "bytes": 9443,
+      "serializationMs": 0.1069999999999709
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 1,
+      "wallMs": 863.4538000000002,
+      "bytes": 4505,
+      "serializationMs": 0.056000000000494765
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 1,
+      "wallMs": 559.809299999999,
+      "bytes": 7851,
+      "serializationMs": 0.11980000000039581
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 2,
+      "wallMs": 560.4946,
+      "bytes": 42968,
+      "serializationMs": 0.4794999999994616
+    },
+    {
+      "route": "archive-loaders",
+      "run": 2,
+      "wallMs": 410.2337000000007,
+      "bytes": 38110,
+      "serializationMs": 0.35719999999855645
+    },
+    {
+      "route": "series-loader",
+      "run": 2,
+      "wallMs": 482.10699999999997,
+      "bytes": 26422,
+      "serializationMs": 0.1860000000015134
+    },
+    {
+      "route": "authors-loader",
+      "run": 2,
+      "wallMs": 180.20210000000043,
+      "bytes": 2003,
+      "serializationMs": 0.0459999999984575
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 2,
+      "wallMs": 639.7530000000006,
+      "bytes": 9443,
+      "serializationMs": 0.19320000000152504
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 2,
+      "wallMs": 821.4688999999998,
+      "bytes": 4505,
+      "serializationMs": 0.2930000000014843
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 2,
+      "wallMs": 559.5162999999993,
+      "bytes": 7851,
+      "serializationMs": 0.0963000000010652
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 3,
+      "wallMs": 546.9459000000006,
+      "bytes": 42968,
+      "serializationMs": 0.39650000000074215
+    },
+    {
+      "route": "archive-loaders",
+      "run": 3,
+      "wallMs": 411.90420000000086,
+      "bytes": 38110,
+      "serializationMs": 0.34540000000015425
+    },
+    {
+      "route": "series-loader",
+      "run": 3,
+      "wallMs": 501.5402000000013,
+      "bytes": 26422,
+      "serializationMs": 0.28629999999975553
+    },
+    {
+      "route": "authors-loader",
+      "run": 3,
+      "wallMs": 186.48500000000058,
+      "bytes": 2003,
+      "serializationMs": 0.020700000000942964
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 3,
+      "wallMs": 811.5738000000001,
+      "bytes": 9443,
+      "serializationMs": 0.14810000000034051
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 3,
+      "wallMs": 821.776100000001,
+      "bytes": 4505,
+      "serializationMs": 0.06129999999939173
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 3,
+      "wallMs": 573.3562000000002,
+      "bytes": 7851,
+      "serializationMs": 0.09310000000004948
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 4,
+      "wallMs": 587.1632000000009,
+      "bytes": 42968,
+      "serializationMs": 0.3782000000028347
+    },
+    {
+      "route": "archive-loaders",
+      "run": 4,
+      "wallMs": 446.16259999999966,
+      "bytes": 38110,
+      "serializationMs": 0.3675999999977648
+    },
+    {
+      "route": "series-loader",
+      "run": 4,
+      "wallMs": 505.9455999999991,
+      "bytes": 26422,
+      "serializationMs": 0.4158999999999651
+    },
+    {
+      "route": "authors-loader",
+      "run": 4,
+      "wallMs": 187.14780000000246,
+      "bytes": 2003,
+      "serializationMs": 0.03510000000096625
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 4,
+      "wallMs": 733.6706000000013,
+      "bytes": 9443,
+      "serializationMs": 0.16339999999763677
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 4,
+      "wallMs": 836.9820999999974,
+      "bytes": 4505,
+      "serializationMs": 0.06269999999858555
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 4,
+      "wallMs": 573.3738999999987,
+      "bytes": 7851,
+      "serializationMs": 0.09149999999863212
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 5,
+      "wallMs": 548.6699999999983,
+      "bytes": 42968,
+      "serializationMs": 0.3669000000008964
+    },
+    {
+      "route": "archive-loaders",
+      "run": 5,
+      "wallMs": 448.65439999999944,
+      "bytes": 38110,
+      "serializationMs": 0.31859999999869615
+    },
+    {
+      "route": "series-loader",
+      "run": 5,
+      "wallMs": 489.40819999999803,
+      "bytes": 26422,
+      "serializationMs": 0.22899999999935972
+    },
+    {
+      "route": "authors-loader",
+      "run": 5,
+      "wallMs": 185.6362999999983,
+      "bytes": 2003,
+      "serializationMs": 0.04890000000159489
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 5,
+      "wallMs": 633.6704000000027,
+      "bytes": 9443,
+      "serializationMs": 0.1514999999999418
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 5,
+      "wallMs": 827.9880999999987,
+      "bytes": 4505,
+      "serializationMs": 0.0621999999966647
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 5,
+      "wallMs": 559.6323000000011,
+      "bytes": 7851,
+      "serializationMs": 0.09130000000004657
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 6,
+      "wallMs": 550.443299999999,
+      "bytes": 42968,
+      "serializationMs": 0.20160000000032596
+    },
+    {
+      "route": "archive-loaders",
+      "run": 6,
+      "wallMs": 417.6162000000004,
+      "bytes": 38110,
+      "serializationMs": 0.17399999999906868
+    },
+    {
+      "route": "series-loader",
+      "run": 6,
+      "wallMs": 490.5565999999999,
+      "bytes": 26422,
+      "serializationMs": 0.22739999999976135
+    },
+    {
+      "route": "authors-loader",
+      "run": 6,
+      "wallMs": 189.21119999999792,
+      "bytes": 2003,
+      "serializationMs": 0.03510000000096625
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 6,
+      "wallMs": 797.3316000000013,
+      "bytes": 9443,
+      "serializationMs": 0.14580000000205473
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 6,
+      "wallMs": 826.8853000000017,
+      "bytes": 4505,
+      "serializationMs": 0.06689999999798601
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 6,
+      "wallMs": 557.1133999999984,
+      "bytes": 7851,
+      "serializationMs": 0.09899999999834108
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 7,
+      "wallMs": 558.2131999999983,
+      "bytes": 42968,
+      "serializationMs": 0.5310000000026776
+    },
+    {
+      "route": "archive-loaders",
+      "run": 7,
+      "wallMs": 441.0730000000003,
+      "bytes": 38110,
+      "serializationMs": 0.35389999999824795
+    },
+    {
+      "route": "series-loader",
+      "run": 7,
+      "wallMs": 483.7501999999986,
+      "bytes": 26422,
+      "serializationMs": 0.12899999999717693
+    },
+    {
+      "route": "authors-loader",
+      "run": 7,
+      "wallMs": 178.10339999999997,
+      "bytes": 2003,
+      "serializationMs": 0.03470000000015716
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 7,
+      "wallMs": 633.5269000000008,
+      "bytes": 9443,
+      "serializationMs": 0.15160000000105356
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 7,
+      "wallMs": 837.1628000000019,
+      "bytes": 4505,
+      "serializationMs": 0.06680000000051223
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 7,
+      "wallMs": 561.9608999999982,
+      "bytes": 7851,
+      "serializationMs": 0.09309999999823049
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 8,
+      "wallMs": 567.5557000000008,
+      "bytes": 42968,
+      "serializationMs": 0.35490000000208966
+    },
+    {
+      "route": "archive-loaders",
+      "run": 8,
+      "wallMs": 444.23289999999906,
+      "bytes": 38110,
+      "serializationMs": 0.3995000000031723
+    },
+    {
+      "route": "series-loader",
+      "run": 8,
+      "wallMs": 486.836299999999,
+      "bytes": 26422,
+      "serializationMs": 0.41849999999976717
+    },
+    {
+      "route": "authors-loader",
+      "run": 8,
+      "wallMs": 183.0083999999988,
+      "bytes": 2003,
+      "serializationMs": 0.03280000000086147
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 8,
+      "wallMs": 808.2437999999966,
+      "bytes": 9443,
+      "serializationMs": 0.16579999999521533
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 8,
+      "wallMs": 812.6195000000007,
+      "bytes": 4505,
+      "serializationMs": 0.19509999999718275
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 8,
+      "wallMs": 560.698900000003,
+      "bytes": 7851,
+      "serializationMs": 0.056900000003224704
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 9,
+      "wallMs": 556.5408000000025,
+      "bytes": 42968,
+      "serializationMs": 0.3444999999992433
+    },
+    {
+      "route": "archive-loaders",
+      "run": 9,
+      "wallMs": 400.87569999999687,
+      "bytes": 38110,
+      "serializationMs": 0.21119999999791617
+    },
+    {
+      "route": "series-loader",
+      "run": 9,
+      "wallMs": 513.6684000000023,
+      "bytes": 26422,
+      "serializationMs": 0.22770000000309665
+    },
+    {
+      "route": "authors-loader",
+      "run": 9,
+      "wallMs": 185.7323000000033,
+      "bytes": 2003,
+      "serializationMs": 0.03800000000046566
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 9,
+      "wallMs": 801.0377999999982,
+      "bytes": 9443,
+      "serializationMs": 0.0852999999988242
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 9,
+      "wallMs": 803.4368000000031,
+      "bytes": 4505,
+      "serializationMs": 0.07259999999951106
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 9,
+      "wallMs": 572.7996999999959,
+      "bytes": 7851,
+      "serializationMs": 0.08819999999832362
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 10,
+      "wallMs": 554.9329999999973,
+      "bytes": 42968,
+      "serializationMs": 0.38229999999748543
+    },
+    {
+      "route": "archive-loaders",
+      "run": 10,
+      "wallMs": 419.3084000000017,
+      "bytes": 38110,
+      "serializationMs": 0.32049999999435386
+    },
+    {
+      "route": "series-loader",
+      "run": 10,
+      "wallMs": 480.96630000000005,
+      "bytes": 26422,
+      "serializationMs": 0.141299999995681
+    },
+    {
+      "route": "authors-loader",
+      "run": 10,
+      "wallMs": 187.93959999999788,
+      "bytes": 2003,
+      "serializationMs": 0.02200000000448199
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 10,
+      "wallMs": 632.0561999999991,
+      "bytes": 9443,
+      "serializationMs": 0.1492999999973108
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 10,
+      "wallMs": 829.3936000000031,
+      "bytes": 4505,
+      "serializationMs": 0.08079999999608845
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 10,
+      "wallMs": 558.4467000000004,
+      "bytes": 7851,
+      "serializationMs": 0.14759999999660067
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 11,
+      "wallMs": 546.7681999999986,
+      "bytes": 42968,
+      "serializationMs": 0.4628000000011525
+    },
+    {
+      "route": "archive-loaders",
+      "run": 11,
+      "wallMs": 408.9262000000017,
+      "bytes": 38110,
+      "serializationMs": 0.5717999999978929
+    },
+    {
+      "route": "series-loader",
+      "run": 11,
+      "wallMs": 507.03369999999995,
+      "bytes": 26422,
+      "serializationMs": 0.14709999999467982
+    },
+    {
+      "route": "authors-loader",
+      "run": 11,
+      "wallMs": 186.06009999999515,
+      "bytes": 2003,
+      "serializationMs": 0.03359999999520369
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 11,
+      "wallMs": 640.648199999996,
+      "bytes": 9443,
+      "serializationMs": 0.14799999999377178
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 11,
+      "wallMs": 825.4873000000007,
+      "bytes": 4505,
+      "serializationMs": 0.06560000000172295
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 11,
+      "wallMs": 555.7607999999964,
+      "bytes": 7851,
+      "serializationMs": 0.09140000000479631
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 12,
+      "wallMs": 563.2499000000025,
+      "bytes": 42968,
+      "serializationMs": 0.3698000000003958
+    },
+    {
+      "route": "archive-loaders",
+      "run": 12,
+      "wallMs": 412.6762999999992,
+      "bytes": 38110,
+      "serializationMs": 0.3665000000037253
+    },
+    {
+      "route": "series-loader",
+      "run": 12,
+      "wallMs": 518.8341,
+      "bytes": 26422,
+      "serializationMs": 0.23369999999704305
+    },
+    {
+      "route": "authors-loader",
+      "run": 12,
+      "wallMs": 190.3191999999981,
+      "bytes": 2003,
+      "serializationMs": 0.023199999995995313
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 12,
+      "wallMs": 669.5013000000035,
+      "bytes": 9443,
+      "serializationMs": 0.10059999999793945
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 12,
+      "wallMs": 819.8695999999982,
+      "bytes": 4505,
+      "serializationMs": 0.04920000000129221
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 12,
+      "wallMs": 559.8401999999987,
+      "bytes": 7851,
+      "serializationMs": 0.055400000004738104
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 13,
+      "wallMs": 543.9421000000002,
+      "bytes": 42968,
+      "serializationMs": 0.3870000000024447
+    },
+    {
+      "route": "archive-loaders",
+      "run": 13,
+      "wallMs": 446.47409999999945,
+      "bytes": 38110,
+      "serializationMs": 0.5650000000023283
+    },
+    {
+      "route": "series-loader",
+      "run": 13,
+      "wallMs": 493.68599999999424,
+      "bytes": 26422,
+      "serializationMs": 0.22189999999682186
+    },
+    {
+      "route": "authors-loader",
+      "run": 13,
+      "wallMs": 198.35169999999925,
+      "bytes": 2003,
+      "serializationMs": 0.04589999999734573
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 13,
+      "wallMs": 634.5323999999964,
+      "bytes": 9443,
+      "serializationMs": 0.151400000002468
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 13,
+      "wallMs": 814.7553999999946,
+      "bytes": 4505,
+      "serializationMs": 0.07249999999476131
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 13,
+      "wallMs": 558.1924999999974,
+      "bytes": 7851,
+      "serializationMs": 0.1106999999974505
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 14,
+      "wallMs": 534.7684999999983,
+      "bytes": 42968,
+      "serializationMs": 0.3614999999990687
+    },
+    {
+      "route": "archive-loaders",
+      "run": 14,
+      "wallMs": 404.295100000003,
+      "bytes": 38110,
+      "serializationMs": 0.21630000000004657
+    },
+    {
+      "route": "series-loader",
+      "run": 14,
+      "wallMs": 487.10229999999865,
+      "bytes": 26422,
+      "serializationMs": 0.2396999999982654
+    },
+    {
+      "route": "authors-loader",
+      "run": 14,
+      "wallMs": 183.4513999999981,
+      "bytes": 2003,
+      "serializationMs": 0.024300000004586764
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 14,
+      "wallMs": 627.5322000000015,
+      "bytes": 9443,
+      "serializationMs": 0.1489000000001397
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 14,
+      "wallMs": 820.8726999999999,
+      "bytes": 4505,
+      "serializationMs": 0.058700000001408625
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 14,
+      "wallMs": 569.8747000000003,
+      "bytes": 7851,
+      "serializationMs": 0.09829999999783468
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 15,
+      "wallMs": 549.7936999999947,
+      "bytes": 42968,
+      "serializationMs": 0.6828999999997905
+    },
+    {
+      "route": "archive-loaders",
+      "run": 15,
+      "wallMs": 408.5005000000019,
+      "bytes": 38110,
+      "serializationMs": 0.31700000000273576
+    },
+    {
+      "route": "series-loader",
+      "run": 15,
+      "wallMs": 491.4303,
+      "bytes": 26422,
+      "serializationMs": 0.23249999999825377
+    },
+    {
+      "route": "authors-loader",
+      "run": 15,
+      "wallMs": 180.83580000000075,
+      "bytes": 2003,
+      "serializationMs": 0.0341000000044005
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 15,
+      "wallMs": 816.2503999999972,
+      "bytes": 9443,
+      "serializationMs": 0.15560000000550644
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 15,
+      "wallMs": 810.1173999999955,
+      "bytes": 4505,
+      "serializationMs": 0.06700000000273576
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 15,
+      "wallMs": 572.7461000000039,
+      "bytes": 7851,
+      "serializationMs": 0.05649999999877764
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 16,
+      "wallMs": 554.7153999999937,
+      "bytes": 42968,
+      "serializationMs": 0.37670000000071013
+    },
+    {
+      "route": "archive-loaders",
+      "run": 16,
+      "wallMs": 437.1967000000004,
+      "bytes": 38110,
+      "serializationMs": 0.2054000000061933
+    },
+    {
+      "route": "series-loader",
+      "run": 16,
+      "wallMs": 481.7669999999998,
+      "bytes": 26422,
+      "serializationMs": 0.12950000000273576
+    },
+    {
+      "route": "authors-loader",
+      "run": 16,
+      "wallMs": 186.27550000000338,
+      "bytes": 2003,
+      "serializationMs": 0.02350000000296859
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 16,
+      "wallMs": 814.9402999999947,
+      "bytes": 9443,
+      "serializationMs": 0.10310000000026776
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 16,
+      "wallMs": 838.1247999999978,
+      "bytes": 4505,
+      "serializationMs": 0.0661000000036438
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 16,
+      "wallMs": 556.2353000000003,
+      "bytes": 7851,
+      "serializationMs": 0.09569999999803258
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 17,
+      "wallMs": 562.9209999999948,
+      "bytes": 42968,
+      "serializationMs": 0.3614999999990687
+    },
+    {
+      "route": "archive-loaders",
+      "run": 17,
+      "wallMs": 415.8854999999894,
+      "bytes": 38110,
+      "serializationMs": 0.20820000000821892
+    },
+    {
+      "route": "series-loader",
+      "run": 17,
+      "wallMs": 481.7184000000125,
+      "bytes": 26422,
+      "serializationMs": 0.3423999999940861
+    },
+    {
+      "route": "authors-loader",
+      "run": 17,
+      "wallMs": 190.64100000000326,
+      "bytes": 2003,
+      "serializationMs": 0.030800000007729977
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 17,
+      "wallMs": 804.2755000000034,
+      "bytes": 9443,
+      "serializationMs": 0.14800000000104774
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 17,
+      "wallMs": 825.0858000000007,
+      "bytes": 4505,
+      "serializationMs": 0.06579999999667052
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 17,
+      "wallMs": 569.4850000000006,
+      "bytes": 7851,
+      "serializationMs": 0.09320000000298023
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 18,
+      "wallMs": 540.4642000000022,
+      "bytes": 42968,
+      "serializationMs": 0.3799999999901047
+    },
+    {
+      "route": "archive-loaders",
+      "run": 18,
+      "wallMs": 411.6939999999886,
+      "bytes": 38110,
+      "serializationMs": 0.3165000000008149
+    },
+    {
+      "route": "series-loader",
+      "run": 18,
+      "wallMs": 494.68210000000545,
+      "bytes": 26422,
+      "serializationMs": 0.227100000003702
+    },
+    {
+      "route": "authors-loader",
+      "run": 18,
+      "wallMs": 184.66660000001139,
+      "bytes": 2003,
+      "serializationMs": 0.030299999998533167
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 18,
+      "wallMs": 814.3589999999967,
+      "bytes": 9443,
+      "serializationMs": 0.15569999998842832
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 18,
+      "wallMs": 799.5564000000013,
+      "bytes": 4505,
+      "serializationMs": 0.06610000001091976
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 18,
+      "wallMs": 560.1521999999968,
+      "bytes": 7851,
+      "serializationMs": 0.21620000000984874
+    },
+    {
+      "route": "home-initial-loaders",
+      "run": 19,
+      "wallMs": 557.3012000000017,
+      "bytes": 42968,
+      "serializationMs": 0.3744999999908032
+    },
+    {
+      "route": "archive-loaders",
+      "run": 19,
+      "wallMs": 406.78719999999157,
+      "bytes": 38110,
+      "serializationMs": 0.3151999999972759
+    },
+    {
+      "route": "series-loader",
+      "run": 19,
+      "wallMs": 480.627999999997,
+      "bytes": 26422,
+      "serializationMs": 0.20449999999254942
+    },
+    {
+      "route": "authors-loader",
+      "run": 19,
+      "wallMs": 186.78259999999136,
+      "bytes": 2003,
+      "serializationMs": 0.02410000000963919
+    },
+    {
+      "route": "admin-dashboard-data",
+      "run": 19,
+      "wallMs": 791.0409000000072,
+      "bytes": 9443,
+      "serializationMs": 0.23290000000270084
+    },
+    {
+      "route": "story-primary-loader",
+      "run": 19,
+      "wallMs": 806.9104999999981,
+      "bytes": 4505,
+      "serializationMs": 0.06680000000051223
+    },
+    {
+      "route": "author-detail-loader",
+      "run": 19,
+      "wallMs": 577.6506000000081,
+      "bytes": 7851,
+      "serializationMs": 0.10199999999895226
+    }
+  ]
+}

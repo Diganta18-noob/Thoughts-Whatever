@@ -4,6 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { deriveCapabilities, getRightsBadgeMeta } from "@/lib/reference/rights-engine";
+import { getReferenceWorkBySlug } from "@/lib/reference/catalogue";
 import { ReferenceRightsBadge } from "@/components/reference/reference-rights-badge";
 import { ReferenceDetailClient } from "./reference-detail-client";
 import { BookOpen, ExternalLink, Download, ArrowLeft, ShieldAlert, Sparkles, FileText, Headphones } from "lucide-react";
@@ -19,10 +20,7 @@ export async function generateMetadata({
   params,
 }: ReferenceDetailPageProps): Promise<Metadata> {
   const slug = decodeURIComponent(params.slug);
-  const work = await prisma.referenceWork.findUnique({
-    where: { slug },
-    select: { titleBn: true, titleEn: true, descriptionBn: true, editions: { take: 1, select: { coverImage: true } } },
-  });
+  const work = await getReferenceWorkBySlug(slug);
 
   if (!work) return { title: "Resource Not Found | Thoughts.Whatever" };
 
@@ -46,20 +44,7 @@ export default async function ReferenceDetailPage({
 }: ReferenceDetailPageProps) {
   const slug = decodeURIComponent(params.slug);
 
-  const work = await prisma.referenceWork.findUnique({
-    where: { slug },
-    include: {
-      author: true,
-      editions: {
-        orderBy: { publicationYear: "asc" },
-        include: {
-          rights: true,
-          sources: true,
-          assets: true,
-        },
-      },
-    },
-  });
+  const work = await getReferenceWorkBySlug(slug);
 
   if (!work || !work.published) {
     notFound();

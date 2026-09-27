@@ -1,0 +1,103 @@
+
+> thoughts-whatever@0.1.0 test
+> jest --maxWorkers=2
+
+PASS src/lib/__tests__/agent-readiness.test.ts (5.779 s)
+  ● Console
+
+    console.log
+      prisma:error 
+      Invalid `prisma.piece.findMany()` invocation in
+      D:\Antigravity\thoughts-whatever\src\lib\pieces.ts:98:37
+      
+        95 
+        96 export const getRecentPieces = cache(
+        97   async (opts: { kind?: PieceKind; take?: number; skip?: number } = {}) => {
+      → 98     const rows = await prisma.piece.findMany(
+      Can't reach database server at `localhost:5432`
+      
+      Please make sure your database server is running at `localhost:5432`.
+
+      at Object.zc (node_modules/@prisma/internals/src/logger.ts:13:11)
+          at async Promise.all (index 0)
+
+    console.log
+      prisma:error 
+      Invalid `prisma.series.findMany()` invocation in
+      D:\Antigravity\thoughts-whatever\src\lib\pieces.ts:426:36
+      
+        423 });
+        424 
+        425 export const getFeaturedSeries = cache(async (take = 3) => {
+      → 426   const rows = await prisma.series.findMany(
+      Can't reach database server at `localhost:5432`
+      
+      Please make sure your database server is running at `localhost:5432`.
+
+      at Object.zc (node_modules/@prisma/internals/src/logger.ts:13:11)
+          at async Promise.all (index 1)
+
+PASS src/lib/__tests__/login-security.test.ts (6.701 s)
+PASS src/lib/__tests__/performance-trace.test.ts
+PASS src/lib/__tests__/forgot-password-route.test.ts
+  ● Console
+
+    console.error
+      [ForgotPassword] Error handling reset request: Error: SMTP delivery failure
+          at Object.<anonymous> (D:\Antigravity\thoughts-whatever\src\lib\__tests__\forgot-password-route.test.ts:155:50)
+          at Promise.then.completed (D:\Antigravity\thoughts-whatever\node_modules\jest-circus\build\utils.js:298:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (D:\Antigravity\thoughts-whatever\node_modules\jest-circus\build\utils.js:231:10)
+          at _callCircusTest (D:\Antigravity\thoughts-whatever\node_modules\jest-circus\build\run.js:316:40)
+          at _runTest (D:\Antigravity\thoughts-whatever\node_modules\jest-circus\build\run.js:252:3)
+          at _runTestsForDescribeBlock (D:\Antigravity\thoughts-whatever\node_modules\jest-circus\build\run.js:126:9)
+          at _runTestsForDescribeBlock (D:\Antigravity\thoughts-whatever\node_modules\jest-circus\build\run.js:121:9)
+          at run (D:\Antigravity\thoughts-whatever\node_modules\jest-circus\build\run.js:71:3)
+          at runAndTransformResultsToJestFormat (D:\Antigravity\thoughts-whatever\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+          at jestAdapter (D:\Antigravity\thoughts-whatever\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+          at runTestInternal (D:\Antigravity\thoughts-whatever\node_modules\jest-runner\build\runTest.js:367:16)
+          at runTest (D:\Antigravity\thoughts-whatever\node_modules\jest-runner\build\runTest.js:444:34)
+          at Object.worker (D:\Antigravity\thoughts-whatever\node_modules\jest-runner\build\testWorker.js:106:12)
+
+      110 |     return NextResponse.json({ ok: true });
+      111 |   } catch (err: any) {
+    > 112 |     console.error("[ForgotPassword] Error handling reset request:", err);
+          |             ^
+      113 |     return NextResponse.json(
+      114 |       {
+      115 |         ok: false,
+
+      at error (src/app/api/admin/forgot-password/route.ts:112:13)
+      at Object.<anonymous> (src/lib/__tests__/forgot-password-route.test.ts:163:17)
+
+PASS src/lib/__tests__/reset-password-route.test.ts
+PASS src/lib/__tests__/reference-catalogue.test.tsx
+PASS src/lib/__tests__/automation-route.test.ts
+PASS src/lib/__tests__/bug-fixes.test.ts
+PASS src/lib/__tests__/ux-usability-audit.test.ts
+PASS src/lib/__tests__/reference-reader.test.ts
+PASS src/lib/__tests__/mailer.test.ts
+PASS src/lib/__tests__/middleware-auth.test.ts
+memory allocation of 1310720 bytes failed
+PASS src/lib/__tests__/card-select.test.ts
+PASS src/lib/__tests__/cover-route.test.ts
+PASS src/lib/__tests__/with-timeout.test.ts
+PASS src/lib/__tests__/reference-audio.test.ts
+PASS src/lib/__tests__/cover-resolver.test.ts
+PASS src/lib/__tests__/images.test.ts
+PASS src/lib/__tests__/blob-prefix.test.ts
+PASS src/lib/__tests__/transliterate.test.ts
+PASS src/lib/__tests__/piece-by-slug.test.ts
+PASS src/lib/__tests__/share-image.test.ts
+PASS src/lib/__tests__/errors.test.ts
+PASS src/lib/__tests__/prisma-middleware.test.ts
+PASS src/lib/__tests__/danda-repair.test.ts
+PASS src/lib/__tests__/signature.test.ts
+PASS src/lib/__tests__/password-reset.test.ts
+PASS src/components/ui/__tests__/button.test.tsx (6.066 s)
+
+Test Suites: 28 passed, 28 total
+Tests:       255 passed, 255 total
+Snapshots:   0 total
+Time:        30.296 s
+Ran all test suites.

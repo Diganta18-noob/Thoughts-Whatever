@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { ReferenceRightsStatus } from "@prisma/client";
 import { cn } from "@/lib/utils";

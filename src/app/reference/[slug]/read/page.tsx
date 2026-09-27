@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { deriveCapabilities, getRightsBadgeMeta } from "@/lib/reference/rights-engine";
+import { getReferenceWorkBySlug } from "@/lib/reference/catalogue";
 import { ArrowLeft, BookOpen, ExternalLink, ShieldAlert, Sparkles } from "lucide-react";
 import { NativeBookReader, type BookReaderPageItem } from "@/components/reference/reader/native-book-reader";
 import { ReferenceRightsBadge } from "@/components/reference/reference-rights-badge";
@@ -20,10 +21,7 @@ interface ReaderPageProps {
 
 export async function generateMetadata({ params }: ReaderPageProps): Promise<Metadata> {
   const slug = decodeURIComponent(params.slug);
-  const work = await prisma.referenceWork.findUnique({
-    where: { slug },
-    select: { titleBn: true, titleEn: true },
-  });
+  const work = await getReferenceWorkBySlug(slug);
 
   if (!work) return { title: "পাঠকক্ষ | Thoughts.Whatever" };
 
@@ -37,19 +35,7 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
   const slug = decodeURIComponent(params.slug);
   const initialPage = Math.max(1, parseInt(searchParams.page || "1", 10));
 
-  const work = await prisma.referenceWork.findUnique({
-    where: { slug },
-    include: {
-      author: true,
-      editions: {
-        include: {
-          rights: true,
-          sources: true,
-          assets: true,
-        },
-      },
-    },
-  });
+  const work = await getReferenceWorkBySlug(slug);
 
   if (!work || !work.published) notFound();
 

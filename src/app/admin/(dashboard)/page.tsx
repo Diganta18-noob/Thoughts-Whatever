@@ -21,7 +21,7 @@ function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T
   ]);
 }
 
-export default async function AdminHomePage() {
+async function DashboardDataFetcher() {
   const [recentSettled, analyticsSettled] = await Promise.allSettled([
     withTimeout(
       prisma.piece.findMany({
@@ -68,11 +68,17 @@ export default async function AdminHomePage() {
   }
 
   return (
+    <CustomDashboard
+      initialAnalyticsData={initialAnalyticsData}
+      recentPieces={recent}
+    />
+  );
+}
+
+export default function AdminHomePage() {
+  return (
     <Suspense fallback={<AnalyticsSkeleton />}>
-      <CustomDashboard
-        initialAnalyticsData={initialAnalyticsData}
-        recentPieces={recent}
-      />
+      <DashboardDataFetcher />
     </Suspense>
   );
 }

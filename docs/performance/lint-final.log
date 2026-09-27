@@ -1,0 +1,5 @@
+
+> thoughts-whatever@0.1.0 lint
+> next lint && eslint scripts prisma --ext .ts
+
+✔ No ESLint warnings or errors

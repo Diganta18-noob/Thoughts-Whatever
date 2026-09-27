@@ -1,0 +1,369 @@
+{
+  "base": "http://localhost:3102",
+  "label": "local-after",
+  "mode": "http",
+  "runs": 20,
+  "createdAt": "2026-09-27T18:18:48.275Z",
+  "samples": [
+    {
+      "route": "/reference",
+      "run": 0,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.247,
+      "tcp": 14.558,
+      "tls": 0,
+      "ttfb": 327.913,
+      "total": 1524.962,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 1,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.076,
+      "tcp": 0.7200000000000001,
+      "tls": 0,
+      "ttfb": 52.706,
+      "total": 691.821,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 2,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.053,
+      "tcp": 0.5609999999999999,
+      "tls": 0,
+      "ttfb": 31.127,
+      "total": 641.0400000000001,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 3,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.055,
+      "tcp": 0.544,
+      "tls": 0,
+      "ttfb": 62.760999999999996,
+      "total": 642.225,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 4,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.102,
+      "tcp": 0.9990000000000001,
+      "tls": 0,
+      "ttfb": 40.334,
+      "total": 625.732,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 5,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.074,
+      "tcp": 0.6930000000000001,
+      "tls": 0,
+      "ttfb": 70.988,
+      "total": 638.784,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 6,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.048,
+      "tcp": 0.5289999999999999,
+      "tls": 0,
+      "ttfb": 60.579,
+      "total": 619.429,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 7,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.076,
+      "tcp": 0.727,
+      "tls": 0,
+      "ttfb": 13.723,
+      "total": 642.712,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 8,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.037,
+      "tcp": 0.404,
+      "tls": 0,
+      "ttfb": 76.964,
+      "total": 650.828,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 9,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.045000000000000005,
+      "tcp": 0.453,
+      "tls": 0,
+      "ttfb": 48.808,
+      "total": 619.9590000000001,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 10,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.064,
+      "tcp": 0.6859999999999999,
+      "tls": 0,
+      "ttfb": 56.179,
+      "total": 672.9699999999999,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 11,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.063,
+      "tcp": 0.664,
+      "tls": 0,
+      "ttfb": 59.187,
+      "total": 647.982,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 12,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.07100000000000001,
+      "tcp": 0.68,
+      "tls": 0,
+      "ttfb": 42.84,
+      "total": 631.049,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 13,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.049,
+      "tcp": 0.47,
+      "tls": 0,
+      "ttfb": 57.448,
+      "total": 689.995,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 14,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.07200000000000001,
+      "tcp": 10.62,
+      "tls": 0,
+      "ttfb": 72.598,
+      "total": 660.8380000000001,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 15,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.06999999999999999,
+      "tcp": 0.6759999999999999,
+      "tls": 0,
+      "ttfb": 27.087,
+      "total": 672.2439999999999,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 16,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.056,
+      "tcp": 0.521,
+      "tls": 0,
+      "ttfb": 61.321,
+      "total": 661.31,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 17,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.06899999999999999,
+      "tcp": 0.735,
+      "tls": 0,
+      "ttfb": 48.577000000000005,
+      "total": 647.695,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 18,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.07200000000000001,
+      "tcp": 11.939,
+      "tls": 0,
+      "ttfb": 74.88300000000001,
+      "total": 675.708,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    },
+    {
+      "route": "/reference",
+      "run": 19,
+      "status": 200,
+      "streamError": false,
+      "articleCount": 2,
+      "dns": 0.07200000000000001,
+      "tcp": 24.557,
+      "tls": 0,
+      "ttfb": 88.901,
+      "total": 688.681,
+      "bytes": 78486,
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+        "cdn-cache-control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+      }
+    }
+  ]
+}

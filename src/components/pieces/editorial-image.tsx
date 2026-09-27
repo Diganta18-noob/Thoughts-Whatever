@@ -41,8 +41,6 @@ export function EditorialImage({
   const [inView, setInView] = useState(priority);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  if (hasError) return null;
-
   // Probe dimensions client-side if missing
   useEffect(() => {
     if (!dimensions && src) {
@@ -86,6 +84,8 @@ export function EditorialImage({
   );
 
   const prefersReduced = useReducedMotion();
+
+  if (hasError) return null;
 
   // 1. Split Layout (Portrait)
   if (activeLayout === "split" && children) {

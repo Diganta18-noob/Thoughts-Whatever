@@ -1,0 +1,24 @@
+
+> thoughts-whatever@0.1.0 build
+> node --max-old-space-size=4096 ./node_modules/next/dist/bin/next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/141) ...
+   Generating static pages (35/141) 
+   Generating static pages (70/141) 
+   Generating static pages (105/141) 
+
+<--- Last few GCs --->
+
+[32948:00000217F13C2000]     4924 ms: Mark-Compact 35.2 (60.1) -> 28.2 (62.6) MB, pooled: 0 MB, 17.04 / 0.01 ms  (+ 12.6 ms in 244 steps since start of marking, biggest step 0.5 ms, walltime since start of marking 36 ms) (average mu = 0.993, current mu = 
+FATAL ERROR: Zone Allocation failed - process out of memory
+----- Native stack trace -----
+
+ ⨯ Next.js build worker exited with code: 3221225725 and signal: null

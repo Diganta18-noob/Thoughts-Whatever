@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { deriveCapabilities, getRightsBadgeMeta } from "@/lib/reference/rights-engine";
+import { getReferenceWorkBySlug } from "@/lib/reference/catalogue";
 import { ArrowLeft, ExternalLink, ShieldAlert, Sparkles, Headphones } from "lucide-react";
 import { ReferenceRightsBadge } from "@/components/reference/reference-rights-badge";
 import { ListeningRoom } from "@/components/reference/audio/listening-room";
@@ -19,10 +20,7 @@ interface ListenPageProps {
 
 export async function generateMetadata({ params }: ListenPageProps): Promise<Metadata> {
   const slug = decodeURIComponent(params.slug);
-  const work = await prisma.referenceWork.findUnique({
-    where: { slug },
-    select: { titleBn: true, titleEn: true },
-  });
+  const work = await getReferenceWorkBySlug(slug);
 
   if (!work) return { title: "অডিও পাঠকক্ষ | Thoughts.Whatever" };
 
@@ -35,19 +33,7 @@ export async function generateMetadata({ params }: ListenPageProps): Promise<Met
 export default async function ReferenceListenPage({ params, searchParams }: ListenPageProps) {
   const slug = decodeURIComponent(params.slug);
 
-  const work = await prisma.referenceWork.findUnique({
-    where: { slug },
-    include: {
-      author: true,
-      editions: {
-        include: {
-          rights: true,
-          sources: true,
-          assets: true,
-        },
-      },
-    },
-  });
+  const work = await getReferenceWorkBySlug(slug);
 
   if (!work || !work.published) notFound();
 

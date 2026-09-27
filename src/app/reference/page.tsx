@@ -1,6 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { referenceCardSelect, getCachedReferenceCatalogueStats } from "@/lib/reference/catalogue";
+import { traceServerOperation } from "@/lib/performance-trace";
 import { ReferenceType, ReferenceRightsStatus, Prisma } from "@prisma/client";
 import { deriveCapabilities } from "@/lib/reference/rights-engine";
 import { ReferenceCard } from "@/components/reference/reference-card";
@@ -71,45 +73,17 @@ export default async function ReferenceLibraryPage({
     ];
   }
 
-  const [total, works, stats] = await Promise.all([
-    prisma.referenceWork.count({ where }),
-    prisma.referenceWork.findMany({
+  const [total, works, stats] = await traceServerOperation("reference.data", (measure) => Promise.all([
+    measure("count", () => prisma.referenceWork.count({ where })),
+    measure("cards", () => prisma.referenceWork.findMany({
       where,
       skip,
       take: limit,
       orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
-      include: {
-        author: {
-          select: { id: true, slug: true, nameBn: true, nameEn: true },
-        },
-        editions: {
-          take: 1,
-          orderBy: { publicationYear: "asc" },
-          include: {
-            rights: true,
-            sources: { take: 1 },
-            assets: true,
-          },
-        },
-      },
-    }),
-    Promise.all([
-      prisma.referenceWork.count({ where: { published: true } }),
-      prisma.referenceWork.count({
-        where: { published: true, type: { in: ["BOOK", "ARTICLE"] } },
-      }),
-      prisma.referenceWork.count({
-        where: {
-          published: true,
-          type: { in: ["DOCUMENT", "MANUSCRIPT", "ARCHIVE"] },
-        },
-      }),
-      prisma.referenceSource.count(),
-      prisma.referenceWork.count({
-        where: { published: true, type: "AUDIO" },
-      }),
-    ]),
-  ]);
+      select: referenceCardSelect,
+    })),
+    measure("stats", getCachedReferenceCatalogueStats),
+  ]));
 
   const totalPages = Math.ceil(total / limit);
   const activeFilters = Boolean(typeFilter || rightsFilter || query);
