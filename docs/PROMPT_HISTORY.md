@@ -2583,3 +2583,15 @@ OBJECTIVE:
    - GroupBy consolidation on Admin Reference page (reducing 5 status counts to 1 query).
    - Streaming Suspense on Admin Dashboard with decoupled data fetching.
 2. Push changes to branch for testing.
+
+---
+
+## 2026-09-28 — Main Deployment Directive
+
+```text
+push to main
+```
+
+OBJECTIVE:
+1. Merge performance optimization branch `perf/intermittent-latency-elimination` into `main`.
+2. Push `main` to `origin/main` for production deployment.
