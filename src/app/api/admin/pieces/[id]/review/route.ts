@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin, requirePermission } from "@/lib/auth";
 import { addReviewComment, updateReviewStatus } from "@/lib/staging";
 import { prisma } from "@/lib/prisma";
+import { revalidatePiece } from "@/lib/admin-api";
 
 type RouteProps = {
   params: Promise<{ id: string }> | { id: string };
@@ -76,7 +77,18 @@ export async function POST(req: NextRequest, props: RouteProps) {
       if (!["draft", "in_review", "approved", "scheduled", "published"].includes(status)) {
         return NextResponse.json({ ok: false, error: "invalid_status" }, { status: 400 });
       }
+      if ((status === "scheduled" || status === "published") && !(await requirePermission("content", "publish"))) {
+        return NextResponse.json({ ok: false, error: "forbidden" }, { status: 403 });
+      }
+      if (status === "scheduled") {
+        const piece = await prisma.piece.findUnique({ where: { id: pieceId }, select: { publishedAt: true } });
+        if (!piece) return NextResponse.json({ ok: false, error: "not_found" }, { status: 404 });
+        if (!piece.publishedAt || piece.publishedAt <= new Date()) {
+          return NextResponse.json({ ok: false, error: "future_publish_date_required" }, { status: 400 });
+        }
+      }
       const updated = await updateReviewStatus(pieceId, status, admin);
+      if (status === "scheduled" || status === "published") revalidatePiece({ kind: updated.kind, slug: updated.slug });
       return NextResponse.json({ ok: true, piece: updated });
     }
 

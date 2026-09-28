@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { guard, ok, fail, readBody, revalidatePiece } from "@/lib/admin-api";
 import { isSlugTaken, updatePiece } from "@/lib/admin-pieces";
 import { pieceInputSchema } from "@/lib/validation";
+import { hasPermission } from "@/lib/permissions";
 
 export const runtime = "nodejs";
 
@@ -13,6 +14,7 @@ type RouteProps = {
 export async function PUT(request: Request, props: RouteProps) {
   const gate = await guard();
   if ("response" in gate) return gate.response;
+  if (!hasPermission(gate.admin.role, "content", "update")) return fail("Forbidden.", 403);
 
   const rawParams = await props?.params;
   let id = rawParams?.id;
@@ -29,6 +31,7 @@ export async function PUT(request: Request, props: RouteProps) {
   const body = await readBody(request, pieceInputSchema);
 
   if ("response" in body) return body.response;
+  if (body.data.status === "PUBLISHED" && !hasPermission(gate.admin.role, "content", "publish")) return fail("Forbidden.", 403);
 
   // Read the old slug and kind first: after the update they are gone, and both
   // old URLs need their caches cleared or a renamed piece stays live at two
@@ -74,6 +77,7 @@ export async function PUT(request: Request, props: RouteProps) {
 export async function DELETE(request: Request, props: RouteProps) {
   const gate = await guard();
   if ("response" in gate) return gate.response;
+  if (!hasPermission(gate.admin.role, "content", "delete")) return fail("Forbidden.", 403);
 
   const rawParams = await props?.params;
   let id = rawParams?.id;

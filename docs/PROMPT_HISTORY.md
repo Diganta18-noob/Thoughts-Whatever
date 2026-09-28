@@ -2595,3 +2595,15 @@ push to main
 OBJECTIVE:
 1. Merge performance optimization branch `perf/intermittent-latency-elimination` into `main`.
 2. Push `main` to `origin/main` for production deployment.
+
+---
+
+## 2026-09-28 — Admin Production Improvements
+
+```text
+only 15% limit is left so donot use much token and tell me how i can improve my admin portal more with more feature and more production ability
+do it and use very less token
+My computer went to sleep while you were working. Please continue from where you left off.
+```
+
+OBJECTIVE: Improve production build checks, admin authorization, editorial scheduling, job execution safety, and operational readiness while keeping responses brief.

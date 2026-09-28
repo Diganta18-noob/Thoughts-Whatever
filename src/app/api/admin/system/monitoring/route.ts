@@ -22,6 +22,7 @@ export async function GET() {
     dbHealthy = true;
   } catch (err) {
     console.error("DB Health check failure:", err);
+    return NextResponse.json({ ok: false, error: "Database health check failed" }, { status: 503 });
   }
 
   // System memory & process stats
@@ -66,7 +67,7 @@ export async function GET() {
     data: {
       timestamp: new Date().toISOString(),
       api: {
-        status: "HEALTHY",
+        status: failedJobs > 0 || activeIncidentsCount > 0 ? "DEGRADED" : "HEALTHY",
         latencyMs: durationMs,
         uptimeSec,
         nodeVersion: process.version,

@@ -3,23 +3,26 @@ import { prisma } from "@/lib/prisma";
 import { derivePieceMeta, formatMarkdownBody } from "@/lib/markdown";
 import type { PieceInput } from "@/lib/validation";
 
-function resolvePublishedAt(input: PieceInput): Date | null {
-  if (input.publishedAt) {
-    const parsed = new Date(input.publishedAt);
-    if (!Number.isNaN(parsed.getTime())) return parsed;
+export function publicationState(status: PieceInput["status"], publishedAt: string | null | undefined, now = new Date()) {
+  const parsed = publishedAt ? new Date(publishedAt) : null;
+  const date = parsed && !Number.isNaN(parsed.getTime()) ? parsed : null;
+  if (status === "PUBLISHED" && date && date > now) {
+    return { status: "DRAFT" as const, reviewStatus: "scheduled", publishedAt: date };
   }
-  return input.status === "PUBLISHED" ? new Date() : null;
+  if (status === "PUBLISHED") {
+    return { status: "PUBLISHED" as const, reviewStatus: "published", publishedAt: date ?? now };
+  }
+  return { status, reviewStatus: undefined, publishedAt: date };
 }
 
 function scalarData(input: PieceInput) {
-
-
+  const publication = publicationState(input.status, input.publishedAt);
   const formattedBody = formatMarkdownBody(input.bodyBn);
   const derived = derivePieceMeta(formattedBody, input.excerptBn);
 
   return {
     kind: input.kind,
-    status: input.status,
+    status: publication.status,
     slug: input.slug,
     titleBn: input.titleBn,
     titleEn: input.titleEn ?? null,
@@ -40,9 +43,10 @@ function scalarData(input: PieceInput) {
     featured: input.featured,
     seoDescription: input.seoDescription ?? null,
     ogImage: input.ogImage ?? null,
-    publishedAt: resolvePublishedAt(input),
+    publishedAt: publication.publishedAt,
+    ...(publication.reviewStatus ? { reviewStatus: publication.reviewStatus } : {}),
     seriesOrder: input.seriesId ? (input.seriesOrder ?? null) : null,
-    ...(input.status === "PUBLISHED"
+    ...(publication.status === "PUBLISHED"
       ? {
           previewToken: null,
           previewExpiresAt: null,

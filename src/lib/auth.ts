@@ -296,15 +296,9 @@ export async function requireAdmin(): Promise<AuthenticatedAdmin | null> {
       return authAdmin;
     }
 
-    if (session.sub && session.email) {
-      return { id: session.sub, email: session.email, nameBn: null, role: "ADMIN" as AdminRole, status: "active" };
-    }
     return null;
   } catch (err) {
     console.error("requireAdmin error:", err);
-    if (session.sub && session.email) {
-      return { id: session.sub, email: session.email, nameBn: null, role: "ADMIN" as AdminRole, status: "active" };
-    }
     return null;
   }
 }

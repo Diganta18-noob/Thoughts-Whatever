@@ -110,6 +110,7 @@ export async function updateReviewStatus(
     where: { id: pieceId },
     data: {
       reviewStatus: status,
+      ...(status === "scheduled" ? { status: "DRAFT" as const } : {}),
       ...(isPublishing
         ? {
             status: "PUBLISHED",
@@ -124,6 +125,7 @@ export async function updateReviewStatus(
       id: true,
       titleBn: true,
       slug: true,
+      kind: true,
       reviewStatus: true,
     },
   });

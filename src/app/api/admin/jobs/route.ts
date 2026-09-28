@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/auth";
+import { requireAdmin, requirePermission } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -24,21 +24,21 @@ const DEFAULT_JOBS = [
     description: "Aggregates milestone reading scroll depths, session milestones, and daily active reader counts.",
     schedule: "*/30 * * * *",
     status: "IDLE" as const,
-    enabled: true,
+    enabled: false,
   },
   {
     name: "Media Usage Verification",
     description: "Audits Cloudinary asset usage across pieces, author portraits, and series banners to identify unused media.",
     schedule: "0 6 * * 0",
     status: "IDLE" as const,
-    enabled: true,
+    enabled: false,
   },
   {
     name: "Sitemap & RSS Regeneration",
     description: "Revalidates sitemap.xml and feeds to ensure search engines receive fresh published pieces.",
     schedule: "0 */4 * * *",
     status: "IDLE" as const,
-    enabled: true,
+    enabled: false,
   },
 ];
 
@@ -70,7 +70,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const admin = await requireAdmin();
+  const admin = await requirePermission("jobs", "update");
   if (!admin) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }

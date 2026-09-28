@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/auth";
+import { requirePermission } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { runMasterPipeline } from "@/lib/automation/pipeline";
 import { runSEOAndBrokenLinkAudit } from "@/lib/seo-scanner";
@@ -10,7 +10,7 @@ export async function POST(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const admin = await requireAdmin();
+  const admin = await requirePermission("jobs", "update");
   if (!admin) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }
@@ -19,6 +19,10 @@ export async function POST(
   const job = await prisma.scheduledJob.findUnique({ where: { id: jobId } });
   if (!job) {
     return NextResponse.json({ ok: false, error: "Job not found" }, { status: 404 });
+  }
+  const supported = job.name === "Nightly Backup & Sync" || job.name === "Automated SEO & Link Integrity Scan";
+  if (!supported) {
+    return NextResponse.json({ ok: false, error: "Job has no configured runner" }, { status: 422 });
   }
 
   // Record execution started
@@ -41,7 +45,7 @@ export async function POST(
   let errorMessage: string | null = null;
 
   try {
-    if (job.name.toLowerCase().includes("backup") || job.name.toLowerCase().includes("nightly")) {
+    if (job.name === "Nightly Backup & Sync") {
       executionLogs.push("Executing complete system automation pipeline...");
       const report = await runMasterPipeline();
       executionLogs.push(`Pipeline completed with status: ${report.overallStatus}`);
@@ -49,16 +53,12 @@ export async function POST(
       if (report.overallStatus === "FAILED") {
         status = "FAILED";
       }
-    } else if (job.name.toLowerCase().includes("seo") || job.name.toLowerCase().includes("link")) {
+    } else if (job.name === "Automated SEO & Link Integrity Scan") {
       executionLogs.push("Scanning all published pieces for SEO health and link integrity...");
       const scanResult = await runSEOAndBrokenLinkAudit(admin);
       executionLogs.push(`Scan complete. Analyzed ${scanResult.totalPiecesScanned} articles.`);
       executionLogs.push(`Overall SEO Score: ${scanResult.overallScore}/100`);
       executionLogs.push(`Broken links discovered: ${scanResult.brokenLinksCount}`);
-    } else {
-      executionLogs.push(`Running generic scheduled maintenance task: ${job.name}`);
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      executionLogs.push("Maintenance cycle completed smoothly.");
     }
   } catch (err: any) {
     status = "FAILED";

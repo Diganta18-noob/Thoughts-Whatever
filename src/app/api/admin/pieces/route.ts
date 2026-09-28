@@ -3,15 +3,18 @@ import { prisma } from "@/lib/prisma";
 import { guard, ok, fail, readBody, revalidatePiece } from "@/lib/admin-api";
 import { createPiece, isSlugTaken } from "@/lib/admin-pieces";
 import { pieceInputSchema } from "@/lib/validation";
+import { hasPermission } from "@/lib/permissions";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   const gate = await guard();
   if ("response" in gate) return gate.response;
+  if (!hasPermission(gate.admin.role, "content", "create")) return fail("Forbidden.", 403);
 
   const body = await readBody(request, pieceInputSchema);
   if ("response" in body) return body.response;
+  if (body.data.status === "PUBLISHED" && !hasPermission(gate.admin.role, "content", "publish")) return fail("Forbidden.", 403);
 
   try {
     const piece = await createPiece(body.data);
