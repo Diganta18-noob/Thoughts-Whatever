@@ -1,6 +1,7 @@
 import React from "react";
 import { prisma } from "@/lib/prisma";
 import { ReferenceAdminClient } from "./reference-admin-client";
+import { ReferenceAnalyticsPanel } from "@/components/admin/reference-analytics-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -61,5 +62,5 @@ export default async function AdminReferencePage() {
     reviewRequired: unverified + restricted,
   };
 
-  return <ReferenceAdminClient initialWorks={serializedWorks} initialStats={stats} />;
+  return <div className="space-y-8"><ReferenceAnalyticsPanel /><ReferenceAdminClient initialWorks={serializedWorks} initialStats={stats} /></div>;
 }

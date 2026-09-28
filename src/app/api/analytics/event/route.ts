@@ -11,7 +11,14 @@ const ALLOWED_EVENT_TYPES = new Set([
   "instagram_click",
   "reel_click",
   "ping",
+  "reference_catalogue",
+  "reference_search",
+  "reference_open",
+  "reference_read",
+  "reference_listen",
 ]);
+
+const WORK_EVENTS = new Set(["reference_open", "reference_read", "reference_listen"]);
 
 export async function POST(req: Request) {
   const ip = getClientIp(req);
@@ -30,6 +37,12 @@ export async function POST(req: Request) {
 
     if (typeof sessionId !== "string" || sessionId.length > 100) {
       return NextResponse.json({ error: "Invalid sessionId format" }, { status: 400 });
+    }
+    const referenceWorkId = metadata && typeof metadata === "object" && !Array.isArray(metadata)
+      ? (metadata as Record<string, unknown>).referenceWorkId
+      : undefined;
+    if (WORK_EVENTS.has(eventType) && (typeof referenceWorkId !== "string" || referenceWorkId.length > 100 || !referenceWorkId.trim())) {
+      return NextResponse.json({ error: "Reference work id is required" }, { status: 400 });
     }
 
     const userAgent = req.headers.get("user-agent") || undefined;
@@ -75,6 +88,9 @@ export async function POST(req: Request) {
         where: { id: pieceId },
         data: { viewCount: { increment: 1 } },
       }).catch(() => {});
+    }
+    if (eventType === "reference_open" && typeof referenceWorkId === "string") {
+      await prisma.referenceWork.update({ where: { id: referenceWorkId }, data: { viewCount: { increment: 1 } } }).catch(() => {});
     }
 
     return NextResponse.json({ ok: true });

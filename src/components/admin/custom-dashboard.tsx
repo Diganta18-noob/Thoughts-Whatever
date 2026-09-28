@@ -10,19 +10,18 @@ import {
   MoveUp,
   MoveDown,
   RotateCcw,
-  Sparkles,
   HeartPulse,
   SearchCheck,
   Activity,
   FileText,
   BarChart2,
   Cpu,
-  ArrowRight,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { AnalyticsDashboard, type AnalyticsData } from "@/components/admin/analytics-dashboard";
 import { AdminActivityWidget } from "@/components/admin/activity-widget";
+import { ReferenceAnalyticsPanel } from "@/components/admin/reference-analytics-panel";
 import { KIND_META, piecePath } from "@/lib/nav";
 import { formatBengaliDate } from "@/lib/bengali";
 
@@ -36,11 +35,10 @@ export interface DashboardWidgetConfig {
 
 const DEFAULT_WIDGETS: DashboardWidgetConfig[] = [
   { id: "overview_metrics", type: "metrics", title: "Analytics Overview", enabled: true, order: 0 },
-  { id: "editorial_intel", type: "intel", title: "Editorial Intelligence", enabled: true, order: 1 },
+  { id: "reference_activity", type: "reference", title: "Reference Activity", enabled: true, order: 1 },
   { id: "recent_pieces", type: "pieces", title: "Recently Edited", enabled: true, order: 2 },
-  { id: "activity_stream", type: "activity", title: "Live Activity Stream", enabled: true, order: 3 },
-  { id: "content_health", type: "health", title: "Content Health Summary", enabled: true, order: 4 },
-  { id: "seo_summary", type: "seo", title: "SEO Status", enabled: true, order: 5 },
+  { id: "content_health", type: "health", title: "Content Health Summary", enabled: true, order: 3 },
+  { id: "seo_summary", type: "seo", title: "SEO Status", enabled: true, order: 4 },
 ];
 
 interface CustomDashboardProps {
@@ -237,57 +235,7 @@ export function CustomDashboard({
             );
           }
 
-          if (w.id === "editorial_intel") {
-            return (
-              <div
-                key={w.id}
-                className="rounded-card border border-rule bg-surface-raised p-6 space-y-4"
-              >
-                <div className="flex items-center justify-between border-b border-rule/60 pb-3">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-accent" />
-                    <h3 className="font-serif text-base font-medium text-content">
-                      Editorial Intelligence & Emerging Trends
-                    </h3>
-                  </div>
-                  <Link
-                    href="/admin/editorial-intelligence"
-                    className="inline-flex items-center gap-1 font-sans text-xs text-accent hover:underline"
-                  >
-                    Full Intelligence Console <ArrowRight className="h-3 w-3" />
-                  </Link>
-                </div>
-
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3 text-xs font-sans">
-                  <div className="p-3 bg-surface rounded-card border border-rule/50 space-y-1">
-                    <span className="font-mono text-[10px] uppercase text-content-faint">Peak Window</span>
-                    <div className="font-serif text-base font-bold text-accent">
-                      Fridays &bull; 6:00 PM
-                    </div>
-                    <p className="text-content-soft text-[11px]">Optimal release timing for essay read completion.</p>
-                  </div>
-
-                  <div className="p-3 bg-surface rounded-card border border-rule/50 space-y-1">
-                    <span className="font-mono text-[10px] uppercase text-content-faint">Recommended Length</span>
-                    <div className="font-serif text-base font-bold text-content">
-                      1,200 &ndash; 2,000 words
-                    </div>
-                    <p className="text-content-soft text-[11px]">78% completion retainability sweet spot.</p>
-                  </div>
-
-                  <div className="p-3 bg-surface rounded-card border border-rule/50 space-y-1">
-                    <span className="font-mono text-[10px] uppercase text-content-faint">Knowledge Graph</span>
-                    <div className="font-serif text-base font-bold text-success">
-                      Topology Active
-                    </div>
-                    <Link href="/admin/content-graph" className="text-accent hover:underline text-[11px] block mt-0.5">
-                      Explore relationship nodes &rarr;
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            );
-          }
+          if (w.id === "reference_activity") return <ReferenceAnalyticsPanel key={w.id} />;
 
           if (w.id === "recent_pieces") {
             return (

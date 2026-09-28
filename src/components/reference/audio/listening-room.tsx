@@ -13,6 +13,7 @@ import { TranscriptScroller } from "./transcript-scroller";
 import { TransportBar } from "./transport-bar";
 import { AudioManifest } from "@/lib/reference/audio/types";
 import { useAudio } from "@/components/providers/audio-provider";
+import { ReferenceActivityTracker } from "../reference-activity-tracker";
 
 interface ListeningRoomProps {
   work: {
@@ -78,6 +79,7 @@ export function ListeningRoom({ work, edition, audioAsset }: ListeningRoomProps)
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col justify-between selection:bg-amber-500/30 selection:text-amber-200">
+      <ReferenceActivityTracker event="reference_listen" workId={work.id} />
       {/* Top Header Bar (Mobile & Tablet optimized) */}
       <header className="sticky top-0 z-30 w-full border-b border-zinc-850/80 bg-zinc-950/90 backdrop-blur-md px-3 sm:px-6 md:px-8 py-2.5 sm:py-3.5 flex items-center justify-between gap-2">
         <Link

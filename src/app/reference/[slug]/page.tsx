@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { deriveCapabilities, getRightsBadgeMeta } from "@/lib/reference/rights-engine";
 import { getReferenceWorkBySlug } from "@/lib/reference/catalogue";
 import { ReferenceRightsBadge } from "@/components/reference/reference-rights-badge";
+import { ReferenceActivityTracker } from "@/components/reference/reference-activity-tracker";
 import { ReferenceDetailClient } from "./reference-detail-client";
 import { BookOpen, ExternalLink, Download, ArrowLeft, ShieldAlert, Sparkles, FileText, Headphones } from "lucide-react";
 import type { Metadata } from "next";
@@ -85,6 +86,7 @@ export default async function ReferenceDetailPage({
 
   return (
     <div className="mx-auto max-w-5xl px-4 pb-24 pt-8 sm:px-6">
+      <ReferenceActivityTracker event="reference_open" workId={work.id} />
       {/* Top Header / Back Navigation */}
       <div className="mb-6 border-b border-rule pb-4 flex items-center justify-between">
         <Link

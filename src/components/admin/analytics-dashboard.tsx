@@ -18,6 +18,7 @@ export interface AnalyticsData {
     totalArticles: number;
     totalSubscribers: number;
     totalReelClicks: number;
+    referenceOpens: number;
   };
   dailyTrend?: Array<{ date: string; views: number; visitors: number }>;
   topArticles?: TopArticleItem[];
@@ -160,7 +161,7 @@ export function AnalyticsDashboard({ initialData }: AnalyticsDashboardProps) {
       ) : (
         <>
           {/* Overview Cards */}
-          <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             <StaggerItem>
               <StatsCard
                 labelEn="Total Views"
@@ -191,6 +192,15 @@ export function AnalyticsDashboard({ initialData }: AnalyticsDashboardProps) {
                 labelBn={t("admin.dashboard.subscribers")}
                 value={overview?.totalSubscribers ?? 0}
                 icon={<Bookmark className="h-4 w-4" />}
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <StatsCard
+                labelEn="Reference Opens"
+                labelBn="Reference Opens"
+                value={overview?.referenceOpens ?? 0}
+                icon={<Bookmark className="h-4 w-4" />}
+                subtext="selected period"
               />
             </StaggerItem>
           </Stagger>

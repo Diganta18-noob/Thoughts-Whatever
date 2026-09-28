@@ -56,14 +56,14 @@ export function ViewTracker({ pieceId, pieceProps }: ViewTrackerProps) {
 
       const percentage = Math.round((window.scrollY / totalHeight) * 100);
 
-      const milestones = [50, 90, 100];
+      const milestones = [25, 50, 75, 100] as const;
       for (const m of milestones) {
         if (percentage >= m && !scrollMilestones.current.has(m)) {
 
           scrollMilestones.current.add(m);
           trackEvent({
             pieceId,
-            eventType: `scroll_${m}` as any,
+            eventType: `scroll_${m}`,
             metadata: { scrollDepth: m },
           });
 

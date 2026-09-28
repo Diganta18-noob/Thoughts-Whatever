@@ -50,7 +50,7 @@ export async function getOverviewStats(period: Period = "30d") {
   const startDate = getStartDate(period);
   const dateFilter = startDate ? { gte: startDate } : undefined;
 
-  const [totalViews, uniqueVisitorsResult, totalArticles, totalSubscribers, totalReelClicks, scrollEvents, piecesWithReadingTime] = await Promise.all([
+  const [totalViews, uniqueVisitorsResult, totalArticles, totalSubscribers, totalReelClicks, referenceOpens, scrollEvents, piecesWithReadingTime] = await Promise.all([
     prisma.analyticsEvent.count({
       where: { eventType: "view", ...(dateFilter ? { createdAt: dateFilter } : {}) },
     }),
@@ -58,11 +58,12 @@ export async function getOverviewStats(period: Period = "30d") {
       ? prisma.$queryRaw<Array<{ count: bigint }>>`
           SELECT COUNT(DISTINCT "sessionId") as count
           FROM "AnalyticsEvent"
-          WHERE "createdAt" >= ${startDate}
+          WHERE "eventType" = 'view' AND "createdAt" >= ${startDate}
         `
       : prisma.$queryRaw<Array<{ count: bigint }>>`
           SELECT COUNT(DISTINCT "sessionId") as count
           FROM "AnalyticsEvent"
+          WHERE "eventType" = 'view'
         `,
     prisma.piece.count({ where: { status: "PUBLISHED" } }),
     prisma.subscriber.count({ where: { unsubscribedAt: null, confirmed: true } }),
@@ -72,6 +73,7 @@ export async function getOverviewStats(period: Period = "30d") {
         ...(dateFilter ? { createdAt: dateFilter } : {}),
       },
     }),
+    prisma.analyticsEvent.count({ where: { eventType: "reference_open", ...(dateFilter ? { createdAt: dateFilter } : {}) } }),
     prisma.analyticsEvent.groupBy({
       by: ["eventType"],
       where: {
@@ -108,6 +110,7 @@ export async function getOverviewStats(period: Period = "30d") {
     totalArticles,
     totalSubscribers,
     totalReelClicks,
+    referenceOpens,
     completionRate,
     avgReadingMinutes,
     bounceRate,

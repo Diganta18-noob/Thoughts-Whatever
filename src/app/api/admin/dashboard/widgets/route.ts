@@ -4,8 +4,8 @@ import { prisma } from "@/lib/prisma";
 
 const DEFAULT_WIDGETS = [
   { id: "overview_metrics", type: "metrics", title: "Key Metrics", enabled: true, order: 0 },
-  { id: "recent_pieces", type: "pieces", title: "Recently Edited", enabled: true, order: 1 },
-  { id: "activity_stream", type: "activity", title: "Live Activity", enabled: true, order: 2 },
+  { id: "reference_activity", type: "reference", title: "Reference Activity", enabled: true, order: 1 },
+  { id: "recent_pieces", type: "pieces", title: "Recently Edited", enabled: true, order: 2 },
   { id: "content_health", type: "health", title: "Content Health", enabled: true, order: 3 },
   { id: "seo_summary", type: "seo", title: "SEO Status", enabled: true, order: 4 },
 ];

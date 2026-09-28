@@ -26,6 +26,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { ReferenceRightsBadge } from "../reference-rights-badge";
+import { ReferenceActivityTracker } from "../reference-activity-tracker";
 
 export interface BookReaderPageItem {
   pageNumber: number;
@@ -326,6 +327,7 @@ export function NativeBookReader({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
+      <ReferenceActivityTracker event="reference_read" workId={work.id} />
       {/* Top Reading Progress Bar */}
       <div className="absolute top-0 inset-x-0 h-1 bg-zinc-900 z-40">
         <div

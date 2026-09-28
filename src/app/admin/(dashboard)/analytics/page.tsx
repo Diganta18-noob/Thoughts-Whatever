@@ -19,6 +19,7 @@ import {
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { Button, TBody, TD, TH, THead, TR } from "@/components/ui";
+import { ReferenceAnalyticsPanel } from "@/components/admin/reference-analytics-panel";
 
 interface AnalyticsData {
   period: string;
@@ -29,6 +30,7 @@ interface AnalyticsData {
     totalArticles: number;
     totalSubscribers: number;
     totalReelClicks: number;
+    referenceOpens: number;
     completionRate: number;
     avgReadingMinutes: number;
     bounceRate: number;
@@ -59,7 +61,7 @@ export default function AdvancedAnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<string>("30d");
-  const [activeTab, setActiveTab] = useState<"traffic" | "content" | "series" | "sources">("traffic");
+  const [activeTab, setActiveTab] = useState<"traffic" | "series" | "sources" | "reference">("traffic");
 
   const fetchAnalytics = useCallback(async () => {
     setLoading(true);
@@ -186,19 +188,19 @@ export default function AdvancedAnalyticsPage() {
             </div>
 
             <div className="rounded-card border border-rule bg-surface-raised p-4 space-y-1">
-              <span className="label">Returning Readers</span>
+              <span className="label">Repeat Page Views</span>
               <div className="font-serif text-2xl font-normal text-content">
                 {data.overview.returningVisitors.toLocaleString()}
               </div>
-              <p className="font-mono text-[10px] text-success font-semibold">Loyal audience</p>
+              <p className="font-mono text-[10px] text-content-faint">Views beyond distinct sessions</p>
             </div>
 
             <div className="rounded-card border border-rule bg-surface-raised p-4 space-y-1">
-              <span className="label">Avg Read Time</span>
+              <span className="label">Est. Article Length</span>
               <div className="font-serif text-2xl font-normal text-content">
                 {data.overview.avgReadingMinutes}m
               </div>
-              <p className="font-mono text-[10px] text-content-faint">Per session duration</p>
+              <p className="font-mono text-[10px] text-content-faint">Based on published text</p>
             </div>
 
             <div className="rounded-card border border-rule bg-surface-raised p-4 space-y-1">
@@ -210,11 +212,11 @@ export default function AdvancedAnalyticsPage() {
             </div>
 
             <div className="rounded-card border border-rule bg-surface-raised p-4 space-y-1">
-              <span className="label">Bounce Rate</span>
+              <span className="label">Reference Opens</span>
               <div className="font-serif text-2xl font-normal text-content">
-                {data.overview.bounceRate}%
+                {data.overview.referenceOpens.toLocaleString()}
               </div>
-              <p className="font-mono text-[10px] text-content-faint">Single page exits</p>
+              <p className="font-mono text-[10px] text-content-faint">Selected period</p>
             </div>
           </div>
 
@@ -268,6 +270,7 @@ export default function AdvancedAnalyticsPage() {
               { id: "traffic", label: "Top Articles" },
               { id: "series", label: "Series Performance" },
               { id: "sources", label: "Referral Sources" },
+              { id: "reference", label: "Reference Activity" },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -361,6 +364,8 @@ export default function AdvancedAnalyticsPage() {
           )}
 
           {/* Tab 3: Referral Sources */}
+          {activeTab === "reference" && <ReferenceAnalyticsPanel />}
+
           {activeTab === "sources" && (
             <div className="rounded-card border border-rule bg-surface-raised p-6 space-y-4 font-sans text-xs">
               <h3 className="font-serif text-base text-content">Traffic Acquisition Channels</h3>

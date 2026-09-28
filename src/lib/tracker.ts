@@ -15,7 +15,7 @@ function getSessionId(): string {
 
 export type EventPayload = {
   pieceId?: string;
-  eventType: "view" | "scroll_25" | "scroll_50" | "scroll_75" | "scroll_100" | "instagram_click" | "reel_click" | "ping";
+  eventType: "view" | "scroll_25" | "scroll_50" | "scroll_75" | "scroll_100" | "instagram_click" | "reel_click" | "ping" | "reference_catalogue" | "reference_search" | "reference_open" | "reference_read" | "reference_listen";
   metadata?: Record<string, unknown>;
 };
 

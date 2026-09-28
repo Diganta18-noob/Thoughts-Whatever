@@ -2617,3 +2617,13 @@ the letter section is not wokring means try to make it work after enterring mail
 ```
 
 OBJECTIVE: Make letter signup send an actual confirmation email, require explicit confirmation, surface delivery failures, and distinguish pending from confirmed subscribers in admin exports.
+
+---
+
+## 2026-09-28 — Admin Reference Intelligence
+
+```text
+this is the admin dashboard , see the admin portal and detailed understand the admin portal and features and tryto improve my admin portal more professional , act like a senior data analysit , and also i have not found any analytics of reference tab activity . and https://www.vengenceui.com/docs/install-nextjs,https://skiper-ui.com/, https://animmasterlib.dev/ ,https://sceneai.art/, use this thing to improve the full admin portal . try to use less token and be fast
+```
+
+OBJECTIVE: Add real Reference activity analytics across the portal, replace fixed dashboard claims, correct misleading metric labels and scroll tracking, and keep the design consistent and efficient.

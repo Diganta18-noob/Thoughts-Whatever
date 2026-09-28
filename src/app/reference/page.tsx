@@ -6,6 +6,7 @@ import { traceServerOperation } from "@/lib/performance-trace";
 import { ReferenceType, ReferenceRightsStatus, Prisma } from "@prisma/client";
 import { deriveCapabilities } from "@/lib/reference/rights-engine";
 import { ReferenceCard } from "@/components/reference/reference-card";
+import { ReferenceActivityTracker } from "@/components/reference/reference-activity-tracker";
 import { PageHeader } from "@/components/layout/page-header";
 import { Search, RotateCcw, BookOpen, ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
@@ -90,6 +91,7 @@ export default async function ReferenceLibraryPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+      <ReferenceActivityTracker event={query ? "reference_search" : "reference_catalogue"} />
       {/* Editorial Section Masthead */}
       <PageHeader
         labelEn="Reference Library"

@@ -12,6 +12,7 @@ async function main() {
     'do it and use very less token',
     'My computer went to sleep while you were working. Please continue from where you left off.',
     'the letter section is not wokring means try to make it work after enterring mail addressh nothing happen',
+    'this is the admin dashboard , see the admin portal and detailed understand the admin portal and features and tryto improve my admin portal more professional , act like a senior data analysit , and also i have not found any analytics of reference tab activity . and https://www.vengenceui.com/docs/install-nextjs,https://skiper-ui.com/, https://animmasterlib.dev/ ,https://sceneai.art/, use this thing to improve the full admin portal . try to use less token and be fast',
   ];
   let inserted=0;
   for(const item of prompts) {
