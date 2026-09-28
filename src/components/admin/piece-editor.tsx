@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Loader2, Plus, X, ExternalLink, Mic } from "lucide-react";
+import { Loader2, Plus, X, ExternalLink, Mic, Music2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Prose } from "@/components/reader/prose";
 import { bengaliSlug, countBengaliWords, readingMinutes, toBengaliNumber } from "@/lib/bengali";
@@ -12,6 +12,7 @@ import { KIND_META, piecePath, type PieceKindKey } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/components/providers/language-provider";
 import { ImageUpload } from "@/components/admin/image-upload";
+import { MediaPicker } from "@/components/admin/media-picker";
 import { AudioTranscribe } from "@/components/admin/audio-transcribe";
 import { PieceSourcesEditor } from "./piece-editor/piece-sources-editor";
 import { PieceTimelineEditor } from "./piece-editor/piece-timeline-editor";
@@ -255,6 +256,7 @@ export function PieceEditor({
   const [showPreview, setShowPreview] = useState(true);
   const [showTranscriber, setShowTranscriber] = useState(false);
   const [previewLoading, setPreviewLoading] = useState(false);
+  const [audioPickerOpen, setAudioPickerOpen] = useState(false);
 
   const handleSharePreview = async () => {
     if (!form.id) {
@@ -763,27 +765,64 @@ export function PieceEditor({
               </p>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_90px]">
-              <Field
-                labelEn="Narration (audio)"
-                hintBn={t("admin.editor.narrationHint")}
-                error={errors.audioUrl}
-              >
-                <input
-                  value={form.audioUrl}
-                  onChange={(e) => set("audioUrl", e.target.value)}
-                  placeholder="/audio/….mp3"
-                  className={monoInputClass}
+            <div>
+              <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_90px]">
+                <Field
+                  labelEn="Narration (audio)"
+                  hintBn={t("admin.editor.narrationHint")}
+                  error={errors.audioUrl}
+                >
+                  <input
+                    value={form.audioUrl}
+                    onChange={(e) => set("audioUrl", e.target.value)}
+                    placeholder="/audio/….mp3"
+                    className={monoInputClass}
+                  />
+                </Field>
+                <Field labelEn="Seconds" error={errors.audioSec}>
+                  <input
+                    value={form.audioSec}
+                    onChange={(e) => set("audioSec", e.target.value)}
+                    inputMode="numeric"
+                    className={monoInputClass}
+                  />
+                </Field>
+              </div>
+              <div className="mt-1.5 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => setAudioPickerOpen(true)}
+                  className="inline-flex items-center gap-1.5 text-xs text-accent hover:underline font-sans"
+                >
+                  <Music2 className="h-3 w-3" />
+                  Choose audio from Media Library
+                </button>
+                {form.audioUrl && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      set("audioUrl", "");
+                      set("audioSec", "");
+                    }}
+                    className="text-xs text-danger/80 hover:text-danger"
+                  >
+                    Clear Audio
+                  </button>
+                )}
+              </div>
+              {audioPickerOpen && (
+                <MediaPicker
+                  type="audio"
+                  title="Choose Narration Audio"
+                  onClose={() => setAudioPickerOpen(false)}
+                  onSelect={(asset) => {
+                    set("audioUrl", asset.url);
+                    if (asset.metadata?.duration) {
+                      set("audioSec", String(Math.round(asset.metadata.duration)));
+                    }
+                  }}
                 />
-              </Field>
-              <Field labelEn="Seconds" error={errors.audioSec}>
-                <input
-                  value={form.audioSec}
-                  onChange={(e) => set("audioSec", e.target.value)}
-                  inputMode="numeric"
-                  className={monoInputClass}
-                />
-              </Field>
+              )}
             </div>
           </Panel>
 

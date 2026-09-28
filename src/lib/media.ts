@@ -45,11 +45,12 @@ export async function uploadMediaBuffer(
 
 export interface GetMediaParams {
   type?: string;
+  orientation?: "all" | "landscape" | "portrait" | "square";
   search?: string;
   unusedOnly?: boolean;
   page?: number;
   limit?: number;
-  sortBy?: "createdAt" | "sizeBytes" | "filename";
+  sortBy?: "createdAt" | "sizeBytes" | "filename" | "duration";
   sortOrder?: "asc" | "desc";
 }
 
@@ -69,7 +70,24 @@ export async function getMediaList(params: GetMediaParams = {}) {
       where.mimeType = { startsWith: "audio/" };
     } else if (params.type === "document") {
       where.mimeType = { in: ["application/pdf", "text/plain", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/epub+zip"] };
+    } else if (params.type === "svg") {
+      where.mimeType = "image/svg+xml";
     }
+  }
+
+  if (params.orientation && params.orientation !== "all") {
+    const ratio = params.orientation === "landscape"
+      ? Prisma.sql`m."width"::float / NULLIF(m."height", 0) >= 1.08`
+      : params.orientation === "portrait"
+        ? Prisma.sql`m."height"::float / NULLIF(m."width", 0) >= 1.08`
+        : Prisma.sql`m."width"::float / NULLIF(m."height", 0) > 0.92 AND m."width"::float / NULLIF(m."height", 0) < 1.08`;
+    const matching = await prisma.$queryRaw<Array<{ id: string }>>(Prisma.sql`
+      SELECT m.id FROM "Media" m
+      WHERE (m."width" > 0 AND m."height" > 0 AND (${ratio}))
+         OR ((m."width" IS NULL OR m."height" IS NULL OR m."width" <= 0 OR m."height" <= 0)
+             AND m.metadata->>'orientation' = ${params.orientation})
+    `);
+    where.id = { in: matching.map((item) => item.id) };
   }
 
   if (params.search?.trim()) {
@@ -86,8 +104,9 @@ export async function getMediaList(params: GetMediaParams = {}) {
     where.usages = { none: {} };
   }
 
+  const sortByField = params.sortBy === "filename" || params.sortBy === "sizeBytes" ? params.sortBy : "createdAt";
   const orderBy = {
-    [params.sortBy || "createdAt"]: params.sortOrder || "desc",
+    [sortByField]: params.sortOrder || "desc",
   };
 
   const [items, total] = await Promise.all([
@@ -129,6 +148,20 @@ export async function createMediaRecord(data: {
   uploadedBy?: string;
   metadata?: Prisma.InputJsonValue;
 }) {
+  if (data.url.startsWith("data:")) {
+    throw new Error("Direct base64 data URLs cannot be stored in the media library. Please use durable cloud upload.");
+  }
+
+  const existingMeta = (data.metadata && typeof data.metadata === "object" && !Array.isArray(data.metadata))
+    ? (data.metadata as Record<string, unknown>)
+    : {};
+  const orientation = (data.width && data.height) ? (data.width >= data.height * 1.08 ? "landscape" : data.height >= data.width * 1.08 ? "portrait" : "square") : existingMeta.orientation;
+
+  const mergedMetadata = {
+    ...existingMeta,
+    ...(orientation ? { orientation } : {}),
+  };
+
   return prisma.media.create({
     data: {
       filename: data.filename,
@@ -141,7 +174,7 @@ export async function createMediaRecord(data: {
       altText: data.altText,
       caption: data.caption,
       uploadedBy: data.uploadedBy,
-      metadata: data.metadata,
+      metadata: mergedMetadata as Prisma.InputJsonValue,
     },
   });
 }
@@ -209,8 +242,19 @@ export async function deleteMediaRecord(
   }
 
   const [pieces, series, authors, editions, referenceAssets] = await Promise.all([
-    prisma.piece.count({ where: { OR: [{ coverImage: media.url }, { ogImage: media.url }, { bodyBn: { contains: media.url } }, { audioUrl: media.url }, { videoUrl: media.url }] } }),
-    prisma.series.count({ where: { coverImage: media.url } }),
+    prisma.piece.count({
+      where: {
+        OR: [
+          { coverImage: media.url },
+          { thumbnailImage: media.url },
+          { ogImage: media.url },
+          { bodyBn: { contains: media.url } },
+          { audioUrl: media.url },
+          { videoUrl: media.url },
+        ],
+      },
+    }),
+    prisma.series.count({ where: { OR: [{ coverImage: media.url }, { bannerImage: media.url }] } }),
     prisma.author.count({ where: { portrait: media.url } }),
     prisma.referenceEdition.count({ where: { coverImage: media.url } }),
     prisma.referenceAsset.count({ where: { fileUrl: media.url } }),
@@ -261,15 +305,30 @@ export async function deleteMediaRecord(
 }
 
 /**
- * Automatically scan all Pieces, Series, and Authors to auto-discover media assets and build/refresh MediaUsage links
+ * Automatically scan all Pieces, Series, Authors, and Reference resources to auto-discover media assets and build/refresh MediaUsage links
  */
 export async function syncAllMediaUsage() {
   const [pieces, seriesList, authors, editions, referenceAssets] = await Promise.all([
-    prisma.piece.findMany({ select: { id: true, slug: true, titleBn: true, coverImage: true, ogImage: true, bodyBn: true, audioUrl: true, videoUrl: true } }),
-    prisma.series.findMany({ select: { id: true, slug: true, titleBn: true, coverImage: true } }),
+    prisma.piece.findMany({
+      select: {
+        id: true,
+        slug: true,
+        titleBn: true,
+        coverImage: true,
+        coverImageWidth: true,
+        coverImageHeight: true,
+        thumbnailImage: true,
+        ogImage: true,
+        bodyBn: true,
+        audioUrl: true,
+        audioSec: true,
+        videoUrl: true,
+      },
+    }),
+    prisma.series.findMany({ select: { id: true, slug: true, titleBn: true, coverImage: true, bannerImage: true } }),
     prisma.author.findMany({ select: { id: true, slug: true, nameBn: true, portrait: true } }),
     prisma.referenceEdition.findMany({ select: { id: true, editionTitleBn: true, coverImage: true } }),
-    prisma.referenceAsset.findMany({ select: { id: true, title: true, fileUrl: true } }),
+    prisma.referenceAsset.findMany({ select: { id: true, title: true, fileUrl: true, mimeType: true, durationSec: true } }),
   ]);
 
   const MD_IMAGE_REGEX = /!\[([^\]]*)\]\(([^)]+)\)/g;
@@ -283,26 +342,40 @@ export async function syncAllMediaUsage() {
     entityId: string,
     entityTitle: string,
     field: string,
-    altText?: string
+    altText?: string,
+    metaHints?: {
+      width?: number | null;
+      height?: number | null;
+      duration?: number | null;
+      mimeType?: string;
+      orientation?: "landscape" | "portrait" | "square";
+    }
   ) {
-    if (!url || typeof url !== "string" || !url.trim()) return;
+    if (!url || typeof url !== "string" || !url.trim() || url.startsWith("data:")) return;
     const cleanUrl = url.trim();
 
     let filename = cleanUrl.split("/").pop()?.split("?")[0] || "asset.jpg";
     if (!filename.includes(".")) filename += ".jpg";
 
-    let mimeType = "image/jpeg";
-    if (filename.endsWith(".png")) mimeType = "image/png";
-    else if (filename.endsWith(".webp")) mimeType = "image/webp";
-    else if (filename.endsWith(".svg")) mimeType = "image/svg+xml";
-    else if (filename.endsWith(".mp4")) mimeType = "video/mp4";
-    else if (filename.endsWith(".mp3")) mimeType = "audio/mpeg";
-    else if (filename.endsWith(".m4a")) mimeType = "audio/mp4";
-    else if (filename.endsWith(".wav")) mimeType = "audio/wav";
-    else if (filename.endsWith(".epub")) mimeType = "application/epub+zip";
-    else if (filename.endsWith(".docx")) mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    else if (filename.endsWith(".txt")) mimeType = "text/plain";
-    else if (filename.endsWith(".pdf")) mimeType = "application/pdf";
+    let mimeType = metaHints?.mimeType;
+    if (!mimeType) {
+      if (filename.endsWith(".png")) mimeType = "image/png";
+      else if (filename.endsWith(".webp")) mimeType = "image/webp";
+      else if (filename.endsWith(".svg")) mimeType = "image/svg+xml";
+      else if (filename.endsWith(".mp4")) mimeType = "video/mp4";
+      else if (filename.endsWith(".mp3")) mimeType = "audio/mpeg";
+      else if (filename.endsWith(".m4a")) mimeType = "audio/mp4";
+      else if (filename.endsWith(".wav")) mimeType = "audio/wav";
+      else if (filename.endsWith(".epub")) mimeType = "application/epub+zip";
+      else if (filename.endsWith(".docx")) mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+      else if (filename.endsWith(".txt")) mimeType = "text/plain";
+      else if (filename.endsWith(".pdf")) mimeType = "application/pdf";
+      else mimeType = "image/jpeg";
+    }
+
+    const width = metaHints?.width ?? (cleanUrl.includes("landscape-thumbnails") ? 1920 : cleanUrl.includes("piece-covers") ? 1080 : null);
+    const height = metaHints?.height ?? (cleanUrl.includes("landscape-thumbnails") ? 1080 : cleanUrl.includes("piece-covers") ? 1920 : null);
+    const orientation = metaHints?.orientation ?? (width && height ? (width >= height * 1.08 ? "landscape" : height >= width * 1.08 ? "portrait" : "square") : null);
 
     let media = await prisma.media.findFirst({ where: { url: cleanUrl } });
 
@@ -314,11 +387,33 @@ export async function syncAllMediaUsage() {
           originalName: filename,
           mimeType,
           sizeBytes: 0,
+          width,
+          height,
           altText: altText || entityTitle,
           caption: `${entityTitle} (${field})`,
+          metadata: {
+            orientation: orientation || (cleanUrl.includes("landscape") ? "landscape" : cleanUrl.includes("cover") || cleanUrl.includes("portrait") ? "portrait" : null),
+            duration: metaHints?.duration || null,
+          } as Prisma.InputJsonValue,
         },
       });
       createdCount++;
+    } else if ((!media.width && width) || (!media.height && height) || !media.metadata) {
+      // Enrich existing record with dimensions and orientation if missing
+      const existingMeta = (media.metadata && typeof media.metadata === "object" && !Array.isArray(media.metadata))
+        ? (media.metadata as Record<string, unknown>) : {};
+      await prisma.media.update({
+        where: { id: media.id },
+        data: {
+          width: media.width || width,
+          height: media.height || height,
+          metadata: {
+            ...existingMeta,
+            orientation: existingMeta.orientation || orientation,
+            duration: existingMeta.duration || metaHints?.duration || null,
+          } as Prisma.InputJsonValue,
+        },
+      });
     }
 
     await prisma.mediaUsage.upsert({
@@ -345,14 +440,49 @@ export async function syncAllMediaUsage() {
 
   // 1. Index Pieces
   for (const piece of pieces) {
+    // 9:16 Portrait Cover Image
     if (piece.coverImage) {
-      await registerMedia(piece.coverImage, "Piece", piece.id, piece.titleBn, "coverImage");
+      await registerMedia(piece.coverImage, "Piece", piece.id, piece.titleBn, "coverImage", undefined, {
+        width: piece.coverImageWidth || 1080,
+        height: piece.coverImageHeight || 1920,
+        orientation: "portrait",
+      });
     }
-    if (piece.ogImage && piece.ogImage !== piece.coverImage) {
-      await registerMedia(piece.ogImage, "Piece", piece.id, piece.titleBn, "ogImage");
+
+    // 16:9 Landscape Thumbnail Image (Featured cards, article list thumbnails)
+    if (piece.thumbnailImage) {
+      await registerMedia(piece.thumbnailImage, "Piece", piece.id, piece.titleBn, "thumbnailImage", undefined, {
+        width: 1920,
+        height: 1080,
+        orientation: "landscape",
+      });
     }
-    if (piece.audioUrl) await registerMedia(piece.audioUrl, "Piece", piece.id, piece.titleBn, "audioUrl");
-    if (piece.videoUrl) await registerMedia(piece.videoUrl, "Piece", piece.id, piece.titleBn, "videoUrl");
+
+    // Social Sharing OpenGraph Landscape Image
+    if (piece.ogImage) {
+      await registerMedia(piece.ogImage, "Piece", piece.id, piece.titleBn, "ogImage", undefined, {
+        width: 1200,
+        height: 630,
+        orientation: "landscape",
+      });
+    }
+
+    // Voice Narration Audio
+    if (piece.audioUrl) {
+      await registerMedia(piece.audioUrl, "Piece", piece.id, piece.titleBn, "audioUrl", undefined, {
+        mimeType: piece.audioUrl.endsWith(".m4a") ? "audio/mp4" : piece.audioUrl.endsWith(".wav") ? "audio/wav" : "audio/mpeg",
+        duration: piece.audioSec || null,
+      });
+    }
+
+    // Documentary / Reel Video
+    if (piece.videoUrl) {
+      await registerMedia(piece.videoUrl, "Piece", piece.id, piece.titleBn, "videoUrl", undefined, {
+        mimeType: "video/mp4",
+      });
+    }
+
+    // Inline Markdown Images
     const bodyImages = [...(piece.bodyBn || "").matchAll(MD_IMAGE_REGEX)];
     for (const match of bodyImages) {
       const alt = match[1];
@@ -364,22 +494,87 @@ export async function syncAllMediaUsage() {
   // 2. Index Series
   for (const s of seriesList) {
     if (s.coverImage) {
-      await registerMedia(s.coverImage, "Series", s.id, s.titleBn, "coverImage");
+      await registerMedia(s.coverImage, "Series", s.id, s.titleBn, "coverImage", undefined, {
+        width: 1080,
+        height: 1920,
+        orientation: "portrait",
+      });
+    }
+    if (s.bannerImage) {
+      await registerMedia(s.bannerImage, "Series", s.id, s.titleBn, "bannerImage", undefined, {
+        orientation: "landscape",
+      });
     }
   }
 
   // 3. Index Authors
   for (const a of authors) {
     if (a.portrait) {
-      await registerMedia(a.portrait, "Author", a.id, a.nameBn, "portrait");
+      await registerMedia(a.portrait, "Author", a.id, a.nameBn, "portrait", undefined, {
+        width: 800,
+        height: 1000,
+        orientation: "portrait",
+      });
     }
   }
 
+  // 4. Index Reference Editions
   for (const edition of editions) {
-    if (edition.coverImage) await registerMedia(edition.coverImage, "ReferenceEdition", edition.id, edition.editionTitleBn || "Reference edition", "coverImage");
+    if (edition.coverImage) {
+      await registerMedia(edition.coverImage, "ReferenceEdition", edition.id, edition.editionTitleBn || "Reference edition", "coverImage", undefined, {
+        width: 800,
+        height: 1200,
+        orientation: "portrait",
+      });
+    }
   }
+
+  // 5. Index Reference Digital Assets (Audio recordings, PDFs, Transcripts)
   for (const asset of referenceAssets) {
-    if (asset.fileUrl) await registerMedia(asset.fileUrl, "ReferenceAsset", asset.id, asset.title, "fileUrl");
+    if (asset.fileUrl) {
+      await registerMedia(asset.fileUrl, "ReferenceAsset", asset.id, asset.title, "fileUrl", undefined, {
+        mimeType: asset.mimeType || undefined,
+        duration: asset.durationSec || null,
+      });
+    }
+  }
+
+  // 6. Backfill existing media records orientation and dimensions
+  const allMediaRecords = await prisma.media.findMany({
+    select: { id: true, url: true, width: true, height: true, metadata: true },
+  });
+  for (const item of allMediaRecords) {
+    const meta = (item.metadata && typeof item.metadata === "object" && !Array.isArray(item.metadata))
+      ? (item.metadata as Record<string, unknown>)
+      : {};
+    let updatedWidth = item.width;
+    let updatedHeight = item.height;
+    let updatedOrientation = meta.orientation;
+
+    if (!updatedOrientation) {
+      if (item.url.includes("landscape-thumbnails") || item.url.includes("landscape") || (item.width && item.height && item.width >= item.height * 1.08)) {
+        updatedOrientation = "landscape";
+        if (!updatedWidth) updatedWidth = 1920;
+        if (!updatedHeight) updatedHeight = 1080;
+      } else if (item.url.includes("piece-covers") || item.url.includes("portrait") || (item.width && item.height && item.height >= item.width * 1.08)) {
+        updatedOrientation = "portrait";
+        if (!updatedWidth) updatedWidth = 1080;
+        if (!updatedHeight) updatedHeight = 1920;
+      } else if (item.width && item.height) {
+        updatedOrientation = "square";
+      }
+    }
+
+    if (updatedOrientation !== meta.orientation || updatedWidth !== item.width || updatedHeight !== item.height) {
+      await prisma.media.update({
+        where: { id: item.id },
+        data: {
+          width: updatedWidth,
+          height: updatedHeight,
+          metadata: { ...meta, ...(updatedOrientation ? { orientation: updatedOrientation } : {}) } as Prisma.InputJsonValue,
+        },
+      });
+    }
   }
 
   const recordedUsages = await prisma.mediaUsage.findMany({ select: { id: true, mediaId: true, entityType: true, entityId: true, field: true } });

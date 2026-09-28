@@ -3,7 +3,7 @@ import { requireAdmin, requirePermission } from "@/lib/auth";
 import { getMediaList, createMediaRecord, deleteMediaRecord, uploadMediaBuffer } from "@/lib/media";
 import { logAuditEvent } from "@/lib/audit";
 import { logActivity } from "@/lib/activity";
-import { validateMediaFile } from "@/lib/media-policy";
+import { resolveMimeType, validateMediaFile } from "@/lib/media-policy";
 
 export async function GET(req: NextRequest) {
   const admin = await requireAdmin();
@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
   const type = searchParams.get("type") || undefined;
+  const orientation = (searchParams.get("orientation") as any) || undefined;
   const search = searchParams.get("search") || undefined;
   const unusedOnly = searchParams.get("unused") === "true";
   const page = parseInt(searchParams.get("page") || "1", 10);
@@ -23,6 +24,7 @@ export async function GET(req: NextRequest) {
 
   const data = await getMediaList({
     type,
+    orientation,
     search,
     unusedOnly,
     page,
@@ -55,14 +57,14 @@ export async function POST(req: NextRequest) {
 
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    const mimeType = file.type || "application/octet-stream";
-    const sizeBytes = buffer.length;
     const originalName = file.name || `upload-${Date.now()}`;
+    const mimeType = resolveMimeType(originalName, file.type);
+    const sizeBytes = buffer.length;
     const validationError = validateMediaFile(originalName, mimeType, sizeBytes);
     if (validationError) return NextResponse.json({ ok: false, error: validationError }, { status: 400 });
     if (sizeBytes > 4_000_000) return NextResponse.json({ ok: false, error: "Use direct upload for files over 4 MB" }, { status: 413 });
 
-    // Upload using standard image handler or base64 storage
+    // Upload using standard cloud storage buffer handler (never data URI fallback)
     const uploadResult = await uploadMediaBuffer(buffer, originalName, mimeType);
 
     const media = await createMediaRecord({

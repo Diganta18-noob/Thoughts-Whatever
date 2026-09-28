@@ -2658,3 +2658,24 @@ why i am not able to see changes in the code
 ```
 
 OBJECTIVE: Clarify and locate the media section code modifications, verify file status, and resolve IDE Source Control display / editor navigation.
+
+---
+
+## 2026-09-29 — Production Media Library: Landscape Photo & Audio Asset Support
+
+```text
+Upgrade the Thoughts.Whatever admin Media Library into a production-ready asset manager. Inspect the existing /admin/media page, API, Cloudinary integration, Media model, usage tracker, and content editors before changing code. Preserve existing assets, URLs, permissions, and workflows.
+
+Support portrait and landscape photos, illustrations, cover art, SVG, audio, video, and documents. Add clear tabs and filters for Images, Audio, Video, and Documents; search, sorting, file details, and useful empty states. Give each type the right preview: responsive image, audio player with duration and waveform or progress, video player with poster, and document thumbnail or safe download. Show dimensions or aspect ratio for images and video, and duration for audio and video.
+
+Make uploads reliable: drag and drop or browse, multiple files, per-file progress, validation, retry, and specific error messages. Validate actual file type and size on the server. Use durable cloud storage and avoid storing large files as base64 data URLs in PostgreSQL. Account for Vercel’s request limits and the project’s free-tier usage; use direct or signed storage uploads where appropriate.
+
+Let editors add alt text, captions, credits, license/source, tags, and focal point where relevant. Provide image crops or variants for landscape, portrait, square, and social sharing without altering the original. Make assets selectable from the existing piece, series, and Reference editors. Keep the usage tracker accurate, warn before deleting used assets, and never break published content.
+
+The current library’s file picker omits audio, and its Cloudinary fallback can return a base64 data URL—those are two concrete issues this prompt asks the agent to address.
+
+still i am not able to seee landscape photo and audio
+```
+
+OBJECTIVE: Fix audio file picker omissions by including explicit extensions, index piece landscape thumbnailImage and audio narration into Media and usage tracker, add orientation filters (16:9 Landscape, 9:16 Portrait, 1:1 Square), build responsive previews and AudioPreviewPlayer with interactive scrubber and waveform, integrate media pickers into piece narration and taxonomy, ensure zero base64 data URL storage, and verify with tests and build.
+

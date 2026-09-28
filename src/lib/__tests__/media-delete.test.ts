@@ -26,6 +26,22 @@ it("refuses deletion when a Reference asset still uses the file, even if usage t
   expect(prisma.media.delete).not.toHaveBeenCalled();
 });
 
+it("refuses deletion when a Piece uses the media as a landscape thumbnailImage", async () => {
+  (prisma.piece.count as jest.Mock).mockResolvedValue(1);
+  await expect(deleteMediaRecord("asset-1")).rejects.toThrow(/Remove its references/);
+  expect(prisma.media.delete).not.toHaveBeenCalled();
+});
+
+it("checks Series banners before deleting an asset", async () => {
+  (prisma.series.count as jest.Mock).mockResolvedValue(1);
+  await expect(deleteMediaRecord("asset-1")).rejects.toThrow(/Remove its references/);
+  expect(prisma.series.count).toHaveBeenCalledWith({ where: { OR: [
+    { coverImage: "https://example.com/cover.jpg" },
+    { bannerImage: "https://example.com/cover.jpg" },
+  ] } });
+  expect(prisma.media.delete).not.toHaveBeenCalled();
+});
+
 it("deletes an unreferenced file", async () => {
   await expect(deleteMediaRecord("asset-1")).resolves.toMatchObject({ ok: true });
   expect(prisma.media.delete).toHaveBeenCalledWith({ where: { id: "asset-1" } });

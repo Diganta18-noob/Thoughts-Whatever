@@ -258,7 +258,17 @@ export function ImageUpload({
       )}
 
       <button type="button" onClick={() => setPickerOpen(true)} className="mt-3 rounded-card border border-rule px-3 py-2 text-xs text-content-soft transition hover:border-accent hover:text-accent">Choose from Media Library</button>
-      {pickerOpen && <MediaPicker type="image" onClose={() => setPickerOpen(false)} onSelect={(asset) => { setPreview(asset.url); onChange(asset.url, { width: asset.width || undefined, height: asset.height || undefined }); }} />}
+      {pickerOpen && (
+        <MediaPicker
+          type="image"
+          orientation={aspectRatio ? (aspectRatio > 1.05 ? "landscape" : aspectRatio < 0.95 ? "portrait" : "square") : "all"}
+          onClose={() => setPickerOpen(false)}
+          onSelect={(asset) => {
+            setPreview(asset.url);
+            onChange(asset.url, { width: asset.width || undefined, height: asset.height || undefined });
+          }}
+        />
+      )}
 
       {!preview && !uploading && (
         <details className="mt-3">
