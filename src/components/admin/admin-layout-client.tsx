@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { ADMIN_NAV_GROUPS, resolveActiveHref } from "@/lib/admin-nav";
 import { AdminHeaderBrand, AdminHeaderActions } from "@/components/admin/admin-header-chrome";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { LogoutButton } from "@/components/admin/logout-button";
@@ -18,6 +20,10 @@ export function AdminLayoutClient({
   children,
 }: AdminLayoutClientProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname() ?? "/admin";
+  const activeHref = resolveActiveHref(pathname, { visibleOnly: true });
+  const currentGroup = ADMIN_NAV_GROUPS.find((group) => group.items.some((item) => item.href === activeHref));
+  const currentPage = currentGroup?.items.find((item) => item.href === activeHref)?.label ?? "Workspace";
 
   useBodyScrollLock(mobileMenuOpen);
 
@@ -35,10 +41,10 @@ export function AdminLayoutClient({
   }, [mobileMenuOpen]);
 
   return (
-    <div className="min-h-screen bg-surface flex flex-col">
+    <div data-admin-workspace className="admin-workspace flex min-h-screen flex-col bg-surface">
       {/* Top Navigation Bar */}
-      <header className="sticky top-0 z-30 border-b border-rule bg-surface/95 backdrop-blur">
-        <div className="flex h-14 items-center justify-between px-4 sm:px-6">
+      <header className="admin-topbar sticky top-0 z-30 border-b border-rule bg-surface/95 backdrop-blur-xl">
+        <div className="flex h-16 items-center justify-between px-4 sm:px-6">
           <AdminHeaderBrand onToggleMobileMenu={() => setMobileMenuOpen(true)} />
 
           <div className="flex items-center gap-3">
@@ -57,7 +63,7 @@ export function AdminLayoutClient({
       {/* Main Workspace with Sidebar */}
       <div className="flex flex-1 relative min-h-0">
         {/* Desktop Sticky Sidebar */}
-        <div className="hidden lg:block shrink-0 sticky top-14 h-[calc(100vh-3.5rem)] max-h-[calc(100vh-3.5rem)] overflow-hidden">
+        <div className="hidden lg:block shrink-0 sticky top-16 h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] overflow-hidden">
           <AdminSidebar />
         </div>
 
@@ -81,8 +87,15 @@ export function AdminLayoutClient({
         )}
 
         {/* Content Viewport */}
-        <main className="flex-1 min-w-0 p-4 sm:p-8 max-w-6xl">
-          {children}
+        <main className="admin-main min-w-0 flex-1 px-4 pb-12 pt-5 sm:px-8 sm:pt-7 xl:px-10">
+          <div className="admin-content mx-auto w-full max-w-[1440px]">
+            <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-content-faint">
+              <span>Workspace</span><span className="text-accent/70" aria-hidden>/</span>
+              <span>{currentGroup?.name ?? "Editor"}</span><span className="text-accent/70" aria-hidden>/</span>
+              <span className="text-content-soft" aria-current="page">{currentPage}</span>
+            </nav>
+            <div key={pathname} className="admin-page-enter">{children}</div>
+          </div>
         </main>
       </div>
     </div>

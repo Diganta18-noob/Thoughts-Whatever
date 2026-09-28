@@ -67,7 +67,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
       data-lenis-prevent
       aria-label="Admin sections"
       className={cn(
-        "flex h-full max-h-full min-h-0 flex-col overflow-hidden border-r border-rule bg-surface/90 backdrop-blur w-64 select-none",
+        "admin-sidebar flex h-full max-h-full min-h-0 w-72 select-none flex-col overflow-hidden border-r border-rule bg-surface/90 backdrop-blur",
         className
       )}
     >
@@ -91,7 +91,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
       {/* Navigation Links Scrollable */}
       <nav
         data-lenis-prevent
-        className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-4 space-y-6 scrollbar-thin"
+        className="scrollbar-thin min-h-0 flex-1 space-y-6 overflow-y-auto overscroll-contain px-3 py-5"
       >
         {ADMIN_NAV_GROUPS.map((group) => {
           const isCollapsed = !!collapsedGroups[group.name];
@@ -120,8 +120,8 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
                 </span>
               </Button>
 
-              {!isCollapsed && (
-                <div id={panelId} className="space-y-0.5 pt-0.5">
+              <div className={cn("admin-nav-panel", isCollapsed && "admin-nav-panel-closed")}>
+                <div id={panelId} className="space-y-0.5 overflow-hidden pt-0.5" inert={isCollapsed}>
                   {visibleItems.map((item) => {
                     const active = item.href === activeHref;
 
@@ -132,10 +132,10 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
                         onClick={onClose}
                         aria-current={active ? "page" : undefined}
                         className={cn(
-                          "flex items-center justify-between rounded-card px-2.5 py-1.5 font-sans text-xs transition-all duration-150 border border-transparent",
+                          "admin-nav-link flex items-center justify-between rounded-card border border-transparent px-3 py-2 font-sans text-xs transition-[background-color,color,border-color,transform] duration-200",
                           active
-                            ? "bg-accent/12 font-medium text-accent border-accent/20 shadow-xs"
-                            : "text-content-soft hover:bg-surface-raised hover:text-content"
+                            ? "admin-nav-link-active border-accent/25 bg-accent/12 font-medium text-accent shadow-xs"
+                            : "text-content-soft hover:border-rule hover:bg-surface-raised hover:text-content"
                         )}
                       >
                         <div className="flex items-center gap-2.5 truncate">
@@ -158,7 +158,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
                     );
                   })}
                 </div>
-              )}
+              </div>
             </div>
           );
         })}

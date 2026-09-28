@@ -2627,3 +2627,13 @@ this is the admin dashboard , see the admin portal and detailed understand the a
 ```
 
 OBJECTIVE: Add real Reference activity analytics across the portal, replace fixed dashboard claims, correct misleading metric labels and scroll tracking, and keep the design consistent and efficient.
+
+---
+
+## 2026-09-29 — Admin Portal Visual and Motion Upgrade
+
+```text
+Use Vengeance UI, Skiper UI, Animmaster Lib, and SceneAI to improve the full admin portal UI and animation. Keep it fast and use fewer tokens.
+```
+
+OBJECTIVE: Apply a consistent, professional visual system and restrained animation across shared admin navigation, workspace layout, metric cards, charts, and controls.

@@ -496,3 +496,130 @@ html.lenis body {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* Editor's Room: one visual system shared by every admin route. */
+.admin-workspace {
+  --radius: 12px;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.08), 0 10px 32px rgb(0 0 0 / 0.035);
+}
+
+.admin-topbar {
+  box-shadow: 0 1px 0 rgb(var(--content) / 0.025);
+}
+
+.admin-main {
+  background:
+    radial-gradient(ellipse 68rem 29rem at 78% -14%, rgb(var(--accent) / 0.065), transparent 68%),
+    linear-gradient(180deg, rgb(var(--surface-raised) / 0.025), transparent 30rem);
+}
+
+.admin-sidebar {
+  background-image: linear-gradient(150deg, rgb(var(--surface-raised) / 0.58), transparent 62%);
+}
+
+.admin-sidebar nav > div + div {
+  border-top: 1px solid rgb(var(--rule) / 0.55);
+  padding-top: 1rem;
+}
+
+.admin-nav-panel {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition: grid-template-rows 240ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms ease;
+}
+
+.admin-nav-panel-closed {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+.admin-nav-link:hover {
+  transform: translateX(2px);
+}
+
+.admin-nav-link-active {
+  position: relative;
+}
+
+.admin-nav-link-active::before {
+  position: absolute;
+  left: -0.75rem;
+  top: 22%;
+  bottom: 22%;
+  width: 2px;
+  border-radius: 999px;
+  background: rgb(var(--accent));
+  content: "";
+}
+
+.admin-page-enter {
+  animation: admin-page-enter 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.admin-stat-card::before {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, rgb(var(--accent)), rgb(var(--gold) / 0.75), transparent 85%);
+  transform: scaleX(0.28);
+  transform-origin: left;
+  opacity: 0.55;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms;
+  content: "";
+}
+
+.admin-stat-card:hover::before { transform: scaleX(1); opacity: 1; }
+
+.admin-chart-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: admin-chart-draw 700ms 120ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.admin-chart-area { animation: admin-chart-fill 520ms 320ms ease-out both; }
+
+@keyframes admin-chart-draw { to { stroke-dashoffset: 0; } }
+@keyframes admin-chart-fill { from { opacity: 0; } to { opacity: 1; } }
+
+@keyframes admin-page-enter {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.admin-content :is(section, article, div).rounded-card.border.bg-surface-raised {
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.admin-content :is(section, article, div).rounded-card.border.bg-surface-raised:hover {
+  border-color: rgb(var(--accent) / 0.22);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.09), 0 14px 36px rgb(0 0 0 / 0.065);
+}
+
+.admin-content :is(button, a).bg-accent:hover {
+  filter: brightness(1.06);
+}
+
+.admin-content :is(input, textarea, select):focus-visible {
+  border-color: rgb(var(--accent) / 0.75);
+  box-shadow: 0 0 0 3px rgb(var(--accent) / 0.12);
+}
+
+.admin-content tbody tr {
+  transition: background-color 160ms ease;
+}
+
+.admin-content tbody tr:hover {
+  background-color: rgb(var(--accent) / 0.035);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-page-enter { animation: none; }
+  .admin-nav-panel, .admin-nav-link, .admin-content :is(section, article, div).rounded-card.border.bg-surface-raised,
+  .admin-content tbody tr { transition: none; }
+  .admin-nav-link:hover { transform: none; }
+  .admin-stat-card::before { transition: none; }
+  .admin-chart-line { animation: none; stroke-dashoffset: 0; }
+  .admin-chart-area { animation: none; }
+}

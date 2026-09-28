@@ -74,8 +74,8 @@ export function TrendChart({ data }: TrendChartProps) {
             </linearGradient>
           </defs>
 
-          <path d={areaD} fill="url(#chartGradient)" />
-          <path d={pathD} fill="none" stroke="rgb(var(--accent))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d={areaD} fill="url(#chartGradient)" className="admin-chart-area" />
+          <path d={pathD} fill="none" stroke="rgb(var(--accent))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="admin-chart-line" pathLength={1} />
 
           {/* Data Points */}
           {points.map((p, idx) => (
