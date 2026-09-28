@@ -115,7 +115,7 @@ export async function generateAnalyticsReport(): Promise<AnalyticsSummary> {
     prisma.analyticsEvent.count({ where: { eventType: "view", createdAt: { gte: thirtyDaysAgo } } }),
     prisma.analyticsEvent.groupBy({ by: ["sessionId"], where: { createdAt: { gte: thirtyDaysAgo } } }),
     prisma.piece.count({ where: { status: "PUBLISHED" } }),
-    prisma.subscriber.count({ where: { unsubscribedAt: null } }),
+    prisma.subscriber.count({ where: { unsubscribedAt: null, confirmed: true } }),
     prisma.analyticsEvent.count({
       where: { eventType: { in: ["instagram_click", "reel_click"] }, createdAt: { gte: thirtyDaysAgo } },
     }),

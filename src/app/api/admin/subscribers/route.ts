@@ -4,9 +4,8 @@ import { guard } from "@/lib/admin-api";
 /**
  * The subscriber list as CSV.
  *
- * There is no sending machinery in this project — the চিঠি goes out from
- * whatever mail tool the publisher already uses. So the useful admin feature is
- * not a dashboard chart, it is a clean export.
+ * Editorial letters are sent by the publisher's mail tool. Export only
+ * confirmed, active subscribers.
  */
 
 export const runtime = "nodejs";
@@ -21,7 +20,7 @@ export async function GET() {
   if ("response" in gate) return gate.response;
 
   const subscribers = await prisma.subscriber.findMany({
-    where: { unsubscribedAt: null },
+    where: { unsubscribedAt: null, confirmed: true },
     select: { email: true, nameBn: true, source: true, createdAt: true },
     orderBy: { createdAt: "asc" },
   });

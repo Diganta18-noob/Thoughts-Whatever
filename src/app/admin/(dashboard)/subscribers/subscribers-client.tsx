@@ -10,14 +10,17 @@ type SubscriberRow = {
   source: string | null;
   createdAt: Date | string;
   unsubscribedAt: Date | string | null;
+  confirmed: boolean;
 };
 
 export function SubscribersClient({
   active,
+  pending,
   gone,
   recent,
 }: {
   active: number;
+  pending: number;
   gone: number;
   recent: SubscriberRow[];
 }) {
@@ -51,6 +54,7 @@ export function SubscribersClient({
         {gone > 0 && (
           <> {t("admin.subscribers.unsubscribed", { count: gone })}</>
         )}
+        {pending > 0 && <> {toBengaliNumber(pending)} awaiting email confirmation.</>}
       </p>
 
       <ul className="mt-8 divide-y divide-rule border-y border-rule">
@@ -71,6 +75,9 @@ export function SubscribersClient({
               <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-accent">
                 left
               </span>
+            )}
+            {!subscriber.unsubscribedAt && !subscriber.confirmed && (
+              <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-content-faint">pending</span>
             )}
             <span className="ml-auto flex items-center gap-4 font-mono text-[0.6875rem] text-content-faint">
               {subscriber.source && <span>{subscriber.source}</span>}

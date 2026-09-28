@@ -20,6 +20,8 @@ type State = "idle" | "sending" | "done" | "error";
  */
 const CODES: Record<string, TranslationKey> = {
   subscribed: "letter.msg.subscribed",
+  checkInbox: "letter.msg.checkInbox",
+  sendFailed: "letter.msg.sendFailed",
   invalidEmail: "letter.msg.invalidEmail",
   unreadable: "letter.msg.unreadable",
   saveFailed: "letter.msg.saveFailed",

@@ -65,7 +65,7 @@ export async function getOverviewStats(period: Period = "30d") {
           FROM "AnalyticsEvent"
         `,
     prisma.piece.count({ where: { status: "PUBLISHED" } }),
-    prisma.subscriber.count({ where: { unsubscribedAt: null } }),
+    prisma.subscriber.count({ where: { unsubscribedAt: null, confirmed: true } }),
     prisma.analyticsEvent.count({
       where: {
         eventType: { in: ["instagram_click", "reel_click"] },

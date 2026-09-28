@@ -85,6 +85,7 @@ export async function GET() {
           current = await prisma.subscriber.count({
             where: {
               unsubscribedAt: null,
+              confirmed: true,
               ...(!isCumulative && g.startDate ? { createdAt: { gte: g.startDate, lte: g.endDate } } : {}),
             },
           });

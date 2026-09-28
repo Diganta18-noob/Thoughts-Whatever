@@ -6,8 +6,9 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Letter" };
 
 export default async function SubscribersPage() {
-  const [active, gone, recent] = await Promise.all([
-    prisma.subscriber.count({ where: { unsubscribedAt: null } }),
+  const [active, pending, gone, recent] = await Promise.all([
+    prisma.subscriber.count({ where: { unsubscribedAt: null, confirmed: true } }),
+    prisma.subscriber.count({ where: { unsubscribedAt: null, confirmed: false } }),
     prisma.subscriber.count({ where: { unsubscribedAt: { not: null } } }),
     prisma.subscriber.findMany({
       select: {
@@ -17,11 +18,12 @@ export default async function SubscribersPage() {
         source: true,
         createdAt: true,
         unsubscribedAt: true,
+        confirmed: true,
       },
       orderBy: { createdAt: "desc" },
       take: 100,
     }),
   ]);
 
-  return <SubscribersClient active={active} gone={gone} recent={recent} />;
+  return <SubscribersClient active={active} pending={pending} gone={gone} recent={recent} />;
 }

@@ -11,6 +11,7 @@ async function main() {
     'only 15% limit is left so donot use much token and tell me how i can improve my admin portal more with more feature and more production ability',
     'do it and use very less token',
     'My computer went to sleep while you were working. Please continue from where you left off.',
+    'the letter section is not wokring means try to make it work after enterring mail addressh nothing happen',
   ];
   let inserted=0;
   for(const item of prompts) {

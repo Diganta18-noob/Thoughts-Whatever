@@ -2607,3 +2607,13 @@ My computer went to sleep while you were working. Please continue from where you
 ```
 
 OBJECTIVE: Improve production build checks, admin authorization, editorial scheduling, job execution safety, and operational readiness while keeping responses brief.
+
+---
+
+## 2026-09-28 — Letter Signup Delivery Fix
+
+```text
+the letter section is not wokring means try to make it work after enterring mail addressh nothing happen
+```
+
+OBJECTIVE: Make letter signup send an actual confirmation email, require explicit confirmation, surface delivery failures, and distinguish pending from confirmed subscribers in admin exports.
