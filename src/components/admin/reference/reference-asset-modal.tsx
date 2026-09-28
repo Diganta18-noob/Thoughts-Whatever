@@ -5,6 +5,7 @@ import { ReferenceAssetKind, ReferenceRightsStatus } from "@prisma/client";
 import { UploadCloud, X, Loader2, AlertCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import { Button, Input, NativeSelect, Textarea } from "@/components/ui";
+import { MediaPicker } from "@/components/admin/media-picker";
 
 interface ReferenceAssetModalProps {
   isOpen: boolean;
@@ -33,6 +34,7 @@ export function ReferenceAssetModal({
   const [isDownloadable, setIsDownloadable] = useState(true);
   const [isOnlineReadable, setIsOnlineReadable] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   if (!isOpen) return null;
 
@@ -175,6 +177,8 @@ export function ReferenceAssetModal({
                 value={fileUrl}
                 onChange={(e) => setFileUrl(e.target.value)}
               />
+              <button type="button" onClick={() => setPickerOpen(true)} className="mt-2 text-xs text-accent underline">Choose from Media Library</button>
+              {pickerOpen && <MediaPicker type={kind === "AUDIO" ? "audio" : kind === "SCAN_IMAGE" ? "image" : "document"} onClose={() => setPickerOpen(false)} onSelect={(asset) => { setFileUrl(asset.url); setMimeType(asset.mimeType); if (!title) setTitle(asset.filename); }} />}
             </div>
 
             {kind === "AUDIO" && (

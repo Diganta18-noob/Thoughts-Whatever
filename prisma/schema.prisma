@@ -136,6 +136,7 @@ model Media {
   url          String
   altText      String?
   caption      String?
+  metadata     Json?
   uploadedBy   String?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt

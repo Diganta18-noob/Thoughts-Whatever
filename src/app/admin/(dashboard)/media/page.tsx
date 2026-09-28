@@ -19,12 +19,15 @@ import {
   RefreshCw,
   FileText,
   Video,
+  Music2,
   X,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { confirmToast } from "@/lib/confirm-toast";
 import { Button, TBody, TD, TH, THead, TR } from "@/components/ui";
+import { uploadMediaDirect } from "@/lib/media-upload-client";
+import { mediaCategory } from "@/lib/media-policy";
 
 interface MediaItem {
   id: string;
@@ -37,6 +40,7 @@ interface MediaItem {
   url: string;
   altText?: string | null;
   caption?: string | null;
+  metadata?: { duration?: number | null; credit?: string; license?: string; source?: string; tags?: string[]; focalX?: number; focalY?: number } | null;
   uploadedBy?: string | null;
   usageCount: number;
   usages: Array<{
@@ -49,11 +53,19 @@ interface MediaItem {
   createdAt: string;
 }
 
+function variantUrl(media: MediaItem, width: number, height: number) {
+  if (!media.mimeType.startsWith("image/") || media.mimeType === "image/svg+xml" || !media.url.includes("/image/upload/")) return null;
+  const x = Math.round((media.width || width) * (media.metadata?.focalX ?? 50) / 100);
+  const y = Math.round((media.height || height) * (media.metadata?.focalY ?? 50) / 100);
+  return media.url.replace("/image/upload/", `/image/upload/c_fill,g_xy_center,x_${x},y_${y},w_${width},h_${height},f_auto,q_auto/`);
+}
+
 export default function MediaLibraryPage() {
   const [items, setItems] = useState<MediaItem[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [uploadQueue, setUploadQueue] = useState<Array<{ file: File; status: "uploading" | "done" | "error"; progress: number; error?: string }>>([]);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // Filters
@@ -61,6 +73,7 @@ export default function MediaLibraryPage() {
   const [unusedOnly, setUnusedOnly] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState("createdAt:desc");
 
   // Selected item for details slide-over
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
@@ -68,6 +81,12 @@ export default function MediaLibraryPage() {
   const [savingMetadata, setSavingMetadata] = useState(false);
   const [editAltText, setEditAltText] = useState("");
   const [editCaption, setEditCaption] = useState("");
+  const [editCredit, setEditCredit] = useState("");
+  const [editLicense, setEditLicense] = useState("");
+  const [editSource, setEditSource] = useState("");
+  const [editTags, setEditTags] = useState("");
+  const [editFocalX, setEditFocalX] = useState(50);
+  const [editFocalY, setEditFocalY] = useState(50);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -80,6 +99,8 @@ export default function MediaLibraryPage() {
         type: filterType,
         search,
         unused: unusedOnly ? "true" : "false",
+        sortBy: sort.split(":")[0],
+        sortOrder: sort.split(":")[1],
       });
 
       const res = await fetch(`/api/admin/media?${params}`);
@@ -93,7 +114,7 @@ export default function MediaLibraryPage() {
     } finally {
       setLoading(false);
     }
-  }, [filterType, unusedOnly, search, page]);
+  }, [filterType, unusedOnly, search, page, sort]);
 
   useEffect(() => {
     fetchMedia();
@@ -103,6 +124,12 @@ export default function MediaLibraryPage() {
     if (selectedMedia) {
       setEditAltText(selectedMedia.altText || "");
       setEditCaption(selectedMedia.caption || "");
+      setEditCredit(selectedMedia.metadata?.credit || "");
+      setEditLicense(selectedMedia.metadata?.license || "");
+      setEditSource(selectedMedia.metadata?.source || "");
+      setEditTags(selectedMedia.metadata?.tags?.join(", ") || "");
+      setEditFocalX(selectedMedia.metadata?.focalX ?? 50);
+      setEditFocalY(selectedMedia.metadata?.focalY ?? 50);
     }
   }, [selectedMedia]);
 
@@ -110,21 +137,16 @@ export default function MediaLibraryPage() {
     if (!files.length) return;
     setUploading(true);
 
+    const queued = Array.from(files).map((file) => ({ file, status: "uploading" as const, progress: 0 }));
+    setUploadQueue(queued);
     let successCount = 0;
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const formData = new FormData();
-      formData.append("file", file);
-
+    for (const file of Array.from(files)) {
       try {
-        const res = await fetch("/api/admin/media", {
-          method: "POST",
-          body: formData,
-        });
-        const data = await res.json();
-        if (data.ok) successCount++;
-      } catch {
-        console.error("Upload failed for:", file.name);
+        await uploadMediaDirect(file, (progress) => setUploadQueue((previous) => previous.map((item) => item.file === file ? { ...item, progress } : item)));
+        setUploadQueue((previous) => previous.map((item) => item.file === file ? { ...item, status: "done", progress: 100 } : item));
+        successCount++;
+      } catch (error) {
+        setUploadQueue((previous) => previous.map((item) => item.file === file ? { ...item, status: "error", error: error instanceof Error ? error.message : "Upload failed" } : item));
       }
     }
 
@@ -133,7 +155,7 @@ export default function MediaLibraryPage() {
       toast.success(`Successfully uploaded ${successCount} file(s)`);
       fetchMedia();
     } else {
-      toast.error("Upload failed");
+      toast.error("Upload failed. See file errors below.");
     }
   };
 
@@ -147,12 +169,16 @@ export default function MediaLibraryPage() {
         body: JSON.stringify({
           altText: editAltText,
           caption: editCaption,
+          metadata: { ...selectedMedia.metadata, credit: editCredit, license: editLicense, source: editSource,
+            tags: editTags.split(",").map((tag) => tag.trim()).filter(Boolean), focalX: editFocalX, focalY: editFocalY },
         }),
       });
       const data = await res.json();
       if (data.ok) {
         toast.success("Metadata updated");
-        setSelectedMedia({ ...selectedMedia, altText: editAltText, caption: editCaption });
+        setSelectedMedia({ ...selectedMedia, altText: editAltText, caption: editCaption,
+          metadata: { ...selectedMedia.metadata, credit: editCredit, license: editLicense, source: editSource,
+            tags: editTags.split(",").map((tag) => tag.trim()).filter(Boolean), focalX: editFocalX, focalY: editFocalY } });
         fetchMedia();
       } else {
         toast.error("Failed to update metadata");
@@ -164,9 +190,9 @@ export default function MediaLibraryPage() {
     }
   };
 
-  const executeDeleteMedia = async (media: MediaItem, force = false) => {
+  const executeDeleteMedia = async (media: MediaItem) => {
     try {
-      const res = await fetch(`/api/admin/media/${media.id}?force=${force ? "true" : "false"}`, {
+      const res = await fetch(`/api/admin/media/${media.id}`, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -182,17 +208,17 @@ export default function MediaLibraryPage() {
     }
   };
 
-  const handleDeleteMedia = (media: MediaItem, force = false) => {
-    if (media.usageCount > 0 && !force) {
+  const handleDeleteMedia = (media: MediaItem) => {
+    if (media.usageCount > 0) {
       confirmToast(
-        `WARNING: This file is currently used in ${media.usageCount} place(s) (e.g. "${media.usages[0]?.entityTitle || "content"}"). Deleting it will result in broken images on live articles. Do you wish to force delete?`,
-        () => executeDeleteMedia(media, true),
-        { title: "Force Delete Media", confirmLabel: "Force Delete", variant: "danger" }
+        `This file is used in ${media.usageCount} place(s). Remove those references before deleting it.`,
+        () => setSelectedMedia(media),
+        { title: "Asset In Use", confirmLabel: "View References" }
       );
     } else {
       confirmToast(
         `Are you sure you want to delete "${media.filename}"?`,
-        () => executeDeleteMedia(media, force),
+        () => executeDeleteMedia(media),
         { title: "Delete Media Asset", confirmLabel: "Delete Asset", variant: "danger" }
       );
     }
@@ -265,7 +291,7 @@ export default function MediaLibraryPage() {
             ref={fileInputRef}
             type="file"
             multiple
-            accept="image/*,video/*,application/pdf"
+            accept="image/jpeg,image/png,image/webp,image/avif,image/gif,image/svg+xml,audio/*,video/mp4,video/webm,video/quicktime,application/pdf,text/plain,.docx,.epub"
             className="hidden"
             onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
           />
@@ -286,16 +312,34 @@ export default function MediaLibraryPage() {
           }
         }}
         onClick={() => fileInputRef.current?.click()}
-        className="cursor-pointer border-2 border-dashed border-rule/80 hover:border-accent/60 rounded-card bg-surface-raised/40 p-6 text-center transition group"
+        onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); fileInputRef.current?.click(); } }}
+        role="button"
+        tabIndex={0}
+        aria-label="Choose media files to upload"
+        className="group cursor-pointer rounded-card border-2 border-dashed border-rule/80 bg-surface-raised/40 p-6 text-center transition hover:border-accent/60"
       >
         <UploadCloud className="h-8 w-8 text-content-faint group-hover:text-accent mx-auto mb-2 transition" />
         <p className="font-serif text-sm text-content">
-          Drag & Drop images or files here, or <span className="text-accent underline">browse</span>
+          Drag & Drop media here, or <span className="text-accent underline">browse</span>
         </p>
         <p className="font-sans text-[11px] text-content-soft mt-1">
-          Supports PNG, JPG, WebP, SVG, MP4, and PDF (Max 25MB per file)
+          Images and documents up to 25 MB; audio and video up to 95 MB. Files upload directly to cloud storage.
         </p>
       </div>
+
+      {uploadQueue.length > 0 && (
+        <div className="space-y-2 rounded-card border border-rule bg-surface-raised p-4" role="status" aria-live="polite">
+          <div className="flex items-center justify-between"><span className="label">Upload queue</span><button type="button" className="text-xs text-content-soft hover:text-accent" onClick={() => setUploadQueue([])}>Clear</button></div>
+          {uploadQueue.map((item, index) => (
+            <div key={`${item.file.name}-${index}`} className="flex items-center gap-3 text-xs">
+              <span className="min-w-0 flex-1 truncate text-content">{item.file.name}</span>
+              <div className="h-1.5 w-24 overflow-hidden rounded-full bg-rule"><div className="h-full bg-accent transition-[width]" style={{ width: `${item.progress}%` }} /></div>
+              <span className={item.status === "error" ? "max-w-52 text-danger" : "w-10 text-right text-content-soft"}>{item.status === "error" ? item.error : item.status === "done" ? "Done" : `${item.progress}%`}</span>
+              {item.status === "error" && <button type="button" className="text-accent underline" onClick={() => handleFileUpload([item.file])}>Retry</button>}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Controls & Filters */}
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -304,6 +348,7 @@ export default function MediaLibraryPage() {
           {[
             { id: "all", label: "All Assets" },
             { id: "image", label: "Images" },
+            { id: "audio", label: "Audio" },
             { id: "video", label: "Videos" },
             { id: "document", label: "Documents" },
           ].map((t) => (
@@ -319,6 +364,7 @@ export default function MediaLibraryPage() {
                   ? "bg-surface font-semibold text-content shadow-card"
                   : "text-content-soft hover:text-content"
               )}
+              aria-pressed={filterType === t.id}
             >
               {t.label}
             </button>
@@ -353,6 +399,11 @@ export default function MediaLibraryPage() {
               className="pl-8 pr-3 py-1.5 text-xs rounded-card border border-rule bg-surface font-sans text-content placeholder:text-content-faint focus:border-accent focus:outline-none w-48 sm:w-60"
             />
           </div>
+
+          <select aria-label="Sort assets" value={sort} onChange={(event) => { setSort(event.target.value); setPage(1); }} className="rounded-card border border-rule bg-surface px-2 py-1.5 text-xs text-content">
+            <option value="createdAt:desc">Newest</option><option value="createdAt:asc">Oldest</option>
+            <option value="filename:asc">Name A–Z</option><option value="sizeBytes:desc">Largest</option>
+          </select>
 
           <div className="flex items-center border border-rule rounded-card bg-surface-raised overflow-hidden">
             <button
@@ -425,6 +476,8 @@ export default function MediaLibraryPage() {
                     />
                   ) : media.mimeType.startsWith("video/") ? (
                     <Video className="h-8 w-8 text-content-faint" />
+                  ) : media.mimeType.startsWith("audio/") ? (
+                    <Music2 className="h-8 w-8 text-accent" />
                   ) : (
                     <FileText className="h-8 w-8 text-content-faint" />
                   )}
@@ -447,7 +500,8 @@ export default function MediaLibraryPage() {
                     {media.filename}
                   </p>
                   <p className="font-mono text-[10px] text-content-faint">
-                    {formatBytes(media.sizeBytes)}
+                    {mediaCategory(media.mimeType)} · {formatBytes(media.sizeBytes)}{media.width && media.height ? ` · ${media.width}×${media.height}` : ""}
+                    {media.metadata?.duration ? ` · ${Math.round(media.metadata.duration)}s` : ""}
                   </p>
                 </div>
               </div>
@@ -456,7 +510,7 @@ export default function MediaLibraryPage() {
         </div>
       ) : (
         /* List View */
-        <div className="rounded-card border border-rule bg-surface-raised overflow-hidden">
+        <div className="overflow-x-auto rounded-card border border-rule bg-surface-raised">
           <table className="w-full text-left font-sans text-xs">
             <THead>
               <TR className="border-b border-rule bg-surface/60 text-[10px] uppercase tracking-wider text-content-faint font-mono">
@@ -486,6 +540,10 @@ export default function MediaLibraryPage() {
                           className="h-full w-full object-cover"
                           unoptimized
                         />
+                      ) : media.mimeType.startsWith("audio/") ? (
+                        <Music2 className="h-4 w-4 text-accent" />
+                      ) : media.mimeType.startsWith("video/") ? (
+                        <Video className="h-4 w-4 text-content-faint" />
                       ) : (
                         <FileText className="h-4 w-4 text-content-faint" />
                       )}
@@ -529,6 +587,12 @@ export default function MediaLibraryPage() {
         </div>
       )}
 
+      {total > 24 && <nav aria-label="Media pages" className="flex items-center justify-center gap-3 text-xs text-content-soft">
+        <button type="button" disabled={page === 1} onClick={() => setPage((value) => value - 1)} className="rounded-card border border-rule px-3 py-1.5 disabled:opacity-40">Previous</button>
+        <span>Page {page} of {Math.ceil(total / 24)}</span>
+        <button type="button" disabled={page >= Math.ceil(total / 24)} onClick={() => setPage((value) => value + 1)} className="rounded-card border border-rule px-3 py-1.5 disabled:opacity-40">Next</button>
+      </nav>}
+
       {/* Media Details Slide-Over Panel */}
       {selectedMedia && (
         <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-surface border-l border-rule shadow-2xl p-6 overflow-y-auto space-y-6 animate-slide-in">
@@ -554,8 +618,12 @@ export default function MediaLibraryPage() {
                 className="object-contain"
                 unoptimized
               />
+            ) : selectedMedia.mimeType.startsWith("audio/") ? (
+              <audio controls preload="metadata" src={selectedMedia.url} className="w-[90%]" aria-label={`Play ${selectedMedia.filename}`} />
+            ) : selectedMedia.mimeType.startsWith("video/") ? (
+              <video controls preload="metadata" src={selectedMedia.url} className="h-full w-full object-contain" aria-label={`Play ${selectedMedia.filename}`} />
             ) : (
-              <FileText className="h-12 w-12 text-content-faint" />
+              <a href={selectedMedia.url} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 text-accent hover:underline"><FileText className="h-12 w-12" /><span className="text-xs">Open or download document</span></a>
             )}
           </div>
 
@@ -605,6 +673,8 @@ export default function MediaLibraryPage() {
               <span className="text-content-faint">Type:</span>
               <span className="text-content">{selectedMedia.mimeType}</span>
             </div>
+            {selectedMedia.width && selectedMedia.height && <div className="flex justify-between"><span className="text-content-faint">Dimensions:</span><span className="text-content">{selectedMedia.width} × {selectedMedia.height} ({selectedMedia.width > selectedMedia.height ? "landscape" : selectedMedia.width < selectedMedia.height ? "portrait" : "square"})</span></div>}
+            {selectedMedia.metadata?.duration && <div className="flex justify-between"><span className="text-content-faint">Duration:</span><span className="text-content">{Math.round(selectedMedia.metadata.duration)} seconds</span></div>}
             <div className="flex justify-between">
               <span className="text-content-faint">Uploaded by:</span>
               <span className="text-content">{selectedMedia.uploadedBy || "Admin"}</span>
@@ -642,6 +712,16 @@ export default function MediaLibraryPage() {
                 className="w-full p-2 rounded-card border border-rule bg-surface font-sans text-content focus:border-accent focus:outline-none"
               />
             </div>
+            <div className="grid grid-cols-2 gap-3">
+              <label className="space-y-1"><span className="label">Credit</span><input value={editCredit} onChange={(e) => setEditCredit(e.target.value)} className="w-full rounded-card border border-rule bg-surface p-2 text-content" placeholder="Creator" /></label>
+              <label className="space-y-1"><span className="label">License</span><input value={editLicense} onChange={(e) => setEditLicense(e.target.value)} className="w-full rounded-card border border-rule bg-surface p-2 text-content" placeholder="Usage rights" /></label>
+            </div>
+            <label className="block space-y-1"><span className="label">Source URL</span><input value={editSource} onChange={(e) => setEditSource(e.target.value)} className="w-full rounded-card border border-rule bg-surface p-2 text-content" placeholder="https://…" /></label>
+            <label className="block space-y-1"><span className="label">Tags</span><input value={editTags} onChange={(e) => setEditTags(e.target.value)} className="w-full rounded-card border border-rule bg-surface p-2 text-content" placeholder="Comma-separated tags" /></label>
+            {selectedMedia.mimeType.startsWith("image/") && <div className="grid grid-cols-2 gap-3">
+              <label className="space-y-1"><span className="label">Focal X (%)</span><input type="number" min="0" max="100" value={editFocalX} onChange={(e) => setEditFocalX(Number(e.target.value))} className="w-full rounded-card border border-rule bg-surface p-2 text-content" /></label>
+              <label className="space-y-1"><span className="label">Focal Y (%)</span><input type="number" min="0" max="100" value={editFocalY} onChange={(e) => setEditFocalY(Number(e.target.value))} className="w-full rounded-card border border-rule bg-surface p-2 text-content" /></label>
+            </div>}
 
             <button
               type="button"
@@ -652,6 +732,19 @@ export default function MediaLibraryPage() {
               {savingMetadata ? "Saving..." : "Save Metadata"}
             </button>
           </div>
+
+          {selectedMedia.mimeType.startsWith("image/") && selectedMedia.mimeType !== "image/svg+xml" && (
+            <div className="space-y-2 border-t border-rule pt-4">
+              <span className="label">Image variants</span>
+              <p className="text-xs text-content-soft">Generated on demand; the original stays unchanged. Save the focal point first.</p>
+              <div className="flex flex-wrap gap-2 text-xs">
+                {([ ["Landscape", 1200, 675], ["Portrait", 800, 1200], ["Square", 800, 800], ["Social", 1200, 630] ] as const).map(([name, width, height]) => {
+                  const url = variantUrl(selectedMedia, width, height);
+                  return url ? <a key={name} href={url} target="_blank" rel="noopener noreferrer" className="rounded-card border border-rule px-2.5 py-1.5 text-content-soft hover:border-accent hover:text-accent">{name}</a> : null;
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Usage Tracking Section */}
           <div className="border-t border-rule pt-4 space-y-3 font-sans text-xs">

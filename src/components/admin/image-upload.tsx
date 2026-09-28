@@ -5,6 +5,8 @@ import { Upload, X, Loader2, Check, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatErrorMessage } from "@/lib/error-formatter";
 import { Input } from "@/components/ui";
+import { MediaPicker } from "@/components/admin/media-picker";
+import { uploadMediaDirect } from "@/lib/media-upload-client";
 
 interface ImageUploadProps {
   value?: string;
@@ -70,7 +72,6 @@ export function ImageUpload({
   value,
   onChange,
   label = "Upload Image",
-  folder = "covers",
   maxSizeMB = 10,
   aspectRatio,
 }: ImageUploadProps) {
@@ -78,6 +79,7 @@ export function ImageUpload({
   const [error, setError] = useState("");
   const [preview, setPreview] = useState<string | null>(value || null);
   const [dragActive, setDragActive] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const validateFile = useCallback(
@@ -105,33 +107,9 @@ export function ImageUpload({
         // Compress image client-side before uploading
         const compressedFile = await compressImage(file);
 
-        const formData = new FormData();
-        formData.append("file", compressedFile);
-        formData.append("folder", folder);
-
-        const response = await fetch("/api/admin/upload", {
-          method: "POST",
-          body: formData,
-        });
-
-        const contentType = response.headers.get("content-type") || "";
-        let data: { ok?: boolean; url?: string; error?: string; width?: number; height?: number };
-
-        if (contentType.includes("application/json")) {
-          data = await response.json();
-        } else {
-          if (response.status === 401 || response.status === 403) {
-            throw new Error("Session expired. Please refresh the page and sign in again.");
-          }
-          throw new Error(`Upload server error (${response.status}). Please try again.`);
-        }
-
-        if (!response.ok || !data.ok || !data.url) {
-          throw new Error(data.error || "Upload failed");
-        }
-
-        setPreview(data.url);
-        onChange(data.url, { width: data.width, height: data.height });
+        const media = await uploadMediaDirect(compressedFile, () => {});
+        setPreview(media.url);
+        onChange(media.url, { width: media.width, height: media.height });
       } catch (err) {
         setError(formatErrorMessage(err));
         setPreview(null);
@@ -139,7 +117,7 @@ export function ImageUpload({
         setUploading(false);
       }
     },
-    [folder, onChange]
+    [onChange]
   );
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -278,6 +256,9 @@ export function ImageUpload({
           <span>{error}</span>
         </div>
       )}
+
+      <button type="button" onClick={() => setPickerOpen(true)} className="mt-3 rounded-card border border-rule px-3 py-2 text-xs text-content-soft transition hover:border-accent hover:text-accent">Choose from Media Library</button>
+      {pickerOpen && <MediaPicker type="image" onClose={() => setPickerOpen(false)} onSelect={(asset) => { setPreview(asset.url); onChange(asset.url, { width: asset.width || undefined, height: asset.height || undefined }); }} />}
 
       {!preview && !uploading && (
         <details className="mt-3">

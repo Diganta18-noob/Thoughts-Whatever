@@ -10,6 +10,7 @@ import {
 import { BookOpen, X, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { Button, Input, NativeSelect, Textarea } from "@/components/ui";
+import { MediaPicker } from "@/components/admin/media-picker";
 
 interface ReferenceEditorModalProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ export function ReferenceEditorModal({
   const [activeTab, setActiveTab] = useState<"basic" | "edition" | "source" | "rights">("basic");
   const [authors, setAuthors] = useState<Array<{ id: string; nameBn: string; slug: string }>>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [coverPickerOpen, setCoverPickerOpen] = useState(false);
 
   // Form fields
   const [titleBn, setTitleBn] = useState("");
@@ -545,6 +547,8 @@ export function ReferenceEditorModal({
                   value={coverImage}
                   onChange={(e) => setCoverImage(e.target.value)}
                 />
+                <button type="button" onClick={() => setCoverPickerOpen(true)} className="mt-2 text-xs text-accent underline">Choose from Media Library</button>
+                {coverPickerOpen && <MediaPicker type="image" onClose={() => setCoverPickerOpen(false)} onSelect={(asset) => setCoverImage(asset.url)} />}
               </div>
 
               <div>

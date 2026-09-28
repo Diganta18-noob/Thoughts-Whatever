@@ -48,6 +48,7 @@ export async function PUT(req: NextRequest, props: RouteProps) {
         altText: body.altText,
         caption: body.caption,
         filename: body.filename,
+        metadata: body.metadata,
       },
       admin
     );
@@ -71,11 +72,8 @@ export async function DELETE(req: NextRequest, props: RouteProps) {
     return NextResponse.json({ ok: false, error: "id_required" }, { status: 400 });
   }
 
-  const { searchParams } = new URL(req.url);
-  const force = searchParams.get("force") === "true";
-
   try {
-    const result = await deleteMediaRecord(id, admin, force);
+    const result = await deleteMediaRecord(id, admin);
     return NextResponse.json(result);
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err.message }, { status: 400 });

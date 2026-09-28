@@ -3,6 +3,7 @@ import { requireAdmin, requirePermission } from "@/lib/auth";
 import { getMediaList, createMediaRecord, deleteMediaRecord, uploadMediaBuffer } from "@/lib/media";
 import { logAuditEvent } from "@/lib/audit";
 import { logActivity } from "@/lib/activity";
+import { validateMediaFile } from "@/lib/media-policy";
 
 export async function GET(req: NextRequest) {
   const admin = await requireAdmin();
@@ -16,8 +17,9 @@ export async function GET(req: NextRequest) {
   const unusedOnly = searchParams.get("unused") === "true";
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = parseInt(searchParams.get("limit") || "24", 10);
-  const sortBy = (searchParams.get("sortBy") as any) || "createdAt";
-  const sortOrder = (searchParams.get("sortOrder") as any) || "desc";
+  const requestedSort = searchParams.get("sortBy");
+  const sortBy = requestedSort === "filename" || requestedSort === "sizeBytes" ? requestedSort : "createdAt";
+  const sortOrder = searchParams.get("sortOrder") === "asc" ? "asc" : "desc";
 
   const data = await getMediaList({
     type,
@@ -39,6 +41,9 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    if (Number(req.headers.get("content-length") || 0) > 4_000_000) {
+      return NextResponse.json({ ok: false, error: "Use direct upload for files over 4 MB" }, { status: 413 });
+    }
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
     const altText = (formData.get("altText") as string) || "";
@@ -53,6 +58,9 @@ export async function POST(req: NextRequest) {
     const mimeType = file.type || "application/octet-stream";
     const sizeBytes = buffer.length;
     const originalName = file.name || `upload-${Date.now()}`;
+    const validationError = validateMediaFile(originalName, mimeType, sizeBytes);
+    if (validationError) return NextResponse.json({ ok: false, error: validationError }, { status: 400 });
+    if (sizeBytes > 4_000_000) return NextResponse.json({ ok: false, error: "Use direct upload for files over 4 MB" }, { status: 413 });
 
     // Upload using standard image handler or base64 storage
     const uploadResult = await uploadMediaBuffer(buffer, originalName, mimeType);
@@ -105,13 +113,12 @@ export async function DELETE(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-    const force = searchParams.get("force") === "true";
 
     if (!id) {
       return NextResponse.json({ ok: false, error: "id_required" }, { status: 400 });
     }
 
-    const result = await deleteMediaRecord(id, admin, force);
+    const result = await deleteMediaRecord(id, admin);
     return NextResponse.json(result);
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err.message }, { status: 400 });
