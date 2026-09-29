@@ -6,6 +6,7 @@ import path from "path";
 import { v2 as cloudinary } from "cloudinary";
 import { PieceKind, TagKind } from "@prisma/client";
 import { prisma } from "../src/lib/prisma";
+import { syncAllMediaUsage } from "../src/lib/media";
 import { bengaliSlug, readingMinutes } from "../src/lib/bengali";
 import { deriveExcerpt, extractHeadings } from "../src/lib/markdown";
 import {
@@ -22,6 +23,7 @@ import sharp from "sharp";
 const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
 const apiKey = process.env.CLOUDINARY_API_KEY;
 const apiSecret = process.env.CLOUDINARY_API_SECRET;
+const uploadedImageDetails = new Map<string, { width: number; height: number; sizeBytes: number }>();
 
 if (cloudName && apiKey && apiSecret) {
   cloudinary.config({
@@ -77,11 +79,75 @@ const KNOWN_REEL_METADATA: Record<string, { reelUrl: string; publishedAt: string
   "চিত্ত যেথা ভয় শূন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
   "চিত্ত যেথা ভয়শূন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
   "চিত্ত যেথা ভয়শূন্য": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Db8gHrhNLUc/", publishedAt: "2026-08-12T00:00:00.000Z" },
+  "গগনেন্দ্রনাথ-ঠাকুর": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcOZCMTAgyC/", publishedAt: "2026-08-19T00:00:00.000Z" },
+
+  // Alaler Ghorer Dulal
+  "আলালের-ঘরের-দুলাল-1": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcTvo9Qsxkj/", publishedAt: "2026-08-21T00:00:00.000Z" },
+  "আলালের ঘরের দুলাল - পর্ব-১": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcTvo9Qsxkj/", publishedAt: "2026-08-21T00:00:00.000Z" },
+  "আলালের ঘরের দুলাল | পর্ব-১": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcTvo9Qsxkj/", publishedAt: "2026-08-21T00:00:00.000Z" },
+  "আলালের ঘরের দুলাল": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcTvo9Qsxkj/", publishedAt: "2026-08-21T00:00:00.000Z" },
+  "আলালের-ঘরের-দুলাল-2": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcWRlfxADPL/", publishedAt: "2026-08-22T00:00:00.000Z" },
+  "আলালের ঘরের দুলাল - পর্ব-২": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcWRlfxADPL/", publishedAt: "2026-08-22T00:00:00.000Z" },
+  "আলালের ঘরের দুলাল | পর্ব-২": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcWRlfxADPL/", publishedAt: "2026-08-22T00:00:00.000Z" },
+  "আলালের-ঘরের-দুলাল-3": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcY0U27gN0h/", publishedAt: "2026-08-23T00:00:00.000Z" },
+  "আলালের ঘরের দুলাল - অন্তিম পর্ব": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcY0U27gN0h/", publishedAt: "2026-08-23T00:00:00.000Z" },
+  "আলালের ঘরের দুলাল | অন্তিম পর্ব": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcY0U27gN0h/", publishedAt: "2026-08-23T00:00:00.000Z" },
+
+  // Kamalakanta's Daptar
+  "কমলাকান্তের-দপ্তর-1": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcltCHMg8Xg/", publishedAt: "2026-08-28T00:00:00.000Z" },
+  "কমলাকান্তের দপ্তর পর্ব -১": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcltCHMg8Xg/", publishedAt: "2026-08-28T00:00:00.000Z" },
+  "কমলাকান্তের দপ্তর পর্ব -১ ": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcltCHMg8Xg/", publishedAt: "2026-08-28T00:00:00.000Z" },
+  "কমলাকান্তের দপ্তর - পর্ব-১": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcltCHMg8Xg/", publishedAt: "2026-08-28T00:00:00.000Z" },
+  "কমলাকান্তের দপ্তর | পর্ব-১": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcltCHMg8Xg/", publishedAt: "2026-08-28T00:00:00.000Z" },
+  "কমলাকান্তের দপ্তর": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcltCHMg8Xg/", publishedAt: "2026-08-28T00:00:00.000Z" },
+  "কমলাকান্তের-দপ্তর-2": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcoQ5R1AMgU/", publishedAt: "2026-08-29T00:00:00.000Z" },
+  "কমলাকান্তের দপ্তর পর্ব-২": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcoQ5R1AMgU/", publishedAt: "2026-08-29T00:00:00.000Z" },
+  "কমলাকান্তের দপ্তর | পর্ব-২": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcoQ5R1AMgU/", publishedAt: "2026-08-29T00:00:00.000Z" },
+  "কমলাকান্তের দপ্তর - পর্ব-২": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcoQ5R1AMgU/", publishedAt: "2026-08-29T00:00:00.000Z" },
+  "কমলাকান্তের-দপ্তর-3": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Dcq1r4VA02G/", publishedAt: "2026-08-30T00:00:00.000Z" },
+  "কমলাকান্তের দপ্তর অন্তিম পর্ব": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Dcq1r4VA02G/", publishedAt: "2026-08-30T00:00:00.000Z" },
+  "কমলাকান্তের দপ্তর | অন্তিম পর্ব": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/Dcq1r4VA02G/", publishedAt: "2026-08-30T00:00:00.000Z" },
+
+  // Solos
+  "তিতুমীর-মহাশ্বেতা-দেবী": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcbZ5mBARfL/", publishedAt: "2026-08-24T00:00:00.000Z" },
+  "তিতুমীর- মহাশ্বেতা দেবী": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcbZ5mBARfL/", publishedAt: "2026-08-24T00:00:00.000Z" },
+  "তিতুমীর - মহাশ্বেতা দেবী": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcbZ5mBARfL/", publishedAt: "2026-08-24T00:00:00.000Z" },
+  "তিতুমীর": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcbZ5mBARfL/", publishedAt: "2026-08-24T00:00:00.000Z" },
+  "ইন্দুবালা-ও-আইনস্টাইন": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcgifUQAoFJ/", publishedAt: "2026-08-26T00:00:00.000Z" },
+  "ইন্দুবালা ও আইনস্টাইন": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcgifUQAoFJ/", publishedAt: "2026-08-26T00:00:00.000Z" },
+  "আইনস্টাইন ও ইন্দুবালা": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcgifUQAoFJ/", publishedAt: "2026-08-26T00:00:00.000Z" },
+  "আইনস্টাইন-ও-ইন্দুবালা": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcgifUQAoFJ/", publishedAt: "2026-08-26T00:00:00.000Z" },
+  "ভুত-ভবিষ্যৎ": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcjPj8rggqb/", publishedAt: "2026-08-27T00:00:00.000Z" },
+  "ভুত ভবিষ্যৎ": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcjPj8rggqb/", publishedAt: "2026-08-27T00:00:00.000Z" },
+  "ভুত ভবিষ্যৎ - শরদিন্দু বন্দ্যোপাধ্যায়": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcjPj8rggqb/", publishedAt: "2026-08-27T00:00:00.000Z" },
+  "ভূত-ভবিষ্যৎ": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcjPj8rggqb/", publishedAt: "2026-08-27T00:00:00.000Z" },
+  "ভূত ভবিষ্যৎ": { reelUrl: "https://www.instagram.com/thoughts.whatever_/reel/DcjPj8rggqb/", publishedAt: "2026-08-27T00:00:00.000Z" },
 };
+
+export const ENGLISH_TITLES: Record<string, string> = {
+  "আলালের-ঘরের-দুলাল-1": "Alaler Gharer Dulal — Part 1",
+  "আলালের-ঘরের-দুলাল-2": "Alaler Gharer Dulal — Part 2",
+  "আলালের-ঘরের-দুলাল-3": "Alaler Gharer Dulal — Final Part",
+  "কমলাকান্তের-দপ্তর-1": "Kamalakanta's Daptar — Part 1",
+  "কমলাকান্তের-দপ্তর-2": "Kamalakanta's Daptar — Part 2",
+  "কমলাকান্তের-দপ্তর-3": "Kamalakanta's Daptar — Final Part",
+  "ইন্দুবালা-ও-আইনস্টাইন": "Indubala and Einstein",
+  "তিতুমীর-মহাশ্বেতা-দেবী": "Titumir — Mahasweta Devi",
+  "ভুত-ভবিষ্যৎ": "Bhoot Bhobishyot",
+  "গগনেন্দ্রনাথ-ঠাকুর": "Gaganendranath Tagore",
+};
+
+function englishTitle(slug: string, existing?: string | null): string | null {
+  return ENGLISH_TITLES[slug] || (existing && !/[\u0980-\u09ff]/.test(existing) ? existing : null);
+}
+
+function publicationReviewStatus(date: Date): "published" | "scheduled" {
+  return date.getTime() > Date.now() ? "scheduled" : "published";
+}
 
 /**
  * Compress image using sharp (1600px width max WebP) then upload to Cloudinary CDN.
- * Fallback to lightweight WebP Data URI if Cloudinary is unavailable.
+ * Upload to durable storage; never write a base64 image URL to content.
  */
 async function uploadImage(imagePath: string, folderName = "thoughts-whatever"): Promise<{ url: string; width: number; height: number } | null> {
   if (!fs.existsSync(imagePath)) return null;
@@ -104,24 +170,23 @@ async function uploadImage(imagePath: string, folderName = "thoughts-whatever"):
           folder: folderName,
           transformation: [{ width: 1600, crop: "limit" }, { quality: "auto:good" }, { fetch_format: "auto" }],
         });
+        uploadedImageDetails.set(result.secure_url, {
+          width: result.width || metadata.width || 1200,
+          height: result.height || metadata.height || 630,
+          sizeBytes: result.bytes || optimizedBuffer.length,
+        });
         return {
           url: result.secure_url,
           width: result.width || metadata.width || 1200,
           height: result.height || metadata.height || 630,
         };
       } catch (err) {
-        console.warn("  ⚠️ Cloudinary upload failed, using optimized WebP Data URI fallback:", err);
+        throw new Error(`Cloudinary upload failed for ${imagePath}: ${String(err)}`);
       }
     }
-
-    return {
-      url: dataUri,
-      width: metadata.width || 1200,
-      height: metadata.height || 630,
-    };
+    throw new Error("Cloudinary credentials are required for content images");
   } catch (err) {
-    console.error("  ❌ Failed processing image with sharp:", err);
-    return null;
+    throw err;
   }
 }
 
@@ -134,24 +199,37 @@ function findThumbnail(thumbnailDir: string, episodeBaseName: string): string | 
   const validExts = [".png", ".jpg", ".jpeg", ".webp"];
   const files = fs.readdirSync(thumbnailDir);
 
-  // Normalize spaces for comparison
-  const normalizedTarget = episodeBaseName.trim().replace(/\s+/g, " ").toLowerCase();
+  function cleanStr(s: string): string {
+    return s
+      .toLowerCase()
+      .replace(/[\u200B-\u200D\uFEFF]/g, "")
+      .replace(/\s*-\s*landscape\b/i, "")
+      .replace(/\s*landscape\b/i, "")
+      .replace(/\s*ln\b/i, "")
+      .replace(/\bpng\b/i, "")
+      .replace(/[.\-_]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
 
+  const normalizedTarget = cleanStr(episodeBaseName);
+
+  // Exact cleaned match
   for (const file of files) {
     const ext = path.extname(file);
     if (!validExts.includes(ext.toLowerCase())) continue;
 
-    const base = path.basename(file, ext).trim().replace(/\s+/g, " ").toLowerCase();
+    const base = cleanStr(path.basename(file, ext));
     if (base === normalizedTarget) {
       return path.join(thumbnailDir, file);
     }
   }
 
-  // Soft fallback: check prefix match
+  // Soft fallback: prefix or substring match
   for (const file of files) {
     const ext = path.extname(file);
     if (!validExts.includes(ext.toLowerCase())) continue;
-    const base = path.basename(file, ext).trim().replace(/\s+/g, " ").toLowerCase();
+    const base = cleanStr(path.basename(file, ext));
     if (base.startsWith(normalizedTarget) || normalizedTarget.startsWith(base)) {
       return path.join(thumbnailDir, file);
     }
@@ -251,6 +329,34 @@ async function findAuthorForSeries(seriesTitle: string) {
     }
     return author;
   }
+  if (title.includes("আলালের ঘরের দুলাল") || title.includes("alal") || title.includes("প্যারীচাঁদ") || title.includes("টেকচাঁদ")) {
+    let author = await prisma.author.findFirst({ where: { slug: "প্যারীচাঁদ-মিত্র" } });
+    if (!author) {
+      author = await prisma.author.create({
+        data: {
+          nameBn: "প্যারীচাঁদ মিত্র",
+          nameEn: "Peary Chand Mitra",
+          slug: "প্যারীচাঁদ-মিত্র",
+          bioBn: "বাংলা কথাসাহিত্যের প্রথম আধুনিক ঔপন্যাসিক ও 'আলালের ঘরের দুলাল'-এর স্রষ্টা (ছদ্মনাম টেকচাঁদ ঠাকুর)।",
+        },
+      });
+    }
+    return author;
+  }
+  if (title.includes("কমলাকান্তের দপ্তর") || title.includes("কমলাকান্ত") || title.includes("kamalakanta")) {
+    let author = await prisma.author.findFirst({ where: { slug: "বঙ্কিমচন্দ্র-চট্টোপাধ্যায়" } });
+    if (!author) {
+      author = await prisma.author.create({
+        data: {
+          nameBn: "বঙ্কিমচন্দ্র চট্টোপাধ্যায়",
+          nameEn: "Bankim Chandra Chattopadhyay",
+          slug: "বঙ্কিমচন্দ্র-চট্টোপাধ্যায়",
+          bioBn: "বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ ঔপন্যাসিক ও আধুনিক বাংলা সাহিত্যের পথিকৃৎ।",
+        },
+      });
+    }
+    return author;
+  }
   return null;
 }
 
@@ -273,7 +379,21 @@ async function findAuthorForSolo(titleBn: string) {
     }
     return a;
   }
-  if (t.includes("দেবী")) {
+  if (t.includes("তিতুমীর") || t.includes("মহাশ্বেতা")) {
+    let a = await prisma.author.findFirst({ where: { slug: "মহাশ্বেতা-দেবী" } });
+    if (!a) {
+      a = await prisma.author.create({
+        data: {
+          nameBn: "মহাশ্বেতা দেবী",
+          nameEn: "Mahasweta Devi",
+          slug: "মহাশ্বেতা-দেবী",
+          bioBn: "জ্ঞানপীঠ ও পদ্মবিভূষণ প্রাপ্ত বিশিষ্ট ভারতীয় বাঙালি সাহিত্যিক ও মানবাধিকার আন্দোলনকর্মী।",
+        },
+      });
+    }
+    return a;
+  }
+  if (t.trim() === "দেবী" || t.startsWith("দেবী ") || t.startsWith("দেবী.")) {
     let a = await prisma.author.findFirst({ where: { slug: "শরৎচন্দ্র-চট্টোপাধ্যায়" } });
     if (!a) {
       a = await prisma.author.create({
@@ -329,12 +449,57 @@ async function findAuthorForSolo(titleBn: string) {
     }
     return a;
   }
+  if (t.includes("ইন্দুবালা") || t.includes("আইনস্টাইন") || t.includes("বিভূতিভূষণ") || t.includes("বিভূতি")) {
+    let a = await prisma.author.findFirst({ where: { slug: "বিভূতিভূষণ-বন্দ্যোপাধ্যায়" } });
+    if (!a) {
+      a = await prisma.author.create({
+        data: {
+          nameBn: "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
+          nameEn: "Bibhutibhushan Bandyopadhyay",
+          slug: "বিভূতিভূষণ-বন্দ্যোপাধ্যায়",
+          bioBn: "বাংলা সাহিত্যের কালজয়ী কথাসাহিত্যিক, 'পথের পাঁচালী' ও 'আরণ্যক'-এর রচয়িতা।",
+        },
+      });
+    }
+    return a;
+  }
+  if (t.includes("ভুত ভবিষ্যৎ") || t.includes("ভূত ভবিষ্যৎ") || t.includes("শরদিন্দু")) {
+    let a = await prisma.author.findFirst({ where: { slug: "শরদিন্দু-বন্দ্যোপাধ্যায়" } });
+    if (!a) {
+      a = await prisma.author.create({
+        data: {
+          nameBn: "শরদিন্দু বন্দ্যোপাধ্যায়",
+          nameEn: "Saradindu Bandyopadhyay",
+          slug: "শরদিন্দু-বন্দ্যোপাধ্যায়",
+          bioBn: "বাংলা সাহিত্যের অন্যতম জনপ্রিয় লেখক, ঐতিহাসিক উপন্যাস এবং গোয়েন্দা ব্যোমকেশ বক্সীর স্রষ্টা।",
+        },
+      });
+    }
+    return a;
+  }
+  if (t.includes("গগনেন্দ্রনাথ")) {
+    let a = await prisma.author.findFirst({ where: { slug: "গগনেন্দ্রনাথ-ঠাকুর" } });
+    if (!a) {
+      a = await prisma.author.create({
+        data: {
+          nameBn: "গগনেন্দ্রনাথ ঠাকুর",
+          nameEn: "Gaganendranath Tagore",
+          slug: "গগনেন্দ্রনাথ-ঠাকুর",
+          bioBn: "আধুনিক ভারতীয় চিত্রকলার অন্যতম পথিকৃৎ ও বিখ্যাত ব্যঙ্গচিত্রশিল্পী।",
+        },
+      });
+    }
+    return a;
+  }
   return null;
 }
 
 async function main(options?: { force?: boolean }) {
   console.log("🚀 Thoughts Whatever — Content Automation Engine Starting...\n");
   const isForce = options?.force ?? process.argv.includes("--force");
+  const onlyIndex = process.argv.indexOf("--only");
+  const onlyTitle = onlyIndex >= 0 ? process.argv[onlyIndex + 1] : undefined;
+  if (onlyIndex >= 0 && !onlyTitle) throw new Error("--only requires a content title");
 
   const contentBaseDir = path.join(process.cwd(), "Content");
   const contextBaseDir = path.join(contentBaseDir, "context");
@@ -371,17 +536,28 @@ async function main(options?: { force?: boolean }) {
     process.exit(0);
   }
 
-  for (const folderName of seriesFolders) {
+  for (const folderName of (onlyTitle ? [] : seriesFolders)) {
     const contextSeriesDir = fs.existsSync(path.join(contextBaseDir, folderName))
       ? path.join(contextBaseDir, folderName)
       : path.join(contentBaseDir, folderName);
 
     let thumbnailSeriesDir = path.join(thumbnailBaseDir, folderName);
+    const landscapeThumbnailBaseDir = path.join(contentBaseDir, "Thumnail Landscape");
+    let landscapeSeriesDir = path.join(landscapeThumbnailBaseDir, folderName);
+
     if (!fs.existsSync(thumbnailSeriesDir)) {
       const cleanName = folderName.replace(/\s*-\s*[^\n]+$/i, "").replace(/\s*Series\s*$/i, "").trim();
       const altThumb = path.join(thumbnailBaseDir, cleanName);
       if (fs.existsSync(altThumb)) {
         thumbnailSeriesDir = altThumb;
+      }
+    }
+
+    if (!fs.existsSync(landscapeSeriesDir)) {
+      const cleanName = folderName.replace(/\s*-\s*[^\n]+$/i, "").replace(/\s*Series\s*$/i, "").trim();
+      const altLandscape = path.join(landscapeThumbnailBaseDir, cleanName);
+      if (fs.existsSync(altLandscape)) {
+        landscapeSeriesDir = altLandscape;
       }
     }
 
@@ -410,15 +586,23 @@ async function main(options?: { force?: boolean }) {
     // STEP 3 & 4: Check or Create Series
     let series = await prisma.series.findUnique({ where: { slug: seriesSlug } });
 
+    // Find series cover thumbnail and banner if available
+    const seriesCoverPath = findThumbnail(thumbnailSeriesDir, cleanSeriesTitle) ||
+      findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} 1`) ||
+      findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} - পর্ব-১`) ||
+      findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} পর্ব -১`) ||
+      findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} cover`);
+    const seriesBannerPath = findThumbnail(landscapeSeriesDir, cleanSeriesTitle) ||
+      findThumbnail(landscapeSeriesDir, `${cleanSeriesTitle} 1`) ||
+      findThumbnail(landscapeSeriesDir, `${cleanSeriesTitle} - পর্ব-১`) ||
+      findThumbnail(landscapeSeriesDir, `${cleanSeriesTitle} পর্ব -১`) ||
+      findThumbnail(landscapeSeriesDir, `${cleanSeriesTitle} banner`);
+
     if (!series) {
       console.log(`  ✨ Creating new Series: "${cleanSeriesTitle}"...`);
       const seriesAiMeta = await generateSeriesMetadata(cleanSeriesTitle, sampleText);
-
-      // Find series cover thumbnail if available
-      const seriesCoverPath = findThumbnail(thumbnailSeriesDir, cleanSeriesTitle) ||
-        findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} 1`) ||
-        findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} cover`);
       const seriesCover = seriesCoverPath ? await uploadImage(seriesCoverPath, "series-covers") : null;
+      const seriesBanner = seriesBannerPath ? await uploadImage(seriesBannerPath, "series-banners") : null;
 
       series = await prisma.series.create({
         data: {
@@ -427,24 +611,30 @@ async function main(options?: { force?: boolean }) {
           titleEn: seriesAiMeta.titleEn,
           descBn: seriesAiMeta.descBn,
           coverImage: seriesCover?.url,
+          bannerImage: seriesBanner?.url,
         },
       });
       console.log(`  ✅ Series Created: ID ${series.id} (slug: ${series.slug})`);
     } else {
       console.log(`  ℹ️ Found existing Series: ID ${series.id} (slug: ${series.slug})`);
-      if (!series.coverImage) {
-        const seriesCoverPath = findThumbnail(thumbnailSeriesDir, cleanSeriesTitle) ||
-          findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} 1`) ||
-          findThumbnail(thumbnailSeriesDir, `${cleanSeriesTitle} cover`);
-        if (seriesCoverPath) {
-          const seriesCover = await uploadImage(seriesCoverPath, "series-covers");
-          if (seriesCover) {
-            series = await prisma.series.update({
-              where: { id: series.id },
-              data: { coverImage: seriesCover.url },
-            });
-            console.log(`  🖼️ Updated Series cover image for ${series.titleBn}`);
-          }
+      if (!series.coverImage && seriesCoverPath) {
+        const seriesCover = await uploadImage(seriesCoverPath, "series-covers");
+        if (seriesCover) {
+          series = await prisma.series.update({
+            where: { id: series.id },
+            data: { coverImage: seriesCover.url },
+          });
+          console.log(`  🖼️ Updated Series cover image for ${series.titleBn}`);
+        }
+      }
+      if (!series.bannerImage && seriesBannerPath) {
+        const seriesBanner = await uploadImage(seriesBannerPath, "series-banners");
+        if (seriesBanner) {
+          series = await prisma.series.update({
+            where: { id: series.id },
+            data: { bannerImage: seriesBanner.url },
+          });
+          console.log(`  🖼️ Updated Series banner image for ${series.titleBn}`);
         }
       }
     }
@@ -463,11 +653,11 @@ async function main(options?: { force?: boolean }) {
       // Generate standard SEO URL slug & Clean Title
       let pieceSlug = `${seriesSlug}-${episodeNumber}`;
       let formattedTitleBn = fileBaseName.trim();
-      if (episodeNumber === 1 && !formattedTitleBn.includes("|") && !formattedTitleBn.includes("পর্ব") && !/\d/.test(formattedTitleBn)) {
+      if (episodeNumber === 1 && (!formattedTitleBn.includes("|") || !formattedTitleBn.includes("পর্ব"))) {
         formattedTitleBn = cleanSeriesTitle;
-      } else if (episodeNumber === 2 && !formattedTitleBn.includes("|") && !/\d/.test(formattedTitleBn)) {
+      } else if (episodeNumber === 2 && !formattedTitleBn.includes("|")) {
         formattedTitleBn = `${cleanSeriesTitle} | পর্ব-২`;
-      } else if (episodeNumber === 3 && formattedTitleBn.includes("অন্তিম")) {
+      } else if (episodeNumber === 3 && (formattedTitleBn.includes("অন্তিম") || !formattedTitleBn.includes("|"))) {
         formattedTitleBn = `${cleanSeriesTitle} | অন্তিম পর্ব`;
       }
 
@@ -488,6 +678,7 @@ async function main(options?: { force?: boolean }) {
       if (existingPiece && !isForce) {
         console.log(`  ℹ️ Episode #${episodeNumber} already exists (${existingPiece.slug}). Updating metadata if needed...`);
         let coverUrl = existingPiece.coverImage;
+        let thumbUrl = existingPiece.thumbnailImage;
         if (!coverUrl) {
           const thumbnailPath = findThumbnail(thumbnailSeriesDir, fileBaseName);
           if (thumbnailPath) {
@@ -495,13 +686,22 @@ async function main(options?: { force?: boolean }) {
             if (uploaded) coverUrl = uploaded.url;
           }
         }
+        if (!thumbUrl) {
+          const landscapePath = findThumbnail(landscapeSeriesDir, fileBaseName);
+          if (landscapePath) {
+            const uploaded = await uploadImage(landscapePath, `episodes/${seriesSlug}`);
+            if (uploaded) thumbUrl = uploaded.url;
+          }
+        }
         await prisma.piece.update({
           where: { id: existingPiece.id },
           data: {
             reelUrl,
             publishedAt: targetPublishedAt,
+            reviewStatus: publicationReviewStatus(targetPublishedAt),
             coverImage: coverUrl,
-            ogImage: coverUrl || existingPiece.ogImage,
+            thumbnailImage: thumbUrl,
+            ogImage: thumbUrl || coverUrl || existingPiece.ogImage,
           },
         });
         continue;
@@ -510,15 +710,24 @@ async function main(options?: { force?: boolean }) {
       console.log(`\n  📝 STEP 1: Reading Context File: "${file}"...`);
       const rawText = fs.readFileSync(filePath, "utf-8");
 
-      console.log(`  🎨 STEP 2: Inspecting & Locating Thumbnail...`);
+      console.log(`  🎨 STEP 2: Inspecting & Locating Thumbnails (Portrait & Landscape)...`);
       const thumbnailPath = findThumbnail(thumbnailSeriesDir, fileBaseName);
+      const landscapePath = findThumbnail(landscapeSeriesDir, fileBaseName);
       let coverImageRes: { url: string; width: number; height: number } | null = null;
+      let landscapeImageRes: { url: string; width: number; height: number } | null = null;
 
       if (thumbnailPath) {
         console.log(`    Found thumbnail: ${path.basename(thumbnailPath)}`);
         coverImageRes = await uploadImage(thumbnailPath, `episodes/${seriesSlug}`);
       } else {
         console.warn(`    ⚠️ Thumbnail not found for ${fileBaseName} in ${thumbnailSeriesDir}`);
+      }
+
+      if (landscapePath) {
+        console.log(`    Found landscape thumbnail: ${path.basename(landscapePath)}`);
+        landscapeImageRes = await uploadImage(landscapePath, `episodes/${seriesSlug}`);
+      } else {
+        console.warn(`    ⚠️ Landscape thumbnail not found for ${fileBaseName} in ${landscapeSeriesDir}`);
       }
 
       console.log(`  ✍️ STEP 6: Formatting Article into Premium Markdown...`);
@@ -568,18 +777,20 @@ async function main(options?: { force?: boolean }) {
           data: {
             kind,
             status: "PUBLISHED",
+            reviewStatus: publicationReviewStatus(targetPublishedAt),
             slug: pieceSlug,
             titleBn: formattedTitleBn,
-            titleEn: epAiMeta.titleEn,
+            titleEn: englishTitle(pieceSlug, existingPiece.titleEn),
             bodyBn: formattedBody,
             excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
             coverImage: coverImageRes?.url || existingPiece.coverImage,
             coverImageWidth: coverImageRes?.width || existingPiece.coverImageWidth,
             coverImageHeight: coverImageRes?.height || existingPiece.coverImageHeight,
+            thumbnailImage: landscapeImageRes?.url || existingPiece.thumbnailImage,
             readingMinutes: readingMins,
             featured: true, // Show on landing page
             seoDescription: epAiMeta.seoDescription,
-            ogImage: coverImageRes?.url || existingPiece.ogImage,
+            ogImage: landscapeImageRes?.url || coverImageRes?.url || existingPiece.ogImage,
             reelUrl,
             publishedAt: targetPublishedAt,
             seriesId: series.id,
@@ -594,18 +805,20 @@ async function main(options?: { force?: boolean }) {
           data: {
             kind,
             status: "PUBLISHED",
+            reviewStatus: publicationReviewStatus(targetPublishedAt),
             slug: pieceSlug,
             titleBn: formattedTitleBn,
-            titleEn: epAiMeta.titleEn,
+            titleEn: englishTitle(pieceSlug),
             bodyBn: formattedBody,
             excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
             coverImage: coverImageRes?.url,
             coverImageWidth: coverImageRes?.width,
             coverImageHeight: coverImageRes?.height,
+            thumbnailImage: landscapeImageRes?.url,
             readingMinutes: readingMins,
             featured: true, // Show on landing page
             seoDescription: epAiMeta.seoDescription,
-            ogImage: coverImageRes?.url,
+            ogImage: landscapeImageRes?.url || coverImageRes?.url,
             reelUrl,
             publishedAt: targetPublishedAt,
             seriesId: series.id,
@@ -658,11 +871,14 @@ async function main(options?: { force?: boolean }) {
   // Process Solo Standalone Articles
   const soloBaseDir = path.join(process.cwd(), "Content", "solo");
   const soloThumbnailDir = path.join(process.cwd(), "Content", "Thumnail", "Solo");
+  const soloLandscapeDir = path.join(process.cwd(), "Content", "Thumnail Landscape", "Solo");
 
   if (fs.existsSync(soloBaseDir)) {
     const soloFiles = fs
       .readdirSync(soloBaseDir)
-      .filter((file) => (file.endsWith(".txt") || file.endsWith(".md")) && !file.endsWith(".social.md"));
+      .filter((file) => (file.endsWith(".txt") || file.endsWith(".md")) && !file.endsWith(".social.md"))
+      .filter((file) => !onlyTitle || path.basename(file, path.extname(file)) === onlyTitle);
+    if (onlyTitle && soloFiles.length === 0) throw new Error(`No solo content found for ${onlyTitle}`);
 
     for (const file of soloFiles) {
       const filePath = path.join(soloBaseDir, file);
@@ -677,6 +893,7 @@ async function main(options?: { force?: boolean }) {
       if (existingPiece && !isForce) {
         console.log(`  ℹ️ Solo Article "${titleBn}" (${slug}) already exists. Updating metadata if needed...`);
         let coverUrl = existingPiece.coverImage;
+        let thumbUrl = existingPiece.thumbnailImage;
         if (!coverUrl) {
           const coverPath = findThumbnail(soloThumbnailDir, titleBn);
           if (coverPath) {
@@ -684,13 +901,22 @@ async function main(options?: { force?: boolean }) {
             if (uploaded) coverUrl = uploaded.url;
           }
         }
+        if (!thumbUrl) {
+          const landscapePath = findThumbnail(soloLandscapeDir, titleBn);
+          if (landscapePath) {
+            const uploaded = await uploadImage(landscapePath, "landscape-thumbnails");
+            if (uploaded) thumbUrl = uploaded.url;
+          }
+        }
         await prisma.piece.update({
           where: { id: existingPiece.id },
           data: {
             reelUrl: soloReelUrl,
             publishedAt: soloPublishedAt,
+            reviewStatus: publicationReviewStatus(soloPublishedAt),
             coverImage: coverUrl,
-            ogImage: coverUrl || existingPiece.ogImage,
+            thumbnailImage: thumbUrl,
+            ogImage: thumbUrl || coverUrl || existingPiece.ogImage,
           },
         });
         continue;
@@ -703,7 +929,12 @@ async function main(options?: { force?: boolean }) {
       const epAiMeta = await generateEpisodeMetadata(titleBn, titleBn, formattedBody, 1);
 
       const coverPath = findThumbnail(soloThumbnailDir, titleBn);
-      const coverImageRes = coverPath ? await uploadImage(coverPath, "piece-covers") : null;
+      const coverImageRes = existingPiece?.coverImage ? { url: existingPiece.coverImage, width: existingPiece.coverImageWidth || 0, height: existingPiece.coverImageHeight || 0 } : coverPath ? await uploadImage(coverPath, "piece-covers") : null;
+      const landscapePath = findThumbnail(soloLandscapeDir, titleBn);
+      const landscapeImageRes = existingPiece?.thumbnailImage ? { url: existingPiece.thumbnailImage } : landscapePath ? await uploadImage(landscapePath, "landscape-thumbnails") : null;
+      if (onlyTitle && (!coverImageRes?.url || !landscapeImageRes?.url || coverImageRes.url.startsWith("data:") || landscapeImageRes.url.startsWith("data:"))) {
+        throw new Error("Both portrait and landscape images must upload to Cloudinary before publishing");
+      }
 
       const readingMins = readingMinutes(formattedBody);
 
@@ -724,18 +955,20 @@ async function main(options?: { force?: boolean }) {
 
       const pieceData = {
         titleBn,
-        titleEn: epAiMeta.titleEn,
+        titleEn: englishTitle(slug, existingPiece?.titleEn),
         bodyBn: formattedBody,
         excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
         coverImage: coverImageRes?.url || existingPiece?.coverImage,
         coverImageWidth: coverImageRes?.width || existingPiece?.coverImageWidth,
         coverImageHeight: coverImageRes?.height || existingPiece?.coverImageHeight,
+        thumbnailImage: landscapeImageRes?.url || existingPiece?.thumbnailImage,
         readingMinutes: readingMins,
         featured: true,
         seoDescription: epAiMeta.seoDescription,
-        ogImage: coverImageRes?.url || existingPiece?.ogImage,
+        ogImage: landscapeImageRes?.url || coverImageRes?.url || existingPiece?.ogImage,
         reelUrl: soloReelUrl,
         publishedAt: soloPublishedAt,
+        reviewStatus: publicationReviewStatus(soloPublishedAt),
         tags: { connect: tagIds.map((id) => ({ id })) },
         authors: soloAuthor ? { connect: [{ id: soloAuthor.id }] } : undefined,
       };
@@ -745,18 +978,20 @@ async function main(options?: { force?: boolean }) {
           where: { id: existingPiece.id },
           data: {
             titleBn,
-            titleEn: epAiMeta.titleEn,
+            titleEn: englishTitle(slug, existingPiece.titleEn),
             bodyBn: formattedBody,
             excerptBn: epAiMeta.excerpt || deriveExcerpt(formattedBody),
             coverImage: coverImageRes?.url || existingPiece.coverImage,
             coverImageWidth: coverImageRes?.width || existingPiece.coverImageWidth,
             coverImageHeight: coverImageRes?.height || existingPiece.coverImageHeight,
+            thumbnailImage: landscapeImageRes?.url || existingPiece.thumbnailImage,
             readingMinutes: readingMins,
             featured: true,
             seoDescription: epAiMeta.seoDescription,
-            ogImage: coverImageRes?.url || existingPiece.ogImage,
+            ogImage: landscapeImageRes?.url || coverImageRes?.url || existingPiece.ogImage,
             reelUrl: soloReelUrl,
             publishedAt: soloPublishedAt,
+            reviewStatus: publicationReviewStatus(soloPublishedAt),
             kind: PieceKind.DOCUMENTARY,
             authors: soloAuthor ? { set: [{ id: soloAuthor.id }] } : undefined,
           },
@@ -778,7 +1013,7 @@ async function main(options?: { force?: boolean }) {
       console.log(`  📱 Generating Social Media Captions for "${titleBn}"...`);
       try {
         const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://thoughts-whatever.vercel.app";
-        const fullUrl = `${baseUrl}/writing/${slug}`;
+        const fullUrl = `${baseUrl}/documentary/${slug}`;
         const socialCaptions = await generateSocialCaptions(
           "Solo",
           titleBn,
@@ -795,6 +1030,18 @@ async function main(options?: { force?: boolean }) {
   }
 
   console.log("\n🎉 ALL CONTENT PROCESSED SUCCESSFULLY!");
+  const mediaSync = await syncAllMediaUsage();
+  for (const [url, details] of uploadedImageDetails) {
+    await prisma.media.updateMany({
+      where: { url },
+      data: {
+        width: details.width,
+        height: details.height,
+        sizeBytes: details.sizeBytes,
+      },
+    });
+  }
+  console.log(`  Media library: ${mediaSync.createdCount} new assets, ${mediaSync.linkedCount} usage links`);
   await prisma.$disconnect();
 }
 

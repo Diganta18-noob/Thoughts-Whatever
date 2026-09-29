@@ -74,8 +74,6 @@ export function cleanMarkdownBody(text: string, title?: string): string {
 export async function formatArticleBody(rawContent: string, title: string): Promise<string> {
   const normalized = rawContent
     .replace(/\r\n/g, "\n")
-    .replace(/\s*l\s*/g, "। ")
-    .replace(/\s*L\s*/g, "। ")
     .replace(/।([^\s\n"”'’])/g, "। $1")
     .replace(/\n{3,}/g, "\n\n")
     .trim();

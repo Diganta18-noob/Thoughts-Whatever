@@ -2679,3 +2679,55 @@ still i am not able to seee landscape photo and audio
 
 OBJECTIVE: Fix audio file picker omissions by including explicit extensions, index piece landscape thumbnailImage and audio narration into Media and usage tracker, add orientation filters (16:9 Landscape, 9:16 Portrait, 1:1 Square), build responsive previews and AudioPreviewPlayer with interactive scrubber and waveform, integrate media pickers into piece narration and taxonomy, ensure zero base64 data URL storage, and verify with tests and build.
 
+## 2026-09-30 — Automated Content Upload: Alal, Kamalakanta, Titumir, Indubala & Bhut Bhabishyat
+
+```text
+আলালের ঘরের দুলাল - পর্ব-১
+[August 21](https://www.instagram.com/thoughts.whatever_/reel/DcTvo9Qsxkj/)
+
+আলালের ঘরের দুলাল - পর্ব-২
+[August 22](https://www.instagram.com/thoughts.whatever_/reel/DcWRlfxADPL/)
+আলালের ঘরের দুলাল - অন্তিম পর্ব
+[August 23](https://www.instagram.com/thoughts.whatever_/reel/DcY0U27gN0h/)
+"তিতুমীর"- মহাশ্বেতা দেবী
+[August 24](https://www.instagram.com/thoughts.whatever_/reel/DcbZ5mBARfL/)
+
+ইন্দুবালা ও আইনস্টাইন
+[August 26](https://www.instagram.com/thoughts.whatever_/reel/DcgifUQAoFJ/)
+ভুত ভবিষ্যৎ - শরদিন্দু বন্দ্যোপাধ্যায়
+[August 27](https://www.instagram.com/thoughts.whatever_/reel/DcjPj8rggqb/)
+কমলাকান্তের দপ্তর পর্ব -১
+
+[August 28](https://www.instagram.com/thoughts.whatever_/reel/DcltCHMg8Xg/)
+কমলাকান্তের দপ্তর পর্ব-২
+[August 29](https://www.instagram.com/thoughts.whatever_/reel/DcoQ5R1AMgU/)
+
+কমলাকান্তের দপ্তর অন্তিম পর্ব
+[August 30](https://www.instagram.com/thoughts.whatever_/reel/Dcq1r4VA02G/)
+
+i have updated the context folder with new post thumbnail and landscape photo now start the content upload automation
+```
+
+OBJECTIVE:
+1. Standardized thumbnail filenames across portrait (`Content/Thumnail/`) and landscape (`Content/Thumnail Landscape/`) directories with clean `- Landscape.png` suffixes.
+2. Configured `KNOWN_REEL_METADATA` in `scripts/process-content.ts` with publication dates and Instagram reel URLs for all 9 works:
+   - আলালের ঘরের দুলাল (3 parts: 2026-08-21, 2026-08-22, 2026-08-23)
+   - তিতুমীর- মহাশ্বেতা দেবী (2026-08-24)
+   - ইন্দুবালা ও আইনস্টাইন (2026-08-26)
+   - ভুত ভবিষ্যৎ (2026-08-27)
+   - কমলাকান্তের দপ্তর (3 parts: 2026-08-28, 2026-08-29, 2026-08-30)
+3. Extended `findAuthorForSeries` and `findAuthorForSolo` with proper author mappings:
+   - প্যারীচাঁদ মিত্র (Peary Chand Mitra) for আলালের ঘরের দুলাল
+   - বঙ্কিমচন্দ্র চট্টোপাধ্যায় for কমলাকান্তের দপ্তর
+   - মহাশ্বেতা দেবী for তিতুমীর
+   - বিভূতিভূষণ বন্দ্যোপাধ্যায় for ইন্দুবালা ও আইনস্টাইন
+   - শরদিন্দু বন্দ্যোপাধ্যায় for ভুত ভবিষ্যৎ
+4. Enhanced series pipeline in `scripts/process-content.ts` to locate and upload 16:9 landscape cards (`thumbnailImage`) and series 21:9 banner key art (`bannerImage`) to Cloudinary.
+5. Executed full automated pipeline, uploaded all portrait and landscape images to Cloudinary CDN, generated excerpts, tags, SEO descriptions, and social captions, and verified all 9 database records.
+
+## 2026-09-30 — Recent content review
+
+User instruction: Review the recent uploaded content, portrait thumbnails, and landscape thumbnails using the database.
+
+User follow-up: Do the necessary changes to fix the review findings using very few tokens.
+

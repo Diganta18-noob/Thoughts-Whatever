@@ -17,6 +17,7 @@ export interface CoverImageFrameProps {
   rounded?: string;
   overlay?: boolean;
   scale?: number;
+  imageFit?: "cover" | "contain";
   className?: string;
 }
 
@@ -31,6 +32,7 @@ export function CoverImageFrame({
   rounded = "rounded-sm",
   overlay = false,
   scale = hover.scale,
+  imageFit = "cover",
   className,
 }: CoverImageFrameProps) {
   const prefersReduced = useReducedMotion();
@@ -39,6 +41,7 @@ export function CoverImageFrame({
     <div
       className={cn(
         "relative overflow-hidden bg-journal-paperEdge transition-shadow duration-500 hover:shadow-xl",
+        imageFit === "contain" && "bg-black",
         aspect,
         rounded,
         className,
@@ -61,6 +64,7 @@ export function CoverImageFrame({
           alt={alt}
           sizes={sizes}
           priority={priority}
+          className={imageFit === "contain" ? "object-contain" : undefined}
         />
       </motion.div>
 

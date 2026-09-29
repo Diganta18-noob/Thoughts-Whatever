@@ -44,6 +44,7 @@ function FeaturedHeroSpread({
                 rounded="rounded-sm"
                 sizes="(max-width: 1024px) 100vw, 60vw"
                 scale={1.03}
+                imageFit={piece.thumbnailImage ? "contain" : "cover"}
                 priority={priority}
                 overlay
               />
@@ -150,6 +151,7 @@ function SupportingEditorialItem({
             rounded="rounded-sm"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             scale={1.03}
+            imageFit={piece.thumbnailImage ? "contain" : "cover"}
             overlay
           />
         </div>

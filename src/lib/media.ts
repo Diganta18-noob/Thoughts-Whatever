@@ -373,8 +373,8 @@ export async function syncAllMediaUsage() {
       else mimeType = "image/jpeg";
     }
 
-    const width = metaHints?.width ?? (cleanUrl.includes("landscape-thumbnails") ? 1920 : cleanUrl.includes("piece-covers") ? 1080 : null);
-    const height = metaHints?.height ?? (cleanUrl.includes("landscape-thumbnails") ? 1080 : cleanUrl.includes("piece-covers") ? 1920 : null);
+    const width = metaHints?.width ?? null;
+    const height = metaHints?.height ?? null;
     const orientation = metaHints?.orientation ?? (width && height ? (width >= height * 1.08 ? "landscape" : height >= width * 1.08 ? "portrait" : "square") : null);
 
     let media = await prisma.media.findFirst({ where: { url: cleanUrl } });
@@ -440,7 +440,7 @@ export async function syncAllMediaUsage() {
 
   // 1. Index Pieces
   for (const piece of pieces) {
-    // 9:16 Portrait Cover Image
+    // Portrait cover image
     if (piece.coverImage) {
       await registerMedia(piece.coverImage, "Piece", piece.id, piece.titleBn, "coverImage", undefined, {
         width: piece.coverImageWidth || 1080,
@@ -449,11 +449,9 @@ export async function syncAllMediaUsage() {
       });
     }
 
-    // 16:9 Landscape Thumbnail Image (Featured cards, article list thumbnails)
+    // Landscape thumbnail (the original may be 3:2 or 16:9)
     if (piece.thumbnailImage) {
       await registerMedia(piece.thumbnailImage, "Piece", piece.id, piece.titleBn, "thumbnailImage", undefined, {
-        width: 1920,
-        height: 1080,
         orientation: "landscape",
       });
     }
@@ -461,8 +459,6 @@ export async function syncAllMediaUsage() {
     // Social Sharing OpenGraph Landscape Image
     if (piece.ogImage) {
       await registerMedia(piece.ogImage, "Piece", piece.id, piece.titleBn, "ogImage", undefined, {
-        width: 1200,
-        height: 630,
         orientation: "landscape",
       });
     }
@@ -554,12 +550,8 @@ export async function syncAllMediaUsage() {
     if (!updatedOrientation) {
       if (item.url.includes("landscape-thumbnails") || item.url.includes("landscape") || (item.width && item.height && item.width >= item.height * 1.08)) {
         updatedOrientation = "landscape";
-        if (!updatedWidth) updatedWidth = 1920;
-        if (!updatedHeight) updatedHeight = 1080;
       } else if (item.url.includes("piece-covers") || item.url.includes("portrait") || (item.width && item.height && item.height >= item.width * 1.08)) {
         updatedOrientation = "portrait";
-        if (!updatedWidth) updatedWidth = 1080;
-        if (!updatedHeight) updatedHeight = 1920;
       } else if (item.width && item.height) {
         updatedOrientation = "square";
       }
