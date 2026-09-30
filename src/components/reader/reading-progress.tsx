@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useProgress } from "@/components/providers/progress-provider";
 
@@ -19,7 +19,8 @@ export function ReadingProgress({
   targetId: string;
   piece?: ProgressSubject;
 }) {
-  const [progress, setProgress] = useState(0);
+  const [percent, setPercent] = useState(0);
+  const barRef = useRef<HTMLDivElement>(null);
   const { t, locale } = useLanguage();
   const { record } = useProgress();
 
@@ -28,6 +29,7 @@ export function ReadingProgress({
     if (!target) return;
 
     let frame = 0;
+    let lastPercent = -1;
 
     const measure = () => {
       const rect = target.getBoundingClientRect();
@@ -35,7 +37,13 @@ export function ReadingProgress({
       const total = rect.height - viewport;
       const scrolled = -rect.top;
       const ratio = total <= 0 ? (rect.bottom <= viewport ? 1 : 0) : scrolled / total;
-      setProgress(Math.min(1, Math.max(0, ratio)));
+      const progress = Math.min(1, Math.max(0, ratio));
+      if (barRef.current) barRef.current.style.transform = `scaleX(${progress})`;
+      const nextPercent = Math.round(progress * 100);
+      if (nextPercent !== lastPercent) {
+        lastPercent = nextPercent;
+        setPercent(nextPercent);
+      }
       frame = 0;
     };
 
@@ -62,8 +70,8 @@ export function ReadingProgress({
 
   useEffect(() => {
     if (!slug || !kind || !titleBn) return;
-    record({ slug, kind, titleBn, seriesSlug, seriesOrder, percent: progress });
-  }, [slug, kind, titleBn, seriesSlug, seriesOrder, progress, record]);
+    record({ slug, kind, titleBn, seriesSlug, seriesOrder, percent: percent / 100 });
+  }, [slug, kind, titleBn, seriesSlug, seriesOrder, percent, record]);
 
   return (
     <div
@@ -74,12 +82,9 @@ export function ReadingProgress({
       aria-label={t("piece.readingProgress")}
       aria-valuemin={0}
       aria-valuemax={100}
-      aria-valuenow={Math.round(progress * 100)}
+      aria-valuenow={percent}
     >
-      <div
-        className="h-px origin-left bg-accent/70 transition-transform duration-100 ease-out"
-        style={{ transform: `scaleX(${progress})`, width: "100%" }}
-      />
+      <div ref={barRef} className="h-px w-full origin-left scale-x-0 bg-accent/70" />
     </div>
   );
 }

@@ -10,9 +10,7 @@ import { useEffect } from "react";
  * drawer does exactly that — and whichever one unmounted first would otherwise
  * hand scrolling back to a page the other is still covering.
  *
- * Lenis is disabled on /admin (see `components/motion/smooth-scroll.tsx`), so
- * the native overflow lock is sufficient here; there is no smooth-scroll
- * instance that also needs stopping.
+ * Native scrolling needs only the overflow lock; no scroll controller needs stopping.
  */
 
 let lockCount = 0;

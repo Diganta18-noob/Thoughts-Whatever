@@ -7,7 +7,6 @@ import { AudioProvider } from "./audio-provider";
 import { BookmarksProvider } from "./bookmarks-provider";
 import { ProgressProvider } from "./progress-provider";
 import { MiniPlayer } from "@/components/audio/mini-player";
-import { SmoothScroll } from "@/components/motion/smooth-scroll";
 
 import { PostHogProvider } from "./posthog-provider";
 
@@ -19,7 +18,6 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
           <BookmarksProvider>
             <ProgressProvider>
               <AudioProvider>
-                <SmoothScroll />
                 {children}
                 <MiniPlayer />
                 <Toaster

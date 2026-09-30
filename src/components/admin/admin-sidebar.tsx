@@ -64,7 +64,6 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
 
   return (
     <aside
-      data-lenis-prevent
       aria-label="Admin sections"
       className={cn(
         "admin-sidebar flex h-full max-h-full min-h-0 w-72 select-none flex-col overflow-hidden border-r border-rule bg-surface/90 backdrop-blur",
@@ -90,7 +89,6 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
 
       {/* Navigation Links Scrollable */}
       <nav
-        data-lenis-prevent
         className="scrollbar-thin min-h-0 flex-1 space-y-6 overflow-y-auto overscroll-contain px-3 py-5"
       >
         {ADMIN_NAV_GROUPS.map((group) => {

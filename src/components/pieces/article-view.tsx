@@ -41,7 +41,9 @@ export function ArticleView({
   const contentRef = useRef<HTMLDivElement>(null);
 
   const scrollToContent = () => {
-    contentRef.current?.scrollIntoView({ behavior: "smooth" });
+    contentRef.current?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    });
   };
 
   return (

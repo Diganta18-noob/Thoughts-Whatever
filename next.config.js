@@ -12,7 +12,6 @@ const nextConfig = {
       "clsx",
       "tailwind-merge",
       "react-markdown",
-      "lenis",
     ],
     serverComponentsExternalPackages: ["archiver", "@aws-sdk/client-s3", "cloudinary", "@prisma/client", "prisma"],
   },
