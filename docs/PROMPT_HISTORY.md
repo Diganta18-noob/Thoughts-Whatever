@@ -2731,19 +2731,3 @@ User instruction: Review the recent uploaded content, portrait thumbnails, and l
 
 User follow-up: Do the necessary changes to fix the review findings using very few tokens.
 
-
-## 2026-09-30 - Public website polish and smooth scrolling
-User instruction: pull the code
-User instruction: see the website is not looks liike premium and smooth scrooling is not there for that reason the website is not looks professional
-Implementation: pulled main (already current); refined hero typography, bilingual description, buttons, section spacing, header, and added Lenis wheel smoothing with reduced-motion, modal, nested-scroll and dedicated-reader safeguards.
-Debug: npm was unavailable on PATH; used the bundled pnpm runtime to run npm.
-Validation: TypeScript and edited-file lint passed; two existing regression suites passed (9 tests). Prompt saver scanned 46 prompts; PostgreSQL sync skipped because DATABASE_URL is missing. Browser visual verification remains pending.
-
-## 2026-09-30 - Verification resumed
-User instruction: Continue the website refinement, smooth-scrolling verification, prompt sync and deployment process.
-Database follow-ups: Supplied database connection strings and requested connectivity tests; credentials intentionally omitted from history. Original credentials failed authentication; replacement credentials passed read-only SELECT 1 on transaction and session poolers.
-Configured ignored .env.local with verified connection settings.
-Validation: Production build passed with 147 generated pages. Five new smooth-scroll lifecycle tests passed. Browser rendered live content/images; Lenis was active, collection anchor navigation worked, and checked mobile/desktop views had no measured horizontal overflow.
-Prompt sync: Existing saver scanned 49 instructions and inserted 42 records. Current Codex task sync inserted 2 records without credentials.
-Debug: Concurrent build/preview writes caused a missing build trace file. Stopped preview and reran the isolated production build successfully.
-Deployment: Awaiting confirmation that Vercel database environment variables use the replacement credentials.
