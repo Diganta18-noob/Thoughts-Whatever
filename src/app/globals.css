@@ -206,6 +206,21 @@
   }
 }
 
+@keyframes home-aura-breathe {
+  0%, 100% { opacity: 0.55; scale: 1; }
+  50% { opacity: 0.9; scale: 1.06; }
+}
+
+@keyframes home-scroll-breathe {
+  0%, 100% { transform: scaleY(0.65); opacity: 0.45; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-hero-aura { animation: home-aura-breathe 12s ease-in-out infinite; }
+  .home-scroll-line { animation: home-scroll-breathe 2.4s ease-in-out infinite; }
+}
+
 /* ══════════════════════════════════════════════════════════════
    Prose (Editorial Reading Surface)
    ══════════════════════════════════════════════════════════════ */

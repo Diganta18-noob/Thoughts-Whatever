@@ -2731,3 +2731,7 @@ User instruction: Review the recent uploaded content, portrait thumbnails, and l
 
 User follow-up: Do the necessary changes to fix the review findings using very few tokens.
 
+## 2026-10-01 — Public homepage motion and caching
+
+User instruction: Remove unnecessary force-dynamic rendering; make the homepage premium, animated, smoothly scrolling, professional, and production ready while using few tokens.
+

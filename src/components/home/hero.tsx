@@ -21,7 +21,7 @@ export function Hero() {
   const face = isBn ? "font-bengali" : "font-serif";
 
   return (
-    <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 sm:px-6">
+    <section className="relative flex min-h-[min(100svh,900px)] flex-col items-center justify-center overflow-hidden px-4 pb-20 pt-24 sm:px-6">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,rgb(var(--surface-raised)/0.9),transparent_70%)]"
@@ -35,14 +35,20 @@ export function Hero() {
         }}
       />
 
+      <div aria-hidden className="home-hero-aura pointer-events-none absolute left-1/2 top-[42%] h-[min(76vw,760px)] w-[min(76vw,760px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/[0.08] bg-[radial-gradient(circle,rgb(var(--accent)/0.08)_0%,transparent_67%)]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-5 top-10 bottom-10 border border-rule/60 sm:inset-x-10 sm:top-14 sm:bottom-14" />
+      <div aria-hidden className="absolute left-5 top-10 h-12 w-12 border-l border-t border-accent/50 sm:left-10 sm:top-14" />
+      <div aria-hidden className="absolute bottom-10 right-5 h-12 w-12 border-b border-r border-accent/50 sm:bottom-14 sm:right-10" />
+
       <div className="relative z-10 flex w-full max-w-5xl flex-col items-center text-center">
         <Reveal>
-          <p
-            className={`text-xs tracking-wider text-content-faint ${isBn ? "font-bengali-sans normal-case tracking-normal" : "font-mono"}`}
-            lang={locale}
-          >
-            {isBn ? siteConfig.tagline : siteConfig.taglineEn}
-          </p>
+          <div className="flex items-center justify-center gap-4">
+            <span aria-hidden className="h-px w-8 bg-accent/50 sm:w-14" />
+            <p className={`text-xs uppercase tracking-[0.25em] text-accent ${isBn ? "font-bengali-sans normal-case tracking-normal" : "font-mono"}`} lang={locale}>
+              {isBn ? siteConfig.tagline : siteConfig.taglineEn}
+            </p>
+            <span aria-hidden className="h-px w-8 bg-accent/50 sm:w-14" />
+          </div>
         </Reveal>
 
         <SplitText
@@ -50,12 +56,12 @@ export function Hero() {
           lang="en"
           text={siteConfig.name}
           delay={0.15}
-          className="mt-6 font-display text-[clamp(2.25rem,7vw,7.5rem)] whitespace-nowrap leading-none text-content tracking-tight max-w-full"
+          className="mt-8 max-w-full whitespace-nowrap font-display text-[clamp(2.25rem,7vw,7.5rem)] leading-[1.08] tracking-tight text-content"
         />
 
         <Reveal delay={0.35}>
           <p
-            className="mt-6 max-w-2xl text-sm sm:text-base text-content-soft leading-relaxed font-bengali"
+            className="mt-7 max-w-2xl font-bengali text-sm leading-relaxed text-content-soft sm:text-lg"
             lang="bn"
           >
             বাংলা সাহিত্য নিয়ে পূর্ণাঙ্গ লেখা, পাঠ-পর্যালোচনা ও তথ্যচিত্র। রিলের পিছনের সম্পূর্ণ রচনা ও গবেষণাপত্র।
@@ -82,7 +88,7 @@ export function Hero() {
             <Magnetic>
               <Link
                 href="/series"
-                className={`inline-flex items-center justify-center rounded-sm bg-accent px-6 py-3 text-sm font-medium text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${face}`}
+                className={`inline-flex min-h-12 items-center justify-center rounded-sm bg-accent px-7 py-3 text-sm font-medium text-white shadow-sm transition-[transform,background-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-lg active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${face}`}
                 lang={locale}
               >
                 {t("home.latestSeries")}
@@ -102,6 +108,12 @@ export function Hero() {
           </div>
         </Reveal>
       </div>
+
+      <Link href="#featured-stories" className="group absolute bottom-14 z-10 flex items-center gap-3 font-mono text-[0.65rem] uppercase tracking-[0.22em] text-content-faint transition-colors hover:text-accent focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:bottom-20" aria-label="Scroll to featured stories">
+        <span aria-hidden className="home-scroll-line block h-8 w-px origin-top bg-accent" />
+        <span>Explore the collection</span>
+        <span aria-hidden className="transition-transform duration-300 group-hover:translate-y-1">↓</span>
+      </Link>
     </section>
   );
 }

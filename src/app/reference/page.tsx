@@ -11,7 +11,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Search, RotateCcw, BookOpen, ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Reference Library | Thoughts.Whatever",
