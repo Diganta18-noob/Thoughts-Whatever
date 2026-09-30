@@ -1,5 +1,6 @@
 "use client";
 
+import { SmoothScroll } from "./smooth-scroll";
 import { Toaster } from "react-hot-toast";
 import { LanguageProvider } from "./language-provider";
 import { ReadingProvider } from "./reading-provider";
@@ -18,6 +19,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
           <BookmarksProvider>
             <ProgressProvider>
               <AudioProvider>
+                <SmoothScroll />
                 {children}
                 <MiniPlayer />
                 <Toaster
@@ -59,4 +61,3 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
     </PostHogProvider>
   );
 }
-

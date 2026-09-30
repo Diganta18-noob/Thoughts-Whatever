@@ -21,7 +21,7 @@ export function Hero() {
   const face = isBn ? "font-bengali" : "font-serif";
 
   return (
-    <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 sm:px-6">
+    <section className="editorial-hero relative flex min-h-[78svh] flex-col items-center justify-center overflow-hidden px-4 py-20 sm:px-6 sm:py-28">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,rgb(var(--surface-raised)/0.9),transparent_70%)]"
@@ -38,7 +38,7 @@ export function Hero() {
       <div className="relative z-10 flex w-full max-w-5xl flex-col items-center text-center">
         <Reveal>
           <p
-            className={`text-xs tracking-wider text-content-faint ${isBn ? "font-bengali-sans normal-case tracking-normal" : "font-mono"}`}
+            className={`inline-flex items-center gap-3 text-xs tracking-[0.2em] uppercase text-gold ${isBn ? "font-bengali-sans normal-case tracking-normal" : "font-mono"}`}
             lang={locale}
           >
             {isBn ? siteConfig.tagline : siteConfig.taglineEn}
@@ -50,15 +50,15 @@ export function Hero() {
           lang="en"
           text={siteConfig.name}
           delay={0.15}
-          className="mt-6 font-display text-[clamp(2.25rem,7vw,7.5rem)] whitespace-nowrap leading-none text-content tracking-tight max-w-full"
+          className="mt-8 font-serif text-[clamp(2.5rem,8vw,7.5rem)] leading-[1.08] text-content tracking-[-0.055em] max-w-full text-balance"
         />
 
         <Reveal delay={0.35}>
           <p
-            className="mt-6 max-w-2xl text-sm sm:text-base text-content-soft leading-relaxed font-bengali"
-            lang="bn"
+            className="mt-8 max-w-xl text-base sm:text-lg text-content-soft leading-[1.9] font-bengali"
+            lang={locale}
           >
-            বাংলা সাহিত্য নিয়ে পূর্ণাঙ্গ লেখা, পাঠ-পর্যালোচনা ও তথ্যচিত্র। রিলের পিছনের সম্পূর্ণ রচনা ও গবেষণাপত্র।
+            {isBn ? "বাংলা সাহিত্য, মনন ও ইতিহাসের এক নিরিবিলি পাঠঘর। একটু থামুন, নতুন ভাবনায় ডুব দিন।" : "A quiet home for Bengali literature, thoughtful essays, and stories worth spending time with."}
           </p>
         </Reveal>
 
@@ -68,7 +68,7 @@ export function Hero() {
               <Magnetic>
                 <Link
                   href={resumeHref}
-                  className={`inline-flex items-center gap-2.5 rounded-sm bg-accent px-6 py-3 text-sm font-medium text-white transition hover:opacity-90 ${face}`}
+                  className={`inline-flex items-center gap-2.5 rounded-full bg-accent px-7 py-3.5 text-sm font-medium text-white transition hover:opacity-90 ${face}`}
                   lang={locale}
                 >
                   {t("home.continueReading")}
@@ -82,7 +82,7 @@ export function Hero() {
             <Magnetic>
               <Link
                 href="/series"
-                className={`inline-flex items-center justify-center rounded-sm bg-accent px-6 py-3 text-sm font-medium text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${face}`}
+                className={`inline-flex items-center justify-center rounded-full bg-accent px-7 py-3.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${face}`}
                 lang={locale}
               >
                 {t("home.latestSeries")}
@@ -92,7 +92,7 @@ export function Hero() {
             <Magnetic>
               <Link
                 href="/archive"
-                className={`group inline-flex items-center gap-1.5 rounded-sm border border-transparent px-6 py-3 text-sm text-content-soft transition-colors hover:border-rule hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${face}`}
+                className={`group inline-flex items-center gap-1.5 rounded-full border border-rule px-7 py-3.5 text-sm text-content-soft transition-colors hover:border-rule hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${face}`}
                 lang={locale}
               >
                 <span>{t("home.exploreArchive")}</span>
@@ -102,6 +102,10 @@ export function Hero() {
           </div>
         </Reveal>
       </div>
+          <a href="#home-collection" className="absolute bottom-6 inline-flex items-center gap-3 text-xs text-content-faint transition-colors hover:text-accent" aria-label={isBn ? "লেখাগুলি দেখুন" : "Explore the collection"}>
+        <span className="h-8 w-px bg-gold/50" aria-hidden="true" />
+        {isBn ? "আরও পড়ুন" : "Explore the collection"}
+      </a>
     </section>
   );
 }

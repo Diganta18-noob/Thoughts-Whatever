@@ -28,9 +28,9 @@ export function SiteHeader() {
   return (
     <header
       data-print="hide"
-      className="sticky top-0 z-30 border-b border-rule bg-surface/90 backdrop-blur"
+      className="sticky top-0 z-30 border-b border-rule/70 bg-surface/95 backdrop-blur-md"
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
+      <div className="mx-auto flex h-[76px] max-w-6xl items-center gap-4 px-4 sm:px-6">
         <Link
           href="/"
           className="group flex items-center gap-2.5 shrink-0"

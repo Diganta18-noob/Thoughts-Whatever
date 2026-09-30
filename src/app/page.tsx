@@ -167,7 +167,7 @@ export default async function HomePage() {
 
       <Hero />
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 space-y-16">
+      <div id="home-collection" className="home-collection mx-auto max-w-6xl px-4 pb-16 sm:px-6 space-y-20 md:space-y-28">
         {/* Featured Card (Top) */}
         {primaryGlimpsePiece && (
           <section className="pt-2">
