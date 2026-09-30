@@ -28,9 +28,9 @@ export interface AudioManifest {
  * Returns -1 if no cue is active or before first cue.
  */
 export function findActiveCueIndex(cues: Cue[], currentTime: number): number {
-  if (!cues || cues.length === 0) return -1;
+  if (!cues || cues.length === 0 || !Number.isFinite(currentTime)) return -1;
   if (currentTime < cues[0].start) return -1;
-  if (currentTime >= cues[cues.length - 1].end) return cues.length - 1;
+  if (currentTime >= cues[cues.length - 1].end) return -1;
 
   let low = 0;
   let high = cues.length - 1;
@@ -49,16 +49,17 @@ export function findActiveCueIndex(cues: Cue[], currentTime: number): number {
     }
   }
 
-  // If between cues (pause), return the closest preceding cue
-  return Math.max(0, high);
+  // A pause has no spoken caption; do not keep highlighting the previous line.
+  return -1;
 }
 
 /**
  * Finds the index of the active word in a cue given currentTime.
  */
 export function findActiveWordIndex(cue: Cue, currentTime: number): number {
+  if (!Number.isFinite(currentTime) || currentTime < cue.start || currentTime >= cue.end) return -1;
   if (!cue.words || cue.words.length === 0) return -1;
-  let activeIdx = 0;
+  let activeIdx = -1;
   for (let i = 0; i < cue.words.length; i++) {
     if (currentTime >= cue.words[i].start) {
       activeIdx = i;
