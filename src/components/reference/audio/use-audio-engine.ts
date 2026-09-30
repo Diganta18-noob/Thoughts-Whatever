@@ -55,7 +55,7 @@ export function useAudioEngine(src: string, initialDuration: number = 0) {
 
     const onPlay = () => setState((s) => ({ ...s, playing: true }));
     const onPause = () => setState((s) => ({ ...s, playing: false }));
-    const onEnded = () => setState((s) => ({ ...s, playing: false, currentTime: 0 }));
+    const onEnded = () => setState((s) => ({ ...s, playing: false, currentTime: audio.currentTime }));
     const onTimeUpdate = () => {
       setState((s) => ({ ...s, currentTime: audio.currentTime }));
     };
@@ -73,6 +73,7 @@ export function useAudioEngine(src: string, initialDuration: number = 0) {
     audio.addEventListener("pause", onPause);
     audio.addEventListener("ended", onEnded);
     audio.addEventListener("timeupdate", onTimeUpdate);
+    audio.addEventListener("seeked", onTimeUpdate);
     audio.addEventListener("loadedmetadata", onLoadedMetadata);
     audio.addEventListener("waiting", onWaiting);
     audio.addEventListener("canplay", onCanPlay);
@@ -82,10 +83,22 @@ export function useAudioEngine(src: string, initialDuration: number = 0) {
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("ended", onEnded);
       audio.removeEventListener("timeupdate", onTimeUpdate);
+      audio.removeEventListener("seeked", onTimeUpdate);
       audio.removeEventListener("loadedmetadata", onLoadedMetadata);
       audio.removeEventListener("waiting", onWaiting);
       audio.removeEventListener("canplay", onCanPlay);
       audio.pause();
+      sourceNodeRef.current?.disconnect();
+      analyserRef.current?.disconnect();
+      const context = audioContextRef.current;
+      if (context && context.state !== "closed") {
+        void context.close().catch((error) => console.warn("Audio context cleanup failed", error));
+      }
+      audioContextRef.current = null;
+      sourceNodeRef.current = null;
+      analyserRef.current = null;
+      dataArrayRef.current = null;
+      audioRef.current = null;
       audio.src = "";
     };
   }, [src, initialDuration]);
@@ -152,7 +165,14 @@ export function useAudioEngine(src: string, initialDuration: number = 0) {
           amp = Math.max(0.15, Math.min(0.9, breath + flutter));
         }
 
-        setState((s) => ({ ...s, amplitude: amp }));
+        // Captions and waveform use the media clock, including playback-rate changes
+        // and buffering. The animation clock only controls decorative motion.
+        const currentTime = audioRef.current?.currentTime;
+        setState((s) => ({
+          ...s,
+          amplitude: amp,
+          currentTime: currentTime ?? s.currentTime,
+        }));
       } else {
         setState((s) => (s.amplitude > 0.01 ? { ...s, amplitude: s.amplitude * 0.85 } : s));
       }
