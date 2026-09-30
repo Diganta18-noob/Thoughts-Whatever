@@ -175,7 +175,7 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
                 alt={currentPiece.titleBn}
                 fill
                 priority={currentIndex === 0}
-                className="object-contain bg-black"
+                className="object-cover object-center"
                 sizes="(max-width: 768px) 100vw, 1200px"
               />
             ) : (
