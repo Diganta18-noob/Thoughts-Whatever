@@ -51,7 +51,8 @@ describe("Reference Audio System Tests", () => {
     expect(findActiveCueIndex(mockCues, 11.9)).toBe(1);
     expect(findActiveCueIndex(mockCues, 12.0)).toBe(2);
     expect(findActiveCueIndex(mockCues, 15.0)).toBe(2);
-    expect(findActiveCueIndex(mockCues, 25.0)).toBe(2);
+    expect(findActiveCueIndex(mockCues, 20.0)).toBe(-1);
+    expect(findActiveCueIndex(mockCues, 25.0)).toBe(-1);
   });
 
   test("findActiveWordIndex locates active word inside cue", () => {
@@ -60,6 +61,18 @@ describe("Reference Audio System Tests", () => {
     expect(findActiveWordIndex(cue, 7.5)).toBe(1);
     expect(findActiveWordIndex(cue, 9.0)).toBe(2);
     expect(findActiveWordIndex(cue, 11.0)).toBe(3);
+  });
+
+  test("captions clear during silence and reject invalid media times", () => {
+    const pausedCues = [mockCues[0], { ...mockCues[1], start: 7 }];
+    expect(findActiveCueIndex(pausedCues, 5.5)).toBe(-1);
+    expect(findActiveCueIndex(pausedCues, 6.5)).toBe(-1);
+    expect(findActiveCueIndex(pausedCues, 7)).toBe(1);
+    expect(findActiveCueIndex(mockCues, NaN)).toBe(-1);
+    expect(findActiveCueIndex(mockCues, Infinity)).toBe(-1);
+    expect(findActiveWordIndex(mockCues[1], 5)).toBe(-1);
+    expect(findActiveWordIndex(mockCues[1], 12)).toBe(-1);
+    expect(findActiveWordIndex({ ...mockCues[1], words: [{ text: "দ্বিতীয়", start: 6 }] }, 5.5)).toBe(-1);
   });
 
   test("formatTimecode formats minutes, seconds, and hours properly", () => {
