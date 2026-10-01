@@ -23,6 +23,15 @@ export interface AudioManifest {
   cues: Cue[];
 }
 
+/** Positive lead shows a later transcript cue at the current media time. */
+export function captionTime(mediaTime: number, leadSeconds: number): number {
+  return Math.max(0, mediaTime + leadSeconds);
+}
+
+export function mediaTimeForCue(cueStart: number, leadSeconds: number): number {
+  return Math.max(0, cueStart - leadSeconds);
+}
+
 /**
  * Binary search for the active cue given the current playback time.
  * Returns -1 if no cue is active or before first cue.

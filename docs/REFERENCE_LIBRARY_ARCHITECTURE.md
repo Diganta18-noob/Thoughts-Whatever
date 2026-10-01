@@ -70,3 +70,5 @@ ReferenceWork (Canonical Literary / Historical Work)
 ### Audio caption maintenance
 
 The Debabrata Biswas transcript is stored as timed cues in `src/data/reference/audio/debabrata-biswas-manifest.json` and copied to the single published AUDIO asset. `scripts/repair-reference-caption-timing.py` repairs implausible cue durations using transcript length and nearby acoustic silence, preserving all transcript text. Its unanchored timings are estimates, not verified word-level alignment. Run the Reference audio test and spot-check playback before `npx tsx scripts/sync-reference-audio-manifest.ts --apply`; the sync script refuses a mismatched transcript and updates only the matching audio asset.
+
+The listening room applies a nine-second caption lead for this recording, calibrated from a listener report at 01:39. The CC timing controls adjust that lead by one second within ±30 seconds and save the preference per work in local storage. Transcript clicks subtract the same lead when seeking. This is a playback correction, not verified forced alignment; the source manifest and audio remain unchanged.

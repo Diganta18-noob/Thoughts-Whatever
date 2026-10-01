@@ -12,6 +12,8 @@ interface TransportBarProps {
   onSkip: (seconds: number) => void;
   onSetRate: (rate: number) => void;
   onToggleMute: () => void;
+  captionLead: number;
+  onCaptionLeadChange: (seconds: number) => void;
   audioUrl?: string | null;
 }
 
@@ -25,6 +27,8 @@ export function TransportBar({
   onSkip,
   onSetRate,
   onToggleMute,
+  captionLead,
+  onCaptionLeadChange,
   audioUrl,
 }: TransportBarProps) {
   const cycleRate = () => {
@@ -85,6 +89,12 @@ export function TransportBar({
         >
           {rate}x
         </button>
+
+        <div className="flex items-center gap-1 rounded-lg border border-zinc-800 bg-zinc-900 px-1 text-amber-400" aria-label="Caption timing adjustment">
+          <button type="button" onClick={() => onCaptionLeadChange(captionLead - 1)} disabled={captionLead <= -30} aria-label="Show earlier caption" title="Show earlier caption" className="min-h-9 min-w-9 rounded hover:bg-zinc-800 disabled:opacity-40">−</button>
+          <span className="min-w-14 text-center text-[0.6875rem]" title="Caption lead in seconds">CC {captionLead >= 0 ? "+" : ""}{captionLead}s</span>
+          <button type="button" onClick={() => onCaptionLeadChange(captionLead + 1)} disabled={captionLead >= 30} aria-label="Show later caption" title="Show later caption" className="min-h-9 min-w-9 rounded hover:bg-zinc-800 disabled:opacity-40">+</button>
+        </div>
 
         <button
           onClick={onToggleMute}

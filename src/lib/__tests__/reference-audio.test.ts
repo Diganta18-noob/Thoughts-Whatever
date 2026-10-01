@@ -1,8 +1,13 @@
-import { findActiveCueIndex, findActiveWordIndex, formatTimecode, Cue } from "../reference/audio/types";
+import { findActiveCueIndex, findActiveWordIndex, formatTimecode, captionTime, mediaTimeForCue, Cue } from "../reference/audio/types";
 import { generateVtt } from "../reference/audio/vtt";
 import manifest from "../../data/reference/audio/debabrata-biswas-manifest.json";
 
 describe("Reference Audio System Tests", () => {
+  test("caption calibration advances the displayed cue and preserves click-to-seek", () => {
+    expect(captionTime(99, 9)).toBe(108);
+    expect(mediaTimeForCue(108, 9)).toBe(99);
+    expect(findActiveCueIndex(manifest.cues, captionTime(99, 9))).toBe(15);
+  });
   test("published Bengali cues never race through long passages", () => {
     const cues = manifest.cues;
     for (const cue of cues) {

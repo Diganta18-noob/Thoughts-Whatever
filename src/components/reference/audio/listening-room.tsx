@@ -11,7 +11,7 @@ import { PulseButton } from "./pulse-button";
 import { CaptionStage } from "./caption-stage";
 import { TranscriptScroller } from "./transcript-scroller";
 import { TransportBar } from "./transport-bar";
-import { AudioManifest } from "@/lib/reference/audio/types";
+import { AudioManifest, captionTime, mediaTimeForCue } from "@/lib/reference/audio/types";
 import { useAudio } from "@/components/providers/audio-provider";
 import { ReferenceActivityTracker } from "../reference-activity-tracker";
 
@@ -55,8 +55,24 @@ export function ListeningRoom({ work, edition, audioAsset }: ListeningRoomProps)
   // Audio Engine Hook
   const { state, actions } = useAudioEngine(audioAsset.fileUrl, durationSec);
 
-  // Active Cue Hook (binary searched at 60fps)
-  const activeCueInfo = useActiveCue(cues, state.currentTime);
+  // The archival transcript was timed from estimates. This recording's observed
+  // caption lag is about nine seconds; readers can fine-tune it while listening.
+  const defaultCaptionLead = work.slug === "debabrata-biswas-rabindrasangeet-1974" ? 9 : 0;
+  const [captionLead, setCaptionLead] = useState(defaultCaptionLead);
+  useEffect(() => {
+    const stored = localStorage.getItem(`tw_caption_lead_${work.slug}`);
+    const saved = Number(stored);
+    if (stored !== null && Number.isFinite(saved) && saved >= -30 && saved <= 30) {
+      setCaptionLead(saved);
+    }
+  }, [work.slug]);
+  const changeCaptionLead = (seconds: number) => {
+    const next = Math.max(-30, Math.min(30, seconds));
+    setCaptionLead(next);
+    localStorage.setItem(`tw_caption_lead_${work.slug}`, String(next));
+  };
+
+  const activeCueInfo = useActiveCue(cues, captionTime(state.currentTime, captionLead));
 
   // Layout mode: "transcript" (split view) or "theatre" (captions focus)
   const [mode, setMode] = useState<"transcript" | "theatre">("transcript");
@@ -238,6 +254,8 @@ export function ListeningRoom({ work, edition, audioAsset }: ListeningRoomProps)
               onSkip={actions.skip}
               onSetRate={actions.setRate}
               onToggleMute={actions.toggleMute}
+              captionLead={captionLead}
+              onCaptionLeadChange={changeCaptionLead}
               audioUrl={audioAsset.fileUrl}
             />
           </div>
@@ -318,7 +336,7 @@ export function ListeningRoom({ work, edition, audioAsset }: ListeningRoomProps)
                 <TranscriptScroller
                   cues={cues}
                   activeCueIndex={activeCueInfo.cueIndex}
-                  onSeek={actions.seek}
+                  onSeek={(seconds) => actions.seek(mediaTimeForCue(seconds, captionLead))}
                   autoScroll={true}
                 />
               </div>
