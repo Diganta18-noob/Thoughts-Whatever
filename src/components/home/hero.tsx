@@ -36,9 +36,6 @@ export function Hero() {
       />
 
       <div aria-hidden className="home-hero-aura pointer-events-none absolute left-1/2 top-[42%] h-[min(76vw,760px)] w-[min(76vw,760px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/[0.08] bg-[radial-gradient(circle,rgb(var(--accent)/0.08)_0%,transparent_67%)]" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-5 top-10 bottom-10 border border-rule/60 sm:inset-x-10 sm:top-14 sm:bottom-14" />
-      <div aria-hidden className="absolute left-5 top-10 h-12 w-12 border-l border-t border-accent/50 sm:left-10 sm:top-14" />
-      <div aria-hidden className="absolute bottom-10 right-5 h-12 w-12 border-b border-r border-accent/50 sm:bottom-14 sm:right-10" />
 
       <div className="relative z-10 flex w-full max-w-5xl flex-col items-center text-center">
         <Reveal>

@@ -153,7 +153,7 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
       <div
         aria-roledescription="carousel"
         aria-label="Latest stories carousel"
-        className="group/carousel relative w-full overflow-hidden rounded-xl border border-rule/60 bg-[#0d0e10] shadow-2xl transition-all duration-300 hover:border-rule/80 aspect-[4/5] sm:aspect-[16/9] lg:aspect-[21/9] min-h-[460px] sm:min-h-[480px] lg:min-h-[520px]"
+        className="group/carousel relative w-full overflow-hidden bg-[#0d0e10] shadow-2xl aspect-[4/5] sm:aspect-[16/9] lg:aspect-[21/9] min-h-[460px] sm:min-h-[480px] lg:min-h-[520px]"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onTouchStart={handleTouchStart}
@@ -175,7 +175,7 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
                 alt={currentPiece.titleBn}
                 fill
                 priority={currentIndex === 0}
-                className="object-contain bg-black"
+                className="object-cover object-center"
                 sizes="(max-width: 768px) 100vw, 1200px"
               />
             ) : (
@@ -201,11 +201,6 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 z-10 sm:hidden bg-gradient-to-t from-[#0a0a0c]/98 via-[#0a0a0c]/75 via-50% to-[#0a0a0c]/30"
-        />
-        {/* Subtle Vignette border ring */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 z-10 ring-1 ring-inset ring-rule/40 rounded-xl"
         />
 
         {/* ─── Carousel Prev/Next Side Controls (Issue 15: Conventional, Accessible, >=44px) ─── */}
