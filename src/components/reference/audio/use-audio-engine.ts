@@ -152,7 +152,16 @@ export function useAudioEngine(src: string, initialDuration: number = 0) {
           amp = Math.max(0.15, Math.min(0.9, breath + flutter));
         }
 
-        setState((s) => ({ ...s, amplitude: amp }));
+        // Read the media clock on each visual frame; `timeupdate` fires only a
+        // few times a second and leaves word highlights visibly behind audio.
+        const currentTime = audioRef.current?.currentTime;
+        setState((s) => ({
+          ...s,
+          amplitude: amp,
+          currentTime: currentTime !== undefined && Number.isFinite(currentTime)
+            ? currentTime
+            : s.currentTime,
+        }));
       } else {
         setState((s) => (s.amplitude > 0.01 ? { ...s, amplitude: s.amplitude * 0.85 } : s));
       }

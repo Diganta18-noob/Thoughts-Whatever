@@ -1,7 +1,18 @@
 import { findActiveCueIndex, findActiveWordIndex, formatTimecode, Cue } from "../reference/audio/types";
 import { generateVtt } from "../reference/audio/vtt";
+import manifest from "../../data/reference/audio/debabrata-biswas-manifest.json";
 
 describe("Reference Audio System Tests", () => {
+  test("published Bengali cues never race through long passages", () => {
+    const cues = manifest.cues;
+    for (const cue of cues) {
+      const duration = cue.end - cue.start;
+      expect(duration).toBeGreaterThan(0);
+      if (cue.text.length >= 50) {
+        expect(cue.text.length / duration).toBeLessThanOrEqual(35);
+      }
+    }
+  });
   const mockCues: Cue[] = [
     {
       id: 0,

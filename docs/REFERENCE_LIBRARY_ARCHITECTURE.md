@@ -51,6 +51,7 @@ ReferenceWork (Canonical Literary / Historical Work)
 - `/reference`: Archive landing page with live dynamic statistics, category selector, faceted search, and exhibits.
 - `/reference/[slug]`: Resource dossier with bibliographic details, dynamic action buttons, rights badge, and original source attribution.
 - `/reference/[slug]/read`: Online reader for verified hosted works (zoom, font scaling, dark/sepia/paper themes).
+- `/reference/[slug]/listen`: Audio playback with Bengali captions driven by the `ReferenceAsset.audioManifest` cue times and the media element's playback clock.
 - `/reference/rights`: Archive copyright and rights policy documentation.
 - `GET /api/reference`: Filtered and paginated search catalog with live count metrics.
 - `GET /api/reference/[slug]`: Public dossier data.
@@ -65,3 +66,7 @@ ReferenceWork (Canonical Literary / Historical Work)
 - `POST /api/admin/reference/[id]/rights-review`: Transition rights state with immutable audit trail.
 - `POST /api/admin/reference/[id]/assets`: Attach digital asset verifying hosting rights.
 - `GET/PATCH /api/admin/reference/claims`: Moderate community copyright notices.
+
+### Audio caption maintenance
+
+The Debabrata Biswas transcript is stored as timed cues in `src/data/reference/audio/debabrata-biswas-manifest.json` and copied to the single published AUDIO asset. `scripts/repair-reference-caption-timing.py` repairs implausible cue durations using transcript length and nearby acoustic silence, preserving all transcript text. Its unanchored timings are estimates, not verified word-level alignment. Run the Reference audio test and spot-check playback before `npx tsx scripts/sync-reference-audio-manifest.ts --apply`; the sync script refuses a mismatched transcript and updates only the matching audio asset.
