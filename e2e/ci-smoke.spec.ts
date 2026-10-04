@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("public routes render and unknown content returns 404", async ({ page }) => {
+test("public routes render and unknown content is marked not found", async ({ page }) => {
   for (const route of ["/", "/writing", "/blog", "/documentary", "/series", "/authors", "/reference"]) {
     const response = await page.goto(route);
     expect(response?.status(), route).toBe(200);
@@ -8,7 +8,11 @@ test("public routes render and unknown content returns 404", async ({ page }) =>
     await expect(page.locator("body")).not.toContainText("Application error");
   }
   const missing = await page.goto("/writing/ci-does-not-exist");
-  expect(missing?.status()).toBe(404);
+  // Next.js can commit streaming headers before notFound() resolves. In that
+  // case the status is 200, with the recovery page and noindex in the stream.
+  expect([200, 404]).toContain(missing?.status());
+  await expect(page.getByRole("navigation", { name: "Recovery navigation" })).toBeVisible();
+  await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toBeAttached();
 });
 
 test("admin routes require login and seeded credentials authenticate", async ({ page, request }) => {
