@@ -2,7 +2,7 @@
 
 Pull requests to `main` and pushes to `main` run `CI Verify`: lint, typecheck, disposable PostgreSQL 16, sample content and admin seed, unit tests, production build, and Chromium smoke tests. No production database or API secrets are needed.
 
-Node 22 is selected from `.nvmrc`. Set the Vercel project's Node version to 22.x too. Vercel's Git integration owns preview and production deployments; the workflow no longer deploys a second copy using a token. Production environment variables still need to be valid in Vercel.
+Node 22 is selected from `.nvmrc` for CI and `package.json` engines for Vercel, which overrides its dashboard Node version. Vercel's Git integration owns preview and production deployments; the workflow no longer deploys a second copy using a token. Production environment variables still need to be valid in Vercel.
 
 In GitHub Settings → Rules → Rulesets, target `main`, require a pull request, require the `CI Verify` status check, block force pushes and deletion, and require branches to be up to date before merging. Use zero required approvals for a solo owner. Enable the ruleset after the first run has registered the check. Keep emergency bypass access limited to the owner.
 
