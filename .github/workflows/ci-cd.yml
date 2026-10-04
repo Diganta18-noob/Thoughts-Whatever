@@ -1,102 +1,86 @@
-name: CI/CD Pipeline
+name: CI
 
 on:
-  push:
-    branches: [main, develop]
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      full_e2e:
+        description: Run the full browser audit instead of the smoke suite
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  lint-and-typecheck:
-    name: Lint & Typecheck
+  verify:
+    name: CI Verify
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Generate Prisma Client
-        run: npx prisma generate
-
-      # `npm run build` proves neither of these: next.config.js sets
-      # typescript.ignoreBuildErrors and eslint.ignoreDuringBuilds. These two
-      # steps are the only real type and lint gates in the repo.
-      - name: Run ESLint
-        run: npm run lint
-
-      - name: TypeScript Check
-        run: npm run typecheck
-
-  test:
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
-    needs: lint-and-typecheck
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Generate Prisma Client
-        run: npx prisma generate
-
-      - name: Run Jest Test Suite
-        run: npm test
-
-  build:
-    name: Production Build Test
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Generate Prisma Client
-        run: npx prisma generate
-
-      - name: Build Next.js project
+    timeout-minutes: 35
+    services:
+      postgres:
+        image: postgres:16
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
-        run: npm run build
-
-  deploy:
-    name: Deploy to Production
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci-local-only
+          POSTGRES_DB: thoughts_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ci -d thoughts_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://ci:ci-local-only@localhost:5432/thoughts_ci
+      DIRECT_URL: postgresql://ci:ci-local-only@localhost:5432/thoughts_ci
+      AUTH_SECRET: ci-only-auth-secret-not-a-production-credential
+      SEED_ADMIN_PASSWORD: ci-only-admin-password
+      TEST_ADMIN_EMAIL: admin@thoughts.whatever.com
+      TEST_ADMIN_PASSWORD: ci-only-admin-password
+      NEXT_TELEMETRY_DISABLED: "1"
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: "--prod"
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install dependencies and generate Prisma client
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Prepare disposable PostgreSQL database
+        run: npx prisma db push --skip-generate
+      - name: Seed test content and admin
+        run: npm run db:seed
+      - name: Unit tests
+        run: npm test -- --ci
+      - name: Build production application
+        run: npm run build
+      - name: Install Chromium
+        run: npx playwright install chromium --with-deps
+      - name: Browser smoke tests
+        if: inputs.full_e2e != true
+        run: npx playwright test --project=ci-smoke
+      - name: Full browser audit
+        if: inputs.full_e2e == true
+        run: npm run test:e2e:ci
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-failure-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+          if-no-files-found: ignore

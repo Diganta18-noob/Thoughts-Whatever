@@ -20,6 +20,11 @@ export default defineConfig({
 
   projects: [
     {
+      name: "ci-smoke",
+      testMatch: /ci-smoke\.spec\.ts/,
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
       name: "setup",
       testMatch: /.*\.setup\.ts/,
     },
@@ -30,6 +35,7 @@ export default defineConfig({
     },
     {
       name: "chromium",
+      testIgnore: /ci-smoke\.spec\.ts/,
       use: { ...devices["Desktop Chrome"] },
       dependencies: ["setup"],
     },
@@ -38,7 +44,7 @@ export default defineConfig({
   webServer: {
     command: "npm run start",
     url: "http://localhost:3000",
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },
 });
