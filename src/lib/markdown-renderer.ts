@@ -243,7 +243,7 @@ Thoughts Whatever welcomes feedback, literary inquiries, corrections, and archiv
     return `# Privacy Policy (গোপনীয়তা নীতি)
 
 **Canonical URL**: ${absoluteUrl("/privacy")}
-**Effective Date**: August 2024 / Updated 2026
+**Updated**: 7 October 2026
 
 Thoughts Whatever is built with respect for reader privacy.
 
@@ -251,9 +251,9 @@ Thoughts Whatever is built with respect for reader privacy.
 
 1. **No Mandatory Accounts**: Readers can browse, read, search, and listen to all public essays without registering an account.
 2. **Local Browser Storage**: The "পরে পড়ব" (Bookmarks / Saved for later) and reading progress features store data exclusively in your device's browser \`localStorage\`. This data is never transmitted to or stored on our servers.
-3. **Newsletter Email Collection**: When you subscribe to "চিঠি" (our newsletter), your email address is stored securely solely for sending editorial letters and updates. We do not sell, rent, or share subscriber emails. You can unsubscribe at any time using the link in any letter.
-4. **Analytics**: We use privacy-conscious analytics (PostHog) to understand aggregate readership patterns (such as which essays are read and device display preferences). IP addresses are anonymized.
-5. **Cookies**: We use essential cookies strictly for theme preference (\`tw_theme\`), language selection (\`tw_lang\`), and secure administrator authentication.
+3. **Newsletter Email Collection**: When you subscribe to "চিঠি" (our newsletter), your email address is stored securely solely for sending editorial letters and updates. We do not sell subscriber emails. Hosting, database, and email providers process information required to deliver the service. You can unsubscribe at any time using the link in any letter.
+4. **Analytics**: Optional first-party analytics and PostHog are disabled until acceptance. They record session-based content activity, browser information and approximate location. Session recording and autocapture are disabled. Use Cookie settings in the footer to withdraw consent; DNT and GPC are honoured. Previously stored events are not automatically erased.
+5. **Cookies**: We store a consent choice and essential preferences for theme preference (\`tw_theme\`), language selection (\`tw_lang\`), and secure administrator authentication.
 
 For inquiries regarding data practices, contact us via [${absoluteUrl("/contact")}](${absoluteUrl("/contact")}).
 `;

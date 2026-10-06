@@ -12,7 +12,7 @@
   --surface-raised: 255 255 255;
   --content: 31 27 22;
   --content-soft: 74 66 56;
-  --content-faint: 138 127 110;
+  --content-faint: 110 99 82;
   --rule: 222 213 194;
   --accent: 140 47 31;
   --gold: 138 106 47;
@@ -28,7 +28,7 @@
   --surface-raised: 250 244 232;
   --content: 44 34 22;
   --content-soft: 86 70 51;
-  --content-faint: 145 126 99;
+  --content-faint: 111 92 65;
   --rule: 216 200 172;
   --accent: 143 68 32;
   --gold: 138 100 40;
@@ -44,7 +44,7 @@
   --surface-raised: 22 22 24;
   --content: 232 230 225;
   --content-soft: 165 162 155;
-  --content-faint: 107 104 98;
+  --content-faint: 151 148 142;
   --rule: 43 43 47;
   --accent: 224 112 60;
   --gold: 198 161 91;
@@ -60,7 +60,7 @@
   --surface-raised: 19 19 21;
   --content: 232 230 225;
   --content-soft: 165 162 155;
-  --content-faint: 107 104 98;
+  --content-faint: 151 148 142;
   --rule: 35 35 38;
   --accent: 193 68 14;
   --gold: 198 161 91;
@@ -623,4 +623,15 @@
   .admin-stat-card::before { transition: none; }
   .admin-chart-line { animation: none; stroke-dashoffset: 0; }
   .admin-chart-area { animation: none; }
+}
+
+/* Keep keyboard focus visible even when a component has no custom ring. */
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 3px;
+}
+
+/* White on the night-theme orange is only 3.2:1; dark text is 6.1:1. */
+[data-theme="night"] .bg-accent.text-white {
+  color: rgb(var(--surface));
 }

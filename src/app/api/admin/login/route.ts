@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { issueAuthCookies, hashPassword, verifyPassword } from "@/lib/auth";
 import { loginSchema } from "@/lib/validation";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
-import { getPostHogServerClient } from "@/lib/posthog";
 
 export const runtime = "nodejs";
 
@@ -83,15 +82,6 @@ export async function POST(request: Request) {
       where: { id: admin.id },
       data: { lastLoginAt: new Date() },
     });
-
-    const phServer = getPostHogServerClient();
-    if (phServer) {
-      phServer.capture({
-        distinctId: admin.id,
-        event: "admin_login_success",
-        properties: { role: "admin" },
-      });
-    }
 
     return NextResponse.json({ ok: true });
 
