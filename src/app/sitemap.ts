@@ -38,7 +38,7 @@ function pieceUrl(kind: keyof typeof KIND_META, slug: string) {
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [pieces, authors, seriesList] = await Promise.all([
+  const [pieces, authors, seriesList, references] = await Promise.all([
     prisma.piece.findMany({
       where: PUBLISHED,
       select: { slug: true, kind: true, publishedAt: true, updatedAt: true },
@@ -50,6 +50,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
     prisma.series.findMany({
       where: { pieces: { some: PUBLISHED } },
+      select: { slug: true, updatedAt: true },
+    }),
+    prisma.referenceWork.findMany({
+      where: { published: true },
       select: { slug: true, updatedAt: true },
     }),
   ]);
@@ -69,6 +73,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: url("/letter"), lastModified: newest, changeFrequency: "monthly", priority: 0.5 },
     { url: url("/about"), lastModified: newest, changeFrequency: "monthly", priority: 0.5 },
     { url: url("/contact"), lastModified: newest, changeFrequency: "monthly", priority: 0.5 },
+    { url: url("/reference"), lastModified: newest, changeFrequency: "weekly", priority: 0.8 },
+    { url: url("/terms"), changeFrequency: "monthly", priority: 0.3 },
     { url: url("/privacy"), lastModified: newest, changeFrequency: "monthly", priority: 0.5 },
   ];
 
@@ -95,5 +101,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // /search and /bookmarks are deliberately absent: both are noindex, and a
   // sitemap entry for a noindex page is a contradiction crawlers report.
-  return [...staticRoutes, ...pieceRoutes, ...authorRoutes, ...seriesRoutes];
+  return [...staticRoutes, ...pieceRoutes, ...authorRoutes, ...seriesRoutes, ...references.map((work) => ({ url: url(`/reference/${encodeURIComponent(work.slug)}`), lastModified: work.updatedAt }))];
 }

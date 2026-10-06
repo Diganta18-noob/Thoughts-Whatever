@@ -15,6 +15,7 @@ export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Reference Library | Thoughts.Whatever",
+  alternates: { canonical: "/reference" },
   description:
     "A rights-aware digital archive of texts, historical documents, recordings, and sources behind Thoughts.Whatever.",
 };

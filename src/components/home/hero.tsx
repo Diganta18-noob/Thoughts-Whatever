@@ -71,7 +71,7 @@ export function Hero() {
               <Magnetic>
                 <Link
                   href={resumeHref}
-                  className={`inline-flex items-center gap-2.5 rounded-sm bg-accent px-6 py-3 text-sm font-medium text-white transition hover:opacity-90 ${face}`}
+                  className={`inline-flex items-center gap-2.5 rounded-sm border border-rule px-6 py-3 text-sm font-medium text-content-soft transition hover:text-accent ${face}`}
                   lang={locale}
                 >
                   {t("home.continueReading")}

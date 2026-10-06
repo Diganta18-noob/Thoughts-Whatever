@@ -38,44 +38,24 @@ export default function PrivacyPage() {
       />
 
       <div className="mx-auto max-w-measure py-12">
-        <div className="prose-bengali" lang="bn">
-          <p>
-            {siteConfig.name} পাঠকদের স্বাধীন ও নিরবচ্ছিন্ন পাঠের অভিজ্ঞতায় বিশ্বাসী। আমরা কোনো অপ্রয়োজনীয় ব্যক্তিগত তথ্য সংগ্রহ করি না এবং পাঠকদের গোপনীয়তাকে সর্বোচ্চ মর্যাদা দিই।
-          </p>
-
-          <h2>১. কোনো বাধ্যতামূলক অ্যাকাউন্ট নেই</h2>
-          <p>
-            {siteConfig.name}-এর যেকোনো রচনা, ব্লগ, তথ্যচিত্র, ধারাবাহিক বা সময়রেখা পড়ার জন্য কোনো পাঠক অ্যাকাউন্ট খোলার প্রয়োজন নেই। সমস্ত প্রকাশিত সাহিত্যকর্ম উন্মুক্ত ও অবিলম্বে পাঠযোগ্য।
-          </p>
-
-          <h2>২. ব্রাউজারের নিজস্ব সংরক্ষণাগার (Local Storage)</h2>
-          <p>
-            আপনি যখন কোনো লেখায় &ldquo;পরে পড়ব&rdquo; (Bookmarks) যোগ করেন অথবা কোনো লেখার কতটুকু পড়েছেন (Reading Progress) তা রেকর্ড হয়, সেই তথ্য কেবলমাত্র আপনার নিজের ডিভাইসের ব্রাউজার \`localStorage\`-এ সংরক্ষিত থাকে। এটি কখনোই আমাদের সার্ভারে পাঠানো হয় না এবং অন্য কারো পক্ষে তা দেখা সম্ভব নয়।
-          </p>
-
-          <h2>৩. নিউজলেটার ও ইমেল সংগ্রহ</h2>
-          <p>
-            আপনি যদি স্বেচ্ছায় আমাদের &ldquo;চিঠি&rdquo; (Newsletter)-তে আপনার ইমেল ঠিকানা জমা দেন, তবে তা শুধুমাত্র নতুন লেখা ও সম্পাদকের নোট পাঠানোর কাজে সুরক্ষিতভাবে ব্যবহৃত হয়। আমরা কখনোই কোনো তৃতীয় পক্ষের কাছে এই ইমেল ঠিকানা বিক্রি, ভাড়া বা হস্তান্তর করি না। প্রতিটি চিঠির নিচে থাকা &ldquo;Unsubscribe&rdquo; লিংকের মাধ্যমে যেকোনো সময় সহজেই সদস্যপদ প্রত্যাহার করা যায়।
-          </p>
-
-          <h2>৪. অ্যানালিটিক্স ও কুকিজ (Analytics & Cookies)</h2>
-          <p>
-            ওয়েবসাইটের গতি ও পাঠক অভিজ্ঞতা উন্নত করার জন্য আমরা পরিচয়হীন (anonymized) পরিসংখ্যান টুল ব্যবহার করি। আমাদের ব্যবহৃত কুকিগুলি কেবলমাত্র আপনার পছন্দের থিম (\`tw_theme\`), ভাষা (\`tw_lang\`) এবং প্রশাসনিক সুরক্ষার জন্য নিবেদিত। কোনো বিজ্ঞাপন ট্র্যাকার বা ক্রস-সাইট প্রোফাইলিং কুকি আমাদের সাইটে নেই।
-          </p>
-
-          <h2>৫. তথ্যের নিরাপত্তা, সংরক্ষণ ও অধিকার</h2>
-          <p>
-            আমাদের ডেটাবেস এবং পরিকাঠামো আধুনিক TLS/SSL এনক্রিপশন ও সুরক্ষা প্রটোকলের আওতাভুক্ত। আপনার সংগৃহীত তথ্যের সম্পূর্ণ অপসারণ (Data Deletion) বা কোনো তথ্যের অধিকার সংক্রান্ত প্রশ্নের জন্য সরাসরি আমাদের সিকিউরিটি ডেস্কে ইমেল করতে পারেন: <a href="mailto:security@thoughtswhatever.in" className="text-accent underline">security@thoughtswhatever.in</a> অথবা আমাদের <a href="/contact" className="text-accent underline">যোগাযোগ পৃষ্ঠা</a> ব্যবহার করতে পারেন।
-          </p>
-
-          <h2>৬. প্রকাশনা ও আইনগত পরিচয়</h2>
-          <p>
-            {siteConfig.name} একটি স্বাধীন ডিজিটাল বাংলা সাহিত্য ও গবেষণা প্ল্যাটফর্ম। কোনো তৃতীয় পক্ষীয় বিজ্ঞাপন নেটওয়ার্কের সাথে আমাদের কোনো সংযোগ নেই।
-          </p>
+        <div className="prose mx-auto max-w-measure text-content" lang="en">
+          <p>Last updated: 7 October 2026. Published reading does not require a reader account.</p>
+          <h2>Essential browser storage</h2>
+          <p>Theme, language, bookmarks, reading progress, audio preferences, and your consent choice are stored in your browser. Administrator login uses authentication cookies. Clearing browser storage removes local preferences and saved reading state.</p>
+          <h2>Optional analytics</h2>
+          <p>Optional readership analytics stays disabled until you accept it. When enabled, our database records a random session identifier, content interactions, browser information, referring site, and approximate location supplied by our hosting provider. PostHog may also process interaction events. We disable automatic click tracking and session recording, and exclude administrator pages from optional tracking.</p>
+          <p>Use Cookie settings in the footer to accept or reject analytics at any time. Rejection stops future optional tracking; it does not automatically erase previously recorded events. We also honour Do Not Track and Global Privacy Control signals.</p>
+          <h2>The Letter</h2>
+          <p>We store the email address and any name you submit, subscription source, confirmation status, and subscription dates to send the newsletter. Signup requires email confirmation. Unsubscribe using the link in a letter. Our hosting, database, and email providers process information needed to operate these services.</p>
+          <h2>External media and service logs</h2>
+          <p>Images, audio, and embedded media may be delivered by external services such as Cloudinary, Instagram, or YouTube. Visiting or loading those services is subject to their own privacy policies. Hosting and security logs may include network information needed to operate and protect the site.</p>
+          <h2>Requests and retention</h2>
+          <p>We do not sell newsletter addresses. Contact us to request access, correction, deletion, or information about retention. Subscription records remain until removed by the operator; unsubscribing stops mail delivery. There is currently no automatic expiry for stored analytics events.</p>
+          <p>For privacy questions and requests, use our <a href="/contact">contact page</a>. Please avoid sending unnecessary sensitive information.</p>
         </div>
 
         <div className="mt-12 border-t border-rule/50 pt-6 text-xs text-content-faint">
-          <p>সর্বশেষ সংস্করণ: সেপ্টেম্বর ২০২৬ — {siteConfig.name} প্রকাশনা</p>
+          <p>সর্বশেষ সংস্করণ: অক্টোবর ২০২৬ — {siteConfig.name} প্রকাশনা</p>
         </div>
       </div>
     </div>

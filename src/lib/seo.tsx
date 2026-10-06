@@ -111,7 +111,7 @@ export function articleJsonLd(piece: SeoPiece) {
       url: siteConfig.url,
       logo: {
         "@type": "ImageObject",
-        url: absoluteUrl("/brand/logo-full.svg"),
+        url: absoluteUrl("/opengraph-image"),
       },
       sameAs: [siteConfig.instagram].filter(Boolean),
     },
@@ -145,7 +145,7 @@ export function organizationJsonLd() {
     alternateName: [siteConfig.nameEn, "Thoughts Whatever", "t.w"],
     url: siteConfig.url,
     logo: absoluteUrl("/brand/logo-full.svg"),
-    image: absoluteUrl("/brand/logo-full.svg"),
+    image: absoluteUrl("/opengraph-image"),
     sameAs: [siteConfig.instagram].filter(Boolean),
     description: `${siteConfig.tagline} — ${siteConfig.taglineEn}. An independent publication and archive dedicated to Bengali literature, close reading, and historical documentary.`,
     knowsAbout: [
@@ -300,7 +300,7 @@ export function seriesJsonLd(series: {
       url: siteConfig.url,
       logo: {
         "@type": "ImageObject",
-        url: absoluteUrl("/brand/logo-full.svg"),
+        url: absoluteUrl("/opengraph-image"),
       },
       sameAs: [siteConfig.instagram].filter(Boolean),
     },

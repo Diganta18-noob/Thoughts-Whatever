@@ -73,6 +73,12 @@ const PUBLIC_ADMIN_PATHS = new Set([
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  // Only redirect on the trusted Vercel production proxy; localhost remains HTTP.
+  if (process.env.VERCEL_ENV === "production" && request.headers.get("x-forwarded-proto") === "http") {
+    const secure = request.nextUrl.clone();
+    secure.protocol = "https:";
+    return NextResponse.redirect(secure, 308);
+  }
 
   // 1. Exclude public admin routes (e.g. login API, forgot-password, reset-password)
   if (PUBLIC_ADMIN_PATHS.has(pathname)) {
