@@ -16,6 +16,7 @@ test("public routes render and unknown content is marked not found", async ({ pa
 });
 
 test("consent, mobile layout, metadata and preview assets work", async ({ page, request }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   const analyticsRequests: string[] = [];
   page.on("request", (req) => { if (req.url().includes("/ingest/") || req.url().includes("/api/analytics/event")) analyticsRequests.push(req.url()); });
   await page.setViewportSize({ width: 390, height: 844 });
@@ -44,6 +45,7 @@ test("consent, mobile layout, metadata and preview assets work", async ({ page, 
   expect(await sitemap.text()).toContain("/reference");
   expect(await sitemap.text()).toContain("/terms");
   await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
   await testInfo.attach("mobile-home", { body: await page.screenshot({ fullPage: true }), contentType: "image/png" });
   const timings = await page.evaluate(() => {
     const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
@@ -52,6 +54,7 @@ test("consent, mobile layout, metadata and preview assets work", async ({ page, 
   await testInfo.attach("page-speed", { body: JSON.stringify(timings), contentType: "application/json" });
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
   await testInfo.attach("desktop-home", { body: await page.screenshot({ fullPage: true }), contentType: "image/png" });
 });
 
