@@ -50,6 +50,9 @@ test("consent, mobile layout, metadata and preview assets work", async ({ page, 
     return { ttfbMs: Math.round(nav.responseStart - nav.requestStart), domReadyMs: Math.round(nav.domContentLoadedEventEnd), resources: performance.getEntriesByType("resource").length };
   });
   await testInfo.attach("page-speed", { body: JSON.stringify(timings), contentType: "application/json" });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await testInfo.attach("desktop-home", { body: await page.screenshot({ fullPage: true }), contentType: "image/png" });
 });
 
 test("admin routes require login and seeded credentials authenticate", async ({ page, request }) => {
