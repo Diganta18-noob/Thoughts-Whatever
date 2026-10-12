@@ -22,10 +22,11 @@ export async function generateMetadata({ params }: ListenPageProps): Promise<Met
   const slug = decodeURIComponent(params.slug);
   const work = await getReferenceWorkBySlug(slug);
 
-  if (!work) return { title: "অডিও পাঠকক্ষ | Thoughts.Whatever" };
+  if (!work) return { title: "অডিও পাঠকক্ষ" };
 
   return {
-    title: `${work.titleBn} — ডিজিটাল অডিও ও প্রতিলিপি কক্ষ | Thoughts.Whatever`,
+    title: `${work.titleBn} — ডিজিটাল অডিও ও প্রতিলিপি কক্ষ`,
+    alternates: { canonical: `/reference/${encodeURIComponent(slug)}/listen` },
     description: `Listen to the archival audio recording and read synchronized captions for ${work.titleBn} at Thoughts.Whatever.`,
   };
 }

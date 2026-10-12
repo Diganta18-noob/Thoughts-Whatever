@@ -91,17 +91,22 @@ export function matchDocs(
 export function useSearchIndex({ eager = false }: { eager?: boolean } = {}) {
   const [docs, setDocs] = useState<SearchDoc[] | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const load = useCallback(async () => {
     // A ref-free guard is fine here: both callers are idempotent, and the
     // worst case is one redundant fetch of a cached JSON file.
     if (docs || loading) return;
     setLoading(true);
+    setError(false);
     try {
       const res = await fetch("/api/search-index");
-      setDocs(res.ok ? ((await res.json()) as SearchDoc[]) : []);
+      if (!res.ok) throw new Error("Search unavailable");
+      const data: unknown = await res.json();
+      if (!Array.isArray(data)) throw new Error("Invalid search index");
+      setDocs(data as SearchDoc[]);
     } catch {
-      setDocs([]);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -121,7 +126,7 @@ export function useSearchIndex({ eager = false }: { eager?: boolean } = {}) {
     };
   }, [docs]);
 
-  return { docs, indexes, loading, load };
+  return { docs, indexes, loading, error, load };
 }
 
 export const KIND_PATH: Record<SearchDoc["kind"], string> = {

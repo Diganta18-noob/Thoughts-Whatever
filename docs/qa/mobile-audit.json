@@ -1,0 +1,2076 @@
+{
+  "checks": 230,
+  "failures": [],
+  "report": [
+    {
+      "width": 320,
+      "route": "/",
+      "status": 200,
+      "title": "Thoughts Whatever — Bengali literature, essays & documentaries",
+      "description": "Explore Bengali literature, thoughtful essays, documentary research, author profiles, and archival texts at Thoughts Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/writing",
+      "status": 200,
+      "title": "রচনা — Thoughts Whatever",
+      "description": "প্রতিটি রিলের পিছনের সম্পূর্ণ লেখা — বাংলা সাহিত্য, পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/blog",
+      "status": 200,
+      "title": "ব্লগ — Thoughts Whatever",
+      "description": "Thoughts Whatever ব্লগ ও পাঠ বিভাগ — বাংলা সাহিত্য, চিন্তাভাবনা ও দীর্ঘ প্রবন্ধ সংকলন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/documentary",
+      "status": 200,
+      "title": "তথ্যচিত্র — Thoughts Whatever",
+      "description": "গবেষণাভিত্তিক তথ্যচিত্র — সূত্র, কালরেখা ও সম্পূর্ণ লেখা সমেত।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/archive",
+      "status": 200,
+      "title": "সংগ্রহ — Thoughts Whatever",
+      "description": "সব লেখা — লেখক, যুগ, রূপ ও বিষয় ধরে সাজানো।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/reference",
+      "status": 200,
+      "title": "Reference Library — Thoughts Whatever",
+      "description": "A rights-aware digital archive of texts, historical documents, recordings, and sources behind Thoughts.Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/series",
+      "status": 200,
+      "title": "ধারাবাহিক — Thoughts Whatever",
+      "description": "পর পর পড়ার মতো লেখার গুচ্ছ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/authors",
+      "status": 200,
+      "title": "লেখকেরা — Thoughts Whatever",
+      "description": "যাঁদের নিয়ে লেখা — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/about",
+      "status": 200,
+      "title": "পরিচয় — About — Thoughts Whatever",
+      "description": "Thoughts Whatever — বাংলা সাহিত্য, পাঠ-পর্যালোচনা ও তথ্যচিত্র নিয়ে একটি স্বাধীন ডিজিটাল পত্রিকা ও আর্কাইভ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/contact",
+      "status": 200,
+      "title": "যোগাযোগ — Contact — Thoughts Whatever",
+      "description": "Thoughts Whatever — সম্পাদকীয় যোগাযোগ, তথ্যসূত্র সংশোধন ও মতামত পাঠানোর মাধ্যম।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/privacy",
+      "status": 200,
+      "title": "গোপনীয়তা নীতি — Privacy Policy — Thoughts Whatever",
+      "description": "Thoughts Whatever — পাঠক ও ব্যবহারকারীর গোপনীয়তা সংক্রান্ত নিয়মাবলী ও তথ্য সুরক্ষা নীতি।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/letter",
+      "status": 200,
+      "title": "চিঠি — Thoughts Whatever",
+      "description": "মাসে একটা চিঠি — নতুন লেখা আর পুরোনো সংগ্রহ থেকে কিছু।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/bookmarks",
+      "status": 200,
+      "title": "পরে পড়ব — Thoughts Whatever",
+      "description": "সংরক্ষিত লেখার তালিকা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/search",
+      "status": 200,
+      "title": "খুঁজুন — Thoughts Whatever",
+      "description": "লেখক, বিষয় বা শিরোনাম ধরে খুঁজুন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/reference/rights",
+      "status": 200,
+      "title": "Rights & Provenance Policy | Reference Library — Thoughts Whatever",
+      "description": "Editorial and legal rights framework, public domain evaluation, and digital preservation principles for the Thoughts.Whatever Reference Library and Digital Archive.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/resource/bangla-sahityer-timeline",
+      "status": 200,
+      "title": "বাংলা সাহিত্যের সম্পূর্ণ টাইমলাইন (১৮০০–২০২৫) — ইতিহাস, যুগবিভাগ ও মাইলফলক — Thoughts Whatever",
+      "description": "ফোর্ট উইলিয়াম কলেজ থেকে সমকালীন পর্ব — বাংলা সাহিত্যের ২২৫ বছরের সমগ্র ইতিহাস, যুগবিভাগ, প্রধান লেখক ও কালজয়ী সৃষ্টির পূর্ণাঙ্গ ইন্টারঅ্যাক্টিভ টাইমলাইন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/missing-mobile-audit-page",
+      "status": 404,
+      "title": "Page not found — Thoughts Whatever",
+      "description": "This page could not be found. Explore the writing, archive, or search Thoughts Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/writing/কপালকুণ্ডলা",
+      "status": 200,
+      "title": "কপালকুণ্ডলা — Thoughts Whatever",
+      "description": "কপালকুণ্ডলা। সেই নারী, যাকে সমাজ গ্রহণ করার আগে বদলে ফেলতে চেয়েছিল। আচ্ছা, একজন নারী যদি সমাজের তৈরি করা নিয়ম না জানে, তাহলে সে কি অসভ্য? না",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-1",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - পর্ব-১ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-2",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল | পর্ব-২ — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - পর্ব-২ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-3",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল | অন্তিম পর্ব — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - অন্তিম পর্ব — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/documentary/ইন্দুবালা-ও-আইনস্টাইন",
+      "status": 200,
+      "title": "ইন্দুবালা ও আইনস্টাইন — Thoughts Whatever",
+      "description": "ইন্দুবালা ও আইনস্টাইন — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-1",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর পর্ব -১  — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-2",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর | পর্ব-২ — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর পর্ব-২ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-3",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর | অন্তিম পর্ব — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর অন্তিম পর্ব — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/documentary/গগনেন্দ্রনাথ-ঠাকুর",
+      "status": 200,
+      "title": "গগনেন্দ্রনাথ ঠাকুর — Thoughts Whatever",
+      "description": "গগনেন্দ্রনাথ ঠাকুর — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/documentary/তিতুমীর-মহাশ্বেতা-দেবী",
+      "status": 200,
+      "title": "তিতুমীর- মহাশ্বেতা দেবী — Thoughts Whatever",
+      "description": "তিতুমীর- মহাশ্বেতা দেবী — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/documentary/ভুত-ভবিষ্যৎ",
+      "status": 200,
+      "title": "ভুত ভবিষ্যৎ — Thoughts Whatever",
+      "description": "ভুত ভবিষ্যৎ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/authors/fyodor-dostoevsky",
+      "status": 200,
+      "title": "Fyodor Dostoevsky — Thoughts Whatever",
+      "description": "Fyodor Dostoevsky নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/authors/কাজী-নজরুল-ইসলাম",
+      "status": 200,
+      "title": "কাজী নজরুল ইসলাম — Thoughts Whatever",
+      "description": "বিদ্রোহী কবি, গীতিকার, সাংবাদিক, সৈনিক। ১৯২২ সালে ‘বিদ্রোহী’ প্রকাশের পর বাংলা কবিতার স্বরটাই বদলে যায়। বাংলাদেশের জাতীয় কবি।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/authors/জীবনানন্দ-দাশ",
+      "status": 200,
+      "title": "জীবনানন্দ দাশ — Thoughts Whatever",
+      "description": "ত্রিশের দশকের প্রধান কবি, যাঁকে বুদ্ধদেব বসু বলেছিলেন ‘নির্জনতম কবি’। জীবদ্দশায় স্বীকৃতি পেয়েছেন কম; মৃত্যুর পর বাংলা কবিতার কেন্দ্রে চলে এসেছেন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/authors/প্রভাতকুমার-মুখোপাধ্যায়",
+      "status": 200,
+      "title": "প্রভাতকুমার মুখোপাধ্যায় — Thoughts Whatever",
+      "description": "প্রভাতকুমার মুখোপাধ্যায় নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/authors/বঙ্কিমচন্দ্র-চট্টোপাধ্যায়",
+      "status": 200,
+      "title": "বঙ্কিমচন্দ্র চট্টোপাধ্যায় — Thoughts Whatever",
+      "description": "বঙ্কিমচন্দ্র চট্টোপাধ্যায় নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/authors/বুদ্ধদেব-বসু",
+      "status": 200,
+      "title": "বুদ্ধদেব বসু — Thoughts Whatever",
+      "description": "কবি, প্রাবন্ধিক, অনুবাদক, সম্পাদক। ১৯৩৫ সালে ‘কবিতা’ পত্রিকা শুরু করেন — ত্রিশের দশকের কবিদের প্রধান আশ্রয়। বোদলেয়ার ও হ্যোল্ডারলিনের অনুবাদক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/authors/মাইকেল-মধুসূদন-দত্ত",
+      "status": 200,
+      "title": "মাইকেল মধুসূদন দত্ত — Thoughts Whatever",
+      "description": "বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ মহাকবি এবং অমিত্রাক্ষর ছন্দের প্রবর্তক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/authors/মানিক-বন্দ্যোপাধ্যায়",
+      "status": 200,
+      "title": "মানিক বন্দ্যোপাধ্যায় — Thoughts Whatever",
+      "description": "কল্লোল-পরবর্তী কথাসাহিত্যের সবচেয়ে নির্মম পর্যবেক্ষক। ‘পদ্মানদীর মাঝি’ (১৯৩৬) ও ‘পুতুলনাচের ইতিকথা’ (১৯৩৬) — দুটিই আটাশ বছর বয়সের আগে লেখা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/authors/রবীন্দ্রনাথ-ঠাকুর",
+      "status": 200,
+      "title": "রবীন্দ্রনাথ ঠাকুর — Thoughts Whatever",
+      "description": "কবি, ঔপন্যাসিক, নাট্যকার, গীতিকার, চিত্রশিল্পী। ১৯১৩ সালে ‘গীতাঞ্জলি’-র ইংরেজি অনুবাদের জন্য সাহিত্যে নোবেল পুরস্কার পান — ইউরোপের বাইরে প্রথম। বাংলা গদ্য ",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/authors/শরৎচন্দ্র-চট্টোপাধ্যায়",
+      "status": 200,
+      "title": "শরৎচন্দ্র চট্টোপাধ্যায় — Thoughts Whatever",
+      "description": "বাংলা কথাসাহিত্যের অপরাজেয় কথাশিল্পী ও কালজয়ী ঔপন্যাসিক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/series/crime-and-punishment",
+      "status": 200,
+      "title": "Crime and punishment — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "দস্তয়েভস্কির 'ক্রাইম অ্যান্ড পুনিশমেন্ট' মানুষের বিবেকের তদন্তের গল্প।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/series/আনন্দমঠ",
+      "status": 200,
+      "title": "আনন্দমঠ — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "আনন্দমঠ বাংলা সাহিত্যের একটি ঐতিহাসিক উপন্যাস যা ফকির-সন্ন্যাসী বিদ্রোহের পটভূমিতে রচিত।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/series/আলালের-ঘরের-দুলাল",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল বিষয়ে একটি বিশেষ সাহিত্যিক ধারাবাহিক ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/series/কমলাকান্তের-দপ্তর",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর বিষয়ে একটি বিশেষ সাহিত্যিক ধারাবাহিক ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/series/চোখের-বালি",
+      "status": 200,
+      "title": "চোখের বালি — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "রবীন্দ্রনাথের 'চোখের বালি' একটি সমাজের গল্প, যেখানে নারীর পরিচয়কে সংজ্ঞায়িত করা হয়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/series/নীলদর্পণ",
+      "status": 200,
+      "title": "নীলদর্পণ — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "নীলকর সাহেবদের অমানুষিক অত্যাচার ও কৃষক বিদ্রোহের কালজয়ী ঐতিহাসিক আলেখ্য।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/series/পথের-দাবী",
+      "status": 200,
+      "title": "পথের দাবী — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "পথের দাবী বিষয়ে একটি ধারাবাহিক বিশ্লেষণ ও আলোচনা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 320,
+      "route": "/series/মেঘনাদবধ-কাব্য",
+      "status": 200,
+      "title": "মেঘনাদবধ কাব্য — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "মেঘনাদবধ কাব্য একটি অনন্য দৃষ্টিকোণ থেকে রাবণ পুত্র মেঘনাথের কাহিনী তুলে ধরে।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/",
+      "status": 200,
+      "title": "Thoughts Whatever — Bengali literature, essays & documentaries",
+      "description": "Explore Bengali literature, thoughtful essays, documentary research, author profiles, and archival texts at Thoughts Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/writing",
+      "status": 200,
+      "title": "রচনা — Thoughts Whatever",
+      "description": "প্রতিটি রিলের পিছনের সম্পূর্ণ লেখা — বাংলা সাহিত্য, পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/blog",
+      "status": 200,
+      "title": "ব্লগ — Thoughts Whatever",
+      "description": "Thoughts Whatever ব্লগ ও পাঠ বিভাগ — বাংলা সাহিত্য, চিন্তাভাবনা ও দীর্ঘ প্রবন্ধ সংকলন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/documentary",
+      "status": 200,
+      "title": "তথ্যচিত্র — Thoughts Whatever",
+      "description": "গবেষণাভিত্তিক তথ্যচিত্র — সূত্র, কালরেখা ও সম্পূর্ণ লেখা সমেত।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/archive",
+      "status": 200,
+      "title": "সংগ্রহ — Thoughts Whatever",
+      "description": "সব লেখা — লেখক, যুগ, রূপ ও বিষয় ধরে সাজানো।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/reference",
+      "status": 200,
+      "title": "Reference Library — Thoughts Whatever",
+      "description": "A rights-aware digital archive of texts, historical documents, recordings, and sources behind Thoughts.Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/series",
+      "status": 200,
+      "title": "ধারাবাহিক — Thoughts Whatever",
+      "description": "পর পর পড়ার মতো লেখার গুচ্ছ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/authors",
+      "status": 200,
+      "title": "লেখকেরা — Thoughts Whatever",
+      "description": "যাঁদের নিয়ে লেখা — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/about",
+      "status": 200,
+      "title": "পরিচয় — About — Thoughts Whatever",
+      "description": "Thoughts Whatever — বাংলা সাহিত্য, পাঠ-পর্যালোচনা ও তথ্যচিত্র নিয়ে একটি স্বাধীন ডিজিটাল পত্রিকা ও আর্কাইভ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/contact",
+      "status": 200,
+      "title": "যোগাযোগ — Contact — Thoughts Whatever",
+      "description": "Thoughts Whatever — সম্পাদকীয় যোগাযোগ, তথ্যসূত্র সংশোধন ও মতামত পাঠানোর মাধ্যম।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/privacy",
+      "status": 200,
+      "title": "গোপনীয়তা নীতি — Privacy Policy — Thoughts Whatever",
+      "description": "Thoughts Whatever — পাঠক ও ব্যবহারকারীর গোপনীয়তা সংক্রান্ত নিয়মাবলী ও তথ্য সুরক্ষা নীতি।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/letter",
+      "status": 200,
+      "title": "চিঠি — Thoughts Whatever",
+      "description": "মাসে একটা চিঠি — নতুন লেখা আর পুরোনো সংগ্রহ থেকে কিছু।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/bookmarks",
+      "status": 200,
+      "title": "পরে পড়ব — Thoughts Whatever",
+      "description": "সংরক্ষিত লেখার তালিকা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/search",
+      "status": 200,
+      "title": "খুঁজুন — Thoughts Whatever",
+      "description": "লেখক, বিষয় বা শিরোনাম ধরে খুঁজুন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/reference/rights",
+      "status": 200,
+      "title": "Rights & Provenance Policy | Reference Library — Thoughts Whatever",
+      "description": "Editorial and legal rights framework, public domain evaluation, and digital preservation principles for the Thoughts.Whatever Reference Library and Digital Archive.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/resource/bangla-sahityer-timeline",
+      "status": 200,
+      "title": "বাংলা সাহিত্যের সম্পূর্ণ টাইমলাইন (১৮০০–২০২৫) — ইতিহাস, যুগবিভাগ ও মাইলফলক — Thoughts Whatever",
+      "description": "ফোর্ট উইলিয়াম কলেজ থেকে সমকালীন পর্ব — বাংলা সাহিত্যের ২২৫ বছরের সমগ্র ইতিহাস, যুগবিভাগ, প্রধান লেখক ও কালজয়ী সৃষ্টির পূর্ণাঙ্গ ইন্টারঅ্যাক্টিভ টাইমলাইন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/missing-mobile-audit-page",
+      "status": 404,
+      "title": "Page not found — Thoughts Whatever",
+      "description": "This page could not be found. Explore the writing, archive, or search Thoughts Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/writing/কপালকুণ্ডলা",
+      "status": 200,
+      "title": "কপালকুণ্ডলা — Thoughts Whatever",
+      "description": "কপালকুণ্ডলা। সেই নারী, যাকে সমাজ গ্রহণ করার আগে বদলে ফেলতে চেয়েছিল। আচ্ছা, একজন নারী যদি সমাজের তৈরি করা নিয়ম না জানে, তাহলে সে কি অসভ্য? না",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-1",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - পর্ব-১ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-2",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল | পর্ব-২ — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - পর্ব-২ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-3",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল | অন্তিম পর্ব — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - অন্তিম পর্ব — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/documentary/ইন্দুবালা-ও-আইনস্টাইন",
+      "status": 200,
+      "title": "ইন্দুবালা ও আইনস্টাইন — Thoughts Whatever",
+      "description": "ইন্দুবালা ও আইনস্টাইন — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-1",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর পর্ব -১  — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-2",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর | পর্ব-২ — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর পর্ব-২ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-3",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর | অন্তিম পর্ব — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর অন্তিম পর্ব — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/documentary/গগনেন্দ্রনাথ-ঠাকুর",
+      "status": 200,
+      "title": "গগনেন্দ্রনাথ ঠাকুর — Thoughts Whatever",
+      "description": "গগনেন্দ্রনাথ ঠাকুর — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/documentary/তিতুমীর-মহাশ্বেতা-দেবী",
+      "status": 200,
+      "title": "তিতুমীর- মহাশ্বেতা দেবী — Thoughts Whatever",
+      "description": "তিতুমীর- মহাশ্বেতা দেবী — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/documentary/ভুত-ভবিষ্যৎ",
+      "status": 200,
+      "title": "ভুত ভবিষ্যৎ — Thoughts Whatever",
+      "description": "ভুত ভবিষ্যৎ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/authors/fyodor-dostoevsky",
+      "status": 200,
+      "title": "Fyodor Dostoevsky — Thoughts Whatever",
+      "description": "Fyodor Dostoevsky নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/authors/কাজী-নজরুল-ইসলাম",
+      "status": 200,
+      "title": "কাজী নজরুল ইসলাম — Thoughts Whatever",
+      "description": "বিদ্রোহী কবি, গীতিকার, সাংবাদিক, সৈনিক। ১৯২২ সালে ‘বিদ্রোহী’ প্রকাশের পর বাংলা কবিতার স্বরটাই বদলে যায়। বাংলাদেশের জাতীয় কবি।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/authors/জীবনানন্দ-দাশ",
+      "status": 200,
+      "title": "জীবনানন্দ দাশ — Thoughts Whatever",
+      "description": "ত্রিশের দশকের প্রধান কবি, যাঁকে বুদ্ধদেব বসু বলেছিলেন ‘নির্জনতম কবি’। জীবদ্দশায় স্বীকৃতি পেয়েছেন কম; মৃত্যুর পর বাংলা কবিতার কেন্দ্রে চলে এসেছেন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/authors/প্রভাতকুমার-মুখোপাধ্যায়",
+      "status": 200,
+      "title": "প্রভাতকুমার মুখোপাধ্যায় — Thoughts Whatever",
+      "description": "প্রভাতকুমার মুখোপাধ্যায় নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/authors/বঙ্কিমচন্দ্র-চট্টোপাধ্যায়",
+      "status": 200,
+      "title": "বঙ্কিমচন্দ্র চট্টোপাধ্যায় — Thoughts Whatever",
+      "description": "বঙ্কিমচন্দ্র চট্টোপাধ্যায় নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/authors/বুদ্ধদেব-বসু",
+      "status": 200,
+      "title": "বুদ্ধদেব বসু — Thoughts Whatever",
+      "description": "কবি, প্রাবন্ধিক, অনুবাদক, সম্পাদক। ১৯৩৫ সালে ‘কবিতা’ পত্রিকা শুরু করেন — ত্রিশের দশকের কবিদের প্রধান আশ্রয়। বোদলেয়ার ও হ্যোল্ডারলিনের অনুবাদক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/authors/মাইকেল-মধুসূদন-দত্ত",
+      "status": 200,
+      "title": "মাইকেল মধুসূদন দত্ত — Thoughts Whatever",
+      "description": "বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ মহাকবি এবং অমিত্রাক্ষর ছন্দের প্রবর্তক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/authors/মানিক-বন্দ্যোপাধ্যায়",
+      "status": 200,
+      "title": "মানিক বন্দ্যোপাধ্যায় — Thoughts Whatever",
+      "description": "কল্লোল-পরবর্তী কথাসাহিত্যের সবচেয়ে নির্মম পর্যবেক্ষক। ‘পদ্মানদীর মাঝি’ (১৯৩৬) ও ‘পুতুলনাচের ইতিকথা’ (১৯৩৬) — দুটিই আটাশ বছর বয়সের আগে লেখা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/authors/রবীন্দ্রনাথ-ঠাকুর",
+      "status": 200,
+      "title": "রবীন্দ্রনাথ ঠাকুর — Thoughts Whatever",
+      "description": "কবি, ঔপন্যাসিক, নাট্যকার, গীতিকার, চিত্রশিল্পী। ১৯১৩ সালে ‘গীতাঞ্জলি’-র ইংরেজি অনুবাদের জন্য সাহিত্যে নোবেল পুরস্কার পান — ইউরোপের বাইরে প্রথম। বাংলা গদ্য ",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/authors/শরৎচন্দ্র-চট্টোপাধ্যায়",
+      "status": 200,
+      "title": "শরৎচন্দ্র চট্টোপাধ্যায় — Thoughts Whatever",
+      "description": "বাংলা কথাসাহিত্যের অপরাজেয় কথাশিল্পী ও কালজয়ী ঔপন্যাসিক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/series/crime-and-punishment",
+      "status": 200,
+      "title": "Crime and punishment — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "দস্তয়েভস্কির 'ক্রাইম অ্যান্ড পুনিশমেন্ট' মানুষের বিবেকের তদন্তের গল্প।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/series/আনন্দমঠ",
+      "status": 200,
+      "title": "আনন্দমঠ — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "আনন্দমঠ বাংলা সাহিত্যের একটি ঐতিহাসিক উপন্যাস যা ফকির-সন্ন্যাসী বিদ্রোহের পটভূমিতে রচিত।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/series/আলালের-ঘরের-দুলাল",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল বিষয়ে একটি বিশেষ সাহিত্যিক ধারাবাহিক ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/series/কমলাকান্তের-দপ্তর",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর বিষয়ে একটি বিশেষ সাহিত্যিক ধারাবাহিক ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/series/চোখের-বালি",
+      "status": 200,
+      "title": "চোখের বালি — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "রবীন্দ্রনাথের 'চোখের বালি' একটি সমাজের গল্প, যেখানে নারীর পরিচয়কে সংজ্ঞায়িত করা হয়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/series/নীলদর্পণ",
+      "status": 200,
+      "title": "নীলদর্পণ — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "নীলকর সাহেবদের অমানুষিক অত্যাচার ও কৃষক বিদ্রোহের কালজয়ী ঐতিহাসিক আলেখ্য।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/series/পথের-দাবী",
+      "status": 200,
+      "title": "পথের দাবী — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "পথের দাবী বিষয়ে একটি ধারাবাহিক বিশ্লেষণ ও আলোচনা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 375,
+      "route": "/series/মেঘনাদবধ-কাব্য",
+      "status": 200,
+      "title": "মেঘনাদবধ কাব্য — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "মেঘনাদবধ কাব্য একটি অনন্য দৃষ্টিকোণ থেকে রাবণ পুত্র মেঘনাথের কাহিনী তুলে ধরে।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/",
+      "status": 200,
+      "title": "Thoughts Whatever — Bengali literature, essays & documentaries",
+      "description": "Explore Bengali literature, thoughtful essays, documentary research, author profiles, and archival texts at Thoughts Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/writing",
+      "status": 200,
+      "title": "রচনা — Thoughts Whatever",
+      "description": "প্রতিটি রিলের পিছনের সম্পূর্ণ লেখা — বাংলা সাহিত্য, পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/blog",
+      "status": 200,
+      "title": "ব্লগ — Thoughts Whatever",
+      "description": "Thoughts Whatever ব্লগ ও পাঠ বিভাগ — বাংলা সাহিত্য, চিন্তাভাবনা ও দীর্ঘ প্রবন্ধ সংকলন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/documentary",
+      "status": 200,
+      "title": "তথ্যচিত্র — Thoughts Whatever",
+      "description": "গবেষণাভিত্তিক তথ্যচিত্র — সূত্র, কালরেখা ও সম্পূর্ণ লেখা সমেত।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/archive",
+      "status": 200,
+      "title": "সংগ্রহ — Thoughts Whatever",
+      "description": "সব লেখা — লেখক, যুগ, রূপ ও বিষয় ধরে সাজানো।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/reference",
+      "status": 200,
+      "title": "Reference Library — Thoughts Whatever",
+      "description": "A rights-aware digital archive of texts, historical documents, recordings, and sources behind Thoughts.Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/series",
+      "status": 200,
+      "title": "ধারাবাহিক — Thoughts Whatever",
+      "description": "পর পর পড়ার মতো লেখার গুচ্ছ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/authors",
+      "status": 200,
+      "title": "লেখকেরা — Thoughts Whatever",
+      "description": "যাঁদের নিয়ে লেখা — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/about",
+      "status": 200,
+      "title": "পরিচয় — About — Thoughts Whatever",
+      "description": "Thoughts Whatever — বাংলা সাহিত্য, পাঠ-পর্যালোচনা ও তথ্যচিত্র নিয়ে একটি স্বাধীন ডিজিটাল পত্রিকা ও আর্কাইভ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/contact",
+      "status": 200,
+      "title": "যোগাযোগ — Contact — Thoughts Whatever",
+      "description": "Thoughts Whatever — সম্পাদকীয় যোগাযোগ, তথ্যসূত্র সংশোধন ও মতামত পাঠানোর মাধ্যম।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/privacy",
+      "status": 200,
+      "title": "গোপনীয়তা নীতি — Privacy Policy — Thoughts Whatever",
+      "description": "Thoughts Whatever — পাঠক ও ব্যবহারকারীর গোপনীয়তা সংক্রান্ত নিয়মাবলী ও তথ্য সুরক্ষা নীতি।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/letter",
+      "status": 200,
+      "title": "চিঠি — Thoughts Whatever",
+      "description": "মাসে একটা চিঠি — নতুন লেখা আর পুরোনো সংগ্রহ থেকে কিছু।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/bookmarks",
+      "status": 200,
+      "title": "পরে পড়ব — Thoughts Whatever",
+      "description": "সংরক্ষিত লেখার তালিকা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/search",
+      "status": 200,
+      "title": "খুঁজুন — Thoughts Whatever",
+      "description": "লেখক, বিষয় বা শিরোনাম ধরে খুঁজুন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/reference/rights",
+      "status": 200,
+      "title": "Rights & Provenance Policy | Reference Library — Thoughts Whatever",
+      "description": "Editorial and legal rights framework, public domain evaluation, and digital preservation principles for the Thoughts.Whatever Reference Library and Digital Archive.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/resource/bangla-sahityer-timeline",
+      "status": 200,
+      "title": "বাংলা সাহিত্যের সম্পূর্ণ টাইমলাইন (১৮০০–২০২৫) — ইতিহাস, যুগবিভাগ ও মাইলফলক — Thoughts Whatever",
+      "description": "ফোর্ট উইলিয়াম কলেজ থেকে সমকালীন পর্ব — বাংলা সাহিত্যের ২২৫ বছরের সমগ্র ইতিহাস, যুগবিভাগ, প্রধান লেখক ও কালজয়ী সৃষ্টির পূর্ণাঙ্গ ইন্টারঅ্যাক্টিভ টাইমলাইন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/missing-mobile-audit-page",
+      "status": 404,
+      "title": "Page not found — Thoughts Whatever",
+      "description": "This page could not be found. Explore the writing, archive, or search Thoughts Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/writing/কপালকুণ্ডলা",
+      "status": 200,
+      "title": "কপালকুণ্ডলা — Thoughts Whatever",
+      "description": "কপালকুণ্ডলা। সেই নারী, যাকে সমাজ গ্রহণ করার আগে বদলে ফেলতে চেয়েছিল। আচ্ছা, একজন নারী যদি সমাজের তৈরি করা নিয়ম না জানে, তাহলে সে কি অসভ্য? না",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-1",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - পর্ব-১ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-2",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল | পর্ব-২ — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - পর্ব-২ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-3",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল | অন্তিম পর্ব — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - অন্তিম পর্ব — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/documentary/ইন্দুবালা-ও-আইনস্টাইন",
+      "status": 200,
+      "title": "ইন্দুবালা ও আইনস্টাইন — Thoughts Whatever",
+      "description": "ইন্দুবালা ও আইনস্টাইন — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-1",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর পর্ব -১  — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-2",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর | পর্ব-২ — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর পর্ব-২ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-3",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর | অন্তিম পর্ব — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর অন্তিম পর্ব — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/documentary/গগনেন্দ্রনাথ-ঠাকুর",
+      "status": 200,
+      "title": "গগনেন্দ্রনাথ ঠাকুর — Thoughts Whatever",
+      "description": "গগনেন্দ্রনাথ ঠাকুর — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/documentary/তিতুমীর-মহাশ্বেতা-দেবী",
+      "status": 200,
+      "title": "তিতুমীর- মহাশ্বেতা দেবী — Thoughts Whatever",
+      "description": "তিতুমীর- মহাশ্বেতা দেবী — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/documentary/ভুত-ভবিষ্যৎ",
+      "status": 200,
+      "title": "ভুত ভবিষ্যৎ — Thoughts Whatever",
+      "description": "ভুত ভবিষ্যৎ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/authors/fyodor-dostoevsky",
+      "status": 200,
+      "title": "Fyodor Dostoevsky — Thoughts Whatever",
+      "description": "Fyodor Dostoevsky নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/authors/কাজী-নজরুল-ইসলাম",
+      "status": 200,
+      "title": "কাজী নজরুল ইসলাম — Thoughts Whatever",
+      "description": "বিদ্রোহী কবি, গীতিকার, সাংবাদিক, সৈনিক। ১৯২২ সালে ‘বিদ্রোহী’ প্রকাশের পর বাংলা কবিতার স্বরটাই বদলে যায়। বাংলাদেশের জাতীয় কবি।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/authors/জীবনানন্দ-দাশ",
+      "status": 200,
+      "title": "জীবনানন্দ দাশ — Thoughts Whatever",
+      "description": "ত্রিশের দশকের প্রধান কবি, যাঁকে বুদ্ধদেব বসু বলেছিলেন ‘নির্জনতম কবি’। জীবদ্দশায় স্বীকৃতি পেয়েছেন কম; মৃত্যুর পর বাংলা কবিতার কেন্দ্রে চলে এসেছেন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/authors/প্রভাতকুমার-মুখোপাধ্যায়",
+      "status": 200,
+      "title": "প্রভাতকুমার মুখোপাধ্যায় — Thoughts Whatever",
+      "description": "প্রভাতকুমার মুখোপাধ্যায় নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/authors/বঙ্কিমচন্দ্র-চট্টোপাধ্যায়",
+      "status": 200,
+      "title": "বঙ্কিমচন্দ্র চট্টোপাধ্যায় — Thoughts Whatever",
+      "description": "বঙ্কিমচন্দ্র চট্টোপাধ্যায় নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/authors/বুদ্ধদেব-বসু",
+      "status": 200,
+      "title": "বুদ্ধদেব বসু — Thoughts Whatever",
+      "description": "কবি, প্রাবন্ধিক, অনুবাদক, সম্পাদক। ১৯৩৫ সালে ‘কবিতা’ পত্রিকা শুরু করেন — ত্রিশের দশকের কবিদের প্রধান আশ্রয়। বোদলেয়ার ও হ্যোল্ডারলিনের অনুবাদক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/authors/মাইকেল-মধুসূদন-দত্ত",
+      "status": 200,
+      "title": "মাইকেল মধুসূদন দত্ত — Thoughts Whatever",
+      "description": "বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ মহাকবি এবং অমিত্রাক্ষর ছন্দের প্রবর্তক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/authors/মানিক-বন্দ্যোপাধ্যায়",
+      "status": 200,
+      "title": "মানিক বন্দ্যোপাধ্যায় — Thoughts Whatever",
+      "description": "কল্লোল-পরবর্তী কথাসাহিত্যের সবচেয়ে নির্মম পর্যবেক্ষক। ‘পদ্মানদীর মাঝি’ (১৯৩৬) ও ‘পুতুলনাচের ইতিকথা’ (১৯৩৬) — দুটিই আটাশ বছর বয়সের আগে লেখা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/authors/রবীন্দ্রনাথ-ঠাকুর",
+      "status": 200,
+      "title": "রবীন্দ্রনাথ ঠাকুর — Thoughts Whatever",
+      "description": "কবি, ঔপন্যাসিক, নাট্যকার, গীতিকার, চিত্রশিল্পী। ১৯১৩ সালে ‘গীতাঞ্জলি’-র ইংরেজি অনুবাদের জন্য সাহিত্যে নোবেল পুরস্কার পান — ইউরোপের বাইরে প্রথম। বাংলা গদ্য ",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/authors/শরৎচন্দ্র-চট্টোপাধ্যায়",
+      "status": 200,
+      "title": "শরৎচন্দ্র চট্টোপাধ্যায় — Thoughts Whatever",
+      "description": "বাংলা কথাসাহিত্যের অপরাজেয় কথাশিল্পী ও কালজয়ী ঔপন্যাসিক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/series/crime-and-punishment",
+      "status": 200,
+      "title": "Crime and punishment — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "দস্তয়েভস্কির 'ক্রাইম অ্যান্ড পুনিশমেন্ট' মানুষের বিবেকের তদন্তের গল্প।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/series/আনন্দমঠ",
+      "status": 200,
+      "title": "আনন্দমঠ — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "আনন্দমঠ বাংলা সাহিত্যের একটি ঐতিহাসিক উপন্যাস যা ফকির-সন্ন্যাসী বিদ্রোহের পটভূমিতে রচিত।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/series/আলালের-ঘরের-দুলাল",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল বিষয়ে একটি বিশেষ সাহিত্যিক ধারাবাহিক ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/series/কমলাকান্তের-দপ্তর",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর বিষয়ে একটি বিশেষ সাহিত্যিক ধারাবাহিক ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/series/চোখের-বালি",
+      "status": 200,
+      "title": "চোখের বালি — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "রবীন্দ্রনাথের 'চোখের বালি' একটি সমাজের গল্প, যেখানে নারীর পরিচয়কে সংজ্ঞায়িত করা হয়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/series/নীলদর্পণ",
+      "status": 200,
+      "title": "নীলদর্পণ — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "নীলকর সাহেবদের অমানুষিক অত্যাচার ও কৃষক বিদ্রোহের কালজয়ী ঐতিহাসিক আলেখ্য।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/series/পথের-দাবী",
+      "status": 200,
+      "title": "পথের দাবী — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "পথের দাবী বিষয়ে একটি ধারাবাহিক বিশ্লেষণ ও আলোচনা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 768,
+      "route": "/series/মেঘনাদবধ-কাব্য",
+      "status": 200,
+      "title": "মেঘনাদবধ কাব্য — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "মেঘনাদবধ কাব্য একটি অনন্য দৃষ্টিকোণ থেকে রাবণ পুত্র মেঘনাথের কাহিনী তুলে ধরে।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/",
+      "status": 200,
+      "title": "Thoughts Whatever — Bengali literature, essays & documentaries",
+      "description": "Explore Bengali literature, thoughtful essays, documentary research, author profiles, and archival texts at Thoughts Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/writing",
+      "status": 200,
+      "title": "রচনা — Thoughts Whatever",
+      "description": "প্রতিটি রিলের পিছনের সম্পূর্ণ লেখা — বাংলা সাহিত্য, পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/blog",
+      "status": 200,
+      "title": "ব্লগ — Thoughts Whatever",
+      "description": "Thoughts Whatever ব্লগ ও পাঠ বিভাগ — বাংলা সাহিত্য, চিন্তাভাবনা ও দীর্ঘ প্রবন্ধ সংকলন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/documentary",
+      "status": 200,
+      "title": "তথ্যচিত্র — Thoughts Whatever",
+      "description": "গবেষণাভিত্তিক তথ্যচিত্র — সূত্র, কালরেখা ও সম্পূর্ণ লেখা সমেত।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/archive",
+      "status": 200,
+      "title": "সংগ্রহ — Thoughts Whatever",
+      "description": "সব লেখা — লেখক, যুগ, রূপ ও বিষয় ধরে সাজানো।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/reference",
+      "status": 200,
+      "title": "Reference Library — Thoughts Whatever",
+      "description": "A rights-aware digital archive of texts, historical documents, recordings, and sources behind Thoughts.Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/series",
+      "status": 200,
+      "title": "ধারাবাহিক — Thoughts Whatever",
+      "description": "পর পর পড়ার মতো লেখার গুচ্ছ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/authors",
+      "status": 200,
+      "title": "লেখকেরা — Thoughts Whatever",
+      "description": "যাঁদের নিয়ে লেখা — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/about",
+      "status": 200,
+      "title": "পরিচয় — About — Thoughts Whatever",
+      "description": "Thoughts Whatever — বাংলা সাহিত্য, পাঠ-পর্যালোচনা ও তথ্যচিত্র নিয়ে একটি স্বাধীন ডিজিটাল পত্রিকা ও আর্কাইভ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/contact",
+      "status": 200,
+      "title": "যোগাযোগ — Contact — Thoughts Whatever",
+      "description": "Thoughts Whatever — সম্পাদকীয় যোগাযোগ, তথ্যসূত্র সংশোধন ও মতামত পাঠানোর মাধ্যম।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/privacy",
+      "status": 200,
+      "title": "গোপনীয়তা নীতি — Privacy Policy — Thoughts Whatever",
+      "description": "Thoughts Whatever — পাঠক ও ব্যবহারকারীর গোপনীয়তা সংক্রান্ত নিয়মাবলী ও তথ্য সুরক্ষা নীতি।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/letter",
+      "status": 200,
+      "title": "চিঠি — Thoughts Whatever",
+      "description": "মাসে একটা চিঠি — নতুন লেখা আর পুরোনো সংগ্রহ থেকে কিছু।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/bookmarks",
+      "status": 200,
+      "title": "পরে পড়ব — Thoughts Whatever",
+      "description": "সংরক্ষিত লেখার তালিকা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/search",
+      "status": 200,
+      "title": "খুঁজুন — Thoughts Whatever",
+      "description": "লেখক, বিষয় বা শিরোনাম ধরে খুঁজুন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/reference/rights",
+      "status": 200,
+      "title": "Rights & Provenance Policy | Reference Library — Thoughts Whatever",
+      "description": "Editorial and legal rights framework, public domain evaluation, and digital preservation principles for the Thoughts.Whatever Reference Library and Digital Archive.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/resource/bangla-sahityer-timeline",
+      "status": 200,
+      "title": "বাংলা সাহিত্যের সম্পূর্ণ টাইমলাইন (১৮০০–২০২৫) — ইতিহাস, যুগবিভাগ ও মাইলফলক — Thoughts Whatever",
+      "description": "ফোর্ট উইলিয়াম কলেজ থেকে সমকালীন পর্ব — বাংলা সাহিত্যের ২২৫ বছরের সমগ্র ইতিহাস, যুগবিভাগ, প্রধান লেখক ও কালজয়ী সৃষ্টির পূর্ণাঙ্গ ইন্টারঅ্যাক্টিভ টাইমলাইন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/missing-mobile-audit-page",
+      "status": 404,
+      "title": "Page not found — Thoughts Whatever",
+      "description": "This page could not be found. Explore the writing, archive, or search Thoughts Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/writing/কপালকুণ্ডলা",
+      "status": 200,
+      "title": "কপালকুণ্ডলা — Thoughts Whatever",
+      "description": "কপালকুণ্ডলা। সেই নারী, যাকে সমাজ গ্রহণ করার আগে বদলে ফেলতে চেয়েছিল। আচ্ছা, একজন নারী যদি সমাজের তৈরি করা নিয়ম না জানে, তাহলে সে কি অসভ্য? না",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-1",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - পর্ব-১ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-2",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল | পর্ব-২ — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - পর্ব-২ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-3",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল | অন্তিম পর্ব — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - অন্তিম পর্ব — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/documentary/ইন্দুবালা-ও-আইনস্টাইন",
+      "status": 200,
+      "title": "ইন্দুবালা ও আইনস্টাইন — Thoughts Whatever",
+      "description": "ইন্দুবালা ও আইনস্টাইন — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-1",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর পর্ব -১  — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-2",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর | পর্ব-২ — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর পর্ব-২ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-3",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর | অন্তিম পর্ব — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর অন্তিম পর্ব — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/documentary/গগনেন্দ্রনাথ-ঠাকুর",
+      "status": 200,
+      "title": "গগনেন্দ্রনাথ ঠাকুর — Thoughts Whatever",
+      "description": "গগনেন্দ্রনাথ ঠাকুর — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/documentary/তিতুমীর-মহাশ্বেতা-দেবী",
+      "status": 200,
+      "title": "তিতুমীর- মহাশ্বেতা দেবী — Thoughts Whatever",
+      "description": "তিতুমীর- মহাশ্বেতা দেবী — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/documentary/ভুত-ভবিষ্যৎ",
+      "status": 200,
+      "title": "ভুত ভবিষ্যৎ — Thoughts Whatever",
+      "description": "ভুত ভবিষ্যৎ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/authors/fyodor-dostoevsky",
+      "status": 200,
+      "title": "Fyodor Dostoevsky — Thoughts Whatever",
+      "description": "Fyodor Dostoevsky নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/authors/কাজী-নজরুল-ইসলাম",
+      "status": 200,
+      "title": "কাজী নজরুল ইসলাম — Thoughts Whatever",
+      "description": "বিদ্রোহী কবি, গীতিকার, সাংবাদিক, সৈনিক। ১৯২২ সালে ‘বিদ্রোহী’ প্রকাশের পর বাংলা কবিতার স্বরটাই বদলে যায়। বাংলাদেশের জাতীয় কবি।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/authors/জীবনানন্দ-দাশ",
+      "status": 200,
+      "title": "জীবনানন্দ দাশ — Thoughts Whatever",
+      "description": "ত্রিশের দশকের প্রধান কবি, যাঁকে বুদ্ধদেব বসু বলেছিলেন ‘নির্জনতম কবি’। জীবদ্দশায় স্বীকৃতি পেয়েছেন কম; মৃত্যুর পর বাংলা কবিতার কেন্দ্রে চলে এসেছেন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/authors/প্রভাতকুমার-মুখোপাধ্যায়",
+      "status": 200,
+      "title": "প্রভাতকুমার মুখোপাধ্যায় — Thoughts Whatever",
+      "description": "প্রভাতকুমার মুখোপাধ্যায় নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/authors/বঙ্কিমচন্দ্র-চট্টোপাধ্যায়",
+      "status": 200,
+      "title": "বঙ্কিমচন্দ্র চট্টোপাধ্যায় — Thoughts Whatever",
+      "description": "বঙ্কিমচন্দ্র চট্টোপাধ্যায় নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/authors/বুদ্ধদেব-বসু",
+      "status": 200,
+      "title": "বুদ্ধদেব বসু — Thoughts Whatever",
+      "description": "কবি, প্রাবন্ধিক, অনুবাদক, সম্পাদক। ১৯৩৫ সালে ‘কবিতা’ পত্রিকা শুরু করেন — ত্রিশের দশকের কবিদের প্রধান আশ্রয়। বোদলেয়ার ও হ্যোল্ডারলিনের অনুবাদক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/authors/মাইকেল-মধুসূদন-দত্ত",
+      "status": 200,
+      "title": "মাইকেল মধুসূদন দত্ত — Thoughts Whatever",
+      "description": "বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ মহাকবি এবং অমিত্রাক্ষর ছন্দের প্রবর্তক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/authors/মানিক-বন্দ্যোপাধ্যায়",
+      "status": 200,
+      "title": "মানিক বন্দ্যোপাধ্যায় — Thoughts Whatever",
+      "description": "কল্লোল-পরবর্তী কথাসাহিত্যের সবচেয়ে নির্মম পর্যবেক্ষক। ‘পদ্মানদীর মাঝি’ (১৯৩৬) ও ‘পুতুলনাচের ইতিকথা’ (১৯৩৬) — দুটিই আটাশ বছর বয়সের আগে লেখা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/authors/রবীন্দ্রনাথ-ঠাকুর",
+      "status": 200,
+      "title": "রবীন্দ্রনাথ ঠাকুর — Thoughts Whatever",
+      "description": "কবি, ঔপন্যাসিক, নাট্যকার, গীতিকার, চিত্রশিল্পী। ১৯১৩ সালে ‘গীতাঞ্জলি’-র ইংরেজি অনুবাদের জন্য সাহিত্যে নোবেল পুরস্কার পান — ইউরোপের বাইরে প্রথম। বাংলা গদ্য ",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/authors/শরৎচন্দ্র-চট্টোপাধ্যায়",
+      "status": 200,
+      "title": "শরৎচন্দ্র চট্টোপাধ্যায় — Thoughts Whatever",
+      "description": "বাংলা কথাসাহিত্যের অপরাজেয় কথাশিল্পী ও কালজয়ী ঔপন্যাসিক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/series/crime-and-punishment",
+      "status": 200,
+      "title": "Crime and punishment — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "দস্তয়েভস্কির 'ক্রাইম অ্যান্ড পুনিশমেন্ট' মানুষের বিবেকের তদন্তের গল্প।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/series/আনন্দমঠ",
+      "status": 200,
+      "title": "আনন্দমঠ — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "আনন্দমঠ বাংলা সাহিত্যের একটি ঐতিহাসিক উপন্যাস যা ফকির-সন্ন্যাসী বিদ্রোহের পটভূমিতে রচিত।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/series/আলালের-ঘরের-দুলাল",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল বিষয়ে একটি বিশেষ সাহিত্যিক ধারাবাহিক ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/series/কমলাকান্তের-দপ্তর",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর বিষয়ে একটি বিশেষ সাহিত্যিক ধারাবাহিক ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/series/চোখের-বালি",
+      "status": 200,
+      "title": "চোখের বালি — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "রবীন্দ্রনাথের 'চোখের বালি' একটি সমাজের গল্প, যেখানে নারীর পরিচয়কে সংজ্ঞায়িত করা হয়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/series/নীলদর্পণ",
+      "status": 200,
+      "title": "নীলদর্পণ — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "নীলকর সাহেবদের অমানুষিক অত্যাচার ও কৃষক বিদ্রোহের কালজয়ী ঐতিহাসিক আলেখ্য।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/series/পথের-দাবী",
+      "status": 200,
+      "title": "পথের দাবী — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "পথের দাবী বিষয়ে একটি ধারাবাহিক বিশ্লেষণ ও আলোচনা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1024,
+      "route": "/series/মেঘনাদবধ-কাব্য",
+      "status": 200,
+      "title": "মেঘনাদবধ কাব্য — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "মেঘনাদবধ কাব্য একটি অনন্য দৃষ্টিকোণ থেকে রাবণ পুত্র মেঘনাথের কাহিনী তুলে ধরে।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/",
+      "status": 200,
+      "title": "Thoughts Whatever — Bengali literature, essays & documentaries",
+      "description": "Explore Bengali literature, thoughtful essays, documentary research, author profiles, and archival texts at Thoughts Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/writing",
+      "status": 200,
+      "title": "রচনা — Thoughts Whatever",
+      "description": "প্রতিটি রিলের পিছনের সম্পূর্ণ লেখা — বাংলা সাহিত্য, পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/blog",
+      "status": 200,
+      "title": "ব্লগ — Thoughts Whatever",
+      "description": "Thoughts Whatever ব্লগ ও পাঠ বিভাগ — বাংলা সাহিত্য, চিন্তাভাবনা ও দীর্ঘ প্রবন্ধ সংকলন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/documentary",
+      "status": 200,
+      "title": "তথ্যচিত্র — Thoughts Whatever",
+      "description": "গবেষণাভিত্তিক তথ্যচিত্র — সূত্র, কালরেখা ও সম্পূর্ণ লেখা সমেত।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/archive",
+      "status": 200,
+      "title": "সংগ্রহ — Thoughts Whatever",
+      "description": "সব লেখা — লেখক, যুগ, রূপ ও বিষয় ধরে সাজানো।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/reference",
+      "status": 200,
+      "title": "Reference Library — Thoughts Whatever",
+      "description": "A rights-aware digital archive of texts, historical documents, recordings, and sources behind Thoughts.Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/series",
+      "status": 200,
+      "title": "ধারাবাহিক — Thoughts Whatever",
+      "description": "পর পর পড়ার মতো লেখার গুচ্ছ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/authors",
+      "status": 200,
+      "title": "লেখকেরা — Thoughts Whatever",
+      "description": "যাঁদের নিয়ে লেখা — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/about",
+      "status": 200,
+      "title": "পরিচয় — About — Thoughts Whatever",
+      "description": "Thoughts Whatever — বাংলা সাহিত্য, পাঠ-পর্যালোচনা ও তথ্যচিত্র নিয়ে একটি স্বাধীন ডিজিটাল পত্রিকা ও আর্কাইভ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/contact",
+      "status": 200,
+      "title": "যোগাযোগ — Contact — Thoughts Whatever",
+      "description": "Thoughts Whatever — সম্পাদকীয় যোগাযোগ, তথ্যসূত্র সংশোধন ও মতামত পাঠানোর মাধ্যম।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/privacy",
+      "status": 200,
+      "title": "গোপনীয়তা নীতি — Privacy Policy — Thoughts Whatever",
+      "description": "Thoughts Whatever — পাঠক ও ব্যবহারকারীর গোপনীয়তা সংক্রান্ত নিয়মাবলী ও তথ্য সুরক্ষা নীতি।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/letter",
+      "status": 200,
+      "title": "চিঠি — Thoughts Whatever",
+      "description": "মাসে একটা চিঠি — নতুন লেখা আর পুরোনো সংগ্রহ থেকে কিছু।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/bookmarks",
+      "status": 200,
+      "title": "পরে পড়ব — Thoughts Whatever",
+      "description": "সংরক্ষিত লেখার তালিকা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/search",
+      "status": 200,
+      "title": "খুঁজুন — Thoughts Whatever",
+      "description": "লেখক, বিষয় বা শিরোনাম ধরে খুঁজুন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/reference/rights",
+      "status": 200,
+      "title": "Rights & Provenance Policy | Reference Library — Thoughts Whatever",
+      "description": "Editorial and legal rights framework, public domain evaluation, and digital preservation principles for the Thoughts.Whatever Reference Library and Digital Archive.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/resource/bangla-sahityer-timeline",
+      "status": 200,
+      "title": "বাংলা সাহিত্যের সম্পূর্ণ টাইমলাইন (১৮০০–২০২৫) — ইতিহাস, যুগবিভাগ ও মাইলফলক — Thoughts Whatever",
+      "description": "ফোর্ট উইলিয়াম কলেজ থেকে সমকালীন পর্ব — বাংলা সাহিত্যের ২২৫ বছরের সমগ্র ইতিহাস, যুগবিভাগ, প্রধান লেখক ও কালজয়ী সৃষ্টির পূর্ণাঙ্গ ইন্টারঅ্যাক্টিভ টাইমলাইন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/missing-mobile-audit-page",
+      "status": 404,
+      "title": "Page not found — Thoughts Whatever",
+      "description": "This page could not be found. Explore the writing, archive, or search Thoughts Whatever.",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/writing/কপালকুণ্ডলা",
+      "status": 200,
+      "title": "কপালকুণ্ডলা — Thoughts Whatever",
+      "description": "কপালকুণ্ডলা। সেই নারী, যাকে সমাজ গ্রহণ করার আগে বদলে ফেলতে চেয়েছিল। আচ্ছা, একজন নারী যদি সমাজের তৈরি করা নিয়ম না জানে, তাহলে সে কি অসভ্য? না",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-1",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - পর্ব-১ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-2",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল | পর্ব-২ — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - পর্ব-২ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/documentary/আলালের-ঘরের-দুলাল-3",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল | অন্তিম পর্ব — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল - অন্তিম পর্ব — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/documentary/ইন্দুবালা-ও-আইনস্টাইন",
+      "status": 200,
+      "title": "ইন্দুবালা ও আইনস্টাইন — Thoughts Whatever",
+      "description": "ইন্দুবালা ও আইনস্টাইন — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-1",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর পর্ব -১  — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-2",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর | পর্ব-২ — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর পর্ব-২ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/documentary/কমলাকান্তের-দপ্তর-3",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর | অন্তিম পর্ব — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর অন্তিম পর্ব — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/documentary/গগনেন্দ্রনাথ-ঠাকুর",
+      "status": 200,
+      "title": "গগনেন্দ্রনাথ ঠাকুর — Thoughts Whatever",
+      "description": "গগনেন্দ্রনাথ ঠাকুর — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/documentary/তিতুমীর-মহাশ্বেতা-দেবী",
+      "status": 200,
+      "title": "তিতুমীর- মহাশ্বেতা দেবী — Thoughts Whatever",
+      "description": "তিতুমীর- মহাশ্বেতা দেবী — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/documentary/ভুত-ভবিষ্যৎ",
+      "status": 200,
+      "title": "ভুত ভবিষ্যৎ — Thoughts Whatever",
+      "description": "ভুত ভবিষ্যৎ — Thoughts Whatever-এ পড়ুন সম্পূর্ণ পাঠ ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/authors/fyodor-dostoevsky",
+      "status": 200,
+      "title": "Fyodor Dostoevsky — Thoughts Whatever",
+      "description": "Fyodor Dostoevsky নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/authors/কাজী-নজরুল-ইসলাম",
+      "status": 200,
+      "title": "কাজী নজরুল ইসলাম — Thoughts Whatever",
+      "description": "বিদ্রোহী কবি, গীতিকার, সাংবাদিক, সৈনিক। ১৯২২ সালে ‘বিদ্রোহী’ প্রকাশের পর বাংলা কবিতার স্বরটাই বদলে যায়। বাংলাদেশের জাতীয় কবি।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/authors/জীবনানন্দ-দাশ",
+      "status": 200,
+      "title": "জীবনানন্দ দাশ — Thoughts Whatever",
+      "description": "ত্রিশের দশকের প্রধান কবি, যাঁকে বুদ্ধদেব বসু বলেছিলেন ‘নির্জনতম কবি’। জীবদ্দশায় স্বীকৃতি পেয়েছেন কম; মৃত্যুর পর বাংলা কবিতার কেন্দ্রে চলে এসেছেন।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/authors/প্রভাতকুমার-মুখোপাধ্যায়",
+      "status": 200,
+      "title": "প্রভাতকুমার মুখোপাধ্যায় — Thoughts Whatever",
+      "description": "প্রভাতকুমার মুখোপাধ্যায় নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/authors/বঙ্কিমচন্দ্র-চট্টোপাধ্যায়",
+      "status": 200,
+      "title": "বঙ্কিমচন্দ্র চট্টোপাধ্যায় — Thoughts Whatever",
+      "description": "বঙ্কিমচন্দ্র চট্টোপাধ্যায় নিয়ে লেখা ও তথ্যচিত্র — এক জায়গায়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/authors/বুদ্ধদেব-বসু",
+      "status": 200,
+      "title": "বুদ্ধদেব বসু — Thoughts Whatever",
+      "description": "কবি, প্রাবন্ধিক, অনুবাদক, সম্পাদক। ১৯৩৫ সালে ‘কবিতা’ পত্রিকা শুরু করেন — ত্রিশের দশকের কবিদের প্রধান আশ্রয়। বোদলেয়ার ও হ্যোল্ডারলিনের অনুবাদক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/authors/মাইকেল-মধুসূদন-দত্ত",
+      "status": 200,
+      "title": "মাইকেল মধুসূদন দত্ত — Thoughts Whatever",
+      "description": "বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ মহাকবি এবং অমিত্রাক্ষর ছন্দের প্রবর্তক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/authors/মানিক-বন্দ্যোপাধ্যায়",
+      "status": 200,
+      "title": "মানিক বন্দ্যোপাধ্যায় — Thoughts Whatever",
+      "description": "কল্লোল-পরবর্তী কথাসাহিত্যের সবচেয়ে নির্মম পর্যবেক্ষক। ‘পদ্মানদীর মাঝি’ (১৯৩৬) ও ‘পুতুলনাচের ইতিকথা’ (১৯৩৬) — দুটিই আটাশ বছর বয়সের আগে লেখা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/authors/রবীন্দ্রনাথ-ঠাকুর",
+      "status": 200,
+      "title": "রবীন্দ্রনাথ ঠাকুর — Thoughts Whatever",
+      "description": "কবি, ঔপন্যাসিক, নাট্যকার, গীতিকার, চিত্রশিল্পী। ১৯১৩ সালে ‘গীতাঞ্জলি’-র ইংরেজি অনুবাদের জন্য সাহিত্যে নোবেল পুরস্কার পান — ইউরোপের বাইরে প্রথম। বাংলা গদ্য ",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/authors/শরৎচন্দ্র-চট্টোপাধ্যায়",
+      "status": 200,
+      "title": "শরৎচন্দ্র চট্টোপাধ্যায় — Thoughts Whatever",
+      "description": "বাংলা কথাসাহিত্যের অপরাজেয় কথাশিল্পী ও কালজয়ী ঔপন্যাসিক।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/series/crime-and-punishment",
+      "status": 200,
+      "title": "Crime and punishment — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "দস্তয়েভস্কির 'ক্রাইম অ্যান্ড পুনিশমেন্ট' মানুষের বিবেকের তদন্তের গল্প।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/series/আনন্দমঠ",
+      "status": 200,
+      "title": "আনন্দমঠ — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "আনন্দমঠ বাংলা সাহিত্যের একটি ঐতিহাসিক উপন্যাস যা ফকির-সন্ন্যাসী বিদ্রোহের পটভূমিতে রচিত।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/series/আলালের-ঘরের-দুলাল",
+      "status": 200,
+      "title": "আলালের ঘরের দুলাল — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "আলালের ঘরের দুলাল বিষয়ে একটি বিশেষ সাহিত্যিক ধারাবাহিক ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/series/কমলাকান্তের-দপ্তর",
+      "status": 200,
+      "title": "কমলাকান্তের দপ্তর — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "কমলাকান্তের দপ্তর বিষয়ে একটি বিশেষ সাহিত্যিক ধারাবাহিক ও বিশ্লেষণ।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/series/চোখের-বালি",
+      "status": 200,
+      "title": "চোখের বালি — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "রবীন্দ্রনাথের 'চোখের বালি' একটি সমাজের গল্প, যেখানে নারীর পরিচয়কে সংজ্ঞায়িত করা হয়।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/series/নীলদর্পণ",
+      "status": 200,
+      "title": "নীলদর্পণ — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "নীলকর সাহেবদের অমানুষিক অত্যাচার ও কৃষক বিদ্রোহের কালজয়ী ঐতিহাসিক আলেখ্য।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/series/পথের-দাবী",
+      "status": 200,
+      "title": "পথের দাবী — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "পথের দাবী বিষয়ে একটি ধারাবাহিক বিশ্লেষণ ও আলোচনা।",
+      "overflow": false,
+      "offscreenControls": []
+    },
+    {
+      "width": 1440,
+      "route": "/series/মেঘনাদবধ-কাব্য",
+      "status": 200,
+      "title": "মেঘনাদবধ কাব্য — সম্পূর্ণ পাঠ ও তথ্যচিত্র সিরিজ — Thoughts Whatever",
+      "description": "মেঘনাদবধ কাব্য একটি অনন্য দৃষ্টিকোণ থেকে রাবণ পুত্র মেঘনাথের কাহিনী তুলে ধরে।",
+      "overflow": false,
+      "offscreenControls": []
+    }
+  ]
+}

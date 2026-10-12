@@ -40,7 +40,7 @@ export function LetterBlock({
         {/* Right Side: Background Image with Gradient Mask */}
         <div className="relative h-48 lg:h-full w-full overflow-hidden">
           <Image
-            src="/brand/letter-desk.jpg"
+            src="/brand/letter-desk.webp"
             alt="Vintage journal, fountain pen, and warm tea"
             fill
             sizes="(max-width: 1024px) 100vw, 45vw"

@@ -20,7 +20,7 @@ export function SearchDialog() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const { docs, indexes, loading, load } = useSearchIndex();
+  const { docs, indexes, loading, error, load } = useSearchIndex();
 
   // ⌘K / Ctrl+K, and / when not already typing somewhere.
   useEffect(() => {
@@ -121,7 +121,8 @@ export function SearchDialog() {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="খুঁজুন — লেখক, বিষয়, শিরোনাম…"
                 lang="bn"
-                className="flex-1 bg-transparent py-4 font-bengali text-[1.0625rem] text-content outline-none placeholder:text-content-faint"
+                aria-label="Search writing"
+                className="min-w-0 flex-1 bg-transparent py-4 font-bengali text-[1.0625rem] text-content outline-none placeholder:text-content-faint"
               />
               <button
                 type="button"
@@ -134,7 +135,14 @@ export function SearchDialog() {
             </div>
 
             <div className="max-h-[55vh] overflow-y-auto">
-              {query.trim().length < MIN_QUERY ? (
+              {error ? (
+                <div role="alert" className="px-4 py-8 text-center text-content-soft">
+                  <p>Search could not load. Check your connection and try again.</p>
+                  <button type="button" onClick={() => void load()} className="mt-3 min-h-11 rounded-sm border border-accent px-4 py-2 text-accent">Try again</button>
+                </div>
+              ) : loading ? (
+                <p role="status" className="px-4 py-8 text-center text-content-soft">Loading search…</p>
+              ) : query.trim().length < MIN_QUERY ? (
                 <p className="px-4 py-8 text-center font-bengali-sans text-sm text-content-faint">
                   অন্তত দুটি অক্ষর লিখুন
                 </p>

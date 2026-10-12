@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Instagram, Mail, MessageSquare, ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
 import { LetterBlock } from "@/components/newsletter/letter-block";
@@ -70,9 +71,9 @@ export default function ContactPage() {
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
               <Mail className="h-5 w-5" />
             </div>
-            <div>
+            <div className="min-w-0">
               <span className="font-mono text-xs text-content-faint">সম্পাদকীয় ও তথ্যসূত্র</span>
-              <p className="font-sans text-sm font-medium text-content">editorial@thoughtswhatever.in</p>
+              <p className="break-all font-sans text-sm font-medium text-content">editorial@thoughtswhatever.in</p>
             </div>
           </a>
 
@@ -83,9 +84,9 @@ export default function ContactPage() {
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
               <ShieldCheck className="h-5 w-5" />
             </div>
-            <div>
+            <div className="min-w-0">
               <span className="font-mono text-xs text-content-faint">সুরক্ষা ও গোপনীয়তা</span>
-              <p className="font-sans text-sm font-medium text-content">security@thoughtswhatever.in</p>
+              <p className="break-all font-sans text-sm font-medium text-content">security@thoughtswhatever.in</p>
             </div>
           </a>
 
@@ -104,7 +105,7 @@ export default function ContactPage() {
             </div>
           </a>
 
-          <div className="flex items-center gap-3 rounded-lg border border-rule/70 bg-surface-raised/30 p-4">
+          <Link href="/letter" className="flex items-center gap-3 rounded-lg border border-rule/70 bg-surface-raised/30 p-4 transition-colors hover:border-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
               <MessageSquare className="h-5 w-5" />
             </div>
@@ -112,7 +113,7 @@ export default function ContactPage() {
               <span className="font-mono text-xs text-content-faint">চিঠি ও মতামত</span>
               <p className="font-bengali text-sm text-content">নিউজলেটারের মাধ্যমে প্রতিক্রিয়া</p>
             </div>
-          </div>
+          </Link>
         </div>
 
         <div className="mt-14 space-y-6">

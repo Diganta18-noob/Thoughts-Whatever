@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bookmark, Instagram, Menu, X } from "lucide-react";
@@ -11,11 +11,29 @@ import { SearchDialog } from "@/components/search/search-dialog";
 import { useBookmarks } from "@/components/providers/bookmarks-provider";
 import { useLanguage } from "@/components/providers/language-provider";
 import { LanguageToggle } from "@/components/layout/language-toggle";
-import { Logo } from "@/components/brand/logo";
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    const desktop = window.matchMedia("(min-width: 1280px)");
+    const closeOnDesktop = () => { if (desktop.matches) setMenuOpen(false); };
+    document.addEventListener("keydown", closeOnEscape);
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      desktop.removeEventListener("change", closeOnDesktop);
+    };
+  }, [menuOpen]);
   const { bookmarks, ready } = useBookmarks();
   const { t, locale, isBn } = useLanguage();
 
@@ -30,7 +48,7 @@ export function SiteHeader() {
       data-print="hide"
       className="sticky top-0 z-30 border-b border-rule bg-surface/90 backdrop-blur"
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-1 px-3 sm:gap-4 sm:px-6">
         <Link
           href="/"
           className="group flex items-center gap-2.5 shrink-0"
@@ -57,7 +75,7 @@ export function SiteHeader() {
 
         <nav
           lang={locale}
-          className="ml-auto hidden items-center gap-1.5 md:flex"
+          className="ml-auto hidden items-center gap-1.5 xl:flex"
           aria-label={t("nav.sections")}
         >
           {PRIMARY_NAV.map((item) => (
@@ -81,7 +99,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="ml-auto flex items-center gap-2 sm:gap-2.5 md:ml-4">
+        <div className="ml-auto flex items-center gap-0 sm:gap-2.5 xl:ml-4">
           <SearchDialog />
           <LanguageToggle />
           <ReadingSettingsButton />
@@ -109,11 +127,13 @@ export function SiteHeader() {
           </a>
 
           <button
+            ref={menuButtonRef}
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
             aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
             aria-label={menuOpen ? t("header.closeMenu") : t("header.openMenu")}
-            className="grid h-10 w-10 min-h-[44px] min-w-[44px] place-items-center rounded-full text-content-soft transition hover:bg-content/5 hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent md:hidden"
+            className="grid h-10 w-10 min-h-[44px] min-w-[44px] place-items-center rounded-full text-content-soft transition hover:bg-content/5 hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent xl:hidden"
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -124,7 +144,8 @@ export function SiteHeader() {
           orients themselves. */}
       {menuOpen && (
         <nav
-          className="animate-fade-in border-t border-rule bg-surface-raised md:hidden"
+          id="mobile-navigation"
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain animate-fade-in border-t border-rule bg-surface-raised xl:hidden"
           aria-label={t("nav.sections")}
         >
           <ul className="divide-y divide-rule/60">
@@ -132,6 +153,8 @@ export function SiteHeader() {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  aria-current={isActive(item.href) ? "page" : undefined}
                   className={cn(
                     "flex items-baseline justify-between px-5 py-3.5 transition",
                     isActive(item.href) ? "bg-accent/5" : "hover:bg-content/[0.03]",

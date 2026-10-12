@@ -29,7 +29,7 @@ export function SearchClient() {
 
   const [query, setQuery] = useState(initial);
   const [kind, setKind] = useState<SearchDoc["kind"] | null>(null);
-  const { docs, indexes, loading } = useSearchIndex({ eager: true });
+  const { docs, indexes, loading, error, load } = useSearchIndex({ eager: true });
 
   // Keep the URL in step with the box, without a history entry per keystroke.
   useEffect(() => {
@@ -71,7 +71,7 @@ export function SearchClient() {
             placeholder="লেখক, বিষয়, শিরোনাম…"
             lang="bn"
             aria-label="খুঁজুন"
-            className="w-full bg-transparent py-3 font-bengali text-bengali-lg text-content outline-none placeholder:text-content-faint"
+            className="min-w-0 w-full bg-transparent py-3 font-bengali text-bengali-lg text-content outline-none placeholder:text-content-faint"
           />
         </div>
 
@@ -99,7 +99,14 @@ export function SearchClient() {
         </div>
       </header>
 
-      {query.trim().length < MIN_QUERY ? (
+      {error ? (
+        <div role="alert" className="py-16 text-center text-content-soft">
+          <p>Search could not load. Check your connection and try again.</p>
+          <button type="button" onClick={() => void load()} className="mt-4 min-h-11 rounded-sm border border-accent px-4 py-2 text-accent">Try again</button>
+        </div>
+      ) : loading ? (
+        <p role="status" className="py-16 text-center text-content-soft">Loading search…</p>
+      ) : query.trim().length < MIN_QUERY ? (
         <p
           className="py-24 text-center font-bengali text-bengali-base text-content-faint"
           lang="bn"

@@ -6,7 +6,8 @@ import Link from "next/link";
 import { ShieldAlert } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Access Restricted — Thoughts Whatever",
+  title: "Access Restricted",
+  description: "Sign in with an authorized account to access this page.",
   robots: { index: false, follow: false },
 };
 

@@ -1,15 +1,21 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { PRIMARY_NAV, SECONDARY_NAV } from "@/lib/nav";
 import { T } from "@/components/i18n/t";
 import { NavLabel } from "@/components/i18n/nav-label";
+
+export const metadata: Metadata = {
+  title: "Page not found",
+  description: "This page could not be found. Explore the writing, archive, or search Thoughts Whatever.",
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   const recoveryLinks = [
     { href: "/", labelEn: "Home", labelBn: "মূল পাতা" },
     ...PRIMARY_NAV,
     ...SECONDARY_NAV,
-    { href: "/sitemap.xml", labelEn: "Sitemap", labelBn: "সাইটম্যাপ" },
-    { href: "/llms.txt", labelEn: "Agent Guide (llms.txt)", labelBn: "এজেন্ট গাইড" },
+    { href: "/search", labelEn: "Search", labelBn: "খুঁজুন" },
   ];
 
   return (

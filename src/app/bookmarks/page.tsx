@@ -4,6 +4,7 @@ import { BookmarksClient } from "./bookmarks-client";
 export const metadata: Metadata = {
   title: "পরে পড়ব",
   description: "সংরক্ষিত লেখার তালিকা।",
+  alternates: { canonical: "/bookmarks" },
   // The list lives in the reader's browser, so there is nothing here to crawl.
   robots: { index: false, follow: false },
 };

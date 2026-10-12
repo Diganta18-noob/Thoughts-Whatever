@@ -23,17 +23,18 @@ export async function generateMetadata({
   const slug = decodeURIComponent(params.slug);
   const work = await getReferenceWorkBySlug(slug);
 
-  if (!work) return { title: "Resource Not Found | Thoughts.Whatever" };
+  if (!work) return { title: "Resource Not Found" };
 
   const ogImg = work.editions[0]?.coverImage || "/brand/og-default.png";
 
   return {
-    title: `${work.titleBn} (${work.titleEn || "Archival Reference"}) | Reference Library | Thoughts.Whatever`,
+    title: `${work.titleBn} (${work.titleEn || "Archival Reference"}) | Reference Library`,
+    alternates: { canonical: `/reference/${encodeURIComponent(slug)}` },
     description:
       work.descriptionBn?.slice(0, 160) ||
       `Read the archival edition of ${work.titleBn} through the Thoughts.Whatever Reference Library.`,
     openGraph: {
-      title: `${work.titleBn} | Thoughts.Whatever Reference Library`,
+      title: `${work.titleBn} | Thoughts Whatever Reference Library`,
       description: work.descriptionBn?.slice(0, 160) || undefined,
       images: [{ url: ogImg }],
     },

@@ -23,10 +23,11 @@ export async function generateMetadata({ params }: ReaderPageProps): Promise<Met
   const slug = decodeURIComponent(params.slug);
   const work = await getReferenceWorkBySlug(slug);
 
-  if (!work) return { title: "পাঠকক্ষ | Thoughts.Whatever" };
+  if (!work) return { title: "পাঠকক্ষ" };
 
   return {
-    title: `${work.titleBn} — ডিজিটাল পাঠকক্ষ | Thoughts.Whatever`,
+    title: `${work.titleBn} — ডিজিটাল পাঠকক্ষ`,
+    alternates: { canonical: `/reference/${encodeURIComponent(slug)}/read` },
     description: `Read the archival edition of ${work.titleBn} through the Thoughts.Whatever Reference Library.`,
   };
 }

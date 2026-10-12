@@ -89,6 +89,8 @@ export function SubscribeForm({
   if (state === "done") {
     return (
       <p
+        role="status"
+        aria-live="polite"
         lang={locale}
         data-testid="subscribe-success-msg"
         className={cn(
@@ -111,6 +113,7 @@ export function SubscribeForm({
   return (
     <form
       onSubmit={onSubmit}
+      aria-busy={state === "sending"}
       className={cn("w-full", compact ? "" : "max-w-sm", className)}
     >
       {/* Honeypot field for bot mitigation - invisible to real readers */}
@@ -124,13 +127,18 @@ export function SubscribeForm({
         autoComplete="off"
         aria-hidden="true"
       />
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 min-[360px]:flex-row">
         <label className="sr-only" htmlFor={`subscribe-${source}`} lang={locale}>
           {t("letter.emailLabel")}
         </label>
         <input
           id={`subscribe-${source}`}
           type="email"
+          name="email"
+          autoComplete="email"
+          inputMode="email"
+          aria-invalid={state === "error"}
+          aria-describedby={state === "error" ? `subscribe-error-${source}` : undefined}
           required
           value={email}
           onChange={(e) => {
@@ -148,6 +156,7 @@ export function SubscribeForm({
         <button
           type="submit"
           disabled={state === "sending"}
+          aria-label={t("letter.send")}
           lang={locale}
           data-testid="subscribe-submit"
           className={cn(
@@ -164,6 +173,8 @@ export function SubscribeForm({
       </div>
       {state === "error" && (
         <p
+          id={`subscribe-error-${source}`}
+          role="alert"
           lang={locale}
           data-testid="subscribe-error-msg"
           className={cn(

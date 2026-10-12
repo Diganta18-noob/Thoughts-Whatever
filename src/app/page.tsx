@@ -1,4 +1,5 @@
 import { Hero } from "@/components/home/hero";
+import type { Metadata } from "next";
 import { FeaturedSeriesHero } from "@/components/home/featured-series-hero";
 import { FeaturedSeries } from "@/components/home/featured-series";
 import { LatestEpisodes } from "@/components/home/latest-episodes";
@@ -19,6 +20,12 @@ import { extractPullQuotes } from "@/lib/markdown";
 import { JsonLd, seriesJsonLd, homeWebPageJsonLd } from "@/lib/seo";
 
 export const revalidate = 300;
+
+export const metadata: Metadata = {
+  title: { absolute: "Thoughts Whatever — Bengali literature, essays & documentaries" },
+  description: "Explore Bengali literature, thoughtful essays, documentary research, author profiles, and archival texts at Thoughts Whatever.",
+  alternates: { canonical: "/" },
+};
 
 const DEFAULT_FACETS: Awaited<ReturnType<typeof getFilterFacets>> = {
   tags: [],

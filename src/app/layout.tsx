@@ -99,7 +99,7 @@ export const metadata: Metadata = {
       { url: "/brand/logo-icon.svg", type: "image/svg+xml" },
       { url: "/icon.svg", type: "image/svg+xml" },
     ],
-    apple: { url: "/brand/logo-icon.svg" },
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
   },
   openGraph: {
     type: "website",
@@ -111,7 +111,7 @@ export const metadata: Metadata = {
       "Thoughts Whatever — বাংলা সাহিত্য নিয়ে পূর্ণাঙ্গ রচনা, পাঠ-পর্যালোচনা ও গবেষণাধর্মী তথ্যচিত্রের একটি মুক্ত ডিজিটাল প্ল্যাটফর্ম ও আর্কাইভ।",
     images: [
       {
-        url: absoluteUrl("/brand/logo-full.svg"),
+        url: absoluteUrl("/brand/og-default.png"),
         width: 1200,
         height: 630,
         alt: "Thoughts Whatever — t.w logo",

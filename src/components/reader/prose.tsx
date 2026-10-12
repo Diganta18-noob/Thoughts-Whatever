@@ -74,6 +74,12 @@ const baseComponents: Components = {
 
   pre: ({ children }) => <>{children}</>,
 
+  table: ({ children }) => (
+    <div className="max-w-full overflow-x-auto" role="region" aria-label="Scrollable table" tabIndex={0}>
+      <table>{children}</table>
+    </div>
+  ),
+
   img: ({ src, alt }) =>
     typeof src === "string" ? (
       <figure className="my-6">

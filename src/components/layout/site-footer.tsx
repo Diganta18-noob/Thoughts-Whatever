@@ -16,7 +16,7 @@ export function SiteFooter() {
   return (
     <footer data-print="hide" className="mt-24 border-t border-rule bg-surface">
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-        <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)]">
           {/* চিঠি. Unlike the section descriptions, which stay Bengali because
               they are editorial voice about the writing, this one follows the
               interface: it is the offer a reader accepts by handing over an
@@ -112,8 +112,8 @@ export function SiteFooter() {
           >
             {t("footer.colophon")}
           </p>
-          <p className="font-bengali text-xs text-content-faint" lang="bn">
-            © {toBengaliNumber(year)} Thoughts Whatever
+          <p className="text-xs text-content-faint" lang={locale}>
+            © {isBn ? toBengaliNumber(year) : year} <Link href="/" className="hover:text-accent">Thoughts Whatever</Link>
           </p>
         </div>
       </div>

@@ -14,7 +14,8 @@ import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Reference Library | Thoughts.Whatever",
+  title: "Reference Library",
+  alternates: { canonical: "/reference" },
   description:
     "A rights-aware digital archive of texts, historical documents, recordings, and sources behind Thoughts.Whatever.",
 };
@@ -147,7 +148,7 @@ export default async function ReferenceLibraryPage({
       {/* Filter and Search Navigation */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-8">
         {/* Category Chips */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+        <div className="flex min-w-0 items-center gap-2 overflow-x-auto pb-1 text-xs">
           {[
             { id: "", label: "All" },
             { id: "BOOK", label: "Books" },
@@ -180,7 +181,7 @@ export default async function ReferenceLibraryPage({
 
           {/* Quick Rights Filter */}
           <Link
-            href={`/reference?rights=PUBLIC_DOMAIN${typeFilter ? `&type=${typeFilter}` : ""}${query ? `&q=${query}` : ""}`}
+            href={`/reference?rights=PUBLIC_DOMAIN${typeFilter ? `&type=${encodeURIComponent(typeFilter)}` : ""}${query ? `&q=${encodeURIComponent(query)}` : ""}`}
             className={`label rounded-full border px-3 py-1 transition-colors whitespace-nowrap ${
               rightsFilter === "PUBLIC_DOMAIN"
                 ? "!border-emerald-500/70 !text-emerald-400 font-medium"
@@ -192,17 +193,18 @@ export default async function ReferenceLibraryPage({
         </div>
 
         {/* Search Input */}
-        <form method="GET" action="/reference" className="flex items-center gap-2">
+        <form method="GET" action="/reference" className="flex min-w-0 items-center gap-2">
           {typeFilter && <input type="hidden" name="type" value={typeFilter} />}
           {rightsFilter && <input type="hidden" name="rights" value={rightsFilter} />}
-          <div className="relative">
+          <div className="relative min-w-0">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-content-faint" />
             <input
               type="text"
               name="q"
+              aria-label="Search the reference archive"
               defaultValue={query}
               placeholder="Search the archive..."
-              className="bg-surface-raised border border-rule rounded px-3 py-1.5 pl-8 text-xs text-content placeholder-content-faint focus:border-accent focus:outline-none w-56 sm:w-64"
+              className="bg-surface-raised border border-rule rounded px-3 py-1.5 pl-8 text-xs text-content placeholder-content-faint focus:border-accent focus:outline-none max-w-full w-56 sm:w-64"
             />
           </div>
           {activeFilters && (
