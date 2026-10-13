@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { TranslatedContent } from "@/components/i18n/translated-content";
+import Link from "@/components/i18n/localized-link";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { useLanguage } from "@/components/providers/language-provider";
 import { formatReading, formatDate, toIsoString } from "@/lib/i18n/format";
@@ -27,7 +28,7 @@ function FeaturedHeroSpread({
   const summary = piece.dekBn || piece.excerptBn;
 
   return (
-    <motion.article
+    <TranslatedContent><motion.article
       {...cardMotionProps}
       className="group relative border-b border-rule/50 pb-12 lg:pb-16"
     >
@@ -104,7 +105,7 @@ function FeaturedHeroSpread({
           </div>
         </div>
       </div>
-    </motion.article>
+    </motion.article></TranslatedContent>
   );
 }
 
@@ -122,7 +123,7 @@ function SupportingEditorialItem({
   const indexStr = String(index + 1).padStart(2, "0");
 
   return (
-    <motion.article
+    <TranslatedContent><motion.article
       {...cardMotionProps}
       className="group flex flex-col justify-between"
     >
@@ -189,7 +190,7 @@ function SupportingEditorialItem({
           <span className="transition-transform group-hover:translate-x-1">→</span>
         </Link>
       </div>
-    </motion.article>
+    </motion.article></TranslatedContent>
   );
 }
 
@@ -208,7 +209,7 @@ export function FeaturedWriting({
   const secondaryPieces = rest.slice(0, 3);
 
   return (
-    <section className="py-12">
+    <TranslatedContent><section className="py-12">
       {/* 1. Refined Editorial Section Header */}
       <Reveal>
         <div className="mb-10 flex items-end justify-between border-b border-rule/50 pb-4">
@@ -257,7 +258,7 @@ export function FeaturedWriting({
           </Stagger>
         </div>
       )}
-    </section>
+    </section></TranslatedContent>
   );
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import React, { useState } from "react";
 import { X, Loader2, CheckCircle2 } from "lucide-react";
 import toast from "react-hot-toast";
@@ -59,7 +60,7 @@ export function ReportRightsModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
+    <TranslatedContent><div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
       <div className="relative w-full max-w-lg bg-surface border border-rule p-6 sm:p-8 text-content my-8 shadow-2xl">
         <button
           onClick={onClose}
@@ -178,6 +179,6 @@ export function ReportRightsModal({
           </div>
         )}
       </div>
-    </div>
+    </div></TranslatedContent>
   );
 }

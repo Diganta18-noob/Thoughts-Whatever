@@ -1,3 +1,4 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/page-header";
 import { ArticleCard } from "@/components/pieces/article-card";
@@ -23,7 +24,7 @@ export default async function DocumentaryPage() {
   const [lead, ...rest] = pieces;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <PageHeader
         labelEn="Documentary"
         titleBn="তথ্যচিত্র"
@@ -56,6 +57,6 @@ export default async function DocumentaryPage() {
           )}
         </>
       )}
-    </div>
+    </div></TranslatedContent>
   );
 }

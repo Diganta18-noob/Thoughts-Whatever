@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { Pause, Play } from "lucide-react";
 import { useAudio, type Track } from "@/components/providers/audio-provider";
 import { formatBengaliDuration } from "@/lib/bengali";
@@ -24,7 +25,7 @@ export function NarrationButton({
   const isPlaying = active && playing;
 
   return (
-    <button
+    <TranslatedContent><button
       type="button"
       data-print="hide"
       onClick={() => play(track)}
@@ -48,6 +49,6 @@ export function NarrationButton({
           {formatBengaliDuration(track.durationSec)}
         </span>
       ) : null}
-    </button>
+    </button></TranslatedContent>
   );
 }

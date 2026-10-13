@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { TranslatedContent } from "@/components/i18n/translated-content";
+import Link from "@/components/i18n/localized-link";
 import { toBanglaDate } from "@/lib/bengali";
 import { formatDate, formatNumber, formatReading } from "@/lib/i18n/format";
 import { KIND_META, piecePath, type PieceKindKey } from "@/lib/nav";
@@ -34,12 +35,12 @@ function KindLabel({ kind }: { kind: PieceKindKey }) {
   const meta = KIND_META[kind];
 
   return (
-    <span
+    <TranslatedContent><span
       className={cn("label !text-accent", isBn && "font-bengali-sans tracking-normal")}
       lang={locale}
     >
       {isBn ? meta.labelBn : meta.labelEn}
-    </span>
+    </span></TranslatedContent>
   );
 }
 
@@ -55,7 +56,7 @@ function CardDate({ publishedAt }: { publishedAt: Date | string }) {
   const bangla = toBanglaDate(publishedAt);
 
   return (
-    <span className="flex items-center gap-1.5 text-[0.6875rem] text-content-faint">
+    <TranslatedContent><span className="flex items-center gap-1.5 text-[0.6875rem] text-content-faint">
       <span lang={locale} className={isBn ? "font-bengali-sans" : "font-sans"}>
         {formatDate(publishedAt, locale)}
       </span>
@@ -69,7 +70,7 @@ function CardDate({ publishedAt }: { publishedAt: Date | string }) {
           </span>
         </>
       )}
-    </span>
+    </span></TranslatedContent>
   );
 }
 
@@ -102,7 +103,7 @@ export function PieceCard({
   const { cardMotionProps } = useCardHover();
 
   return (
-    <motion.article
+    <TranslatedContent><motion.article
       {...cardMotionProps}
       className={cn(
         "group",
@@ -182,7 +183,7 @@ export function PieceCard({
           ))}
         </p>
       )}
-    </motion.article>
+    </motion.article></TranslatedContent>
   );
 }
 
@@ -197,7 +198,7 @@ export function PieceRow({
   const { locale, isBn } = useLanguage();
 
   return (
-    <Link
+    <TranslatedContent><Link
       href={piecePath(piece.kind, piece.slug)}
       className="group flex gap-4 border-b border-rule py-4 transition hover:bg-accent/[0.03]"
     >
@@ -233,6 +234,6 @@ export function PieceRow({
           </span>
         </div>
       </div>
-    </Link>
+    </Link></TranslatedContent>
   );
 }

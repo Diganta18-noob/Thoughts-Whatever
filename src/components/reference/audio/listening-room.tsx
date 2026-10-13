@@ -1,8 +1,9 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/i18n/localized-link";
 import { ArrowLeft, Subtitles, ListMusic, Radio, Layers } from "lucide-react";
 import { useAudioEngine } from "./use-audio-engine";
 import { useActiveCue } from "./use-active-cue";
@@ -78,7 +79,7 @@ export function ListeningRoom({ work, edition, audioAsset }: ListeningRoomProps)
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col justify-between selection:bg-amber-500/30 selection:text-amber-200">
+    <TranslatedContent><div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col justify-between selection:bg-amber-500/30 selection:text-amber-200">
       <ReferenceActivityTracker event="reference_listen" workId={work.id} />
       {/* Top Header Bar (Mobile & Tablet optimized) */}
       <header className="sticky top-0 z-30 w-full border-b border-zinc-850/80 bg-zinc-950/90 backdrop-blur-md px-3 sm:px-6 md:px-8 py-2.5 sm:py-3.5 flex items-center justify-between gap-2">
@@ -334,6 +335,6 @@ export function ListeningRoom({ work, edition, audioAsset }: ListeningRoomProps)
           কপিরাইট ও স্বত্বাধিকার সংক্রান্ত তথ্যের জন্য সংস্করণ ডসিয়ার দেখুন।
         </p>
       </footer>
-    </div>
+    </div></TranslatedContent>
   );
 }

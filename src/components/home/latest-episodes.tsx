@@ -1,7 +1,8 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useState, useEffect, useCallback, useRef } from "react";
-import Link from "next/link";
+import Link from "@/components/i18n/localized-link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "@/components/motion/reveal";
@@ -127,7 +128,7 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
       .trim() || currentPiece.titleBn;
 
   return (
-    <section className="py-6">
+    <TranslatedContent><section className="py-6">
       {/* ─── Section Heading (Issue 11: View all placement and accessible font scale) ─── */}
       <Reveal>
         <div className="mb-6 flex items-center justify-between border-b border-rule/50 pb-2.5">
@@ -369,6 +370,6 @@ export function LatestEpisodes({ pieces }: { pieces: CardPiece[] }) {
           )}
         </div>
       </div>
-    </section>
+    </section></TranslatedContent>
   );
 }

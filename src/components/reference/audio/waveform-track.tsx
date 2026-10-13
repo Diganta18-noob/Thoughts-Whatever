@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import React, { useRef, useEffect, useCallback, useState } from "react";
 import { formatTimecode } from "@/lib/reference/audio/types";
 
@@ -157,7 +158,7 @@ export function WaveformTrack({
   );
 
   return (
-    <div
+    <TranslatedContent><div
       ref={containerRef}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -186,6 +187,6 @@ export function WaveformTrack({
           {formatTimecode(hoverTime)}
         </div>
       )}
-    </div>
+    </div></TranslatedContent>
   );
 }

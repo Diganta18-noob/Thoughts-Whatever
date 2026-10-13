@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { motion, useAnimation, useInView, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, type ReactNode } from "react";
 import { duration, distance, ease, stagger, viewport } from "./motion-tokens";
@@ -67,10 +68,10 @@ export function Reveal({
     return () => clearTimeout(timer);
   }, [controls]);
 
-  if (reduced) return <Tag className={className}>{children}</Tag>;
+  if (reduced) return <TranslatedContent><Tag className={className}>{children}</Tag></TranslatedContent>;
 
   return (
-    <Tag
+    <TranslatedContent><Tag
       ref={ref as any}
       data-reveal
       className={className}
@@ -78,7 +79,7 @@ export function Reveal({
       animate={controls}
     >
       {children}
-    </Tag>
+    </Tag></TranslatedContent>
   );
 }
 
@@ -99,10 +100,10 @@ export function Stagger({
   const reduced = useReducedMotion();
   const Tag = motion[as];
 
-  if (reduced) return <Tag className={className}>{children}</Tag>;
+  if (reduced) return <TranslatedContent><Tag className={className}>{children}</Tag></TranslatedContent>;
 
   return (
-    <Tag
+    <TranslatedContent><Tag
       className={className}
       initial="hidden"
       whileInView="shown"
@@ -113,7 +114,7 @@ export function Stagger({
       }}
     >
       {children}
-    </Tag>
+    </Tag></TranslatedContent>
   );
 }
 
@@ -129,10 +130,10 @@ export function StaggerItem({
   const reduced = useReducedMotion();
   const Tag = motion[as];
 
-  if (reduced) return <Tag className={className}>{children}</Tag>;
+  if (reduced) return <TranslatedContent><Tag className={className}>{children}</Tag></TranslatedContent>;
 
   return (
-    <Tag
+    <TranslatedContent><Tag
       className={className}
       variants={{
         hidden: { opacity: 0, y: distance.rise },
@@ -145,6 +146,6 @@ export function StaggerItem({
       data-reveal
     >
       {children}
-    </Tag>
+    </Tag></TranslatedContent>
   );
 }

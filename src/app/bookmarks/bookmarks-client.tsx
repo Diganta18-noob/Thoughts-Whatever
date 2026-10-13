@@ -1,16 +1,20 @@
 "use client";
 
-import Link from "next/link";
+import { TranslatedContent } from "@/components/i18n/translated-content";
+import Link from "@/components/i18n/localized-link";
 import { Trash2, X } from "lucide-react";
 import { useBookmarks } from "@/components/providers/bookmarks-provider";
 import { formatBengaliDate, toBengaliNumber } from "@/lib/bengali";
 import { KIND_META, piecePath } from "@/lib/nav";
+import { useLanguage } from "@/components/providers/language-provider";
+import { formatDate, formatNumber } from "@/lib/i18n/format";
 
 export function BookmarksClient() {
   const { bookmarks, remove, clear, ready } = useBookmarks();
+  const { isBn, locale } = useLanguage();
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <header className="border-b border-rule pb-8 pt-12 sm:pt-16">
         <div className="flex items-baseline justify-between gap-4">
           <span className="label" lang="en">
@@ -65,17 +69,17 @@ export function BookmarksClient() {
         </div>
       ) : (
         <>
-          <p className="pt-6 label">{toBengaliNumber(bookmarks.length)} টি</p>
+          <p className="pt-6 label">{formatNumber(bookmarks.length, locale)} {isBn ? "টি" : "saved"}</p>
           <ol className="divide-y divide-rule">
             {bookmarks.map((bookmark) => (
               <li key={bookmark.slug} className="flex items-start gap-4 py-5">
                 <div className="min-w-0 flex-1">
                   <div className="mb-1 flex items-center gap-3">
                     <span className="label !text-accent">
-                      {KIND_META[bookmark.kind].labelBn}
+                      {isBn ? KIND_META[bookmark.kind].labelBn : KIND_META[bookmark.kind].labelEn}
                     </span>
                     <span className="label">
-                      {formatBengaliDate(new Date(bookmark.savedAt))}
+                      {formatDate(new Date(bookmark.savedAt), locale)}
                     </span>
                   </div>
                   <Link
@@ -90,7 +94,7 @@ export function BookmarksClient() {
                 <button
                   type="button"
                   onClick={() => remove(bookmark.slug)}
-                  aria-label={`${bookmark.titleBn} — তালিকা থেকে সরান`}
+                  aria-label={isBn ? `${bookmark.titleBn} — তালিকা থেকে সরান` : "Remove from saved pieces"}
                   className="mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-full text-content-faint transition hover:bg-content/5 hover:text-content"
                 >
                   <X className="h-4 w-4" />
@@ -100,6 +104,6 @@ export function BookmarksClient() {
           </ol>
         </>
       )}
-    </div>
+    </div></TranslatedContent>
   );
 }

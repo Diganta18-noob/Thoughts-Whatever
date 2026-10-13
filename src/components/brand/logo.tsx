@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { TranslatedContent } from "@/components/i18n/translated-content";
+import Link from "@/components/i18n/localized-link";
 import { cn } from "@/lib/utils";
 
 export type LogoVariant = "full" | "compact" | "icon" | "wordmark";
@@ -78,9 +79,9 @@ export function Logo({
 
   if (href) {
     return (
-      <Link href={href} className="inline-block" aria-label="Thoughts Whatever Home">
+      <TranslatedContent><Link href={href} className="inline-block" aria-label="Thoughts Whatever Home">
         {content}
-      </Link>
+      </Link></TranslatedContent>
     );
   }
 

@@ -1,0 +1,40 @@
+{
+  "results": [
+    {
+      "route": "/bookmarks",
+      "untranslated": [],
+      "title": "Read later — Thoughts Whatever",
+      "unavailable": 0
+    },
+    {
+      "route": "/privacy",
+      "untranslated": [],
+      "title": "Privacy Policy — Thoughts Whatever",
+      "unavailable": 0
+    },
+    {
+      "route": "/contact",
+      "untranslated": [],
+      "title": "Contact — Thoughts Whatever",
+      "unavailable": 0
+    },
+    {
+      "route": "/about",
+      "untranslated": [],
+      "title": "About — Thoughts Whatever",
+      "unavailable": 0
+    },
+    {
+      "route": "/resource/bangla-sahityer-timeline",
+      "untranslated": [],
+      "title": "The Complete Timeline of Bengali Literature (1800–2025) — Thoughts Whatever",
+      "unavailable": 0
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "pendingSources": [],
+  "languageSwitch": "passed",
+  "articleMarkdown": "passed",
+  "referenceControls": "passed"
+}

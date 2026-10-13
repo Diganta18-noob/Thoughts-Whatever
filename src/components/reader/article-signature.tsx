@@ -1,3 +1,4 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { cn } from "@/lib/utils";
 
 interface ArticleSignatureProps {
@@ -17,7 +18,7 @@ interface ArticleSignatureProps {
  */
 export function ArticleSignature({ className }: ArticleSignatureProps) {
   return (
-    <div
+    <TranslatedContent><div
       className={cn(
         "my-12 sm:my-16 select-none flex items-center justify-start text-content-soft",
         className
@@ -27,6 +28,6 @@ export function ArticleSignature({ className }: ArticleSignatureProps) {
       <span className="font-latin-serif italic text-base sm:text-lg tracking-wide text-content-soft opacity-85">
         — thoughts.whatever
       </span>
-    </div>
+    </div></TranslatedContent>
   );
 }

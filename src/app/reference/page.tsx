@@ -1,5 +1,6 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
-import Link from "next/link";
+import Link from "@/components/i18n/localized-link";
 import { prisma } from "@/lib/prisma";
 import { referenceCardSelect, getCachedReferenceCatalogueStats } from "@/lib/reference/catalogue";
 import { traceServerOperation } from "@/lib/performance-trace";
@@ -91,7 +92,7 @@ export default async function ReferenceLibraryPage({
   const activeFilters = Boolean(typeFilter || rightsFilter || query);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <ReferenceActivityTracker event={query ? "reference_search" : "reference_catalogue"} />
       {/* Editorial Section Masthead */}
       <PageHeader
@@ -177,19 +178,8 @@ export default async function ReferenceLibraryPage({
             );
           })}
 
-          <span className="text-rule mx-1">|</span>
 
-          {/* Quick Rights Filter */}
-          <Link
-            href={`/reference?rights=PUBLIC_DOMAIN${typeFilter ? `&type=${encodeURIComponent(typeFilter)}` : ""}${query ? `&q=${encodeURIComponent(query)}` : ""}`}
-            className={`label rounded-full border px-3 py-1 transition-colors whitespace-nowrap ${
-              rightsFilter === "PUBLIC_DOMAIN"
-                ? "!border-emerald-500/70 !text-emerald-400 font-medium"
-                : "border-rule text-content-faint hover:border-content-faint/80 hover:text-content-soft"
-            }`}
-          >
-            Public Domain Only
-          </Link>
+
         </div>
 
         {/* Search Input */}
@@ -312,6 +302,6 @@ export default async function ReferenceLibraryPage({
           </div>
         </div>
       )}
-    </div>
+    </div></TranslatedContent>
   );
 }

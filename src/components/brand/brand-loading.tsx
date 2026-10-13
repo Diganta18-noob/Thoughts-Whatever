@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { Logo } from "./logo";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +16,7 @@ export function BrandLoading({
   className,
 }: BrandLoadingProps) {
   return (
-    <div
+    <TranslatedContent><div
       className={cn(
         "flex flex-col items-center justify-center p-8 text-center",
         fullscreen ? "fixed inset-0 z-50 bg-surface/95 backdrop-blur-sm" : "min-h-[300px]",
@@ -30,6 +31,6 @@ export function BrandLoading({
           {message}
         </p>
       )}
-    </div>
+    </div></TranslatedContent>
   );
 }

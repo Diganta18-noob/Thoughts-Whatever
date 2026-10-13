@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { motion, useReducedMotion } from "framer-motion";
 import { CoverImage } from "@/components/media/cover-image";
 import { type CoverOwner } from "@/lib/images";
@@ -38,7 +39,7 @@ export function CoverImageFrame({
   const prefersReduced = useReducedMotion();
 
   return (
-    <div
+    <TranslatedContent><div
       className={cn(
         "relative overflow-hidden bg-journal-paperEdge transition-shadow duration-500 hover:shadow-xl",
         imageFit === "contain" && "bg-black",
@@ -71,6 +72,6 @@ export function CoverImageFrame({
       {overlay && (
         <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-500 group-hover:bg-black/10" />
       )}
-    </div>
+    </div></TranslatedContent>
   );
 }

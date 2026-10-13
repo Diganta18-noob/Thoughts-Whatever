@@ -1,7 +1,8 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import React, { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/i18n/localized-link";
 import { ArrowLeft, Globe2 } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
 
@@ -18,7 +19,7 @@ export function ReferenceRightsContent() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       {/* Top Navigation & Language Switcher */}
       <div className="pt-8 flex items-center justify-between">
         <Link
@@ -232,6 +233,6 @@ export function ReferenceRightsContent() {
           )}
         </section>
       </div>
-    </div>
+    </div></TranslatedContent>
   );
 }

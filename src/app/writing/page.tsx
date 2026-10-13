@@ -1,3 +1,4 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/page-header";
 import { ArticleCard } from "@/components/pieces/article-card";
@@ -23,7 +24,7 @@ export default async function WritingPage() {
   const [lead, ...rest] = pieces;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <PageHeader
         labelEn="Writing"
         titleBn="রচনা"
@@ -51,15 +52,15 @@ export default async function WritingPage() {
           )}
         </>
       )}
-    </div>
+    </div></TranslatedContent>
   );
 }
 
 function EmptyState() {
   return (
-    <p className="py-24 text-center text-bengali-base text-content-faint">
+    <TranslatedContent><p className="py-24 text-center text-bengali-base text-content-faint">
       <T k="empty.nothingPublished" bnClassName="font-bengali" />{" "}
       <T k="empty.comingSoon" bnClassName="font-bengali" />
-    </p>
+    </p></TranslatedContent>
   );
 }

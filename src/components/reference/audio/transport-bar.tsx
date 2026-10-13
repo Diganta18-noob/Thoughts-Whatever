@@ -1,8 +1,9 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
 import { formatTimecode } from "@/lib/reference/audio/types";
-import { RotateCcw, RotateCw, Volume2, VolumeX, Download } from "lucide-react";
+import { RotateCcw, RotateCw, Volume2, VolumeX } from "lucide-react";
 
 interface TransportBarProps {
   currentTime: number;
@@ -25,7 +26,6 @@ export function TransportBar({
   onSkip,
   onSetRate,
   onToggleMute,
-  audioUrl,
 }: TransportBarProps) {
   const cycleRate = () => {
     const curIdx = RATES.indexOf(rate);
@@ -34,7 +34,7 @@ export function TransportBar({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 pt-3 pb-1 border-t border-zinc-850/80 text-zinc-400 text-xs font-mono">
+    <TranslatedContent><div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 pt-3 pb-1 border-t border-zinc-850/80 text-zinc-400 text-xs font-mono">
       {/* Timecode & Playback Stats */}
       <div className="flex items-center justify-between w-full sm:w-auto gap-2">
         <div className="flex items-center gap-1.5 bg-zinc-900/80 px-2.5 py-1 rounded-lg border border-zinc-800/60">
@@ -44,18 +44,7 @@ export function TransportBar({
         </div>
 
         {/* Mobile-only download quick link */}
-        {audioUrl && (
-          <a
-            href={audioUrl}
-            target="_blank"
-            rel="noreferrer"
-            download
-            className="sm:hidden inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-[0.6875rem] text-zinc-400 hover:text-zinc-200 transition-colors"
-          >
-            <Download className="w-3 h-3 text-amber-400" />
-            <span>.m4a</span>
-          </a>
-        )}
+
       </div>
 
       {/* Skips, Rate, and Mute Controls */}
@@ -96,18 +85,7 @@ export function TransportBar({
       </div>
 
       {/* Desktop Download Action */}
-      {audioUrl && (
-        <a
-          href={audioUrl}
-          target="_blank"
-          rel="noreferrer"
-          download
-          className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 hover:text-zinc-100 hover:border-zinc-700 text-xs transition-colors shrink-0"
-        >
-          <Download className="w-3.5 h-3.5 text-amber-400" />
-          <span>অডিও ফাইল (.m4a)</span>
-        </a>
-      )}
-    </div>
+
+    </div></TranslatedContent>
   );
 }

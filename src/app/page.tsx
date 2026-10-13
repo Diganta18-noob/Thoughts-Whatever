@@ -1,3 +1,4 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { Hero } from "@/components/home/hero";
 import type { Metadata } from "next";
 import { FeaturedSeriesHero } from "@/components/home/featured-series-hero";
@@ -168,7 +169,7 @@ export default async function HomePage() {
   }));
 
   return (
-    <div className="min-h-screen">
+    <TranslatedContent><div className="min-h-screen">
       <JsonLd data={homeWebPageJsonLd()} />
       {leadSeries && <JsonLd data={seriesJsonLd(leadSeries)} />}
 
@@ -206,6 +207,6 @@ export default async function HomePage() {
       </div>
 
       {quote && <Quote quote={quote} />}
-    </div>
+    </div></TranslatedContent>
   );
 }

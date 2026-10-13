@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
@@ -32,10 +33,10 @@ export function Magnetic({
 
   const active = fine && !reduced;
 
-  if (!active) return <span className={className}>{children}</span>;
+  if (!active) return <TranslatedContent><span className={className}>{children}</span></TranslatedContent>;
 
   return (
-    <motion.span
+    <TranslatedContent><motion.span
       ref={ref}
       className={className}
       style={{ x: springX, y: springY, display: "inline-block" }}
@@ -53,6 +54,6 @@ export function Magnetic({
       }}
     >
       {children}
-    </motion.span>
+    </motion.span></TranslatedContent>
   );
 }

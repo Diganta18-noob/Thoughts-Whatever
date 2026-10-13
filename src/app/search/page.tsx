@@ -1,3 +1,4 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 export const dynamic = "force-dynamic";
 
 import { Suspense } from "react";
@@ -16,8 +17,8 @@ export default function SearchPage() {
   return (
     // useSearchParams needs a Suspense boundary, or the whole route opts out
     // of static rendering.
-    <Suspense fallback={<div className="min-h-[60vh]" />}>
+    <TranslatedContent><Suspense fallback={<div className="min-h-[60vh]" />}>
       <SearchClient />
-    </Suspense>
+    </Suspense></TranslatedContent>
   );
 }

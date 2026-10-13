@@ -14,6 +14,8 @@ import { AppProviders } from "@/components/providers";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { PublicChrome } from "@/components/layout/public-chrome";
+import { TranslationNotice } from "@/components/i18n/translation-notice";
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { siteConfig, absoluteUrl } from "@/lib/utils";
 import { JsonLd, websiteJsonLd, organizationJsonLd } from "@/lib/seo";
 
@@ -176,13 +178,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-sm focus:bg-accent focus:px-4 focus:py-2 focus:text-surface"
         >
-          মূল লেখা বা বিষয়বস্তুতে যান (Skip to content)
+          Skip to content
         </a>
         <AppProviders>
           <PublicChrome>
             <SiteHeader />
+            <TranslationNotice />
           </PublicChrome>
-          <main id="main-content" className="flex-1">{children}</main>
+          <main id="main-content" className="flex-1"><TranslatedContent>{children}</TranslatedContent></main>
           <PublicChrome>
             <SiteFooter />
           </PublicChrome>

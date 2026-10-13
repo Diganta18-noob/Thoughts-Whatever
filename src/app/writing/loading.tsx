@@ -1,6 +1,7 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 export default function WritingLoading() {
   return (
-    <div className="mx-auto max-w-6xl animate-pulse px-4 pb-24 sm:px-6">
+    <TranslatedContent><div className="mx-auto max-w-6xl animate-pulse px-4 pb-24 sm:px-6">
       {/* Header Skeleton */}
       <div className="border-b border-rule py-12 space-y-4">
         <div className="h-4 w-24 rounded bg-content/10" />
@@ -31,6 +32,6 @@ export default function WritingLoading() {
           </div>
         ))}
       </div>
-    </div>
+    </div></TranslatedContent>
   );
 }

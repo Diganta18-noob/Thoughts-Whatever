@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
 import { Play, Pause } from "lucide-react";
 
@@ -28,7 +29,7 @@ export function PulseButton({ playing, amplitude, onClick, size = "lg" }: PulseB
   }[size];
 
   return (
-    <div className="relative inline-flex items-center justify-center">
+    <TranslatedContent><div className="relative inline-flex items-center justify-center">
       {/* Outer audio pulse aura synced to amplitude */}
       <div
         className="absolute inset-0 rounded-full bg-amber-500 blur-xl pointer-events-none transition-transform duration-75"
@@ -64,6 +65,6 @@ export function PulseButton({ playing, amplitude, onClick, size = "lg" }: PulseB
           <Play className={`${iconSizes} fill-current translate-x-0.5`} />
         )}
       </button>
-    </div>
+    </div></TranslatedContent>
   );
 }

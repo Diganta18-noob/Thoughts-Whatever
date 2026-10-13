@@ -1,3 +1,4 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/page-header";
 import { T } from "@/components/i18n/t";
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function LetterPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <PageHeader
         labelEn="The letter"
         titleBn="চিঠি"
@@ -47,6 +48,6 @@ export default function LetterPage() {
           <SubscribeForm source="letter-page" />
         </div>
       </div>
-    </div>
+    </div></TranslatedContent>
   );
 }

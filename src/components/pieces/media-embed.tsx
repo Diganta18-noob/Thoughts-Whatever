@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useState } from "react";
 import { Play, Instagram } from "lucide-react";
 import { instagramShortcode, youtubeId, cn } from "@/lib/utils";
@@ -28,7 +29,7 @@ function Facade({
   className?: string;
 }) {
   return (
-    <button
+    <TranslatedContent><button
       type="button"
       onClick={onPlay}
       className={cn(
@@ -57,7 +58,7 @@ function Facade({
           {label}
         </span>
       </div>
-    </button>
+    </button></TranslatedContent>
   );
 }
 
@@ -75,7 +76,7 @@ export function ReelEmbed({
 
   if (!code) {
     return (
-      <a
+      <TranslatedContent><a
         href={url}
         target="_blank"
         rel="noopener noreferrer"
@@ -83,12 +84,12 @@ export function ReelEmbed({
       >
         <Instagram className="h-4 w-4" />
         রিলটি দেখুন
-      </a>
+      </a></TranslatedContent>
     );
   }
 
   return (
-    <div data-print="hide" className={cn("mx-auto w-full max-w-[400px]", className)}>
+    <TranslatedContent><div data-print="hide" className={cn("mx-auto w-full max-w-[400px]", className)}>
       {loaded ? (
         <div className="overflow-hidden rounded-sm border border-rule">
           <iframe
@@ -119,7 +120,7 @@ export function ReelEmbed({
         <Instagram className="h-3 w-3" />
         ইনস্টাগ্রামে দেখুন
       </a>
-    </div>
+    </div></TranslatedContent>
   );
 }
 
@@ -137,21 +138,21 @@ export function VideoEmbed({
 
   if (!id) {
     return (
-      <a
+      <TranslatedContent><a
         href={url}
         target="_blank"
         rel="noopener noreferrer"
         className="text-sm text-accent hover:underline"
       >
         ভিডিওটি দেখুন
-      </a>
+      </a></TranslatedContent>
     );
   }
 
   const thumb = poster || `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
 
   return (
-    <div data-print="hide" className={cn("w-full", className)}>
+    <TranslatedContent><div data-print="hide" className={cn("w-full", className)}>
       {loaded ? (
         <div className="aspect-video overflow-hidden rounded-sm border border-rule">
           <iframe
@@ -172,6 +173,6 @@ export function VideoEmbed({
           className="aspect-video"
         />
       )}
-    </div>
+    </div></TranslatedContent>
   );
 }

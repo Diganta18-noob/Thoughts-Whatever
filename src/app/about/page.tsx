@@ -1,5 +1,6 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/i18n/localized-link";
 import { Instagram } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
 import { LetterBlock } from "@/components/newsletter/letter-block";
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <JsonLd data={aboutPageJsonLd()} />
       <PageHeader
         labelEn="About"
@@ -72,6 +73,6 @@ export default function AboutPage() {
           <LetterBlock source="about" />
         </div>
       </div>
-    </div>
+    </div></TranslatedContent>
   );
 }

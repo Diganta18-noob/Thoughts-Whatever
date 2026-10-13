@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { TranslatedContent } from "@/components/i18n/translated-content";
+import Link from "@/components/i18n/localized-link";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/page-header";
 import { getSeriesList } from "@/lib/pieces";
@@ -18,7 +19,7 @@ export default async function SeriesIndexPage() {
   const seriesList = await getSeriesList();
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <PageHeader
         labelEn="Series"
         titleBn="ধারাবাহিক"
@@ -92,6 +93,6 @@ export default async function SeriesIndexPage() {
           ))}
         </div>
       )}
-    </div>
+    </div></TranslatedContent>
   );
 }

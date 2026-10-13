@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useEffect, useState } from "react";
 import { type Heading } from "@/lib/markdown";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -45,7 +46,7 @@ export function TableOfContents({ headings }: { headings: Heading[] }) {
   };
 
   return (
-    <nav className="rounded-md border border-rule/60 bg-surface-raised/30 p-4 shadow-sm backdrop-blur">
+    <TranslatedContent><nav className="rounded-md border border-rule/60 bg-surface-raised/30 p-4 shadow-sm backdrop-blur">
       <div className="mb-3 flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-content-soft">
         <List className="h-3.5 w-3.5" />
         <span>{isBn ? "সূচিপত্র" : "Contents"}</span>
@@ -75,6 +76,6 @@ export function TableOfContents({ headings }: { headings: Heading[] }) {
           );
         })}
       </ul>
-    </nav>
+    </nav></TranslatedContent>
   );
 }

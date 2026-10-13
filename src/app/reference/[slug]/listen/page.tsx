@@ -1,5 +1,6 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
-import Link from "next/link";
+import Link from "@/components/i18n/localized-link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { deriveCapabilities, getRightsBadgeMeta } from "@/lib/reference/rights-engine";
@@ -65,7 +66,7 @@ export default async function ReferenceListenPage({ params, searchParams }: List
   // If cannot listen or rights not verified, present rights-gate screen
   if (!capabilities.canListen || !audioAsset) {
     return (
-      <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col justify-between p-4 sm:p-8">
+      <TranslatedContent><div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col justify-between p-4 sm:p-8">
         <header className="max-w-4xl mx-auto w-full flex items-center justify-between border-b border-zinc-850 pb-4">
           <Link
             href={`/reference/${work.slug}`}
@@ -122,12 +123,12 @@ export default async function ReferenceListenPage({ params, searchParams }: List
         <footer className="max-w-4xl mx-auto w-full border-t border-zinc-850 pt-6 text-center text-xs text-zinc-500 font-serif">
           Thoughts.Whatever Archival Preservation Engine
         </footer>
-      </div>
+      </div></TranslatedContent>
     );
   }
 
   return (
-    <ListeningRoom
+    <TranslatedContent><ListeningRoom
       work={{
         id: work.id,
         slug: work.slug,
@@ -148,6 +149,6 @@ export default async function ReferenceListenPage({ params, searchParams }: List
         durationSec: audioAsset.durationSec,
         audioManifest: audioAsset.audioManifest as any,
       }}
-    />
+    /></TranslatedContent>
   );
 }

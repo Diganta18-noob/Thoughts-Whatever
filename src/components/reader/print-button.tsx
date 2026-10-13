@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { Printer } from "lucide-react";
 
 /**
@@ -11,7 +12,7 @@ import { Printer } from "lucide-react";
  */
 export function PrintButton() {
   return (
-    <button
+    <TranslatedContent><button
       type="button"
       data-print="hide"
       onClick={() => window.print()}
@@ -20,6 +21,6 @@ export function PrintButton() {
     >
       <Printer className="h-3.5 w-3.5" />
       <span className="font-bengali-sans">PDF</span>
-    </button>
+    </button></TranslatedContent>
   );
 }

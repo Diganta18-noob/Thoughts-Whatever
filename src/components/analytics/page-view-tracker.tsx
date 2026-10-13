@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef, Suspense } from "react";
 import { posthog } from "@/lib/posthog-client";
@@ -46,8 +47,8 @@ function PostHogPageViewTrackerContent() {
 
 export function PostHogPageViewTracker() {
   return (
-    <Suspense fallback={null}>
+    <TranslatedContent><Suspense fallback={null}>
       <PostHogPageViewTrackerContent />
-    </Suspense>
+    </Suspense></TranslatedContent>
   );
 }

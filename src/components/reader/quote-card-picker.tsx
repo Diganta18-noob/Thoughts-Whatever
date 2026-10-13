@@ -1,8 +1,10 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Quote, X, Copy, Check } from "lucide-react";
 import toast from "react-hot-toast";
+import { useLanguage } from "@/components/providers/language-provider";
 
 /**
  * Select a line → get a shareable card.
@@ -30,6 +32,7 @@ export function QuoteCardPicker({
   slug: string;
   titleBn: string;
 }) {
+  const { isBn } = useLanguage();
   const [selection, setSelection] = useState<{
     text: string;
     x: number;
@@ -88,7 +91,7 @@ export function QuoteCardPicker({
     : null;
 
   return (
-    <>
+    <TranslatedContent><>
       {/* Floating trigger, anchored to the selection */}
       {selection && !cardText && (
         <button
@@ -166,10 +169,10 @@ export function QuoteCardPicker({
                   try {
                     await navigator.clipboard.writeText(`“${cardText}”\n\n— ${titleBn}`);
                     setCopied(true);
-                    toast("লেখা কপি হয়েছে");
+                    toast(isBn ? "লেখা কপি হয়েছে" : "Text copied");
                     setTimeout(() => setCopied(false), 2000);
                   } catch {
-                    toast("কপি করা গেল না");
+                    toast(isBn ? "কপি করা গেল না" : "Could not copy the text");
                   }
                 }}
                 aria-label="লেখা কপি করুন"
@@ -189,6 +192,6 @@ export function QuoteCardPicker({
           </div>
         </div>
       )}
-    </>
+    </></TranslatedContent>
   );
 }

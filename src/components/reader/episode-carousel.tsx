@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { TranslatedContent } from "@/components/i18n/translated-content";
+import Link from "@/components/i18n/localized-link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { piecePath } from "@/lib/nav";
@@ -24,7 +25,7 @@ export function EpisodeCarousel({ episodes, currentSlug }: EpisodeCarouselProps)
   if (!episodes || episodes.length === 0) return null;
 
   return (
-    <section className="py-12 border-t border-rule/60">
+    <TranslatedContent><section className="py-12 border-t border-rule/60">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <span className="label !text-accent uppercase text-xs tracking-wider block mb-1">
@@ -105,6 +106,6 @@ export function EpisodeCarousel({ episodes, currentSlug }: EpisodeCarouselProps)
           );
         })}
       </div>
-    </section>
+    </section></TranslatedContent>
   );
 }

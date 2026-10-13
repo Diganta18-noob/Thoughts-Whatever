@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { TranslatedContent } from "@/components/i18n/translated-content";
+import Link from "@/components/i18n/localized-link";
 import { toBanglaDate } from "@/lib/bengali";
 import { formatDate, formatReading, formatWeekday } from "@/lib/i18n/format";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -37,7 +38,7 @@ export function PieceMeta({
   const bangla = publishedAt ? toBanglaDate(publishedAt) : null;
 
   return (
-    <div
+    <TranslatedContent><div
       className={cn(
         "text-[0.8125rem] text-content-faint",
         isBn ? "font-bengali-sans" : "font-sans",
@@ -92,7 +93,7 @@ export function PieceMeta({
         )}
         <span>{formatReading(readingMinutes, locale)}</span>
       </p>
-    </div>
+    </div></TranslatedContent>
   );
 }
 
@@ -109,7 +110,7 @@ export function TagList({
   if (!tags.length) return null;
 
   return (
-    <ul className={cn("flex flex-wrap gap-2", className)}>
+    <TranslatedContent><ul className={cn("flex flex-wrap gap-2", className)}>
       {tags.map((tag) => (
         <li key={tag.slug}>
           <Link
@@ -124,7 +125,7 @@ export function TagList({
           </Link>
         </li>
       ))}
-    </ul>
+    </ul></TranslatedContent>
   );
 }
 
@@ -149,7 +150,7 @@ export function PieceEyebrow({
   const content = <span className="label !text-accent">{label}</span>;
 
   return (
-    <div className={cn("mb-3", className)}>
+    <TranslatedContent><div className={cn("mb-3", className)}>
       {href ? (
         <Link href={href} className="transition hover:opacity-70">
           {content}
@@ -157,6 +158,6 @@ export function PieceEyebrow({
       ) : (
         content
       )}
-    </div>
+    </div></TranslatedContent>
   );
 }

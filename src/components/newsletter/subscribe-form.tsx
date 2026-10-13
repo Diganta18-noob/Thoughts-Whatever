@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useState } from "react";
 import { Loader2, Check } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -88,7 +89,7 @@ export function SubscribeForm({
 
   if (state === "done") {
     return (
-      <p
+      <TranslatedContent><p
         role="status"
         aria-live="polite"
         lang={locale}
@@ -101,7 +102,7 @@ export function SubscribeForm({
       >
         <Check className="h-4 w-4 shrink-0" />
         {t(messageKey)}
-      </p>
+      </p></TranslatedContent>
     );
   }
 
@@ -111,7 +112,7 @@ export function SubscribeForm({
   );
 
   return (
-    <form
+    <TranslatedContent><form
       onSubmit={onSubmit}
       aria-busy={state === "sending"}
       className={cn("w-full", compact ? "" : "max-w-sm", className)}
@@ -185,7 +186,7 @@ export function SubscribeForm({
           {t(messageKey)}
         </p>
       )}
-    </form>
+    </form></TranslatedContent>
 
   );
 }

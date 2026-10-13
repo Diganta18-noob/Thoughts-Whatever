@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import React, { useState } from "react";
 import { ReferenceRightsStatus } from "@prisma/client";
 import { RightsBadgeMeta } from "@/lib/reference/rights-engine";
@@ -32,7 +33,7 @@ export function ReferenceDetailClient({
   const [isReportOpen, setIsReportOpen] = useState(false);
 
   return (
-    <div className="border-t border-rule pt-6 space-y-4">
+    <TranslatedContent><div className="border-t border-rule pt-6 space-y-4">
       <div className="flex items-center justify-between">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
@@ -60,9 +61,9 @@ export function ReferenceDetailClient({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <ReferenceRightsBadge status={rightsStatus} size="md" />
-              <span className="font-serif text-content-soft font-medium">
+              {rightsStatus !== "PUBLIC_DOMAIN" && <span className="font-serif text-content-soft font-medium">
                 {rightsMeta.labelEn}
-              </span>
+              </span>}
             </div>
             {verifiedAt && (
               <span className="font-mono text-content-faint text-[0.6875rem]">
@@ -71,12 +72,12 @@ export function ReferenceDetailClient({
             )}
           </div>
 
-          <p className="font-serif text-content-soft text-xs leading-relaxed">
+          {rightsStatus !== "PUBLIC_DOMAIN" && <p className="font-serif text-content-soft text-xs leading-relaxed">
             {rightsMeta.descriptionEn}
-          </p>
+          </p>}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-rule/60 text-xs font-serif">
-            {license && (
+            {license && rightsStatus !== "PUBLIC_DOMAIN" && (
               <div>
                 <span className="label block text-[0.625rem]">License</span>
                 <span className="text-content">{license}</span>
@@ -105,7 +106,7 @@ export function ReferenceDetailClient({
           </div>
 
           <p className="border-t border-rule/50 pt-2.5 font-serif text-[0.6875rem] text-content-faint leading-relaxed italic">
-            Thoughts.Whatever operates strictly under the Copyright Act, 1957 (India) and international copyright conventions. Works are cataloged for scholarly reference, and downloadable copies are restricted solely to confirmed public-domain or licensed editions.
+            Works are cataloged for scholarly reference. Source and edition information is preserved in this record.
           </p>
         </div>
       )}
@@ -117,6 +118,6 @@ export function ReferenceDetailClient({
         resourceTitle={workTitle}
         workSlug={workSlug}
       />
-    </div>
+    </div></TranslatedContent>
   );
 }

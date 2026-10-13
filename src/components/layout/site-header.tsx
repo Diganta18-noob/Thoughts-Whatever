@@ -1,7 +1,8 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/i18n/localized-link";
 import { usePathname } from "next/navigation";
 import { Bookmark, Instagram, Menu, X } from "lucide-react";
 import { PRIMARY_NAV, SECONDARY_NAV } from "@/lib/nav";
@@ -44,7 +45,7 @@ export function SiteHeader() {
     pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header
+    <TranslatedContent><header
       data-print="hide"
       className="sticky top-0 z-30 border-b border-rule bg-surface/90 backdrop-blur"
     >
@@ -181,6 +182,6 @@ export function SiteHeader() {
           </ul>
         </nav>
       )}
-    </header>
+    </header></TranslatedContent>
   );
 }

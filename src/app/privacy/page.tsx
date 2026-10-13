@@ -1,3 +1,4 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/page-header";
 import { siteConfig, absoluteUrl } from "@/lib/utils";
@@ -29,7 +30,7 @@ export default function PrivacyPage() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <JsonLd data={privacyJsonLd} />
       <PageHeader
         labelEn="Privacy Policy"
@@ -78,6 +79,6 @@ export default function PrivacyPage() {
           <p>সর্বশেষ সংস্করণ: সেপ্টেম্বর ২০২৬ — {siteConfig.name} প্রকাশনা</p>
         </div>
       </div>
-    </div>
+    </div></TranslatedContent>
   );
 }

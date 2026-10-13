@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { TranslatedContent } from "@/components/i18n/translated-content";
+import Link from "@/components/i18n/localized-link";
 import { Reveal } from "@/components/motion/reveal";
 import { useLanguage } from "@/components/providers/language-provider";
 import { formatNumber } from "@/lib/i18n/format";
@@ -13,7 +14,7 @@ export function ArchiveTeaser({ years }: { years: number[] }) {
   const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-widest";
 
   return (
-    <section className="py-16">
+    <TranslatedContent><section className="py-16">
       <Reveal>
         <div className="mb-5 border-b border-rule pb-3">
           <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
@@ -54,6 +55,6 @@ export function ArchiveTeaser({ years }: { years: number[] }) {
           </Link>
         </div>
       </Reveal>
-    </section>
+    </section></TranslatedContent>
   );
 }

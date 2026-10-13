@@ -1,7 +1,8 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/i18n/localized-link";
 import { motion } from "framer-motion";
 import { BookmarkButton } from "@/components/reader/bookmark-button";
 import { NarrationButton } from "@/components/audio/narration-button";
@@ -26,7 +27,7 @@ export function ArticleHero({ piece, onScrollToContent }: ArticleHeroProps) {
   const metaFace = isBn ? "font-bengali-sans" : "font-sans";
 
   return (
-    <header className="relative pt-6 pb-12">
+    <TranslatedContent><header className="relative pt-6 pb-12">
       <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-14">
         {/* Left Column: Title, Subtitle, Meta & Actions */}
         <div className="flex flex-col justify-center min-w-0">
@@ -176,6 +177,6 @@ export function ArticleHero({ piece, onScrollToContent }: ArticleHeroProps) {
           </div>
         )}
       </div>
-    </header>
+    </header></TranslatedContent>
   );
 }

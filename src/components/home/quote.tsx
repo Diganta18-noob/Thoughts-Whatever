@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { TranslatedContent } from "@/components/i18n/translated-content";
+import Link from "@/components/i18n/localized-link";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLanguage } from "@/components/providers/language-provider";
 import { duration, ease, viewport } from "@/components/motion/motion-tokens";
@@ -16,7 +17,7 @@ export function Quote({ quote }: { quote: PullQuote | null }) {
   const href = piecePath(quote.kind as PieceKindKey, quote.slug);
 
   return (
-    <section className="relative flex min-h-[70svh] items-center justify-center py-24">
+    <TranslatedContent><section className="relative flex min-h-[70svh] items-center justify-center py-24">
       <figure className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
         <span
           aria-hidden
@@ -54,6 +55,6 @@ export function Quote({ quote }: { quote: PullQuote | null }) {
           </Link>
         </figcaption>
       </figure>
-    </section>
+    </section></TranslatedContent>
   );
 }

@@ -1,8 +1,9 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
 
 export function HeroCardSkeleton() {
   return (
-    <div className="w-full rounded-sm border border-rule bg-surface p-6 animate-pulse">
+    <TranslatedContent><div className="w-full rounded-sm border border-rule bg-surface p-6 animate-pulse">
       <div className="flex flex-col gap-6 md:flex-row md:items-center">
         <div className="aspect-[9/16] w-full max-w-[200px] rounded bg-content/10"></div>
         <div className="flex-1 space-y-4">
@@ -13,13 +14,13 @@ export function HeroCardSkeleton() {
           <div className="h-10 w-36 rounded bg-content/10"></div>
         </div>
       </div>
-    </div>
+    </div></TranslatedContent>
   );
 }
 
 export function SeriesGridSkeleton() {
   return (
-    <div className="space-y-6 py-8 animate-pulse">
+    <TranslatedContent><div className="space-y-6 py-8 animate-pulse">
       <div className="h-6 w-40 rounded bg-content/10"></div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {[1, 2, 3].map((i) => (
@@ -30,13 +31,13 @@ export function SeriesGridSkeleton() {
           </div>
         ))}
       </div>
-    </div>
+    </div></TranslatedContent>
   );
 }
 
 export function EpisodesSkeleton() {
   return (
-    <div className="space-y-6 py-8 animate-pulse">
+    <TranslatedContent><div className="space-y-6 py-8 animate-pulse">
       <div className="h-6 w-44 rounded bg-content/10"></div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {[1, 2, 3, 4].map((i) => (
@@ -47,6 +48,6 @@ export function EpisodesSkeleton() {
           </div>
         ))}
       </div>
-    </div>
+    </div></TranslatedContent>
   );
 }

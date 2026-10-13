@@ -1,5 +1,6 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
-import Link from "next/link";
+import Link from "@/components/i18n/localized-link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -8,7 +9,7 @@ import { getReferenceWorkBySlug } from "@/lib/reference/catalogue";
 import { ReferenceRightsBadge } from "@/components/reference/reference-rights-badge";
 import { ReferenceActivityTracker } from "@/components/reference/reference-activity-tracker";
 import { ReferenceDetailClient } from "./reference-detail-client";
-import { BookOpen, ExternalLink, Download, ArrowLeft, ShieldAlert, Sparkles, FileText, Headphones } from "lucide-react";
+import { BookOpen, ExternalLink, ArrowLeft, ShieldAlert, Sparkles, FileText, Headphones } from "lucide-react";
 import type { Metadata } from "next";
 
 interface ReferenceDetailPageProps {
@@ -86,7 +87,7 @@ export default async function ReferenceDetailPage({
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-4 pb-24 pt-8 sm:px-6">
+    <TranslatedContent><div className="mx-auto max-w-5xl px-4 pb-24 pt-8 sm:px-6">
       <ReferenceActivityTracker event="reference_open" workId={work.id} />
       {/* Top Header / Back Navigation */}
       <div className="mb-6 border-b border-rule pb-4 flex items-center justify-between">
@@ -246,14 +247,14 @@ export default async function ReferenceDetailPage({
                 {companionEdition && (
                   <div className="pt-2 border-t border-amber-800/30 flex items-center justify-between flex-wrap gap-2">
                     <span className="text-xs text-emerald-400 font-sans">
-                      The complete work can be read in the verified 1874 Public Domain edition:
+                      The complete work can be read in the verified 1874 edition:
                     </span>
                     <Link
                       href={`/reference/${companionEdition.slug}/read`}
                       className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-300 hover:text-emerald-100 underline"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
-                      <span>Go to 1874 Public Domain Reading Room →</span>
+                      <span>Go to the 1874 Reading Room →</span>
                     </Link>
                   </div>
                 )}
@@ -292,18 +293,7 @@ export default async function ReferenceDetailPage({
                 </Link>
               )}
 
-              {capabilities.canDownload && capabilities.downloadUrl && (
-                <a
-                  href={capabilities.downloadUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  download
-                  className="label inline-flex items-center gap-2 border border-rule bg-surface-raised px-4 py-2 text-content hover:border-content transition-colors text-xs"
-                >
-                  <Download className="h-3.5 w-3.5 text-accent" />
-                  <span>Download PDF</span>
-                </a>
-              )}
+
 
               {source?.sourceUrl && (
                 <a
@@ -326,7 +316,7 @@ export default async function ReferenceDetailPage({
             <div className="space-y-0.5">
               <span className="label">Archival Notes & Overview</span>
               <p className="font-serif text-[0.6875rem] italic text-content-faint">
-                Historical description and cataloguing notes — in Bengali
+                Historical description and cataloguing notes
               </p>
             </div>
             <div className="font-bengali text-bengali-base text-content-soft leading-relaxed whitespace-pre-line">
@@ -398,6 +388,6 @@ export default async function ReferenceDetailPage({
           </div>
         )}
       </div>
-    </div>
+    </div></TranslatedContent>
   );
 }

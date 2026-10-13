@@ -1,5 +1,6 @@
 "use client";
 
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
 import { NativeBookReader } from "@/components/reference/reader/native-book-reader";
 
@@ -19,7 +20,7 @@ export function OnlineReaderClient({
   sourceName = "Original Source",
 }: OnlineReaderClientProps) {
   return (
-    <NativeBookReader
+    <TranslatedContent><NativeBookReader
       work={{
         id: "legacy",
         slug: "legacy-reader",
@@ -38,6 +39,6 @@ export function OnlineReaderClient({
       isRightsVerified={true}
       canDownload={Boolean(pdfUrl)}
       downloadUrl={pdfUrl}
-    />
+    /></TranslatedContent>
   );
 }

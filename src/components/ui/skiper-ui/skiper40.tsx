@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/i18n/localized-link";
 import React from "react";
 import { cn } from "@/lib/utils";
 

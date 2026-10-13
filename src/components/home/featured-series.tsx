@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { TranslatedContent } from "@/components/i18n/translated-content";
+import Link from "@/components/i18n/localized-link";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { Magnetic } from "@/components/motion/magnetic";
 import { CoverImage } from "@/components/media/cover-image";
@@ -57,7 +58,7 @@ function SeriesCard({
   const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-widest";
 
   return (
-    <motion.article className="group relative" {...cardMotionProps}>
+    <TranslatedContent><motion.article className="group relative" {...cardMotionProps}>
       <Link href={`/series/${series.slug}`} className="block">
         {series.coverImage && (
           <CoverImageFrame
@@ -128,7 +129,7 @@ function SeriesCard({
           </Magnetic>
         </div>
       )}
-    </motion.article>
+    </motion.article></TranslatedContent>
   );
 }
 
@@ -138,7 +139,7 @@ export function FeaturedSeries({ series }: { series: SeriesWithPieces[] }) {
   if (!series.length) return null;
 
   return (
-    <section className="py-16">
+    <TranslatedContent><section className="py-16">
       <Reveal>
         <div className="mb-8 border-b border-rule pb-3">
           <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
@@ -159,6 +160,6 @@ export function FeaturedSeries({ series }: { series: SeriesWithPieces[] }) {
           </StaggerItem>
         ))}
       </Stagger>
-    </section>
+    </section></TranslatedContent>
   );
 }

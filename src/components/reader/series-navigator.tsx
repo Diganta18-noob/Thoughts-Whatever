@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { TranslatedContent } from "@/components/i18n/translated-content";
+import Link from "@/components/i18n/localized-link";
 import { ChevronLeft, ChevronRight, Layers } from "lucide-react";
 import { piecePath, type PieceKindKey } from "@/lib/nav";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -31,7 +32,7 @@ export function SeriesNavigator({
   if (!prev && !next) return null;
 
   return (
-    <nav className="my-10 rounded-lg border border-rule/80 bg-surface-raised/40 p-6 backdrop-blur shadow-sm">
+    <TranslatedContent><nav className="my-10 rounded-lg border border-rule/80 bg-surface-raised/40 p-6 backdrop-blur shadow-sm">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-rule/60 pb-3">
         <Link
           href={`/series/${series.slug}`}
@@ -102,6 +103,6 @@ export function SeriesNavigator({
         ) : null}
 
       </div>
-    </nav>
+    </nav></TranslatedContent>
   );
 }

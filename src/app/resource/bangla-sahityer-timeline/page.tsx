@@ -1,5 +1,6 @@
+import { TranslatedContent } from "@/components/i18n/translated-content";
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/i18n/localized-link";
 import { TimelineInteractive } from "@/components/resource/timeline-interactive";
 import { TIMELINE_FAQS } from "@/lib/timeline-data";
 import { JsonLd, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
@@ -106,7 +107,7 @@ export default function BanglaSahityerTimelinePage() {
   ];
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-28 pt-8 sm:px-6 sm:pt-12">
+    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-28 pt-8 sm:px-6 sm:pt-12">
       <JsonLd data={articleSchema} />
       <JsonLd data={breadcrumbJsonLd(breadcrumbs)} />
       <JsonLd data={faqJsonLd(TIMELINE_FAQS)} />
@@ -188,6 +189,6 @@ export default function BanglaSahityerTimelinePage() {
           </div>
         </div>
       </aside>
-    </div>
+    </div></TranslatedContent>
   );
 }
