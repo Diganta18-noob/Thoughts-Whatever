@@ -1,4 +1,3 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/page-header";
@@ -83,7 +82,7 @@ export default async function AuthorPage(props: RouteProps) {
   if (!author) notFound();
 
   return (
-    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <JsonLd data={authorPersonJsonLd(author)} />
       <JsonLd
         data={breadcrumbJsonLd([
@@ -156,6 +155,6 @@ export default async function AuthorPage(props: RouteProps) {
           ))}
         </div>
       )}
-    </div></TranslatedContent>
+    </div>
   );
 }

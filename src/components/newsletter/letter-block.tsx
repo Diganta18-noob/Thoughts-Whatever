@@ -1,4 +1,3 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import Image from "next/image";
 import { SubscribeForm } from "@/components/newsletter/subscribe-form";
 import { cn } from "@/lib/utils";
@@ -11,7 +10,7 @@ export function LetterBlock({
   className?: string;
 }) {
   return (
-    <TranslatedContent><aside
+    <aside
       data-print="hide"
       className={cn(
         "relative overflow-hidden rounded-lg border border-rule/60 bg-surface-raised shadow-xl",
@@ -54,6 +53,6 @@ export function LetterBlock({
           />
         </div>
       </div>
-    </aside></TranslatedContent>
+    </aside>
   );
 }

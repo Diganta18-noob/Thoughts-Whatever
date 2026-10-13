@@ -1,7 +1,6 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/providers/language-provider";
 
@@ -34,7 +33,7 @@ export function PageHeader({
   const { isBn } = useLanguage();
 
   return (
-    <TranslatedContent><header className={cn("border-b border-rule pb-8 pt-12 sm:pt-16", className)}>
+    <header className={cn("border-b border-rule pb-8 pt-12 sm:pt-16", className)}>
       <div className="flex items-baseline justify-between gap-4">
         {!isBn && (
           <span className="label" lang="en">
@@ -52,12 +51,12 @@ export function PageHeader({
 
       <h1
         className="mt-3 font-bengali text-[2rem] font-medium leading-tight text-content sm:text-[2.5rem]"
-        lang={isBn ? "bn" : "en"}
+        lang="bn"
       >
-        {isBn ? titleBn : labelEn}
+        {titleBn}
       </h1>
 
-      {descBn && (isBn || !descEn) && (
+      {descBn && (
         <p className="mt-4 max-w-measure-wide font-bengali text-bengali-base text-content-soft" lang="bn">
           {descBn}
         </p>
@@ -68,7 +67,7 @@ export function PageHeader({
           {descEn}
         </p>
       )}
-    </header></TranslatedContent>
+    </header>
   );
 }
 
@@ -89,15 +88,15 @@ export function SectionHeading({
   const { t, locale, isBn } = useLanguage();
 
   return (
-    <TranslatedContent><div className={cn("mb-6 flex items-end justify-between gap-4 border-b border-rule pb-3", className)}>
+    <div className={cn("mb-6 flex items-end justify-between gap-4 border-b border-rule pb-3", className)}>
       <div>
         {labelEn && !isBn && (
           <span className="label block" lang="en">
             {labelEn}
           </span>
         )}
-        <h2 className="mt-1 font-bengali text-xl text-content" lang={locale}>
-          {isBn || !labelEn ? titleBn : labelEn}
+        <h2 className="mt-1 font-bengali text-xl text-content" lang="bn">
+          {titleBn}
         </h2>
       </div>
       {href && (
@@ -112,6 +111,6 @@ export function SectionHeading({
           {hrefLabel ?? t("common.all")} →
         </Link>
       )}
-    </div></TranslatedContent>
+    </div>
   );
 }

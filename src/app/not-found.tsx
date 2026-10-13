@@ -1,5 +1,4 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { PRIMARY_NAV, SECONDARY_NAV } from "@/lib/nav";
 import { T } from "@/components/i18n/t";
@@ -20,7 +19,7 @@ export default function NotFound() {
   ];
 
   return (
-    <TranslatedContent><div className="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center px-4 py-20 sm:px-6">
+    <div className="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-measure text-center">
         <span className="label font-bengali-sans text-accent font-semibold tracking-widest">404</span>
         <T
@@ -52,6 +51,6 @@ export default function NotFound() {
           ))}
         </nav>
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

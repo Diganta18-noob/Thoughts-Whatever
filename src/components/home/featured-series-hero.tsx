@@ -1,7 +1,6 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { CoverImageFrame } from "@/components/media/cover-image-frame";
 import { piecePath, KIND_META } from "@/lib/nav";
@@ -30,7 +29,7 @@ export function FeaturedSeriesHero({
   const { cardMotionProps } = useCardHover();
 
   return (
-    <TranslatedContent><motion.div
+    <motion.div
       {...cardMotionProps}
       className="group relative overflow-hidden rounded-2xl border border-rule/70 bg-surface-raised/20 p-6 sm:p-10 lg:p-14 backdrop-blur-sm transition-all duration-300 hover:border-rule"
     >
@@ -118,7 +117,7 @@ export function FeaturedSeriesHero({
           </div>
         </div>
       </div>
-    </motion.div></TranslatedContent>
+    </motion.div>
   );
 }
 

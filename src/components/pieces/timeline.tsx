@@ -1,4 +1,3 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { T } from "@/components/i18n/t";
 
 export type TimelineItem = {
@@ -19,7 +18,7 @@ export function Timeline({ events }: { events: TimelineItem[] }) {
   if (!events.length) return null;
 
   return (
-    <TranslatedContent><section className="mt-14 border-t border-rule pt-8" aria-labelledby="timeline">
+    <section className="mt-14 border-t border-rule pt-8" aria-labelledby="timeline">
       <h2 id="timeline" className="mb-6 text-lg text-content">
         <T k="piece.timeline" className="font-serif" bnClassName="font-bengali" />
       </h2>
@@ -51,6 +50,6 @@ export function Timeline({ events }: { events: TimelineItem[] }) {
           </li>
         ))}
       </ol>
-    </section></TranslatedContent>
+    </section>
   );
 }

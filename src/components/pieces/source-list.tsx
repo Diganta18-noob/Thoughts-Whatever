@@ -1,4 +1,3 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { ExternalLink } from "lucide-react";
 import { T } from "@/components/i18n/t";
 import { toBengaliNumber } from "@/lib/bengali";
@@ -23,7 +22,7 @@ export function SourceList({ sources }: { sources: SourceItem[] }) {
   if (!sources.length) return null;
 
   return (
-    <TranslatedContent><section className="mt-14 border-t border-rule pt-8" aria-labelledby="sources">
+    <section className="mt-14 border-t border-rule pt-8" aria-labelledby="sources">
       <h2 id="sources" className="mb-5 text-lg text-content">
         <T k="piece.sources" className="font-serif" bnClassName="font-bengali" />
       </h2>
@@ -73,6 +72,6 @@ export function SourceList({ sources }: { sources: SourceItem[] }) {
         className="mt-6 font-sans text-[0.6875rem] leading-relaxed text-content-faint"
         bnClassName="font-bengali-sans"
       />
-    </section></TranslatedContent>
+    </section>
   );
 }

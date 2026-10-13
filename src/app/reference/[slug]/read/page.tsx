@@ -1,6 +1,5 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { deriveCapabilities, getRightsBadgeMeta } from "@/lib/reference/rights-engine";
@@ -103,7 +102,7 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
     const rightsMeta = getRightsBadgeMeta(rightsStatus);
 
     return (
-      <TranslatedContent><div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col justify-between p-4 sm:p-8">
+      <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col justify-between p-4 sm:p-8">
         <header className="max-w-4xl mx-auto w-full flex items-center justify-between border-b border-zinc-800 pb-4">
           <Link
             href={`/reference/${work.slug}`}
@@ -181,13 +180,13 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
             </p>
           </footer>
         )}
-      </div></TranslatedContent>
+      </div>
     );
   }
 
   // Native In-Site Reading Experience
   return (
-    <TranslatedContent><NativeBookReader
+    <NativeBookReader
       work={{
         id: work.id,
         slug: work.slug,
@@ -233,6 +232,6 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
       canDownload={capabilities.canDownload}
       downloadUrl={capabilities.downloadUrl}
       companionEdition={companionEdition}
-    /></TranslatedContent>
+    />
   );
 }

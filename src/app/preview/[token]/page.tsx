@@ -1,4 +1,3 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -38,7 +37,7 @@ export default async function StagingPreviewPage({ params }: PreviewPageProps) {
 
   if (!piece) {
     return (
-      <TranslatedContent><div className="min-h-screen bg-surface flex items-center justify-center p-6 font-sans">
+      <div className="min-h-screen bg-surface flex items-center justify-center p-6 font-sans">
         <div className="max-w-md w-full rounded-sm border border-rule bg-surface-raised p-8 text-center space-y-4">
           <ShieldAlert className="h-10 w-10 text-rose-600 mx-auto" />
           <h1 className="font-serif text-xl text-content">Invalid Preview Link</h1>
@@ -52,13 +51,13 @@ export default async function StagingPreviewPage({ params }: PreviewPageProps) {
             Go to Pieces
           </Link>
         </div>
-      </div></TranslatedContent>
+      </div>
     );
   }
 
   if (piece.isExpired) {
     return (
-      <TranslatedContent><div className="min-h-screen bg-surface flex items-center justify-center p-6 font-sans">
+      <div className="min-h-screen bg-surface flex items-center justify-center p-6 font-sans">
         <div className="max-w-md w-full rounded-sm border border-rule bg-surface-raised p-8 text-center space-y-4">
           <Clock className="h-10 w-10 text-amber-600 mx-auto" />
           <h1 className="font-serif text-xl text-content">Preview Link Expired</h1>
@@ -72,7 +71,7 @@ export default async function StagingPreviewPage({ params }: PreviewPageProps) {
             Regenerate in Editor
           </Link>
         </div>
-      </div></TranslatedContent>
+      </div>
     );
   }
 
@@ -81,7 +80,7 @@ export default async function StagingPreviewPage({ params }: PreviewPageProps) {
   const reviewComments = Array.isArray(piece.reviewComments) ? (piece.reviewComments as any[]) : [];
 
   return (
-    <TranslatedContent><div className="min-h-screen bg-surface text-content pb-24">
+    <div className="min-h-screen bg-surface text-content pb-24">
       {/* Floating Staging Top Banner */}
       <aside aria-label="Staging banner" className="sticky top-0 z-50 border-b border-amber-500/30 bg-amber-50/95 dark:bg-amber-950/80 backdrop-blur-md px-4 py-2.5 shadow-sm">
         <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs font-sans">
@@ -188,6 +187,6 @@ export default async function StagingPreviewPage({ params }: PreviewPageProps) {
           </section>
         )}
       </main>
-    </div></TranslatedContent>
+    </div>
   );
 }

@@ -1,6 +1,5 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import type { Metadata } from "next";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { T } from "@/components/i18n/t";
 import { UnsubscribeClient } from "./unsubscribe-client";
 
@@ -17,7 +16,7 @@ export default function UnsubscribePage({
   const token = searchParams.token?.trim() ?? "";
 
   return (
-    <TranslatedContent><div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-measure">
         <T
           k="letter.unsubEyebrow"
@@ -56,6 +55,6 @@ export default function UnsubscribePage({
           )}
         </div>
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { usePathname } from "next/navigation";
 
 /**
@@ -14,5 +13,5 @@ import { usePathname } from "next/navigation";
 export function PublicChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   if (pathname?.startsWith("/admin")) return null;
-  return <TranslatedContent><>{children}</></TranslatedContent>;
+  return <>{children}</>;
 }

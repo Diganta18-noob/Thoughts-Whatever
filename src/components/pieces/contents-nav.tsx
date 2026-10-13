@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useLanguage } from "@/components/providers/language-provider";
 import { cn } from "@/lib/utils";
 
@@ -22,7 +21,7 @@ export function ContentsNav({
   const { t, locale, isBn } = useLanguage();
 
   return (
-    <TranslatedContent><nav
+    <nav
       data-print="hide"
       aria-label={t("piece.contents")}
       className="mx-auto mt-10 max-w-measure rounded-sm border border-rule bg-surface-raised px-5 py-4"
@@ -50,6 +49,6 @@ export function ContentsNav({
           </li>
         ))}
       </ol>
-    </nav></TranslatedContent>
+    </nav>
   );
 }

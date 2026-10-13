@@ -1,7 +1,6 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import Image from "next/image";
 import { formatDate } from "@/lib/i18n/format";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -20,7 +19,7 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
   const meta = KIND_META[piece.kind];
 
   return (
-    <TranslatedContent><aside className="sticky top-28 space-y-6 pl-2 hidden lg:block">
+    <aside className="sticky top-28 space-y-6 pl-2 hidden lg:block">
       {/* 1. About This Episode Card */}
       <div className="rounded-md border border-rule/40 bg-surface-raised/20 p-4 space-y-3 text-xs">
         <h4 className="label text-[0.625rem] uppercase tracking-widest text-content-faint">
@@ -135,6 +134,6 @@ export function ArticleRightSidebar({ piece, nextEpisode }: ArticleRightSidebarP
           </Link>
         </div>
       )}
-    </aside></TranslatedContent>
+    </aside>
   );
 }

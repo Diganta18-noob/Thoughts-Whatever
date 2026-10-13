@@ -1,8 +1,7 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import React, { useState } from "react";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import {
   Globe,
   History,
@@ -25,7 +24,7 @@ export function SeriesEnhancementsView({
   const [showEnglishAbstract, setShowEnglishAbstract] = useState<boolean>(true);
 
   return (
-    <TranslatedContent><div className="mt-16 space-y-12">
+    <div className="mt-16 space-y-12">
       {/* ── Section 1: English Abstract & Global Context ──── */}
       <section className="rounded-2xl border border-rule/80 bg-surface-raised/50 p-6 sm:p-8 backdrop-blur shadow-sm">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-rule/60 pb-4">
@@ -217,6 +216,6 @@ export function SeriesEnhancementsView({
           Thoughts Whatever (2026). {enhancement.englishTitle} — Comprehensive Literary & Historical Analysis. thoughtswhatever.in/series/{enhancement.slug}
         </div>
       </aside>
-    </div></TranslatedContent>
+    </div>
   );
 }

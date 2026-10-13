@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { cn } from "@/lib/utils";
 
 interface EditorialDividerProps {
@@ -13,11 +12,11 @@ export function EditorialDivider({
   variant = "ornament",
 }: EditorialDividerProps) {
   if (variant === "simple") {
-    return <TranslatedContent><hr className={cn("border-t border-rule/60 my-10 sm:my-14", className)} /></TranslatedContent>;
+    return <hr className={cn("border-t border-rule/60 my-10 sm:my-14", className)} />;
   }
 
   return (
-    <TranslatedContent><div className={cn("relative my-12 flex items-center justify-center sm:my-16", className)}>
+    <div className={cn("relative my-12 flex items-center justify-center sm:my-16", className)}>
       <div className="absolute inset-0 flex items-center" aria-hidden="true">
         <div className="w-full border-t border-rule/70" />
       </div>
@@ -36,6 +35,6 @@ export function EditorialDivider({
           </svg>
         )}
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

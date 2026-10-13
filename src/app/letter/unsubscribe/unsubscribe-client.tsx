@@ -1,8 +1,7 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useState } from "react";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { Loader2, Check } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
 import type { TranslationKey } from "@/lib/i18n/en";
@@ -45,7 +44,7 @@ export function UnsubscribeClient({ token }: { token: string }) {
 
   if (state === "done") {
     return (
-      <TranslatedContent><div>
+      <div>
         <p
           lang={locale}
           className={cn(
@@ -72,12 +71,12 @@ export function UnsubscribeClient({ token }: { token: string }) {
         >
           {t("error.home")}
         </Link>
-      </div></TranslatedContent>
+      </div>
     );
   }
 
   return (
-    <TranslatedContent><div>
+    <div>
       <p
         lang={locale}
         className={cn("text-bengali-base text-content-soft", body)}
@@ -114,6 +113,6 @@ export function UnsubscribeClient({ token }: { token: string }) {
           {t(messageKey)}
         </p>
       )}
-    </div></TranslatedContent>
+    </div>
   );
 }

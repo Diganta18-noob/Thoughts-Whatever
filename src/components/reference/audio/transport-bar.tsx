@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
 import { formatTimecode } from "@/lib/reference/audio/types";
 import { RotateCcw, RotateCw, Volume2, VolumeX } from "lucide-react";
@@ -34,7 +33,7 @@ export function TransportBar({
   };
 
   return (
-    <TranslatedContent><div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 pt-3 pb-1 border-t border-zinc-850/80 text-zinc-400 text-xs font-mono">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 pt-3 pb-1 border-t border-zinc-850/80 text-zinc-400 text-xs font-mono">
       {/* Timecode & Playback Stats */}
       <div className="flex items-center justify-between w-full sm:w-auto gap-2">
         <div className="flex items-center gap-1.5 bg-zinc-900/80 px-2.5 py-1 rounded-lg border border-zinc-800/60">
@@ -86,6 +85,6 @@ export function TransportBar({
 
       {/* Desktop Download Action */}
 
-    </div></TranslatedContent>
+    </div>
   );
 }

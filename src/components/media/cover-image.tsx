@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useState } from "react";
 import Image from "next/image";
 import { coverSrc, isOptimizable, type CoverOwner } from "@/lib/images";
@@ -24,28 +23,28 @@ export function FillImage({
 
   if (hasError) {
     return (
-      <TranslatedContent><div className="absolute inset-0 flex items-center justify-center bg-journal-paperEdge text-content-faint">
+      <div className="absolute inset-0 flex items-center justify-center bg-journal-paperEdge text-content-faint">
         <span className="font-mono text-[0.65rem] uppercase tracking-wider">Image Unavailable</span>
-      </div></TranslatedContent>
+      </div>
     );
   }
 
   if (!isOptimizable(src)) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <TranslatedContent><img
+      <img
         src={src}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
         onError={() => setHasError(true)}
         className={cn("absolute inset-0 h-full w-full", shared)}
-      /></TranslatedContent>
+      />
     );
   }
 
   return (
-    <TranslatedContent><Image
+    <Image
       src={src}
       alt={alt}
       fill
@@ -53,7 +52,7 @@ export function FillImage({
       priority={priority}
       onError={() => setHasError(true)}
       className={shared}
-    /></TranslatedContent>
+    />
   );
 }
 
@@ -80,12 +79,12 @@ export function CoverImage({
   const src = coverSrc(owner, slug, coverImage);
 
   return (
-    <TranslatedContent><FillImage
+    <FillImage
       src={src}
       alt={alt}
       sizes={sizes}
       priority={priority}
       className={className}
-    /></TranslatedContent>
+    />
   );
 }

@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react";
 import { ReferenceRightsBadge } from "../reference-rights-badge";
 import { TransportBar } from "../audio/transport-bar";
 
-jest.mock("@/components/i18n/translated-content", () => ({ TranslatedContent: ({ children }: { children: React.ReactNode }) => children }));
 describe("reference display controls", () => {
   it("omits the public-domain badge while retaining other statuses", () => {
     const { container, rerender } = render(<ReferenceRightsBadge status="PUBLIC_DOMAIN" />);

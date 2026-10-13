@@ -1,4 +1,3 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/page-header";
 import { ArticleCard } from "@/components/pieces/article-card";
@@ -44,7 +43,7 @@ export default async function BlogPage() {
   ];
 
   return (
-    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <JsonLd data={blogJsonLd} />
       <JsonLd data={breadcrumbJsonLd(breadcrumbs)} />
       <PageHeader
@@ -75,6 +74,6 @@ export default async function BlogPage() {
       <div className="mt-12 pt-12 border-t border-rule/60">
         <LetterBlock source="blog" />
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

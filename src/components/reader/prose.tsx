@@ -1,10 +1,4 @@
-"use client";
-
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { Children, type ReactNode } from "react";
-import { useLanguage } from "@/components/providers/language-provider";
-import { englishText } from "@/components/i18n/translation-store";
-import { needsEnglishTranslation } from "@/lib/content-translation";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { firstGrapheme, splitLeadParagraph, stripThoughtsSignature } from "@/lib/markdown";
@@ -156,22 +150,12 @@ export function Prose({
   // Re-strip signature in case code fences wrapped it
   cleanBody = stripThoughtsSignature(cleanBody);
 
-  const { isBn, setLocale } = useLanguage();
-  const englishBody = englishText(cleanBody);
-  if (!isBn && needsEnglishTranslation(cleanBody) && !englishBody) {
-    return <section lang="en" className="my-8 rounded-sm border border-rule bg-surface-raised p-6 font-serif text-content-soft">
-      <h2 className="text-xl text-content">English translation not available yet</h2>
-      <p className="mt-3">An English version of this literary text is not available yet. You can read the complete original in Bengali.</p>
-      <button type="button" onClick={() => setLocale("bn")} className="mt-4 min-h-11 rounded-sm border border-accent px-4 py-2 text-accent">Read the Bengali original</button>
-    </section>;
-  }
-  if (!isBn && englishBody) cleanBody = englishBody;
-  const { lead, rest } = dropCap && isBn
+  const { lead, rest } = dropCap
     ? splitLeadParagraph(cleanBody)
     : { lead: null, rest: cleanBody };
 
   return (
-    <TranslatedContent><div className={cn("prose-bengali", className)} lang="bn">
+    <div className={cn("prose-bengali", className)} lang="bn">
       {lead && (
         <Markdown remarkPlugins={[remarkGfm]} components={leadComponents}>
           {lead}
@@ -183,6 +167,6 @@ export function Prose({
         </Markdown>
       )}
       {showSignature && <ArticleSignature />}
-    </div></TranslatedContent>
+    </div>
   );
 }

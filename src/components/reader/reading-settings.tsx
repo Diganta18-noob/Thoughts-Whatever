@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useEffect, useRef, useState } from "react";
 import { Type, RotateCcw, Check } from "lucide-react";
 import {
@@ -82,7 +81,7 @@ export function ReadingSettingsButton() {
   }, [open]);
 
   return (
-    <TranslatedContent><div className="relative" data-print="hide">
+    <div className="relative" data-print="hide">
       <button
         ref={buttonRef}
         type="button"
@@ -258,6 +257,6 @@ export function ReadingSettingsButton() {
             )}
         </div>
       )}
-    </div></TranslatedContent>
+    </div>
   );
 }

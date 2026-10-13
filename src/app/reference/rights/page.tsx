@@ -1,4 +1,3 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
 import { ReferenceRightsContent } from "./reference-rights-content";
 import type { Metadata } from "next";
@@ -11,5 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function ReferenceRightsPolicyPage() {
-  return <TranslatedContent><ReferenceRightsContent /></TranslatedContent>;
+  return <ReferenceRightsContent />;
 }

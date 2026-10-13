@@ -1,7 +1,6 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { BookmarkButton } from "@/components/reader/bookmark-button";
 import { cn } from "@/lib/utils";
 import { toast } from "@/lib/toast";
@@ -28,7 +27,7 @@ export function ArticleLeftSidebar({
   titleBn,
 }: ArticleLeftSidebarProps) {
   return (
-    <TranslatedContent><aside className="sticky top-24 space-y-8 pr-4 hidden lg:block">
+    <aside className="sticky top-24 space-y-8 pr-4 hidden lg:block">
       {/* 1. On This Page Navigation (Scrollspy) */}
       {headings.length > 0 && (
         <div className="space-y-3">
@@ -117,6 +116,6 @@ export function ArticleLeftSidebar({
           </button>
         </div>
       </div>
-    </aside></TranslatedContent>
+    </aside>
   );
 }

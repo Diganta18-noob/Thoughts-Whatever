@@ -1,5 +1,4 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import type { Metadata } from "next";
 import type { PieceKind } from "@prisma/client";
 import { PageHeader } from "@/components/layout/page-header";
@@ -96,7 +95,7 @@ export default async function ArchivePage({
   const active = Object.values(filters).filter(Boolean).length > 0;
 
   return (
-    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <PageHeader
         labelEn="Archive"
         titleBn="সংগ্রহ"
@@ -266,7 +265,7 @@ export default async function ArchivePage({
           )}
         </div>
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }
 
@@ -293,7 +292,7 @@ function Chip({
   numeric?: boolean;
 }) {
   return (
-    <TranslatedContent><Link
+    <Link
       href={href}
       scroll={false}
       prefetch={false}
@@ -311,6 +310,6 @@ function Chip({
       {typeof count === "number" && (
         <Num value={count} className="text-[0.625rem] opacity-60" />
       )}
-    </Link></TranslatedContent>
+    </Link>
   );
 }

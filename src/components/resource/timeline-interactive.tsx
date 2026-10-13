@@ -1,8 +1,7 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import React, { useState, useMemo } from "react";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import {
   Search,
   BookOpen,
@@ -53,7 +52,7 @@ export function TimelineInteractive() {
   }, [selectedEra, selectedCategory, realSearch]);
 
   return (
-    <TranslatedContent><div className="space-y-12">
+    <div className="space-y-12">
       {/* ── Filter Bar & Controls ────────────────────────── */}
       <section className="sticky top-16 z-20 rounded-xl border border-rule/80 bg-surface/95 p-4 shadow-sm backdrop-blur transition-all">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -315,6 +314,6 @@ export function TimelineInteractive() {
           </div>
         </div>
       </section>
-    </div></TranslatedContent>
+    </div>
   );
 }

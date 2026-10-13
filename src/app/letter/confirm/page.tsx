@@ -1,4 +1,3 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import type { Metadata } from "next";
 import { LetterConfirmClient } from "./letter-confirm-client";
 
@@ -9,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function LetterConfirmPage({ searchParams }: { searchParams: { token?: string } }) {
   return (
-    <TranslatedContent><main className="mx-auto max-w-measure px-4 py-20 sm:px-6">
+    <main className="mx-auto max-w-measure px-4 py-20 sm:px-6">
       <LetterConfirmClient token={searchParams.token ?? ""} />
-    </main></TranslatedContent>
+    </main>
   );
 }

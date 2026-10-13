@@ -1,9 +1,8 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { useLanguageSafe } from "@/components/providers/language-provider";
 import { cn } from "@/lib/utils";
 
@@ -31,7 +30,7 @@ export default function Error({
   };
 
   return (
-    <TranslatedContent><div className="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center px-4 py-20 sm:px-6">
+    <div className="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-measure text-center" lang={locale}>
         <span className={cn("label", isBn && "font-bengali-sans tracking-normal")}>
           {t("error.label")}
@@ -77,6 +76,6 @@ export default function Error({
           </p>
         )}
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

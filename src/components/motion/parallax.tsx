@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef, type ReactNode } from "react";
 
@@ -26,17 +25,17 @@ export function Parallax({
 
   if (reduced) {
     return (
-      <TranslatedContent><div ref={ref} className={className}>
+      <div ref={ref} className={className}>
         {children}
-      </div></TranslatedContent>
+      </div>
     );
   }
 
   return (
-    <TranslatedContent><div ref={ref} className={className}>
+    <div ref={ref} className={className}>
       <motion.div style={{ y }} className="h-full w-full will-change-transform">
         {children}
       </motion.div>
-    </div></TranslatedContent>
+    </div>
   );
 }

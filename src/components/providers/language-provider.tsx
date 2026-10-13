@@ -49,7 +49,7 @@ type Ctx = {
   locale: Locale;
   setLocale: (next: Locale) => void;
   toggle: () => void;
-  /** Interface dictionary. Literary and page content use the content bundle. */
+  /** Chrome only. Never call this on a title, body, author, or tag. */
   t: (key: TranslationKey, params?: TranslationParams) => string;
   /** `true` for Bengali chrome — handy for switching font classes. */
   isBn: boolean;

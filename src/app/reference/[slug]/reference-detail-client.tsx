@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import React, { useState } from "react";
 import { ReferenceRightsStatus } from "@prisma/client";
 import { RightsBadgeMeta } from "@/lib/reference/rights-engine";
@@ -33,7 +32,7 @@ export function ReferenceDetailClient({
   const [isReportOpen, setIsReportOpen] = useState(false);
 
   return (
-    <TranslatedContent><div className="border-t border-rule pt-6 space-y-4">
+    <div className="border-t border-rule pt-6 space-y-4">
       <div className="flex items-center justify-between">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
@@ -118,6 +117,6 @@ export function ReferenceDetailClient({
         resourceTitle={workTitle}
         workSlug={workSlug}
       />
-    </div></TranslatedContent>
+    </div>
   );
 }

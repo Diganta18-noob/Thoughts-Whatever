@@ -1,8 +1,7 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useEffect, useMemo, useState } from "react";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search as SearchIcon, Loader2 } from "lucide-react";
 import { formatReadingTime, toBengaliNumber } from "@/lib/bengali";
@@ -47,7 +46,7 @@ export function SearchClient() {
   const results = kind ? all.filter((doc) => doc.kind === kind) : all;
 
   return (
-    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <header className="border-b border-rule pb-8 pt-12 sm:pt-16">
         <span className="label" lang="en">
           Search
@@ -168,7 +167,7 @@ export function SearchClient() {
           ))}
         </ol>
       )}
-    </div></TranslatedContent>
+    </div>
   );
 }
 
@@ -182,7 +181,7 @@ function FilterPill({
   children: React.ReactNode;
 }) {
   return (
-    <TranslatedContent><button
+    <button
       type="button"
       onClick={onClick}
       aria-pressed={active}
@@ -195,6 +194,6 @@ function FilterPill({
       lang="bn"
     >
       {children}
-    </button></TranslatedContent>
+    </button>
   );
 }

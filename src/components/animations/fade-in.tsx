@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { motion } from "framer-motion";
 
 export function FadeIn({
@@ -15,14 +14,14 @@ export function FadeIn({
   className?: string;
 }) {
   return (
-    <TranslatedContent><motion.div
+    <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
       className={className}
     >
       {children}
-    </motion.div></TranslatedContent>
+    </motion.div>
   );
 }
 
@@ -45,14 +44,14 @@ export function SlideIn({
   };
 
   return (
-    <TranslatedContent><motion.div
+    <motion.div
       initial={{ opacity: 0, ...offsets[direction] }}
       animate={{ opacity: 1, x: 0, y: 0 }}
       transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
       className={className}
     >
       {children}
-    </motion.div></TranslatedContent>
+    </motion.div>
   );
 }
 
@@ -66,7 +65,7 @@ export function StaggerList({
   className?: string;
 }) {
   return (
-    <TranslatedContent><motion.div
+    <motion.div
       initial="hidden"
       animate="visible"
       variants={{
@@ -80,7 +79,7 @@ export function StaggerList({
       className={className}
     >
       {children}
-    </motion.div></TranslatedContent>
+    </motion.div>
   );
 }
 
@@ -92,7 +91,7 @@ export function StaggerItem({
   className?: string;
 }) {
   return (
-    <TranslatedContent><motion.div
+    <motion.div
       variants={{
         hidden: { opacity: 0, y: 12 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
@@ -100,6 +99,6 @@ export function StaggerItem({
       className={className}
     >
       {children}
-    </motion.div></TranslatedContent>
+    </motion.div>
   );
 }

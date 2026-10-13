@@ -1,10 +1,8 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { Bookmark as BookmarkIcon, BookmarkCheck } from "lucide-react";
 import toast from "react-hot-toast";
 import { useBookmarks } from "@/components/providers/bookmarks-provider";
-import { useLanguage } from "@/components/providers/language-provider";
 import { cn } from "@/lib/utils";
 
 import { posthog } from "@/lib/posthog-client";
@@ -21,11 +19,10 @@ export function BookmarkButton({
   withLabel?: boolean;
 }) {
   const { has, toggle, ready } = useBookmarks();
-  const { isBn } = useLanguage();
   const saved = ready && has(slug);
 
   return (
-    <TranslatedContent><button
+    <button
       type="button"
       data-print="hide"
       onClick={() => {
@@ -35,7 +32,7 @@ export function BookmarkButton({
           content_type: kind,
           action: nowSaved ? "add" : "remove",
         });
-        toast(isBn ? (nowSaved ? "পরে পড়ার তালিকায় যোগ হল" : "তালিকা থেকে সরানো হল") : (nowSaved ? "Saved for later" : "Removed from saved pieces"));
+        toast(nowSaved ? "পরে পড়ার তালিকায় যোগ হল" : "তালিকা থেকে সরানো হল");
       }}
 
       aria-pressed={saved}
@@ -55,6 +52,6 @@ export function BookmarkButton({
       {withLabel && (
         <span className="font-bengali-sans">{saved ? "সংরক্ষিত" : "পরে পড়ব"}</span>
       )}
-    </button></TranslatedContent>
+    </button>
   );
 }

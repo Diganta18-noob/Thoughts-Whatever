@@ -1,4 +1,3 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import type { Metadata } from "next";
 import { BookmarksClient } from "./bookmarks-client";
 
@@ -11,5 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function BookmarksPage() {
-  return <TranslatedContent><BookmarksClient /></TranslatedContent>;
+  return <BookmarksClient />;
 }

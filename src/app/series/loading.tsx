@@ -1,7 +1,6 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 export default function SeriesLoading() {
   return (
-    <TranslatedContent><div className="mx-auto max-w-6xl animate-pulse px-4 pb-24 sm:px-6">
+    <div className="mx-auto max-w-6xl animate-pulse px-4 pb-24 sm:px-6">
       <div className="border-b border-rule py-12 space-y-4">
         <div className="h-4 w-24 rounded bg-content/10" />
         <div className="h-10 w-48 rounded bg-content/10" />
@@ -18,6 +17,6 @@ export default function SeriesLoading() {
           </div>
         ))}
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

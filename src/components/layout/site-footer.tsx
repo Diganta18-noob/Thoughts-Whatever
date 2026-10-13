@@ -1,7 +1,6 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { Instagram } from "lucide-react";
 import { PRIMARY_NAV, SECONDARY_NAV } from "@/lib/nav";
 import { siteConfig, cn } from "@/lib/utils";
@@ -15,7 +14,7 @@ export function SiteFooter() {
   const { t, locale, isBn } = useLanguage();
 
   return (
-    <TranslatedContent><footer data-print="hide" className="mt-24 border-t border-rule bg-surface">
+    <footer data-print="hide" className="mt-24 border-t border-rule bg-surface">
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)]">
           {/* চিঠি. Unlike the section descriptions, which stay Bengali because
@@ -118,6 +117,6 @@ export function SiteFooter() {
           </p>
         </div>
       </div>
-    </footer></TranslatedContent>
+    </footer>
   );
 }

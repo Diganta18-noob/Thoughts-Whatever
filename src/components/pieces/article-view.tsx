@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useRef } from "react";
 import { Prose } from "@/components/reader/prose";
 import { ReadingProgress } from "@/components/reader/reading-progress";
@@ -48,7 +47,7 @@ export function ArticleView({
   };
 
   return (
-    <TranslatedContent><>
+    <>
       <ReadingProgress targetId={ARTICLE_ID} />
       <ViewTracker
         pieceId={piece.id}
@@ -184,6 +183,6 @@ export function ArticleView({
           <LetterBlock source={`piece:${piece.slug}`} />
         </div>
       </article>
-    </></TranslatedContent>
+    </>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { motion } from "framer-motion";
 import { T } from "@/components/i18n/t";
 import { Count, Num } from "@/components/i18n/values";
@@ -12,7 +11,7 @@ export interface HomeHeroProps {
 
 export function HomeHero({ today, totalPieces }: HomeHeroProps) {
   return (
-    <TranslatedContent><section className="pt-8 pb-12 text-center max-w-4xl mx-auto px-4">
+    <section className="pt-8 pb-12 text-center max-w-4xl mx-auto px-4">
       {/* Small Category / Subtitle Badge */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -49,6 +48,6 @@ export function HomeHero({ today, totalPieces }: HomeHeroProps) {
         {today && <span className="text-rule">·</span>}
         <span><Count k="common.count" value={totalPieces} /></span>
       </motion.div>
-    </section></TranslatedContent>
+    </section>
   );
 }

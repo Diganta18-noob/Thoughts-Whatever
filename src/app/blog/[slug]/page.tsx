@@ -1,4 +1,3 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -72,7 +71,7 @@ export default async function BlogPiecePage(props: RouteProps) {
   ]);
 
   return (
-    <TranslatedContent><>
+    <>
       <JsonLd data={articleJsonLd(piece)} />
       <JsonLd
         data={breadcrumbJsonLd([
@@ -81,6 +80,6 @@ export default async function BlogPiecePage(props: RouteProps) {
         ])}
       />
       <ArticleView piece={piece} related={related} neighbours={neighbours} />
-    </></TranslatedContent>
+    </>
   );
 }

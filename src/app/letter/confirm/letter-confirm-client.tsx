@@ -1,8 +1,7 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useState } from "react";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { useLanguage } from "@/components/providers/language-provider";
 import type { TranslationKey } from "@/lib/i18n/en";
 
@@ -29,7 +28,7 @@ export function LetterConfirmClient({ token }: { token: string }) {
   }
 
   return (
-    <TranslatedContent><div lang={locale}>
+    <div lang={locale}>
       <h1 className="font-serif text-3xl text-content">{t("letter.confirmTitle")}</h1>
       <p className="mt-4 text-content-soft">{t("letter.confirmIntro")}</p>
       {!token ? <p className="mt-6 text-accent">{t("letter.msg.invalidConfirmation")}</p> : state === "done" ? (
@@ -43,6 +42,6 @@ export function LetterConfirmClient({ token }: { token: string }) {
         </>
       )}
       <p className="mt-8"><Link href="/letter" className="text-accent underline">{t("common.back")}</Link></p>
-    </div></TranslatedContent>
+    </div>
   );
 }

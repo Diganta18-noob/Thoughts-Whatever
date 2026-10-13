@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useProgress } from "@/components/providers/progress-provider";
@@ -75,7 +74,7 @@ export function ReadingProgress({
   }, [slug, kind, titleBn, seriesSlug, seriesOrder, percent, record]);
 
   return (
-    <TranslatedContent><div
+    <div
       data-print="hide"
       className="fixed inset-x-0 top-16 z-20 h-px bg-transparent"
       role="progressbar"
@@ -86,6 +85,6 @@ export function ReadingProgress({
       aria-valuenow={percent}
     >
       <div ref={barRef} className="h-px w-full origin-left scale-x-0 bg-accent/70" />
-    </div></TranslatedContent>
+    </div>
   );
 }

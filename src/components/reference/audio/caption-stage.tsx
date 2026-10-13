@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
 import { Cue } from "@/lib/reference/audio/types";
 
@@ -14,14 +13,14 @@ interface CaptionStageProps {
 export function CaptionStage({ cue, prevCue, nextCue, activeWordIndex }: CaptionStageProps) {
   if (!cue) {
     return (
-      <TranslatedContent><div className="w-full min-h-[160px] sm:min-h-[220px] flex items-center justify-center p-4 sm:p-6 text-center text-zinc-500 font-bengali text-sm sm:text-lg italic">
+      <div className="w-full min-h-[160px] sm:min-h-[220px] flex items-center justify-center p-4 sm:p-6 text-center text-zinc-500 font-bengali text-sm sm:text-lg italic">
         প্লে বোতাম চেপে ১৯৭৪ সালের অডিও এবং রিয়েল-টাইম বাংলা ক্যাপশন শুরু করুন...
-      </div></TranslatedContent>
+      </div>
     );
   }
 
   return (
-    <TranslatedContent><div className="w-full min-h-[160px] sm:min-h-[220px] flex flex-col justify-center items-center text-center p-4 sm:p-8 md:p-10 space-y-3 sm:space-y-4">
+    <div className="w-full min-h-[160px] sm:min-h-[220px] flex flex-col justify-center items-center text-center p-4 sm:p-8 md:p-10 space-y-3 sm:space-y-4">
       {/* Previous sentence (faded) */}
       {prevCue && (
         <p className="text-xs sm:text-sm font-bengali text-zinc-500/70 line-clamp-1 transition-opacity duration-300">
@@ -62,6 +61,6 @@ export function CaptionStage({ cue, prevCue, nextCue, activeWordIndex }: Caption
           {nextCue.text}
         </p>
       )}
-    </div></TranslatedContent>
+    </div>
   );
 }

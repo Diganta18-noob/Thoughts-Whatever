@@ -1,7 +1,6 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { Pause, Play, X, Rewind, FastForward } from "lucide-react";
 import { PLAYBACK_RATES, useAudio } from "@/components/providers/audio-provider";
 import { formatBengaliDuration, toBengaliNumber } from "@/lib/bengali";
@@ -20,7 +19,7 @@ export function MiniPlayer() {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <TranslatedContent><div
+    <div
       data-print="hide"
       className="fixed inset-x-0 bottom-0 z-40 animate-slide-up border-t border-rule bg-surface-raised/95 backdrop-blur"
     >
@@ -121,6 +120,6 @@ export function MiniPlayer() {
           <X className="h-4 w-4" />
         </button>
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

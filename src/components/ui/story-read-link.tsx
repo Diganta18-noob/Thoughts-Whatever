@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { cn } from "@/lib/utils";

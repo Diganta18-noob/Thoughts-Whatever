@@ -1,7 +1,6 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { PortraitCover } from "@/components/pieces/portrait-cover";
 import { piecePath, KIND_META } from "@/lib/nav";
 import { formatDate, formatReading } from "@/lib/i18n/format";
@@ -19,7 +18,7 @@ export function AlsoFeaturedStacked({ pieces }: AlsoFeaturedStackedProps) {
   if (!pieces || pieces.length === 0) return null;
 
   return (
-    <TranslatedContent><div className="flex flex-col h-full justify-between space-y-6">
+    <div className="flex flex-col h-full justify-between space-y-6">
       <h3 className="label text-xs tracking-widest text-content-faint uppercase font-sans border-b border-rule/60 pb-2">
         Also Featured
       </h3>
@@ -91,6 +90,6 @@ export function AlsoFeaturedStacked({ pieces }: AlsoFeaturedStackedProps) {
           <span>→</span>
         </Link>
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

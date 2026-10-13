@@ -1,7 +1,6 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { KIND_META, piecePath } from "@/lib/nav";
@@ -38,7 +37,7 @@ export function SeriesNav({ prev, next }: { prev: Neighbour; next: Neighbour }) 
     "mt-2 block font-bengali text-[0.9375rem] text-content transition group-hover:text-accent";
 
   return (
-    <TranslatedContent><nav
+    <nav
       data-print="hide"
       aria-label={t("piece.seriesNav")}
       className="mx-auto mt-14 grid max-w-measure gap-3 sm:grid-cols-2"
@@ -72,6 +71,6 @@ export function SeriesNav({ prev, next }: { prev: Neighbour; next: Neighbour }) 
           </span>
         </Link>
       )}
-    </nav></TranslatedContent>
+    </nav>
   );
 }

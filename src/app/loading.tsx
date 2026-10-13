@@ -1,7 +1,6 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 export default function Loading() {
   return (
-    <TranslatedContent><div className="min-h-screen animate-pulse">
+    <div className="min-h-screen animate-pulse">
       {/* Hero Skeleton */}
       <div className="flex min-h-[100svh] items-center justify-center px-4">
         <div className="w-full max-w-2xl space-y-8 text-center">
@@ -78,6 +77,6 @@ export default function Loading() {
           <div className="h-12 w-full max-w-md rounded-sm bg-content/5" />
         </div>
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

@@ -1,6 +1,5 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import Image from "next/image";
 import { ReferenceRightsBadge } from "./reference-rights-badge";
 import { BookOpen, ExternalLink, ArrowRight, Headphones } from "lucide-react";
@@ -42,7 +41,7 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
   const coverImage = edition?.coverImage;
 
   return (
-    <TranslatedContent><article className="group relative flex flex-col border border-rule bg-surface transition-all duration-300 hover:border-content-faint/60 rounded-sm overflow-hidden shadow-sm">
+    <article className="group relative flex flex-col border border-rule bg-surface transition-all duration-300 hover:border-content-faint/60 rounded-sm overflow-hidden shadow-sm">
       {/* Archival Book Cover Frame */}
       <Link
         href={`/reference/${work.slug}`}
@@ -182,6 +181,6 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
           </div>
         </div>
       </div>
-    </article></TranslatedContent>
+    </article>
   );
 }

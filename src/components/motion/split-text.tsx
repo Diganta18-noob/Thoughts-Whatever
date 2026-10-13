@@ -1,7 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import { useTranslatedText } from "@/components/i18n/translation-store";
 import { motion, useReducedMotion } from "framer-motion";
 import { Fragment, useMemo } from "react";
 import { duration, ease, stagger, viewport } from "./motion-tokens";
@@ -29,11 +27,10 @@ export function SplitText({
   as: Tag = "span",
   lang,
 }: SplitTextProps) {
-  const displayText = useTranslatedText(text);
   const reduced = useReducedMotion();
 
   const words = useMemo(() => {
-    const clusters = graphemes(displayText);
+    const clusters = graphemes(text);
     if (!clusters) return null;
 
     const out: string[][] = [[]];
@@ -45,21 +42,21 @@ export function SplitText({
       }
     }
     return out.filter((word) => word.length > 0);
-  }, [displayText]);
+  }, [text]);
 
   if (reduced || !words) {
     return (
-      <TranslatedContent><Tag className={className} lang={lang}>
-        {displayText}
-      </Tag></TranslatedContent>
+      <Tag className={className} lang={lang}>
+        {text}
+      </Tag>
     );
   }
 
   let index = -1;
 
   return (
-    <TranslatedContent><Tag className={className} lang={lang}>
-      <span className="sr-only">{displayText}</span>
+    <Tag className={className} lang={lang}>
+      <span className="sr-only">{text}</span>
       <motion.span
         aria-hidden
         data-reveal
@@ -101,6 +98,6 @@ export function SplitText({
           </Fragment>
         ))}
       </motion.span>
-    </Tag></TranslatedContent>
+    </Tag>
   );
 }

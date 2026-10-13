@@ -1,8 +1,7 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import Image from "next/image";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { Play, Layers } from "lucide-react";
 import { bannerSrc } from "@/lib/images";
 
@@ -31,7 +30,7 @@ export function SeriesHeroBanner({
   const hasDedicatedBanner = !!bannerImage?.trim();
 
   return (
-    <TranslatedContent><div className="relative my-8 w-full overflow-hidden rounded-xl border border-rule/80 bg-surface-raised/40 shadow-sm backdrop-blur">
+    <div className="relative my-8 w-full overflow-hidden rounded-xl border border-rule/80 bg-surface-raised/40 shadow-sm backdrop-blur">
       {/* 21:9 cinematic banner — falls back to 16:9 if no dedicated art */}
       <div
         className={`relative w-full ${
@@ -81,6 +80,6 @@ export function SeriesHeroBanner({
           </div>
         )}
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

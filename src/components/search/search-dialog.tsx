@@ -1,8 +1,7 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { Search as SearchIcon, X, Loader2, CornerDownLeft } from "lucide-react";
 import { formatReadingTime } from "@/lib/bengali";
 import {
@@ -80,7 +79,7 @@ export function SearchDialog() {
 
 
   return (
-    <TranslatedContent><>
+    <>
       <button
         type="button"
         onClick={() => {
@@ -210,6 +209,6 @@ export function SearchDialog() {
           </div>
         </div>
       )}
-    </></TranslatedContent>
+    </>
   );
 }

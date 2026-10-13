@@ -1,5 +1,4 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/page-header";
 import { getAuthorsList } from "@/lib/pieces";
@@ -18,7 +17,7 @@ export default async function AuthorsPage() {
   const authors = await getAuthorsList();
 
   return (
-    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <PageHeader
         labelEn="Authors"
         titleBn="লেখকেরা"
@@ -64,6 +63,6 @@ export default async function AuthorsPage() {
           ))}
         </ul>
       )}
-    </div></TranslatedContent>
+    </div>
   );
 }

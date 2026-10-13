@@ -1,6 +1,5 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { referenceCardSelect, getCachedReferenceCatalogueStats } from "@/lib/reference/catalogue";
 import { traceServerOperation } from "@/lib/performance-trace";
@@ -92,7 +91,7 @@ export default async function ReferenceLibraryPage({
   const activeFilters = Boolean(typeFilter || rightsFilter || query);
 
   return (
-    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <ReferenceActivityTracker event={query ? "reference_search" : "reference_catalogue"} />
       {/* Editorial Section Masthead */}
       <PageHeader
@@ -302,6 +301,6 @@ export default async function ReferenceLibraryPage({
           </div>
         </div>
       )}
-    </div></TranslatedContent>
+    </div>
   );
 }

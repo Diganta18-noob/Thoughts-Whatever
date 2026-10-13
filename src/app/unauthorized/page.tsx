@@ -1,9 +1,8 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 export const revalidate = 60;
 
 
 import type { Metadata } from "next";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { ShieldAlert } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -14,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function UnauthorizedPage() {
   return (
-    <TranslatedContent><div className="mx-auto flex min-h-[75vh] max-w-6xl flex-col justify-center px-4 py-20 sm:px-6">
+    <div className="mx-auto flex min-h-[75vh] max-w-6xl flex-col justify-center px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-md text-center">
         <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-accent/10 text-accent">
           <ShieldAlert className="h-7 w-7" />
@@ -47,6 +46,6 @@ export default function UnauthorizedPage() {
           </Link>
         </div>
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

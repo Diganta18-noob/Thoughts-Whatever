@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
@@ -91,7 +90,7 @@ export function EditorialImage({
   // 1. Split Layout (Portrait)
   if (activeLayout === "split" && children) {
     return (
-      <TranslatedContent><div
+      <div
         ref={containerRef}
         className={cn(
           "grid gap-6 md:grid-cols-[2fr_3fr] md:items-center py-4",
@@ -132,13 +131,13 @@ export function EditorialImage({
           </motion.div>
         </div>
         <div className="min-w-0">{children}</div>
-      </div></TranslatedContent>
+      </div>
     );
   }
 
   // 2. Default Edge-to-Edge Image Frame
   return (
-    <TranslatedContent><div
+    <div
       ref={containerRef}
       className={cn(
         "relative overflow-hidden rounded-lg bg-transparent flex items-center justify-center w-full shadow-sm transition-all duration-500 hover:shadow-xl",
@@ -175,7 +174,7 @@ export function EditorialImage({
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
         />
       </motion.div>
-    </div></TranslatedContent>
+    </div>
   );
 
 }

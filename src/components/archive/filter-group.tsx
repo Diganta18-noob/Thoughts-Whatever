@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useLanguage } from "@/components/providers/language-provider";
 
 /**
@@ -26,7 +25,7 @@ export function FilterGroup({
   const { isBn } = useLanguage();
 
   return (
-    <TranslatedContent><section className="mb-7">
+    <section className="mb-7">
       <div className="mb-2.5 flex items-baseline gap-2">
         {isBn ? (
           <span className="label font-bengali-sans tracking-normal" lang="bn">
@@ -44,6 +43,6 @@ export function FilterGroup({
         )}
       </div>
       <div className="flex flex-wrap gap-1.5">{children}</div>
-    </section></TranslatedContent>
+    </section>
   );
 }

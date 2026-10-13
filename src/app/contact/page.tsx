@@ -1,6 +1,5 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import type { Metadata } from "next";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { Instagram, Mail, MessageSquare, ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
 import { LetterBlock } from "@/components/newsletter/letter-block";
@@ -39,7 +38,7 @@ export default function ContactPage() {
   };
 
   return (
-    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <JsonLd data={contactJsonLd} />
       <PageHeader
         labelEn="Contact"
@@ -121,6 +120,6 @@ export default function ContactPage() {
           <LetterBlock source="contact" />
         </div>
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

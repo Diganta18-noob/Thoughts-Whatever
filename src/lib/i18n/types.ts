@@ -1,6 +1,10 @@
 /**
- * The locale selects both interface and content language. English content
- * comes from the bundled translation dictionary; Bengali preserves originals.
+ * Two locales, and they mean something narrower than usual here.
+ *
+ * The locale selects the language of the *chrome* — navigation, buttons, form
+ * labels, system messages. It never touches the writing. Titles, bodies,
+ * author names, tags and excerpts are Bengali in both locales, because that is
+ * the work; translating it would be translating the thing itself.
  */
 
 export type Locale = "en" | "bn";

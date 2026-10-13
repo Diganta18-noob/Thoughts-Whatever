@@ -1,7 +1,6 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { useProgress } from "@/components/providers/progress-provider";
 import { useLanguage } from "@/components/providers/language-provider";
 import { SplitText } from "@/components/motion/split-text";
@@ -22,7 +21,7 @@ export function Hero() {
   const face = isBn ? "font-bengali" : "font-serif";
 
   return (
-    <TranslatedContent><section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 sm:px-6">
+    <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 sm:px-6">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,rgb(var(--surface-raised)/0.9),transparent_70%)]"
@@ -103,6 +102,6 @@ export function Hero() {
           </div>
         </Reveal>
       </div>
-    </section></TranslatedContent>
+    </section>
   );
 }

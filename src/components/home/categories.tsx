@@ -1,7 +1,6 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { useLanguage } from "@/components/providers/language-provider";
 import { formatNumber } from "@/lib/i18n/format";
@@ -24,7 +23,7 @@ export function Categories({
   const monoFace = isBn ? "font-bengali-sans" : "font-mono tracking-widest";
 
   return (
-    <TranslatedContent><section className="py-16">
+    <section className="py-16">
       <Reveal>
         <div className="mb-5 border-b border-rule pb-3">
           <h2 className="font-bengali text-2xl font-medium text-content" lang="bn">
@@ -85,6 +84,6 @@ export function Categories({
           ))}
         </Stagger>
       )}
-    </section></TranslatedContent>
+    </section>
   );
 }

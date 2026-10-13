@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -56,7 +55,7 @@ export function PortraitCover({
       : "3/4";
 
   return (
-    <TranslatedContent><div className={cn("relative group/portrait-cover flex items-center justify-center", containerClassName)}>
+    <div className={cn("relative group/portrait-cover flex items-center justify-center", containerClassName)}>
       {/* 1. Optional Ambient Blur Backdrop */}
       {showAmbientBlur && (
         <div
@@ -98,6 +97,6 @@ export function PortraitCover({
         />
       </motion.div>
 
-    </div></TranslatedContent>
+    </div>
   );
 }

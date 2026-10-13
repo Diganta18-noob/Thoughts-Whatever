@@ -1,4 +1,3 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
 import { ReferenceRightsStatus } from "@prisma/client";
 import { cn } from "@/lib/utils";
@@ -49,7 +48,7 @@ export function ReferenceRightsBadge({
   };
 
   return (
-    <TranslatedContent><span
+    <span
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full border border-rule/70 bg-surface/90 backdrop-blur-sm font-mono tracking-label uppercase text-content-soft transition-colors",
         size === "sm" ? "px-2 py-0.5 text-[0.625rem]" : "px-2.5 py-1 text-[0.6875rem]",
@@ -63,6 +62,6 @@ export function ReferenceRightsBadge({
         />
       )}
       <span>{config.label}</span>
-    </span></TranslatedContent>
+    </span>
   );
 }

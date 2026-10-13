@@ -1,6 +1,5 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import React from "react";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -87,7 +86,7 @@ export default async function ReferenceDetailPage({
   }
 
   return (
-    <TranslatedContent><div className="mx-auto max-w-5xl px-4 pb-24 pt-8 sm:px-6">
+    <div className="mx-auto max-w-5xl px-4 pb-24 pt-8 sm:px-6">
       <ReferenceActivityTracker event="reference_open" workId={work.id} />
       {/* Top Header / Back Navigation */}
       <div className="mb-6 border-b border-rule pb-4 flex items-center justify-between">
@@ -316,7 +315,7 @@ export default async function ReferenceDetailPage({
             <div className="space-y-0.5">
               <span className="label">Archival Notes & Overview</span>
               <p className="font-serif text-[0.6875rem] italic text-content-faint">
-                Historical description and cataloguing notes
+                Historical description and cataloguing notes — in Bengali
               </p>
             </div>
             <div className="font-bengali text-bengali-base text-content-soft leading-relaxed whitespace-pre-line">
@@ -388,6 +387,6 @@ export default async function ReferenceDetailPage({
           </div>
         )}
       </div>
-    </div></TranslatedContent>
+    </div>
   );
 }

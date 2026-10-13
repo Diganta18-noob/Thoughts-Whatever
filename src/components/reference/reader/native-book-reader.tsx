@@ -1,9 +1,7 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import { useLanguage } from "@/components/providers/language-provider";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import Image from "next/image";
 import {
   ChevronLeft,
@@ -97,7 +95,6 @@ export function NativeBookReader({
   isRightsVerified,
   companionEdition,
 }: NativeBookReaderProps) {
-  const { isBn } = useLanguage();
   const totalPages = Math.max(1, pages.length || edition.pages || 1);
   const validatedInitial = Math.min(Math.max(1, initialPage), totalPages);
 
@@ -321,7 +318,7 @@ export function NativeBookReader({
   const progressPercent = ((currentPage / totalPages) * 100).toFixed(1);
 
   return (
-    <TranslatedContent><div
+    <div
       ref={containerRef}
       className="relative flex-1 flex flex-col bg-zinc-950 text-zinc-100 select-none overflow-hidden min-h-screen"
       onTouchStart={handleTouchStart}
@@ -629,7 +626,6 @@ export function NativeBookReader({
               transformOrigin: "center center",
             }}
           >
-            {!isBn && <p lang="en" className="border-b border-rule bg-surface-raised p-3 font-sans text-xs text-content-soft">Original archival scan. An English transcription of this page is not available yet.</p>}
             <Image
               src={activePageUrl}
               alt={`${work.titleEn || work.titleBn} — Page ${currentPage}`}
@@ -1044,6 +1040,6 @@ export function NativeBookReader({
           </div>
         </div>
       )}
-    </div></TranslatedContent>
+    </div>
   );
 }

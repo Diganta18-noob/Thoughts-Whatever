@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { AlertCircle, RotateCcw, ArrowLeft, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 

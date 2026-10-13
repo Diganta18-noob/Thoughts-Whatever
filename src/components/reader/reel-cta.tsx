@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import Image from "next/image";
 import { trackReelClick } from "@/lib/tracker";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -58,7 +57,7 @@ export function ReelCallToAction({
   // 1. Inline Banner Variant
   if (variant === "banner" || variant === "inline") {
     return (
-      <TranslatedContent><div
+      <div
         className={cn(
           "relative overflow-hidden rounded-2xl border border-rule/60 bg-gradient-to-r from-surface-raised via-surface to-surface-raised p-5 sm:p-6 shadow-md my-8 transition-all hover:shadow-xl group/reel-banner",
           className
@@ -100,14 +99,14 @@ export function ReelCallToAction({
             <span>Watch Reel →</span>
           </a>
         </div>
-      </div></TranslatedContent>
+      </div>
     );
   }
 
   // 2. Visual Preview Card Variant
   if (variant === "card") {
     return (
-      <TranslatedContent><div className={cn("rounded-2xl border border-rule/60 bg-surface-raised/40 p-5 space-y-4 shadow-sm", className)}>
+      <div className={cn("rounded-2xl border border-rule/60 bg-surface-raised/40 p-5 space-y-4 shadow-sm", className)}>
         <div className="flex items-center justify-between">
           <span className="label text-[0.6875rem] uppercase tracking-widest text-[#e6683c]">
             Visual Reel
@@ -150,13 +149,13 @@ export function ReelCallToAction({
           <span>Watch Reel on Instagram</span>
           <span>↗</span>
         </a>
-      </div></TranslatedContent>
+      </div>
     );
   }
 
   // 3. Compact Button Variant
   return (
-    <TranslatedContent><a
+    <a
       href={finalUrl}
       target="_blank"
       rel="noopener noreferrer"
@@ -169,6 +168,6 @@ export function ReelCallToAction({
       <span>🎬</span>
       <span className="font-bengali" lang="bn">রিল দেখুন</span>
       <span>Reel →</span>
-    </a></TranslatedContent>
+    </a>
   );
 }

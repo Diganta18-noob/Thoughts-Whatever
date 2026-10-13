@@ -1,6 +1,5 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { Cue, formatTimecode } from "@/lib/reference/audio/types";
 import { Search, Copy, Check, ArrowDownCircle, Lock, Unlock, X } from "lucide-react";
@@ -82,7 +81,7 @@ export function TranscriptScroller({
     : cues;
 
   return (
-    <TranslatedContent><div className="relative flex flex-col h-full bg-zinc-950/70 border border-zinc-800/80 rounded-2xl overflow-hidden shadow-xl">
+    <div className="relative flex flex-col h-full bg-zinc-950/70 border border-zinc-800/80 rounded-2xl overflow-hidden shadow-xl">
       {/* Search & Toolbar Header */}
       <div className="p-3 sm:p-4 border-b border-zinc-800/80 bg-zinc-900/60 flex items-center justify-between gap-2 sm:gap-3">
         <div className="relative flex-1">
@@ -210,6 +209,6 @@ export function TranscriptScroller({
           </button>
         </div>
       )}
-    </div></TranslatedContent>
+    </div>
   );
 }

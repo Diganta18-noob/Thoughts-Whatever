@@ -1,7 +1,6 @@
 "use client";
 
-import { TranslatedContent } from "@/components/i18n/translated-content";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { toBanglaDate } from "@/lib/bengali";
 import { formatDate, formatNumber, formatReading } from "@/lib/i18n/format";
@@ -17,12 +16,12 @@ function KindLabel({ kind }: { kind: PieceKindKey }) {
   const meta = KIND_META[kind];
 
   return (
-    <TranslatedContent><span
+    <span
       className={cn("label !text-accent", isBn && "font-bengali-sans tracking-normal")}
       lang={locale}
     >
       {isBn ? meta.labelBn : meta.labelEn}
-    </span></TranslatedContent>
+    </span>
   );
 }
 
@@ -31,7 +30,7 @@ function CardDate({ publishedAt }: { publishedAt: Date | string }) {
   const bangla = toBanglaDate(publishedAt);
 
   return (
-    <TranslatedContent><span className="flex items-center gap-1.5 text-xs text-content-faint">
+    <span className="flex items-center gap-1.5 text-xs text-content-faint">
       <span lang={locale} className={isBn ? "font-bengali-sans" : "font-sans"}>
         {formatDate(publishedAt, locale)}
       </span>
@@ -45,7 +44,7 @@ function CardDate({ publishedAt }: { publishedAt: Date | string }) {
           </span>
         </>
       )}
-    </span></TranslatedContent>
+    </span>
   );
 }
 
@@ -79,7 +78,7 @@ export function ArticleCard({
   // 1. Desktop Split Layout (Image 35-40% left, Text 60-65% right)
   if (layout === "split" || layout === "hero") {
     return (
-      <TranslatedContent><article
+      <article
         className={cn(
           "group/article-card relative overflow-hidden rounded-2xl border border-rule/60 bg-surface-raised/30 p-6 md:p-8 transition-all duration-300 hover:border-rule hover:bg-surface-raised/60",
           className
@@ -165,13 +164,13 @@ export function ArticleCard({
             </div>
           </div>
         </div>
-      </article></TranslatedContent>
+      </article>
     );
   }
 
   // 2. Stacked Grid Card
   return (
-    <TranslatedContent><article
+    <article
       className={cn(
         "group/article-card flex flex-col h-full rounded-xl border border-rule/50 bg-surface-raised/20 p-4 sm:p-5 transition-all duration-300 hover:border-rule hover:bg-surface-raised/50 shadow-sm hover:shadow-md",
         className
@@ -234,6 +233,6 @@ export function ArticleCard({
           </p>
         )}
       </div>
-    </article></TranslatedContent>
+    </article>
   );
 }

@@ -1,7 +1,6 @@
-import { TranslatedContent } from "@/components/i18n/translated-content";
 
 import { notFound } from "next/navigation";
-import Link from "@/components/i18n/localized-link";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { getSeriesBySlug, getSeriesList } from "@/lib/pieces";
 import { piecePath } from "@/lib/nav";
@@ -89,7 +88,7 @@ export default async function SeriesPage(props: RouteProps) {
   const firstPiece = series.pieces[0];
 
   return (
-    <TranslatedContent><div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <JsonLd
         data={seriesJsonLd({
           slug: series.slug,
@@ -170,6 +169,6 @@ export default async function SeriesPage(props: RouteProps) {
 
       {/* Deep-dive Historical & Critical Enhancements */}
       {enhancement && <SeriesEnhancementsView enhancement={enhancement} />}
-    </div></TranslatedContent>
+    </div>
   );
 }
