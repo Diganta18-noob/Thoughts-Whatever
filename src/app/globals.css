@@ -500,8 +500,33 @@
 
 /* Editor's Room: one visual system shared by every admin route. */
 .admin-workspace {
-  --radius: 12px;
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.08), 0 10px 32px rgb(0 0 0 / 0.035);
+  --radius: 6px;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.035);
+  --content-faint: 111 101 85;
+  font-family: var(--font-ui), var(--font-bengali-sans), system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+[data-theme="night"] .admin-workspace {
+  --content-faint: 156 153 146;
+}
+
+.admin-workspace .label {
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  text-transform: none;
+  color: rgb(var(--content-soft));
+}
+
+.admin-page-title {
+  font-family: var(--font-ui), var(--font-bengali-sans), system-ui, sans-serif;
+  font-size: clamp(1.5rem, 1.3rem + 0.5vw, 1.875rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
 }
 
 .admin-topbar {
@@ -509,13 +534,11 @@
 }
 
 .admin-main {
-  background:
-    radial-gradient(ellipse 68rem 29rem at 78% -14%, rgb(var(--accent) / 0.065), transparent 68%),
-    linear-gradient(180deg, rgb(var(--surface-raised) / 0.025), transparent 30rem);
+  background: rgb(var(--surface));
 }
 
 .admin-sidebar {
-  background-image: linear-gradient(150deg, rgb(var(--surface-raised) / 0.58), transparent 62%);
+  background: rgb(var(--surface));
 }
 
 .admin-sidebar nav > div + div {
@@ -536,7 +559,7 @@
 }
 
 .admin-nav-link:hover {
-  transform: translateX(2px);
+  background-color: rgb(var(--surface-raised));
 }
 
 .admin-nav-link-active {
@@ -544,31 +567,15 @@
 }
 
 .admin-nav-link-active::before {
-  position: absolute;
-  left: -0.75rem;
-  top: 22%;
-  bottom: 22%;
-  width: 2px;
-  border-radius: 999px;
-  background: rgb(var(--accent));
-  content: "";
+  content: none;
 }
 
 .admin-page-enter {
-  animation: admin-page-enter 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  min-width: 0;
 }
 
 .admin-stat-card::before {
-  position: absolute;
-  inset: 0 auto auto 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, rgb(var(--accent)), rgb(var(--gold) / 0.75), transparent 85%);
-  transform: scaleX(0.28);
-  transform-origin: left;
-  opacity: 0.55;
-  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms;
-  content: "";
+  content: none;
 }
 
 .admin-stat-card:hover::before { transform: scaleX(1); opacity: 1; }
@@ -590,16 +597,15 @@
 }
 
 .admin-content :is(section, article, div).rounded-card.border.bg-surface-raised {
-  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  box-shadow: none;
 }
 
 .admin-content :is(section, article, div).rounded-card.border.bg-surface-raised:hover {
-  border-color: rgb(var(--accent) / 0.22);
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.09), 0 14px 36px rgb(0 0 0 / 0.065);
+  box-shadow: none;
 }
 
 .admin-content :is(button, a).bg-accent:hover {
-  filter: brightness(1.06);
+  filter: none;
 }
 
 .admin-content :is(input, textarea, select):focus-visible {

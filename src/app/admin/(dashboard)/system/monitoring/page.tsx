@@ -1,4 +1,5 @@
 "use client";
+import { useAdminPolling } from "@/lib/hooks/use-admin-polling";
 
 import { useState, useEffect } from "react";
 import {
@@ -21,7 +22,7 @@ import { Button } from "@/components/ui";
 export default function SystemMonitoringPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [autoRefresh, setAutoRefresh] = useState(false);
 
   const fetchMetrics = async (silent = false) => {
     if (!silent) setLoading(true);
@@ -42,12 +43,8 @@ export default function SystemMonitoringPage() {
 
   useEffect(() => {
     fetchMetrics();
-    if (!autoRefresh) return;
-    const interval = setInterval(() => {
-      fetchMetrics(true);
-    }, 10000);
-    return () => clearInterval(interval);
-  }, [autoRefresh]);
+  }, []);
+  useAdminPolling(() => fetchMetrics(true), 60000, autoRefresh);
 
   return (
     <div className="space-y-8 animate-fade-in max-w-6xl pb-12">
@@ -73,7 +70,7 @@ export default function SystemMonitoringPage() {
               onChange={(e) => setAutoRefresh(e.target.checked)}
               className="rounded border-rule text-accent focus:ring-accent"
             />
-            Auto-refresh (10s)
+            Auto-refresh (1 min, visible tab)
           </label>
 
           <Button variant="secondary" size="sm"

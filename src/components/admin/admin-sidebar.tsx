@@ -25,19 +25,29 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
   const activeHref = resolveActiveHref(pathname, { visibleOnly: true });
   const activeGroup = resolveActiveGroup(activeHref);
 
-  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(ADMIN_NAV_GROUPS.map((group) => [group.name, group.name !== "Content" && group.name !== activeGroup])));
 
   // Read on mount, not during render: `localStorage` does not exist on the
   // server, and seeding initial state from it would desync hydration.
   useEffect(() => {
     try {
       const stored = window.localStorage.getItem(COLLAPSE_STORAGE_KEY);
-      if (stored) setCollapsedGroups(JSON.parse(stored) as Record<string, boolean>);
+      if (stored) {
+        const parsed: unknown = JSON.parse(stored);
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+          setCollapsedGroups((defaults) => ({
+            ...defaults,
+            ...Object.fromEntries(Object.entries(parsed).filter(([, value]) => typeof value === "boolean")),
+            ...(activeGroup ? { [activeGroup]: false } : {}),
+          }));
+        }
+      }
     } catch {
       // Private-mode and quota failures are not worth surfacing — the rail just
       // opens fully expanded, which is the sane default anyway.
     }
-  }, []);
+  }, [activeGroup]);
 
   // Reveal wherever you just landed. Jumping via ⌘K used to drop you on a page
   // whose nav entry sat inside a group you had collapsed, leaving nothing in the
@@ -66,7 +76,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
     <aside
       aria-label="Admin sections"
       className={cn(
-        "admin-sidebar flex h-full max-h-full min-h-0 w-72 select-none flex-col overflow-hidden border-r border-rule bg-surface/90 backdrop-blur",
+        "admin-sidebar flex h-full max-h-full min-h-0 w-60 select-none flex-col overflow-hidden border-r border-rule bg-surface",
         className
       )}
     >
@@ -89,7 +99,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
 
       {/* Navigation Links Scrollable */}
       <nav
-        className="scrollbar-thin min-h-0 flex-1 space-y-6 overflow-y-auto overscroll-contain px-3 py-5"
+        className="scrollbar-thin min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-3 py-5"
       >
         {ADMIN_NAV_GROUPS.map((group) => {
           const isCollapsed = !!collapsedGroups[group.name];
@@ -102,7 +112,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
                 onClick={() => toggleGroup(group.name)}
                 aria-expanded={!isCollapsed}
                 aria-controls={panelId}
-                className="justify-between text-left font-mono text-[10px] uppercase tracking-wider"
+                className="w-full justify-between px-3 text-left font-ui text-xs font-medium text-content-soft"
               >
                 <span>{group.name}</span>
                 <span className="flex items-center gap-1.5">
@@ -119,7 +129,7 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
               </Button>
 
               <div className={cn("admin-nav-panel", isCollapsed && "admin-nav-panel-closed")}>
-                <div id={panelId} className="space-y-0.5 overflow-hidden pt-0.5" inert={isCollapsed}>
+                <div id={panelId} className="space-y-0.5 overflow-hidden pt-0.5" hidden={isCollapsed}>
                   {visibleItems.map((item) => {
                     const active = item.href === activeHref;
 
@@ -130,9 +140,9 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
                         onClick={onClose}
                         aria-current={active ? "page" : undefined}
                         className={cn(
-                          "admin-nav-link flex items-center justify-between rounded-card border border-transparent px-3 py-2 font-sans text-xs transition-[background-color,color,border-color,transform] duration-200",
+                          "admin-nav-link flex min-h-10 items-center justify-between rounded-card border border-transparent px-3 py-2 font-ui text-[13px] transition-colors",
                           active
-                            ? "admin-nav-link-active border-accent/25 bg-accent/12 font-medium text-accent shadow-xs"
+                            ? "admin-nav-link-active bg-accent/10 font-medium text-accent"
                             : "text-content-soft hover:border-rule hover:bg-surface-raised hover:text-content"
                         )}
                       >
@@ -147,11 +157,6 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
                           <span className="truncate">{item.label}</span>
                         </div>
 
-                        {item.badge && (
-                          <span className="rounded bg-accent px-1.5 py-0.5 font-mono text-[9px] font-bold leading-none text-surface">
-                            {item.badge}
-                          </span>
-                        )}
                       </Link>
                     );
                   })}
@@ -163,8 +168,8 @@ export function AdminSidebar({ onClose, className }: AdminSidebarProps) {
       </nav>
 
       {/* Sidebar Footer */}
-      <div className="shrink-0 border-t border-rule p-3 font-mono text-[10px] text-content-faint text-center">
-        Editor&apos;s Room OS &bull; v2.0
+      <div className="shrink-0 border-t border-rule px-6 py-4 text-xs text-content-soft">
+        Thoughts Whatever
       </div>
     </aside>
   );

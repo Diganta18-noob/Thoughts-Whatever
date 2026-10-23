@@ -104,7 +104,7 @@ export function AnalyticsDashboard({ initialData }: AnalyticsDashboardProps) {
   return (
     <div className="space-y-8">
       {/* Date Filter Bar */}
-      <div className="flex items-center justify-between border-b border-rule pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-rule pb-4">
         <div>
           <span className="label">
             Analytics & Insights

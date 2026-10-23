@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { EMPTY_PIECE, PieceEditor } from "@/components/admin/piece-editor";
 import { getEditorOptions } from "../editor-data";
+import { requireAdmin } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +17,8 @@ export default async function NewPiecePage({
   searchParams?: { kind?: string } | Promise<{ kind?: string }>;
 }) {
   const resolvedParams = await Promise.resolve(searchParams);
+  const admin = await requireAdmin();
+  if (!admin) redirect("/admin/login");
   const kindParam = resolvedParams?.kind;
 
   const { authors, tags, series } = await getEditorOptions();
@@ -34,6 +38,8 @@ export default async function NewPiecePage({
 
       <div className="mt-6">
         <PieceEditor
+          key={`${admin.id}:${kind}`}
+          recoveryOwner={admin.id}
           initial={{ ...EMPTY_PIECE, kind }}
           authors={authors}
           tags={tags}

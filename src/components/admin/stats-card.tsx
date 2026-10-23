@@ -27,17 +27,13 @@ export function StatsCard({ labelEn, labelBn, value, subtext, icon, trend }: Sta
   return (
     <div
       className={cn(
-        "admin-stat-card group relative overflow-hidden rounded-card border border-rule bg-surface-raised p-5 shadow-card",
-        // Lift and rule-darkening only, no shadow bloom: the tiles sit in a grid
-        // of shared borders, and a glow on one makes the row look misaligned.
-        "transition-[transform,border-color] duration-150 ease-out",
-        "hover:-translate-y-0.5 hover:border-accent/40"
+        "admin-stat-card relative overflow-hidden rounded-card border border-rule bg-surface-raised p-5"
       )}
     >
       <div className="flex items-center justify-between">
-        <span className="label">{labelEn}</span>
+        <span className="text-sm font-medium text-content-soft">{label}</span>
         {icon && (
-          <span className="flex h-9 w-9 items-center justify-center rounded-card border border-accent/15 bg-accent/10 text-accent transition-[transform,background-color] duration-200 group-hover:-rotate-6 group-hover:bg-accent/15 motion-reduce:transform-none">
+          <span className="text-content-faint" aria-hidden>
             {icon}
           </span>
         )}
@@ -68,9 +64,7 @@ export function StatsCard({ labelEn, labelBn, value, subtext, icon, trend }: Sta
         )}
       </div>
 
-      <p className="mt-2 font-sans text-xs text-content-faint">
-        {label} {subtext ? `· ${subtext}` : ""}
-      </p>
+      {subtext && <p className="mt-2 font-ui text-xs text-content-soft">{subtext}</p>}
     </div>
   );
 }

@@ -117,20 +117,20 @@ export default function SystemHealthPage() {
       : "text-danger bg-danger/10";
 
   return (
-    <div className="p-6 space-y-8 max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-7xl mx-auto">
       <AutomationDashboard initialData={health?.automation} />
 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold font-serif text-journal-ink">System Health & Diagnostics</h1>
-          <p className="text-sm text-journal-inkSoft">Server diagnostics, storage utilization, and database backup control.</p>
+          <h1 className="admin-page-title text-content">System health</h1>
+          <p className="text-sm text-content-soft">Server diagnostics, storage utilization, and database backup control.</p>
         </div>
 
         <div className="flex items-center gap-3">
           <Button variant="secondary"
             onClick={handleRunMaintenance}
             disabled={isProcessing}
-            className="bg-surface-hover"
+            className="bg-surface-raised"
           >
             Run Maintenance
           </Button>
@@ -198,7 +198,7 @@ export default function SystemHealthPage() {
               </THead>
               <TBody className="divide-y divide-rule">
                 {health.lastMaintenanceReport.tasks?.map((t: any) => (
-                  <TR key={t.taskName} className="hover:bg-surface-hover/50">
+                  <TR key={t.taskName} className="hover:bg-surface-raised/50">
                     <TD className="py-2.5 font-medium text-content">{t.taskName}</TD>
                     <TD className="py-2.5">
                       <span
@@ -208,7 +208,7 @@ export default function SystemHealthPage() {
                             : t.status === "WARNING"
                             ? "bg-warning/10 text-warning"
                             : t.status === "SKIPPED"
-                            ? "bg-surface-hover text-content-soft"
+                            ? "bg-surface-raised text-content-soft"
                             : "bg-danger/10 text-danger"
                         }`}
                       >
@@ -246,7 +246,7 @@ export default function SystemHealthPage() {
                 <Button variant="secondary" size="sm"
                   onClick={() => handleRestore(b.backupId)}
                   disabled={isProcessing}
-                  className="hover:bg-surface-hover"
+                  className="hover:bg-surface-raised"
                 >
                   Restore
                 </Button>

@@ -43,7 +43,7 @@ export function AdminLayoutClient({
   return (
     <div data-admin-workspace className="admin-workspace flex min-h-screen flex-col bg-surface">
       {/* Top Navigation Bar */}
-      <header className="admin-topbar sticky top-0 z-30 border-b border-rule bg-surface/95 backdrop-blur-xl">
+      <header className="admin-topbar sticky top-0 z-30 border-b border-rule bg-surface">
         <div className="flex h-16 items-center justify-between px-4 sm:px-6">
           <AdminHeaderBrand onToggleMobileMenu={() => setMobileMenuOpen(true)} />
 
@@ -81,7 +81,7 @@ export function AdminLayoutClient({
               aria-label="Navigation menu"
               className="relative z-10 w-72 max-w-[85vw] h-full max-h-full overflow-hidden shadow-2xl animate-fade-up"
             >
-              <AdminSidebar onClose={() => setMobileMenuOpen(false)} />
+              <AdminSidebar className="w-full" onClose={() => setMobileMenuOpen(false)} />
             </div>
           </div>
         )}
@@ -89,9 +89,8 @@ export function AdminLayoutClient({
         {/* Content Viewport */}
         <main className="admin-main min-w-0 flex-1 px-4 pb-12 pt-5 sm:px-8 sm:pt-7 xl:px-10">
           <div className="admin-content mx-auto w-full max-w-[1440px]">
-            <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-content-faint">
-              <span>Workspace</span><span className="text-accent/70" aria-hidden>/</span>
-              <span>{currentGroup?.name ?? "Editor"}</span><span className="text-accent/70" aria-hidden>/</span>
+            <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-2 font-ui text-xs text-content-soft">
+              <span>{currentGroup?.name ?? "Editor"}</span><span className="text-content-faint" aria-hidden>/</span>
               <span className="text-content-soft" aria-current="page">{currentPage}</span>
             </nav>
             <div key={pathname} className="admin-page-enter">{children}</div>

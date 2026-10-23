@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { requireAdmin } from "@/lib/auth";
 import { ArrowLeft } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { PieceEditor, type EditorPiece } from "@/components/admin/piece-editor";
@@ -13,6 +14,8 @@ type PageProps = {
 };
 
 export default async function EditPiecePage(props: PageProps) {
+  const admin = await requireAdmin();
+  if (!admin) redirect("/admin/login");
   const rawParams = await props?.params;
   const id = rawParams?.id;
   if (!id) notFound();
@@ -94,6 +97,8 @@ export default async function EditPiecePage(props: PageProps) {
 
       <div className="mt-6">
         <PieceEditor
+          key={`${admin.id}:${piece.id}`}
+          recoveryOwner={admin.id}
           initial={initial}
           publishedAtIso={piece.publishedAt?.toISOString() ?? null}
           authors={options.authors}

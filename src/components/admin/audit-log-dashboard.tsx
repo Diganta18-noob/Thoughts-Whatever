@@ -1,4 +1,5 @@
 "use client";
+import { useAdminPolling } from "@/lib/hooks/use-admin-polling";
 
 import { useEffect, useState, useCallback } from "react";
 import {
@@ -114,11 +115,7 @@ export function AuditLogDashboard() {
   }, [fetchLogs]);
 
   // Auto-refresh interval
-  useEffect(() => {
-    if (!autoRefresh) return;
-    const interval = setInterval(fetchLogs, 30000);
-    return () => clearInterval(interval);
-  }, [autoRefresh, fetchLogs]);
+  useAdminPolling(fetchLogs, 120000, autoRefresh);
 
   const handleExportCSV = () => {
     const params = new URLSearchParams({ export: "csv" });
@@ -212,8 +209,9 @@ export function AuditLogDashboard() {
             }`}
           >
             <RefreshCw className={`h-3.5 w-3.5 ${autoRefresh ? "animate-spin" : ""}`} />
-            {autoRefresh ? "Auto-refreshing (30s)" : "Auto-refresh"}
+            {autoRefresh ? "Auto-refreshing (2 min, visible tab)" : "Auto-refresh"}
           </button>
+          <Button variant="secondary" size="sm" disabled={loading} onClick={() => void fetchLogs()}>Refresh now</Button>
 
           <Button variant="primary" size="sm"
             onClick={handleExportCSV}

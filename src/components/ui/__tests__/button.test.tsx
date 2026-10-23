@@ -4,6 +4,10 @@ import { render, screen } from "@testing-library/react";
 import { Button } from "@/components/ui/button";
 
 describe("Button", () => {
+  it("preserves the primary foreground alongside the custom text size", () => {
+    render(<Button>Save writing</Button>);
+    expect(screen.getByRole("button")).toHaveClass("text-surface", "text-step-0");
+  });
   it("renders its children", () => {
     render(<Button>Publish</Button>);
     expect(screen.getByRole("button", { name: "Publish" })).toBeInTheDocument();

@@ -1,85 +1,34 @@
 import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
-import {
-  getOverviewStats,
-  getDailyTrend,
-  getTopArticles,
-  getSeriesAnalytics,
-} from "@/lib/analytics";
-import { AnalyticsSkeleton } from "@/components/admin/analytics-skeleton";
 import { CustomDashboard } from "@/components/admin/custom-dashboard";
-import type { AnalyticsData } from "@/components/admin/analytics-dashboard";
 
 export const dynamic = "force-dynamic";
-
-export const metadata = { title: "Overview & Intelligence" };
-
-function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
-  ]);
-}
+export const metadata = { title: "Editorial overview" };
 
 async function DashboardDataFetcher() {
-  const [recentSettled, analyticsSettled] = await Promise.allSettled([
-    withTimeout(
-      prisma.piece.findMany({
-        select: {
-          id: true,
-          slug: true,
-          kind: true,
-          status: true,
-          titleBn: true,
-          updatedAt: true,
-        },
-        orderBy: { updatedAt: "desc" },
-        take: 8,
-      }),
-      8000,
-      []
-    ),
-    withTimeout(
-      Promise.all([
-        getOverviewStats("30d"),
-        getDailyTrend(30),
-        getTopArticles(10, "30d"),
-        getSeriesAnalytics(),
-      ]),
-      8000,
-      null
-    ),
+  // Detailed analytics load only on their own screen or explicitly opened widgets.
+  const [recent, drafts, scheduled, failedJobs] = await Promise.allSettled([
+    prisma.piece.findMany({
+      select: { id: true, slug: true, kind: true, status: true, titleBn: true, updatedAt: true },
+      orderBy: { updatedAt: "desc" }, take: 8,
+    }),
+    prisma.piece.count({ where: { status: "DRAFT", OR: [{ reviewStatus: null }, { reviewStatus: { not: "scheduled" } }] } }),
+    prisma.piece.count({ where: { status: "DRAFT", reviewStatus: "scheduled" } }),
+    prisma.scheduledJob.count({ where: { status: "FAILED" } }),
   ]);
-
-  const recent = recentSettled.status === "fulfilled" ? recentSettled.value : [];
-  let initialAnalyticsData: AnalyticsData | undefined = undefined;
-
-  if (analyticsSettled.status === "fulfilled" && analyticsSettled.value) {
-    const [overview, dailyTrend, topArticles, seriesAnalytics] = analyticsSettled.value;
-    initialAnalyticsData = {
-      overview,
-      dailyTrend,
-      topArticles: topArticles.map((t) => ({
-        ...t,
-        publishedAt: t.publishedAt ? t.publishedAt.toISOString() : null,
-      })),
-      seriesAnalytics,
-    };
-  }
-
-  return (
-    <CustomDashboard
-      initialAnalyticsData={initialAnalyticsData}
-      recentPieces={recent}
-    />
-  );
+  return <CustomDashboard
+    recentPieces={recent.status === "fulfilled" ? recent.value : []}
+    recentError={recent.status === "rejected"}
+    workSummary={{
+      drafts: drafts.status === "fulfilled" ? drafts.value : null,
+      scheduled: scheduled.status === "fulfilled" ? scheduled.value : null,
+      failedJobs: failedJobs.status === "fulfilled" ? failedJobs.value : null,
+    }}
+  />;
 }
 
 export default function AdminHomePage() {
-  return (
-    <Suspense fallback={<AnalyticsSkeleton />}>
-      <DashboardDataFetcher />
-    </Suspense>
-  );
+  return <Suspense fallback={<p role="status" className="text-sm text-content-soft">Loading your editorial overview…</p>}>
+    <DashboardDataFetcher />
+  </Suspense>;
 }
-

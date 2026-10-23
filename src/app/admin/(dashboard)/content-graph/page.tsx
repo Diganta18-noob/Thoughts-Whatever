@@ -408,7 +408,7 @@ export default function ContentGraphPage() {
       {/* Graph Canvas Viewport */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Canvas Area (8 or 9 cols) */}
-        <div className="lg:col-span-8 xl:col-span-9 relative rounded-sm border border-rule bg-journal-paper dark:bg-archive-panel overflow-hidden h-[620px]">
+        <div className="lg:col-span-8 xl:col-span-9 relative rounded-sm border border-rule bg-surface-raised dark:bg-archive-panel overflow-hidden h-[620px]">
           <canvas
             ref={canvasRef}
             width={900}

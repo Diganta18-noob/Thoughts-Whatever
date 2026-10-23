@@ -40,9 +40,8 @@ export function AdminActivityWidget() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between py-4">
         <div>
-          <span className="label">System Audit</span>
           <CardTitle className="text-base font-medium">
-            Live Activity Stream
+            Recent activity
           </CardTitle>
         </div>
         <Link
