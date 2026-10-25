@@ -1,4 +1,5 @@
 "use client";
+import { useAdminPolling } from "@/lib/hooks/use-admin-polling";
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
@@ -90,11 +91,7 @@ export function PromptsDashboard() {
     fetchPrompts();
   }, [fetchPrompts]);
 
-  useEffect(() => {
-    if (!autoRefresh) return;
-    const interval = setInterval(fetchPrompts, 30000);
-    return () => clearInterval(interval);
-  }, [autoRefresh, fetchPrompts]);
+  useAdminPolling(fetchPrompts, 120000, autoRefresh);
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
@@ -186,8 +183,9 @@ export function PromptsDashboard() {
             }`}
           >
             <RefreshCw className={`h-3.5 w-3.5 ${autoRefresh ? "animate-spin" : ""}`} />
-            {autoRefresh ? "Auto (30s)" : "Auto-refresh"}
+            {autoRefresh ? "Auto (2 min, visible tab)" : "Auto-refresh"}
           </button>
+          <Button variant="secondary" size="sm" disabled={loading} onClick={() => void fetchPrompts()}>Refresh now</Button>
 
           <Button variant="secondary" size="sm"
             onClick={() => handleExport("json")}

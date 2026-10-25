@@ -1,4 +1,5 @@
 "use client";
+import { useAdminPolling } from "@/lib/hooks/use-admin-polling";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "react-hot-toast";
@@ -99,9 +100,10 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
     if (!initialData) {
       fetchStatus();
     }
-    const interval = setInterval(() => fetchStatus(false), 20000);
-    return () => clearInterval(interval);
-  }, [fetchStatus, initialData]);
+    // fetchStatus changes with the fetched data; it must not trigger another initial load.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialData]);
+  useAdminPolling(() => fetchStatus(false), 60000);
 
   const runPipelineNow = async () => {
     setTriggering(true);
@@ -143,7 +145,7 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
 
   if (loading && !data) {
     return (
-      <div className="p-6 bg-journal-paper rounded-lg border border-journal-rule text-journal-inkSoft font-mono text-xs animate-pulse">
+      <div className="p-6 bg-surface-raised rounded-card border border-rule text-content-soft font-ui text-sm animate-pulse">
         Connecting to Production Automation Hub...
       </div>
     );
@@ -155,8 +157,8 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
     <div className="space-y-6">
       {/* ── Error Banner if any ── */}
       {error && !data && (
-        <div className="flex items-center justify-between p-4 bg-warning/10 border border-warning/30 rounded-lg text-xs font-mono text-warning">
-          <span>⚠️ Automation status temporarily unavailable: {error}</span>
+        <div className="flex items-center justify-between p-4 bg-warning/10 border border-warning/30 rounded-card text-xs font-ui text-warning">
+          <span>Automation status temporarily unavailable: {error}</span>
           <Button variant="warning" size="sm"
             onClick={() => {
               setLoading(true);
@@ -169,13 +171,17 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
       )}
 
       {/* ── Header Controls ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-journal-paperEdge p-5 rounded-lg border border-journal-rule">
+      <div className="flex flex-wrap items-center gap-3 text-xs text-content-soft">
+        <Button variant="secondary" size="sm" onClick={() => void fetchStatus(true)}>Refresh status</Button>
+        <span>Refreshes every minute while this tab is visible.</span>
+      </div>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface-raised p-5 rounded-card border border-rule">
         <div>
-          <h2 className="text-lg font-bold text-journal-ink flex items-center gap-2">
-            ⚙️ Production Automation Hub (1:00 AM Nightly Pipeline)
+          <h2 className="text-xl font-semibold text-content">
+            Automation
           </h2>
-          <p className="text-xs text-journal-inkSoft mt-1 font-mono">
-            Self-maintaining SaaS maintenance engine • Status:{" "}
+          <p className="text-xs text-content-soft mt-1 font-mono">
+            Pipeline status: {" "}
             <span className={isHealthy ? "text-success font-bold" : "text-warning font-bold"}>
               {data?.health?.status || "HEALTHY"}
             </span>
@@ -184,66 +190,66 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
         <Button variant="primary"
           onClick={runPipelineNow}
           disabled={triggering || data?.isRunning}
-          className="bg-journal-vermilion hover:bg-journal-vermilionSoft"
+          className="bg-accent hover:bg-accent/90"
         >
-          {triggering || data?.isRunning ? "⚡ Pipeline Executing..." : "▶️ Run Full Pipeline Now"}
+          {triggering || data?.isRunning ? "Running pipeline…" : "Run pipeline"}
         </Button>
       </div>
 
       {/* ── Status Grid ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <div className="bg-journal-paper p-4 rounded border border-journal-rule">
-          <p className="text-xs text-journal-inkFaint uppercase tracking-wider font-mono">Database & Health</p>
-          <p className="text-xl font-bold text-journal-ink mt-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="bg-surface-raised p-4 rounded border border-rule">
+          <p className="text-sm text-content-soft">Database & Health</p>
+          <p className="text-xl font-bold text-content mt-1">
             {data?.health
               ? data.health.dbConnected
-                ? "✅ Connected"
-                : "❌ Disconnected"
-              : "⏳ Checking..."}
+                ? "Connected"
+                : "Disconnected"
+              : "Checking…"}
           </p>
-          <p className="text-xs text-journal-inkSoft font-mono mt-1">
+          <p className="text-xs text-content-soft font-mono mt-1">
             Heap: {data?.health ? `${data.health.memoryUsageMb} MB` : "—"}
           </p>
         </div>
 
-        <div className="bg-journal-paper p-4 rounded border border-journal-rule">
-          <p className="text-xs text-journal-inkFaint uppercase tracking-wider font-mono">Active Sessions</p>
-          <p className="text-xl font-bold text-journal-ink mt-1">{data?.security?.activeSessions ?? 1}</p>
-          <p className="text-xs text-journal-inkSoft font-mono mt-1">
+        <div className="bg-surface-raised p-4 rounded border border-rule">
+          <p className="text-sm text-content-soft">Active Sessions</p>
+          <p className="text-xl font-bold text-content mt-1">{data?.security?.activeSessions ?? 1}</p>
+          <p className="text-xs text-content-soft font-mono mt-1">
             Revoked Reuses: {data?.security?.revokedTokenReuseAttempts ?? 0}
           </p>
         </div>
 
-        <div className="bg-journal-paper p-4 rounded border border-journal-rule">
-          <p className="text-xs text-journal-inkFaint uppercase tracking-wider font-mono">Last Run Status</p>
-          <p className="text-xl font-bold text-journal-ink mt-1">
+        <div className="bg-surface-raised p-4 rounded border border-rule">
+          <p className="text-sm text-content-soft">Last Run Status</p>
+          <p className="text-xl font-bold text-content mt-1">
             {data?.lastReport?.overallStatus || "SUCCESS"}
           </p>
-          <p className="text-xs text-journal-inkSoft font-mono mt-1">
+          <p className="text-xs text-content-soft font-mono mt-1">
             {data?.lastReport?.totalDurationMs ? `${(data.lastReport.totalDurationMs / 1000).toFixed(1)}s` : "Nightly 01:00 AM"}
           </p>
         </div>
 
-        <div className="bg-journal-paper p-4 rounded border border-journal-rule">
-          <p className="text-xs text-journal-inkFaint uppercase tracking-wider font-mono">Backup Retention</p>
-          <p className="text-xl font-bold text-journal-ink mt-1">30 Days R2</p>
-          <p className="text-xs text-journal-inkSoft font-mono mt-1">Auto Gzip & Lifecycle</p>
+        <div className="bg-surface-raised p-4 rounded border border-rule">
+          <p className="text-sm text-content-soft">Backup Retention</p>
+          <p className="text-xl font-bold text-content mt-1">30 Days R2</p>
+          <p className="text-xs text-content-soft font-mono mt-1">Auto Gzip & Lifecycle</p>
         </div>
       </div>
 
       {/* ── Steps Execution Table ── */}
       {data?.lastReport && (
-        <div className="bg-journal-paper p-5 rounded-lg border border-journal-rule">
-          <h3 className="text-sm font-bold text-journal-ink mb-3 flex items-center justify-between">
-            <span>📋 Last Pipeline Execution Steps ({data.lastReport.timestamp.split("T")[0]})</span>
-            <span className="text-xs font-mono text-journal-inkSoft">
+        <div className="bg-surface-raised p-5 rounded-card border border-rule">
+          <h3 className="text-sm font-semibold text-content mb-3 flex flex-wrap items-center justify-between gap-2">
+            <span>Last pipeline run · {data.lastReport.timestamp.split("T")[0]}</span>
+            <span className="text-xs font-ui text-content-soft">
               {data.lastReport.summary.passed}/{data.lastReport.summary.total} Steps Passed
             </span>
           </h3>
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs font-mono">
+            <table className="w-full text-left text-xs font-ui">
               <THead>
-                <TR className="border-b border-journal-rule text-journal-inkFaint">
+                <TR className="border-b border-rule text-content-faint">
                   <TH className="py-2">Step</TH>
                   <TH className="py-2">Name</TH>
                   <TH className="py-2">Status</TH>
@@ -251,11 +257,11 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
                   <TH className="py-2">Details</TH>
                 </TR>
               </THead>
-              <TBody className="divide-y divide-journal-rule">
+              <TBody className="divide-y divide-rule">
                 {data.lastReport.steps.map((step) => (
                   <TR key={step.stepNumber}>
-                    <TD className="py-2 text-journal-inkFaint">{step.stepNumber}</TD>
-                    <TD className="py-2 font-bold text-journal-ink">{step.name}</TD>
+                    <TD className="py-2 text-content-faint">{step.stepNumber}</TD>
+                    <TD className="py-2 font-bold text-content">{step.name}</TD>
                     <TD className="py-2">
                       <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
                         step.status === "SUCCESS" ? "bg-success/10 text-success" : "bg-danger/10 text-danger"
@@ -263,8 +269,8 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
                         {step.status}
                       </span>
                     </TD>
-                    <TD className="py-2 text-journal-inkSoft">{step.durationMs}ms</TD>
-                    <TD className="py-2 text-journal-inkSoft">{step.message}</TD>
+                    <TD className="py-2 text-content-soft">{step.durationMs}ms</TD>
+                    <TD className="py-2 text-content-soft">{step.message}</TD>
                   </TR>
                 ))}
               </TBody>
@@ -274,9 +280,9 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
       )}
 
       {/* ── Live Log Terminal ── */}
-      <div className="bg-journal-ink p-4 rounded-lg border border-journal-inkSoft font-mono text-xs text-journal-paper">
-        <div className="flex items-center justify-between mb-2 pb-2 border-b border-journal-inkSoft/40 text-journal-inkFaint">
-          <span>📟 Live Automation System Logs (`automation.log` & AuditLog)</span>
+      <div className="bg-surface p-4 rounded-card border border-rule font-ui text-sm text-content">
+        <div className="flex items-center justify-between mb-2 pb-2 border-b border-rule/40 text-content-faint">
+          <span>Recent automation logs</span>
           <span>Last 50 entries</span>
         </div>
         <div className="max-h-60 overflow-y-auto space-y-1 font-mono text-[11px] leading-relaxed select-text">
@@ -287,7 +293,7 @@ export function AutomationDashboard({ initialData }: AutomationDashboardProps) {
               </div>
             ))
           ) : (
-            <p className="text-journal-inkFaint italic">No logs recorded yet today.</p>
+            <p className="text-content-faint italic">No logs recorded yet today.</p>
           )}
         </div>
       </div>

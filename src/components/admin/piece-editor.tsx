@@ -17,15 +17,15 @@ import { AudioTranscribe } from "@/components/admin/audio-transcribe";
 import { PieceSourcesEditor } from "./piece-editor/piece-sources-editor";
 import { PieceTimelineEditor } from "./piece-editor/piece-timeline-editor";
 import { Button } from "@/components/ui";
+import { useEditorRecovery } from "@/lib/hooks/use-editor-recovery";
+import { isEditorRecovery } from "@/lib/admin-piece-recovery";
 
 
 /**
  * The editor.
  *
- * One screen, no modals, no autosave. Autosave and a publish workflow are the
- * same feature in most CMSes and it is a bad pairing for one person writing
- * essays: an accidental keystroke should never touch the live site. So the
- * publisher presses Save, and Save is the only thing that writes.
+ * Manual server saves, with a browser-local safety copy for unsaved work.
+ * Recovery never changes the live site; the publisher must explicitly save.
  *
  * The preview is the real reading component — `Prose` — not a lookalike. Bengali
  * conjuncts, verse blocks, and drop caps are exactly where the typography can
@@ -193,7 +193,7 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <section className="border border-rule p-4">
+    <section className="rounded-card border border-rule bg-surface-raised p-5">
       <h2 className="label" lang="en">
         {labelEn}
       </h2>
@@ -205,12 +205,14 @@ function Panel({
 /* ─── the editor ────────────────────────────────────────── */
 
 export function PieceEditor({
+  recoveryOwner,
   initial,
   publishedAtIso,
   authors,
   tags,
   series,
 }: {
+  recoveryOwner: string;
   initial: EditorPiece;
   publishedAtIso?: string | null;
   authors: (EditorOption & { era?: string | null })[];
@@ -257,6 +259,12 @@ export function PieceEditor({
   const [showTranscriber, setShowTranscriber] = useState(false);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [audioPickerOpen, setAudioPickerOpen] = useState(false);
+  const recoveryKey = `tw:editor:v1:${recoveryOwner}:${initial.id || "new"}`;
+  const recovery = useEditorRecovery(recoveryKey, form, dirty, (value): value is EditorPiece =>
+    isEditorRecovery(value) && value.id === initial.id);
+  const currentForm = useRef(form);
+  currentForm.current = form;
+  const createdId = useRef<string | null>(null);
 
   const handleSharePreview = async () => {
     if (!form.id) {
@@ -335,13 +343,24 @@ export function PieceEditor({
   // Leaving with unsaved work is the one loss this editor can actually cause.
   useEffect(() => {
     if (!dirty) return;
-    const warn = (e: BeforeUnloadEvent) => e.preventDefault();
+    const warn = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = ""; };
+    const warnLink = (e: MouseEvent) => {
+      const link = (e.target as Element)?.closest?.("a[href]") as HTMLAnchorElement | null;
+      if (!link || link.target === "_blank" || link.hasAttribute("download") || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      if (link.pathname === window.location.pathname && link.search === window.location.search) return;
+      if (!window.confirm("You have unsaved changes. Leave the editor?")) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
     window.addEventListener("beforeunload", warn);
-    return () => window.removeEventListener("beforeunload", warn);
+    document.addEventListener("click", warnLink, true);
+    return () => { window.removeEventListener("beforeunload", warn); document.removeEventListener("click", warnLink, true); };
   }, [dirty]);
 
   async function save(overrideStatus?: EditorPiece["status"]) {
-    if (busy) return;
+    if (busy || recovery.recovered) return;
+    const submitted = JSON.stringify(form);
     setBusy(true);
     setErrors({});
 
@@ -382,9 +401,9 @@ export function PieceEditor({
 
     try {
       const res = await fetch(
-        isNew ? "/api/admin/pieces" : `/api/admin/pieces/${form.id}`,
+        form.id || createdId.current ? `/api/admin/pieces/${form.id || createdId.current}` : "/api/admin/pieces",
         {
-          method: isNew ? "POST" : "PUT",
+          method: form.id || createdId.current ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         },
@@ -403,8 +422,13 @@ export function PieceEditor({
         return;
       }
 
-      setDirty(false);
-      setForm((prev) => ({ ...prev, status }));
+      const unchanged = JSON.stringify(currentForm.current) === submitted;
+      if (isNew && data.id) createdId.current = data.id;
+      if (unchanged) {
+        recovery.commit();
+        setDirty(false);
+        setForm((prev) => ({ ...prev, status }));
+      }
 
       if (status === "PUBLISHED") {
         toast.success("Piece published successfully!");
@@ -414,8 +438,10 @@ export function PieceEditor({
         toast.success("Draft saved successfully.");
       }
 
-      if (isNew && data.id) {
-        router.replace(`/admin/pieces/${data.id}`);
+      if (isNew && createdId.current && unchanged) {
+        router.replace(`/admin/pieces/${createdId.current}`);
+      } else if (!unchanged) {
+        toast("Saved submitted version. Newer edits are still unsaved.");
       } else {
         router.refresh();
       }
@@ -437,7 +463,7 @@ export function PieceEditor({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form, busy]);
+  }, [form, busy, recovery.recovered]);
 
   const isDocumentary = form.kind === "DOCUMENTARY";
 
@@ -450,7 +476,7 @@ export function PieceEditor({
             {isNew ? "New piece" : `Editing · ${KIND_META[form.kind].labelEn}`}
           </span>
           <h1
-            className="mt-2 text-[1.5rem] font-medium text-content"
+            className="admin-page-title mt-2 font-bengali text-content"
           >
             {form.titleBn || t("admin.editor.untitled")}
           </h1>
@@ -503,7 +529,7 @@ export function PieceEditor({
 
           <Button variant="primary"
             onClick={() => void save()}
-            disabled={busy}
+            disabled={busy || Boolean(recovery.recovered)}
             className="text-[0.9375rem]"
           >
             {busy && <Loader2 className="h-4 w-4 animate-spin" />}
@@ -511,12 +537,34 @@ export function PieceEditor({
               ? t("admin.editor.update")
               : form.status === "ARCHIVED"
               ? "Save Archived"
-              : t("admin.editor.publishBtn")}
+              : t("admin.editor.saveDraft")}
           </Button>
         </div>
       </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <p role="status" className="mt-3 text-xs text-content-soft">
+        {dirty ? "Unsaved changes" : "No unsaved changes"}
+        {dirty && recovery.savedAt ? " · Recovery copy saved in this browser" : ""}
+      </p>
+      {recovery.error && <p role="alert" className="mt-2 text-sm text-accent">{recovery.error}</p>}
+      {recovery.recovered && (
+        <section aria-label="Recover unsaved writing" className="mt-4 rounded-sm border border-accent/40 bg-accent/5 p-4">
+          <h2 className="font-medium text-content">Unsaved writing found</h2>
+          <p className="mt-1 text-sm text-content-soft">
+            A recovery copy from {new Date(recovery.recovered.savedAt).toLocaleString()} is available on this browser.
+            Restore it to continue, or discard it to keep the server version. Restoring does not publish it.
+          </p>
+          <div className="mt-3 flex gap-2">
+            <Button variant="primary" onClick={() => {
+              const draft = recovery.restore();
+              if (draft) { setForm(draft); setDirty(true); slugTouched.current = true; }
+            }}>Restore writing</Button>
+            <Button variant="secondary" onClick={recovery.discard}>Discard recovery copy</Button>
+          </div>
+        </section>
+      )}
+      <p className="mt-2 text-xs text-content-faint">Recovery stays on this browser for your account. Use Save to store work on the server.</p>
+      <fieldset disabled={busy || Boolean(recovery.recovered)} className="mt-8 grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         {/* ─── main column ──────────────────────────────── */}
         <div className="space-y-6">
           <Field labelEn="Title (Bengali)" error={errors.titleBn}>
@@ -591,7 +639,7 @@ export function PieceEditor({
                 className="border-accent/30 text-accent"
               >
                 <Mic className="h-3.5 w-3.5" />
-                {showTranscriber ? "Hide Transcriber" : "🎙️ Transcribe Audio Narration / Reel"}
+                {showTranscriber ? "Hide transcription" : "Transcribe audio"}
               </Button>
             </div>
 
@@ -951,7 +999,7 @@ export function PieceEditor({
             </p>
           )}
         </div>
-      </div>
+      </fieldset>
     </div>
   );
 }

@@ -2735,3 +2735,25 @@ User follow-up: Do the necessary changes to fix the review findings using very f
 
 User instruction: Remove unnecessary force-dynamic rendering; make the homepage premium, animated, smoothly scrolling, professional, and production ready while using few tokens.
 
+
+## 2026-10-24 — Admin usability first batch
+
+User request: "My recommended first batch: reduce polling, add draft recovery, and simplify the dashboard. These directly address hosting costs and the work you do most often. do it"
+
+Implemented scope: visibility-aware slower admin polling and explicit refresh controls; per-account browser-local writing recovery with explicit restore/discard and manual server saves; a daily-work overview with recent edits and on-demand analytics. No deployment requested or performed.
+
+Review/debug notes: regression tests caught and fixed Ctrl+S bypassing pending recovery and new-piece kind changes making recovery unreadable. Existing unrelated workspace changes were preserved.
+
+Verification: production build, TypeScript check, and lint passed. All 44 Jest suites / 298 tests passed. An existing open interval in src/lib/rate-limit.ts:15 kept the diagnostic Jest run alive after results; the completed diagnostic process was stopped. The normal test run passed with a worker cleanup warning. npm run save-prompts completed (450 scanned, 1 inserted); direct sync of this specific request encountered database connectivity failure and was retried separately.
+Direct sync retry also failed because the database endpoint was unreachable. This request remains preserved in this file; its specific PromptLog sync is pending connectivity.
+
+## 2026-10-24 — Admin design cleanup
+
+User request: "admin portal is looks like vide coded tryto detetct those thing and fix the design isssue"
+
+Inspected shared admin source and historical screenshots; captured current components with synthetic fixture data at 1440px and 390px in cream/night themes. Removed decorative gradients, moving navigation, accent stripes and promotional badges; standardized labels, actions, panels and theme colors. Fixed custom font-size/color merging that stripped button foregrounds, exposed editor translation keys, inaccurate draft-save copy, and mobile drawer/sidebar sizing. Previous polling/recovery work and unrelated workspace edits preserved.
+
+Validation: production build passed; 45 Jest suites / 300 tests passed; lint passed without warnings. Twelve fixture viewport/theme checks passed overflow and primary-action contrast assertions. Existing Jest worker cleanup warning remains from the rate-limiter interval noted in the earlier batch. npm run save-prompts scanned 450 prompts, but database sync was skipped because the database endpoint was unreachable. No deployment was performed.
+
+
+User follow-up: push to main. Integrate only the approved admin improvements onto the latest origin/main; exclude unrelated website/audio/environment edits.

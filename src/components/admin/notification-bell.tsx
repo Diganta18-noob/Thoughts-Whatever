@@ -1,4 +1,5 @@
 "use client";
+import { useAdminPolling } from "@/lib/hooks/use-admin-polling";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -38,9 +39,8 @@ export function NotificationBell() {
 
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 45000); // 45s poll
-    return () => clearInterval(interval);
   }, []);
+  useAdminPolling(fetchNotifications, 120000);
 
   // Close on outside click
   useEffect(() => {
@@ -91,7 +91,7 @@ export function NotificationBell() {
     <div className="relative" ref={dropdownRef}>
       <button
         type="button"
-        onClick={() => setOpen(!open)}
+        onClick={() => { if (!open) void fetchNotifications(); setOpen(!open); }}
         className="relative flex h-8 w-8 items-center justify-center rounded-sm border border-rule text-content-soft transition hover:border-accent hover:text-accent"
         title="Notifications"
         aria-label="Notifications"

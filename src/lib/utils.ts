@@ -6,6 +6,13 @@ const customTwMerge = extendTailwindMerge({
     classGroups: {
       rounded: ["rounded-card", "rounded-xs"],
       shadow: ["shadow-card"],
+      // These are font sizes, not colors. Without this group, merging a size
+      // such as text-step-0 removes the button's text-surface foreground.
+      "font-size": [
+        "text-step-0", "text-step-1", "text-step-2", "text-step-3",
+        "text-step-4", "text-step-5", "text-step-6", "text-step-7",
+        "text-bengali-sm", "text-bengali-base", "text-bengali-lg", "text-bengali-xl",
+      ],
       "font-family": [
         "font-display",
         "font-body",

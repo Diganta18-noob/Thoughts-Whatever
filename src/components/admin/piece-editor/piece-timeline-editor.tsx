@@ -17,10 +17,7 @@ export function PieceTimelineEditor({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="font-mono text-xs uppercase tracking-wider text-content-soft">
-          {t("admin.editor.timeline")}
-        </h3>
+      <div className="flex items-center justify-end">
         <button
           type="button"
           onClick={() =>
@@ -29,7 +26,7 @@ export function PieceTimelineEditor({
           className="inline-flex items-center gap-1 font-sans text-xs text-accent transition hover:opacity-75"
         >
           <Plus className="h-3.5 w-3.5" />
-          {t("admin.editor.addTimelineEvent")}
+          {t("admin.editor.addEvent")}
         </button>
       </div>
 
@@ -40,6 +37,7 @@ export function PieceTimelineEditor({
         >
           <button
             type="button"
+            aria-label={`${t("admin.editor.removeTooltip")} ${i + 1}`}
             onClick={() => onChange(timeline.filter((_, idx) => idx !== i))}
             className="absolute top-2 right-2 text-content-faint hover:text-accent"
           >
@@ -65,7 +63,7 @@ export function PieceTimelineEditor({
                 next[i] = { ...next[i], labelBn: e.target.value };
                 onChange(next);
               }}
-              placeholder={t("admin.editor.eventLabelPlaceholder")}
+              placeholder={t("admin.editor.eventPlaceholder")}
               lang="bn"
               className={inputClass}
             />

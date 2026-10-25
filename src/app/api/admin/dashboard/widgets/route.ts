@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { DEFAULT_ADMIN_WIDGETS } from "@/lib/admin-dashboard-widgets";
 
-const DEFAULT_WIDGETS = [
-  { id: "overview_metrics", type: "metrics", title: "Key Metrics", enabled: true, order: 0 },
-  { id: "reference_activity", type: "reference", title: "Reference Activity", enabled: true, order: 1 },
-  { id: "recent_pieces", type: "pieces", title: "Recently Edited", enabled: true, order: 2 },
-  { id: "content_health", type: "health", title: "Content Health", enabled: true, order: 3 },
-  { id: "seo_summary", type: "seo", title: "SEO Status", enabled: true, order: 4 },
-];
+const DEFAULT_WIDGETS = DEFAULT_ADMIN_WIDGETS;
 
 export async function GET() {
   const admin = await requireAdmin();

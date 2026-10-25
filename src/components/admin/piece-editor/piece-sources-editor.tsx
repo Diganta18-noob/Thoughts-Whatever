@@ -19,10 +19,7 @@ export function PieceSourcesEditor({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="font-mono text-xs uppercase tracking-wider text-content-soft">
-          {t("admin.editor.sources")}
-        </h3>
+      <div className="flex items-center justify-end">
         <button
           type="button"
           onClick={() =>
@@ -42,6 +39,7 @@ export function PieceSourcesEditor({
         >
           <button
             type="button"
+            aria-label={`${t("admin.editor.removeTooltip")} ${i + 1}`}
             onClick={() => onChange(sources.filter((_, idx) => idx !== i))}
             className="absolute top-2 right-2 text-content-faint hover:text-accent"
           >
@@ -55,7 +53,7 @@ export function PieceSourcesEditor({
               next[i] = { ...next[i], label: e.target.value };
               onChange(next);
             }}
-            placeholder={t("admin.editor.sourceLabelPlaceholder")}
+            placeholder={t("admin.editor.sourcePlaceholder")}
             lang="bn"
             className={inputClass}
           />
