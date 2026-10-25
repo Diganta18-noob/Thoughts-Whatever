@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test("public routes render and unknown content is marked not found", async ({ page }) => {
-  for (const route of ["/", "/writing", "/blog", "/documentary", "/series", "/authors", "/reference"]) {
+  for (const route of ["/", "/writing", "/blog", "/documentary", "/series", "/authors", "/reference", "/privacy", "/terms", "/contact"]) {
     const response = await page.goto(route);
     expect(response?.status(), route).toBe(200);
     await expect(page.locator("main")).toBeVisible();
@@ -13,6 +13,49 @@ test("public routes render and unknown content is marked not found", async ({ pa
   expect([200, 404]).toContain(missing?.status());
   await expect(page.getByRole("navigation", { name: "Recovery navigation" })).toBeVisible();
   await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toBeAttached();
+});
+
+test("consent, mobile layout, metadata and preview assets work", async ({ page, request }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const analyticsRequests: string[] = [];
+  page.on("request", (req) => { if (req.url().includes("/ingest/") || req.url().includes("/api/analytics/event")) analyticsRequests.push(req.url()); });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await expect(page.getByRole("region", { name: "Cookie preferences" })).toBeVisible();
+  expect(analyticsRequests).toEqual([]);
+  await page.getByRole("button", { name: "Reject optional analytics" }).click();
+  await page.reload();
+  await expect(page.getByRole("region", { name: "Cookie preferences" })).toHaveCount(0);
+  expect(analyticsRequests).toEqual([]);
+  await page.getByRole("button", { name: "Cookie settings", exact: true }).click();
+  await page.getByRole("button", { name: "Accept analytics", exact: true }).click();
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("tw_consent"))).toBe("accepted");
+  await page.getByRole("button", { name: "Cookie settings", exact: true }).click();
+  await page.getByRole("button", { name: "Reject optional analytics" }).click();
+  for (const route of ["/", "/reference", "/privacy", "/terms"]) {
+    await page.goto(route);
+    await expect(page.locator('meta[name="description"]').first()).toHaveAttribute("content", /.+/);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), route).toBe(true);
+    await expect(page.locator("main img:not([alt])")).toHaveCount(0);
+  }
+  const preview = await request.get("/opengraph-image");
+  expect(preview.status()).toBe(200);
+  expect(preview.headers()["content-type"]).toContain("image/png");
+  const sitemap = await request.get("/sitemap.xml");
+  expect(await sitemap.text()).toContain("/reference");
+  expect(await sitemap.text()).toContain("/terms");
+  await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
+  await testInfo.attach("mobile-home", { body: await page.screenshot({ fullPage: true }), contentType: "image/png" });
+  const timings = await page.evaluate(() => {
+    const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+    return { ttfbMs: Math.round(nav.responseStart - nav.requestStart), domReadyMs: Math.round(nav.domContentLoadedEventEnd), resources: performance.getEntriesByType("resource").length };
+  });
+  await testInfo.attach("page-speed", { body: JSON.stringify(timings), contentType: "application/json" });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
+  await testInfo.attach("desktop-home", { body: await page.screenshot({ fullPage: true }), contentType: "image/png" });
 });
 
 test("admin routes require login and seeded credentials authenticate", async ({ page, request }) => {

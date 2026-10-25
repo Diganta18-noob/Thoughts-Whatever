@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { trackEvent } from "@/lib/tracker";
+import { analyticsAllowed, CONSENT_EVENT } from "@/lib/analytics-consent";
 import { posthog } from "@/lib/posthog-client";
 
 interface ViewTrackerProps {
@@ -23,8 +24,15 @@ export function ViewTracker({ pieceId, pieceProps }: ViewTrackerProps) {
   const scrollMilestones = useRef(new Set<number>());
 
   useEffect(() => {
-    // Track initial page view (Prisma)
-    trackEvent({ pieceId, eventType: "view" });
+    scrollMilestones.current.clear();
+    let viewed = false;
+    const recordView = () => {
+      if (viewed || !analyticsAllowed()) return;
+      viewed = true;
+      trackEvent({ pieceId, eventType: "view" });
+    };
+    recordView();
+    window.addEventListener(CONSENT_EVENT, recordView);
 
     // Track PostHog piece / documentary / series opening event
     if (pieceProps) {
@@ -50,6 +58,7 @@ export function ViewTracker({ pieceId, pieceProps }: ViewTrackerProps) {
 
     // Track scroll milestones
     const handleScroll = () => {
+      if (!analyticsAllowed()) return;
       const el = document.documentElement;
       const totalHeight = el.scrollHeight - el.clientHeight;
       if (totalHeight <= 0) return;
@@ -94,7 +103,7 @@ export function ViewTracker({ pieceId, pieceProps }: ViewTrackerProps) {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => { window.removeEventListener("scroll", handleScroll); window.removeEventListener(CONSENT_EVENT, recordView); };
   }, [pieceId, pieceProps]);
 
   return null;

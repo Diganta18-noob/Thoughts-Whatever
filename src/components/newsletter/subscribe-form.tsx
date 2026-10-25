@@ -131,6 +131,10 @@ export function SubscribeForm({
         <input
           id={`subscribe-${source}`}
           type="email"
+          autoComplete="email"
+          maxLength={254}
+          aria-invalid={state === "error"}
+          aria-describedby={state === "error" ? `subscribe-error-${source}` : undefined}
           required
           value={email}
           onChange={(e) => {
@@ -166,6 +170,8 @@ export function SubscribeForm({
         <p
           lang={locale}
           data-testid="subscribe-error-msg"
+          id={`subscribe-error-${source}`}
+          role="alert"
           className={cn(
             "mt-2 text-xs text-accent",
             isBn ? "font-bengali" : "font-sans",

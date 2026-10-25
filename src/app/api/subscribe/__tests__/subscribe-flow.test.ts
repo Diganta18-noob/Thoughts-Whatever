@@ -51,3 +51,18 @@ it("reports a storage failure separately and does not send mail", async () => {
   expect(await response.json()).toMatchObject({ ok: false, code: "saveFailed" });
   expect(sendConfirmation).not.toHaveBeenCalled();
 });
+
+
+it("rejects invalid email without writing or mailing", async () => {
+  const response = await POST(new Request("http://localhost/api/subscribe", { method: "POST", body: JSON.stringify({ email: "invalid" }) }));
+  expect(response.status).toBe(400);
+  expect(subscriber.upsert).not.toHaveBeenCalled();
+  expect(sendConfirmation).not.toHaveBeenCalled();
+});
+
+it("silently discards honeypot spam without writing or mailing", async () => {
+  const response = await POST(new Request("http://localhost/api/subscribe", { method: "POST", body: JSON.stringify({ email: "bot@example.com", website: "spam" }) }));
+  expect(response.status).toBe(200);
+  expect(subscriber.upsert).not.toHaveBeenCalled();
+  expect(sendConfirmation).not.toHaveBeenCalled();
+});

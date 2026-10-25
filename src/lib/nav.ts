@@ -50,6 +50,7 @@ export const SECONDARY_NAV: NavItem[] = [
   { href: "/letter", labelEn: "Letter", labelBn: "চিঠি" },
   { href: "/about", labelEn: "About", labelBn: "পরিচয়" },
   { href: "/contact", labelEn: "Contact", labelBn: "যোগাযোগ" },
+  { href: "/terms", labelEn: "Terms", labelBn: "Terms" },
   { href: "/privacy", labelEn: "Privacy", labelBn: "গোপনীয়তা" },
 ];
 

@@ -111,14 +111,14 @@ export const metadata: Metadata = {
       "Thoughts Whatever — বাংলা সাহিত্য নিয়ে পূর্ণাঙ্গ রচনা, পাঠ-পর্যালোচনা ও গবেষণাধর্মী তথ্যচিত্রের একটি মুক্ত ডিজিটাল প্ল্যাটফর্ম ও আর্কাইভ।",
     images: [
       {
-        url: absoluteUrl("/brand/logo-full.svg"),
+        url: absoluteUrl("/opengraph-image"),
         width: 1200,
         height: 630,
         alt: "Thoughts Whatever — t.w logo",
       },
     ],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", images: [absoluteUrl("/opengraph-image")] },
   robots: {
     index: true,
     follow: true,
