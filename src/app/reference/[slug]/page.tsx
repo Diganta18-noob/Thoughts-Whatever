@@ -1,3 +1,4 @@
+import { isReadingOnlyReference } from "@/lib/reference/presentation";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -58,6 +59,7 @@ export default async function ReferenceDetailPage({
   const manifest = primaryEdition?.readerManifest as any;
 
   const capabilities = deriveCapabilities({
+    workSlug: work.slug,
     rightsStatus,
     hostingMode,
     assets: primaryEdition?.assets || [],
@@ -126,7 +128,7 @@ export default async function ReferenceDetailPage({
             )}
 
             <div className="absolute top-2.5 right-2.5">
-              <ReferenceRightsBadge status={rightsStatus} size="sm" />
+              {!isReadingOnlyReference(work.slug) && <ReferenceRightsBadge status={rightsStatus} size="sm" />}
             </div>
           </div>
 
@@ -233,7 +235,7 @@ export default async function ReferenceDetailPage({
             </div>
 
             {/* Rights Warning & Companion Link if Rights Unverified */}
-            {!capabilities.isRightsVerified && (
+            {!capabilities.isRightsVerified && !isReadingOnlyReference(work.slug) && (
               <div className="bg-amber-950/30 border border-amber-800/40 rounded-lg p-4 space-y-2 mt-4">
                 <div className="flex items-center gap-2 text-xs font-mono text-amber-400">
                   <ShieldAlert className="w-4 h-4 shrink-0" />
@@ -335,7 +337,7 @@ export default async function ReferenceDetailPage({
         )}
 
         {/* Rights Dossier & Takedown Form */}
-        <ReferenceDetailClient
+        {!isReadingOnlyReference(work.slug) && <ReferenceDetailClient
           rightsStatus={rightsStatus}
           rightsMeta={rightsMeta}
           license={primaryEdition?.rights?.license}
@@ -344,7 +346,7 @@ export default async function ReferenceDetailPage({
           verifiedAt={primaryEdition?.rights?.verifiedAt}
           workTitle={work.titleBn}
           workSlug={work.slug}
-        />
+        />}
 
         {/* Section 24 & 25: Mandatory ORIGINAL SOURCE & REFERENCE Section at the VERY BOTTOM */}
         {source && (

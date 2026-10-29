@@ -1,3 +1,4 @@
+import { isReadingOnlyReference } from "@/lib/reference/presentation";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -69,7 +70,7 @@ export function ReferenceCard({ work }: ReferenceCardProps) {
           <span className="label !bg-surface/90 !text-[0.625rem] border border-rule/80 px-2.5 py-0.5 rounded-full backdrop-blur-sm">
             {work.type} · ARCHIVE
           </span>
-          <ReferenceRightsBadge status={rightsStatus} size="sm" />
+          {!isReadingOnlyReference(work.slug) && <ReferenceRightsBadge status={rightsStatus} size="sm" />}
         </div>
       </Link>
 

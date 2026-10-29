@@ -2757,3 +2757,12 @@ Validation: production build passed; 45 Jest suites / 300 tests passed; lint pas
 
 
 User follow-up: push to main. Integrate only the approved admin improvements onto the latest origin/main; exclude unrelated website/audio/environment edits.
+
+
+## 2026-10-30 — Supplied Reference book
+
+User: "upload this to reference do not add any download option or any kind of lebel like licensed public domain something"
+
+User: "remove download option" (Kalika Purana screenshot). Download flag disabled and live page verified.
+
+User: "do it" — explicit approval to upload the supplied Goddess book to configured Cloudinary storage after an approval-review block. All 404 pages uploaded; reading-only entry saved with internal rights status unchanged. No download option or public rights labels.

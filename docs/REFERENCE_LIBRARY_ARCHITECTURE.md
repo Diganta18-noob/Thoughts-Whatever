@@ -72,3 +72,10 @@ ReferenceWork (Canonical Literary / Historical Work)
 The Debabrata Biswas transcript is stored as timed cues in `src/data/reference/audio/debabrata-biswas-manifest.json` and copied to the single published AUDIO asset. `scripts/repair-reference-caption-timing.py` repairs implausible cue durations using transcript length and nearby acoustic silence, preserving all transcript text. Its unanchored timings are estimates, not verified word-level alignment. Run the Reference audio test and spot-check playback before `npx tsx scripts/sync-reference-audio-manifest.ts --apply`; the sync script refuses a mismatched transcript and updates only the matching audio asset.
 
 The listening room applies a nine-second caption lead for this recording, calibrated from a listener report at 01:39. The CC timing controls adjust that lead by one second within ±30 seconds and save the preference per work in local storage. Transcript clicks subtract the same lead when seeking. This is a playback correction, not verified forced alignment; the source manifest and audio remain unchanged.
+
+
+### Supplied reading-only reference (2026-10-30)
+
+The explicitly requested `in-the-name-of-the-goddess` entry is identified by `src/lib/reference/presentation.ts`. This scoped editorial exception allows reading while retaining internal `RIGHTS_UNVERIFIED` metadata and disabling downloads. Public rights badges/dossier are hidden for this entry; it does not assert a license or public-domain status. Other references retain their existing guardrails. A non-downloadable online-readable `SCAN_IMAGE` asset exposes its catalogue reading action without loading the full page manifest in the card query.
+
+`scripts/import-goddess-reference.ts` imports 404 rendered pages from `tmp/reference-import/page-NNN.jpg`, saves resumable Cloudinary checkpoints, and stores the reader manifest. The user explicitly approved this Cloudinary upload, and all 404 pages were uploaded and checked.

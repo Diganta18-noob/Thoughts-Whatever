@@ -245,6 +245,7 @@ export default async function ReferenceLibraryPage({
             const sourceUrl = primaryEdition?.sources[0]?.sourceUrl || null;
 
             const capabilities = deriveCapabilities({
+              workSlug: w.slug,
               rightsStatus,
               hostingMode,
               assets: primaryEdition?.assets || [],

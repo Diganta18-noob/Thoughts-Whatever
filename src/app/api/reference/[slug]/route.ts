@@ -69,6 +69,8 @@ export async function GET(
     const sourceUrl = primaryEdition?.sources[0]?.sourceUrl || null;
 
     const capabilities = deriveCapabilities({
+      workSlug: work.slug,
+      readerManifest: primaryEdition?.readerManifest,
       rightsStatus,
       hostingMode,
       assets: primaryEdition?.assets || [],
