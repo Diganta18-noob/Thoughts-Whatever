@@ -1,4 +1,5 @@
 "use client";
+import { isReadingOnlyReference } from "@/lib/reference/presentation";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
@@ -430,8 +431,8 @@ export function NativeBookReader({
             <button
               onClick={() => setIsInfoOpen(true)}
               className="p-2 rounded-lg border border-zinc-800 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 transition-colors"
-              title="Book Details & Archival Rights"
-              aria-label="Book metadata and rights"
+              title="Book Details"
+              aria-label="Book metadata"
             >
               <Info className="w-4 h-4" />
             </button>
@@ -893,7 +894,7 @@ export function NativeBookReader({
               <div className="flex items-center gap-2">
                 <Info className="w-4 h-4 text-amber-400" />
                 <h3 className="font-semibold text-zinc-100 text-sm">
-                  Book Details & Archival Rights
+                  Book Details
                 </h3>
               </div>
               <button
@@ -907,10 +908,10 @@ export function NativeBookReader({
 
             {/* Dossier Meta List */}
             <div className="space-y-4 text-xs">
-              <div className="flex items-center justify-between">
+              {!isReadingOnlyReference(work.slug) && <div className="flex items-center justify-between">
                 <span className="text-zinc-400 font-mono">Rights Status:</span>
                 <ReferenceRightsBadge status={edition.rightsStatus as any} size="sm" />
-              </div>
+              </div>}
 
               <div>
                 <h4 className="font-bengali text-lg font-bold text-zinc-100">

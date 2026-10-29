@@ -3,12 +3,15 @@ import {
   ReferenceHostingMode,
   ReferenceAssetKind,
 } from "@prisma/client";
+import { isReadingOnlyReference } from "./presentation";
 
 /**
  * Core Rights Invariant for Thoughts.Whatever:
  * 1. Material hosted directly by Thoughts.Whatever MUST have verified PUBLIC_DOMAIN or LICENSED rights.
  * 2. Material from Internet Archive or other open repositories defaults to RIGHTS_UNVERIFIED and EXTERNAL hosting.
- * 3. RIGHTS_UNVERIFIED and RESTRICTED resources must NEVER expose download or hosted media buttons.
+ * 3. Unverified/restricted resources do not expose hosted media by default.
+ *    The explicitly supplied reading-only reference has a scoped presentation exception;
+ *    its rights status stays unverified and downloads remain disabled.
  */
 
 export interface RightsCapabilities {
@@ -41,6 +44,7 @@ export function validateHostingRights(
 }
 
 export function deriveCapabilities(params: {
+  workSlug?: string;
   rightsStatus: ReferenceRightsStatus;
   hostingMode: ReferenceHostingMode;
   assets?: Array<{
@@ -58,10 +62,12 @@ export function deriveCapabilities(params: {
   const isRightsVerified =
     rightsStatus === "PUBLIC_DOMAIN" || rightsStatus === "LICENSED";
   const isHosted = hostingMode === "THOUGHTS_WHATEVER";
+  const readingOnly = isReadingOnlyReference(params.workSlug);
 
   const pdfAsset = assets.find((a) => a.kind === "PDF");
   const audioAsset = assets.find((a) => a.kind === "AUDIO");
   const transcriptAsset = assets.find((a) => a.kind === "TRANSCRIPT");
+  const scanAsset = assets.find((a) => a.kind === "SCAN_IMAGE" && a.isOnlineReadable && a.fileUrl);
 
   const hasReaderPages = Boolean(
     readerManifest &&
@@ -70,14 +76,15 @@ export function deriveCapabilities(params: {
   );
 
   const canDownload =
+    !readingOnly &&
     isRightsVerified &&
     isHosted &&
     assets.some((a) => a.isDownloadable && a.fileUrl);
 
   const canReadOnline =
-    isRightsVerified &&
+    (isRightsVerified || readingOnly) &&
     isHosted &&
-    (hasReaderPages || Boolean(pdfAsset) || Boolean(transcriptAsset?.transcriptText));
+    (hasReaderPages || Boolean(pdfAsset) || Boolean(scanAsset) || Boolean(transcriptAsset?.transcriptText));
 
   const canListen = isRightsVerified && isHosted && Boolean(audioAsset?.fileUrl);
   const canViewOriginalSource = Boolean(sourceUrl);

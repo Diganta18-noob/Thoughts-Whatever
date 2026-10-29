@@ -68,6 +68,7 @@ export default async function ReferenceReaderPage({ params, searchParams }: Read
   const manifest = selectedEdition?.readerManifest as any;
 
   const capabilities = deriveCapabilities({
+    workSlug: work.slug,
     rightsStatus,
     hostingMode,
     assets: selectedEdition?.assets || [],
