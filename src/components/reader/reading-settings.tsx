@@ -103,7 +103,7 @@ export function ReadingSettingsButton() {
           ref={panelRef}
           role="dialog"
           aria-label="Reading settings"
-          className="absolute right-0 top-12 z-50 w-[22rem] sm:w-[24rem] max-w-[calc(100vw-2rem)] animate-fade-up rounded-md border border-rule/80 bg-surface-raised p-6 shadow-2xl shadow-black/25 backdrop-blur-md"
+          className="fixed inset-x-4 top-20 z-50 w-auto max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain sm:absolute sm:inset-x-auto sm:right-0 sm:top-12 sm:w-[24rem] sm:max-w-[calc(100vw-2rem)] animate-fade-up rounded-md border border-rule/80 bg-surface-raised p-4 sm:p-6 shadow-2xl shadow-black/25 backdrop-blur-md"
         >
           {/* Header & Reset */}
           <div className="flex items-center justify-between pb-4 border-b border-rule/60">
