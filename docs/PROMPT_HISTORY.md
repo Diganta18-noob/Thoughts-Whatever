@@ -2766,3 +2766,10 @@ User: "upload this to reference do not add any download option or any kind of le
 User: "remove download option" (Kalika Purana screenshot). Download flag disabled and live page verified.
 
 User: "do it" — explicit approval to upload the supplied Goddess book to configured Cloudinary storage after an approval-review block. All 404 pages uploaded; reading-only entry saved with internal rights status unchanged. No download option or public rights labels.
+
+
+## 2026-11-04 — Mobile reading-settings panel
+
+User: "fix this mobile view problem" with a phone screenshot showing the Reading settings panel clipped beyond the left edge.
+
+Cause: the wide absolute panel was right-aligned to a header icon that is inset from the viewport edge. Fixed by anchoring the phone panel to the screen with side gutters, responsive padding, a dynamic viewport height limit, and internal scrolling. Desktop retains its anchored popover. Verified at 390×844, 320×480, and 1280×800; checked Reset, theme selection, and Escape dismissal.
