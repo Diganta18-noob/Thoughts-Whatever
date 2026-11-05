@@ -148,12 +148,12 @@ export const seriesInputSchema = z.object({
 });
 
 export const loginSchema = z.object({
-  email: z.string().trim().email("সঠিক ইমেল দিন"),
+  email: z.string().trim().max(254).email("সঠিক ইমেল দিন"),
   password: z.string().min(8, "পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে"),
 });
 
 export const forgotPasswordSchema = z.object({
-  email: z.string().trim().email("সঠিক ইমেল দিন"),
+  email: z.string().trim().max(254).email("সঠিক ইমেল দিন"),
 });
 
 export const resetPasswordSchema = z.object({
@@ -162,7 +162,7 @@ export const resetPasswordSchema = z.object({
 });
 
 export const subscribeSchema = z.object({
-  email: z.string().trim().email("সঠিক ইমেল ঠিকানা দিন"),
+  email: z.string().trim().max(254).email("সঠিক ইমেল ঠিকানা দিন"),
   nameBn: optionalText,
   source: z.string().trim().max(120).optional(),
   website: optionalText, // Honeypot field for bot mitigation

@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { subscribeSchema } from "@/lib/validation";
@@ -47,7 +48,7 @@ export async function POST(request: Request) {
   const email = parsed.data.email.trim().toLowerCase();
 
   // Secondary rate limit per email address to prevent targeted spamming
-  const emailKey = Buffer.from(email).toString("hex").slice(0, 24);
+  const emailKey = createHash("sha256").update(email).digest("hex");
   const emailLimiter = rateLimit(`subscribe:mail:${emailKey}`, { windowMs: 60 * 1000, max: 3 });
   if (!emailLimiter.success) {
     return NextResponse.json(

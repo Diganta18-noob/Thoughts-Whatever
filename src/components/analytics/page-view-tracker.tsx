@@ -10,13 +10,9 @@ function PostHogPageViewTrackerContent() {
   const lastTrackedPath = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!pathname) return;
+    if (!pathname || pathname.startsWith("/admin")) return;
 
-    let url = window.origin + pathname;
-    const searchString = searchParams?.toString();
-    if (searchString) {
-      url += `?${searchString}`;
-    }
+    const url = window.origin + pathname;
 
     if (lastTrackedPath.current === url) return;
     lastTrackedPath.current = url;

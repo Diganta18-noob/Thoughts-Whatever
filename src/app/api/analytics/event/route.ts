@@ -21,6 +21,10 @@ const ALLOWED_EVENT_TYPES = new Set([
 const WORK_EVENTS = new Set(["reference_open", "reference_read", "reference_listen"]);
 
 export async function POST(req: Request) {
+  const consent = req.headers.get("cookie")?.split(";").some((part) => part.trim() === "tw_consent=accepted");
+  if (!consent || req.headers.get("dnt") === "1" || req.headers.get("sec-gpc") === "1") {
+    return new NextResponse(null, { status: 204 });
+  }
   const ip = getClientIp(req);
   const limiter = rateLimit(`analytics:${ip}`, { windowMs: 60 * 1000, max: 60 });
   if (!limiter.success) {

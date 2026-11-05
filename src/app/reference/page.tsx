@@ -15,6 +15,7 @@ export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Reference Library | Thoughts.Whatever",
+  alternates: { canonical: "/reference" },
   description:
     "A rights-aware digital archive of texts, historical documents, recordings, and sources behind Thoughts.Whatever.",
 };
@@ -180,7 +181,7 @@ export default async function ReferenceLibraryPage({
 
           {/* Quick Rights Filter */}
           <Link
-            href={`/reference?rights=PUBLIC_DOMAIN${typeFilter ? `&type=${typeFilter}` : ""}${query ? `&q=${query}` : ""}`}
+            href={`/reference?rights=PUBLIC_DOMAIN${typeFilter ? `&type=${typeFilter}` : ""}${query ? `&q=${encodeURIComponent(query)}` : ""}`}
             className={`label rounded-full border px-3 py-1 transition-colors whitespace-nowrap ${
               rightsFilter === "PUBLIC_DOMAIN"
                 ? "!border-emerald-500/70 !text-emerald-400 font-medium"

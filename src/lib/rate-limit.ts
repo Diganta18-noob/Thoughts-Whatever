@@ -12,7 +12,7 @@ const storage = new Map<string, RateLimitTracker>();
 
 // Cleanup stale entries every 5 minutes
 if (typeof setInterval !== "undefined") {
-  setInterval(() => {
+  const cleanup = setInterval(() => {
     const now = Date.now();
     for (const [key, tracker] of storage.entries()) {
       if (now > tracker.resetTime) {
@@ -20,6 +20,8 @@ if (typeof setInterval !== "undefined") {
       }
     }
   }, 5 * 60 * 1000);
+  // Housekeeping must not hold a build/test/serverless process open.
+  cleanup.unref?.();
 }
 
 export interface RateLimitOptions {

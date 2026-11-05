@@ -17,7 +17,7 @@ import { POST } from "../route";
 const create = prisma.analyticsEvent.create as jest.Mock;
 const request = (eventType: string, metadata?: unknown) => new Request("http://localhost/api/analytics/event", {
   method: "POST",
-  headers: { "content-type": "application/json" },
+  headers: { "content-type": "application/json", cookie: "tw_consent=accepted" },
   body: JSON.stringify({ eventType, sessionId: "session-1", metadata }),
 });
 
@@ -34,5 +34,12 @@ it("records a reference work open with its work id", async () => {
 it("rejects reference work activity without a work id", async () => {
   const response = await POST(request("reference_read"));
   expect(response.status).toBe(400);
+  expect(create).not.toHaveBeenCalled();
+});
+
+
+it("ignores analytics without consent before touching the database", async () => {
+  const response = await POST(new Request("http://localhost/api/analytics/event", { method: "POST", body: "{}" }));
+  expect(response.status).toBe(204);
   expect(create).not.toHaveBeenCalled();
 });

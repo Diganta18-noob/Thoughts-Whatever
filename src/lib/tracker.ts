@@ -1,3 +1,5 @@
+import { analyticsAllowed } from "@/lib/analytics-consent";
+
 /**
  * Client-side analytics tracker.
  * Anonymous session-based tracking for views, scroll depth, reading time, and Instagram/reel clicks.
@@ -20,7 +22,7 @@ export type EventPayload = {
 };
 
 export function trackEvent(payload: EventPayload) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !analyticsAllowed()) return;
   
   // Do Not Track check
   if (navigator.doNotTrack === "1") return;
@@ -28,7 +30,7 @@ export function trackEvent(payload: EventPayload) {
   const body = JSON.stringify({
     ...payload,
     sessionId: getSessionId(),
-    referrer: document.referrer || undefined,
+    referrer: document.referrer ? new URL(document.referrer).origin : undefined,
   });
 
   if (navigator.sendBeacon) {

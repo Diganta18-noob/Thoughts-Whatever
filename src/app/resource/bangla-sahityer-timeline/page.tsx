@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     locale: "bn_IN",
     images: [
       {
-        url: absoluteUrl("/brand/logo-full.svg"),
+        url: absoluteUrl("/opengraph-image"),
         width: 1200,
         height: 630,
         alt: "বাংলা সাহিত্যের সম্পূর্ণ টাইমলাইন (১৮০০–২০২৫)",
@@ -72,7 +72,7 @@ export default function BanglaSahityerTimelinePage() {
     description:
       "ফোর্ট উইলিয়াম কলেজ থেকে সমকালীন আধুনিক পর্ব — বাংলা সাহিত্যের ২২৫ বছরের সমগ্র ইতিহাস, যুগবিভাগ, প্রধান লেখক ও কালজয়ী সৃষ্টির পূর্ণাঙ্গ ইন্টারঅ্যাক্টিভ টাইমলাইন।",
     inLanguage: "bn-IN",
-    image: absoluteUrl("/brand/logo-full.svg"),
+    image: absoluteUrl("/opengraph-image"),
     datePublished: "2026-08-25T00:00:00.000Z",
     dateModified: "2026-08-25T00:00:00.000Z",
     mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
@@ -88,7 +88,7 @@ export default function BanglaSahityerTimelinePage() {
       url: siteConfig.url,
       logo: {
         "@type": "ImageObject",
-        url: absoluteUrl("/brand/logo-full.svg"),
+        url: absoluteUrl("/opengraph-image"),
       },
       sameAs: [siteConfig.instagram].filter(Boolean),
     },

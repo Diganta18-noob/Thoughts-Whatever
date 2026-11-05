@@ -9,6 +9,8 @@ import { SubscribeForm } from "@/components/newsletter/subscribe-form";
 import { useLanguage } from "@/components/providers/language-provider";
 import { NavLabel } from "@/components/i18n/nav-label";
 
+import { OPEN_COOKIE_SETTINGS } from "@/components/providers/cookie-consent";
+
 export function SiteFooter() {
   const year = new Date().getFullYear();
   const { t, locale, isBn } = useLanguage();
@@ -100,6 +102,8 @@ export function SiteFooter() {
             </ul>
           </nav>
         </div>
+
+        <button type="button" onClick={() => window.dispatchEvent(new Event(OPEN_COOKIE_SETTINGS))} className="mt-6 min-h-11 text-sm text-content-soft underline">Cookie settings</button>
 
         {/* Colophon (Issue 5: Readable text scale 12-13px) */}
         <div className="mt-14 flex flex-col gap-4 border-t border-rule pt-6 sm:flex-row sm:items-baseline sm:justify-between">
