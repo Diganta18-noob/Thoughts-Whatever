@@ -153,11 +153,7 @@ export function NativeBookReader({
       // ignore
     }
 
-    if (currentPage >= totalPages) {
-      setIsCompleted(true);
-    } else {
-      setIsCompleted(false);
-    }
+    setIsCompleted(false);
   }, [currentPage, totalPages, work.slug]);
 
   // Preload adjacent pages for instant flipping
@@ -176,21 +172,11 @@ export function NativeBookReader({
   }, [currentPage, pages, totalPages]);
 
   const goToNextPage = useCallback(() => {
-    setCurrentPage((p) => {
-      if (p < totalPages) return p + 1;
-      setIsCompleted(true);
-      return p;
-    });
+    setCurrentPage((page) => Math.min(page + 1, totalPages));
   }, [totalPages]);
 
   const goToPrevPage = useCallback(() => {
-    setCurrentPage((p) => {
-      if (p > 1) {
-        setIsCompleted(false);
-        return p - 1;
-      }
-      return p;
-    });
+    setCurrentPage((page) => Math.max(page - 1, 1));
   }, []);
 
   const handleZoomIn = useCallback(() => {
@@ -226,6 +212,7 @@ export function NativeBookReader({
       // Do not capture if typing in an input
       const target = e.target as HTMLElement;
       if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) return;
+      if (e.key === " " && target instanceof Element && target.closest("button")) return;
 
       if (e.key === "ArrowLeft" || e.key === "h" || e.key === "PageUp") {
         e.preventDefault();
@@ -553,7 +540,10 @@ export function NativeBookReader({
 
             <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
               <button
-                onClick={() => setCurrentPage(1)}
+                onClick={() => {
+                  setIsCompleted(false);
+                  setCurrentPage(1);
+                }}
                 className="px-4 py-2 border border-zinc-700 hover:border-zinc-500 rounded-lg text-xs font-mono text-zinc-300 hover:text-zinc-100 flex items-center gap-1.5"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -699,13 +689,17 @@ export function NativeBookReader({
 
           {/* Next Page Button (min 44px touch target) */}
           <button
-            onClick={goToNextPage}
-            disabled={currentPage >= totalPages}
+            onClick={currentPage === totalPages ? () => setIsCompleted(true) : goToNextPage}
+            disabled={isCompleted}
             className="min-h-[44px] min-w-[44px] px-3.5 py-2 rounded-xl border border-zinc-800 bg-zinc-900/80 hover:bg-zinc-850 text-zinc-200 disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1.5 text-xs font-mono transition-colors shadow-sm"
-            aria-label="Next page"
+            aria-label={currentPage === totalPages ? "Finish reading" : "Next page"}
           >
-            <span className="hidden sm:inline">Next</span>
-            <ChevronRight className="w-4 h-4 text-amber-400" />
+            <span className="hidden sm:inline">{currentPage === totalPages ? "Finish" : "Next"}</span>
+            {currentPage === totalPages ? (
+              <Check className="w-4 h-4 text-amber-400" />
+            ) : (
+              <ChevronRight className="w-4 h-4 text-amber-400" />
+            )}
           </button>
         </div>
       </footer>

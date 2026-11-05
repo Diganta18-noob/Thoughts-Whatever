@@ -57,7 +57,7 @@ export function SiteHeader() {
 
         <nav
           lang={locale}
-          className="ml-auto hidden items-center gap-1.5 md:flex"
+          className="ml-auto hidden items-center gap-1.5 xl:flex"
           aria-label={t("nav.sections")}
         >
           {PRIMARY_NAV.map((item) => (
@@ -81,7 +81,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="ml-auto flex items-center gap-2 sm:gap-2.5 md:ml-4">
+        <div className="ml-auto flex items-center gap-1 min-[360px]:gap-2 sm:gap-2.5 xl:ml-4">
           <SearchDialog />
           <LanguageToggle />
           <ReadingSettingsButton />
@@ -113,7 +113,7 @@ export function SiteHeader() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-expanded={menuOpen}
             aria-label={menuOpen ? t("header.closeMenu") : t("header.openMenu")}
-            className="grid h-10 w-10 min-h-[44px] min-w-[44px] place-items-center rounded-full text-content-soft transition hover:bg-content/5 hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent md:hidden"
+            className="grid h-10 w-10 min-h-[44px] min-w-[44px] place-items-center rounded-full text-content-soft transition hover:bg-content/5 hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent xl:hidden"
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -124,7 +124,7 @@ export function SiteHeader() {
           orients themselves. */}
       {menuOpen && (
         <nav
-          className="animate-fade-in border-t border-rule bg-surface-raised md:hidden"
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain animate-fade-in border-t border-rule bg-surface-raised xl:hidden"
           aria-label={t("nav.sections")}
         >
           <ul className="divide-y divide-rule/60">

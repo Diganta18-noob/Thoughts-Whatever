@@ -30,3 +30,15 @@ test("admin routes require login and seeded credentials authenticate", async ({ 
   expect(await login.json()).toMatchObject({ ok: true });
   expect(login.headers()["set-cookie"]).toBeTruthy();
 });
+
+test("header and footer fit narrow phones and tablets", async ({ page }) => {
+  for (const width of [320, 768]) {
+    await page.setViewportSize({ width, height: 480 });
+    await page.goto("/");
+    await expect(page.getByRole("button", { name: "Open menu" })).toBeVisible();
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow, `horizontal overflow at ${width}px`).toBeLessThanOrEqual(1);
+  }
+});
