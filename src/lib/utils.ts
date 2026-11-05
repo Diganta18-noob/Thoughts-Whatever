@@ -34,7 +34,11 @@ import { getSiteName } from "./transliterate";
 
 function getCanonicalSiteUrl(): string {
   const envUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  if (envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"))) {
+  if (
+    process.env.NODE_ENV !== "production" &&
+    envUrl &&
+    (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"))
+  ) {
     return envUrl.replace(/\/$/, "");
   }
   return "https://www.thoughtswhatever.in";

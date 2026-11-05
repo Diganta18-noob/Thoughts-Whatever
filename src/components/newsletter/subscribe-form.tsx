@@ -124,7 +124,7 @@ export function SubscribeForm({
         autoComplete="off"
         aria-hidden="true"
       />
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 min-[360px]:flex-row">
         <label className="sr-only" htmlFor={`subscribe-${source}`} lang={locale}>
           {t("letter.emailLabel")}
         </label>

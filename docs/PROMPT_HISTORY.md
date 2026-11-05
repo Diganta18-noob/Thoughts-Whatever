@@ -2773,3 +2773,5 @@ User: "do it" — explicit approval to upload the supplied Goddess book to confi
 User: "fix this mobile view problem" with a phone screenshot showing the Reading settings panel clipped beyond the left edge.
 
 Cause: the wide absolute panel was right-aligned to a header icon that is inset from the viewport edge. Fixed by anchoring the phone panel to the screen with side gutters, responsive padding, a dynamic viewport height limit, and internal scrolling. Desktop retains its anchored popover. Verified at 390×844, 320×480, and 1280×800; checked Reset, theme selection, and Escape dismissal.
+
+2026-11-06 — User said start plan. Began the full-site audit and verified the first batch of canonical URL, responsive layout and last-page reader fixes.
