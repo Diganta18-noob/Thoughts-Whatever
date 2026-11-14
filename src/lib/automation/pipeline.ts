@@ -42,7 +42,9 @@ export function isPipelineRunning(): boolean {
   return isPipelineExecuting;
 }
 
-export async function runMasterPipeline(): Promise<PipelineReport> {
+export async function runMasterPipeline(options: {
+  databaseBackup?: () => Promise<Record<string, unknown>>;
+} = {}): Promise<PipelineReport> {
   if (isPipelineExecuting) {
     throw new Error("Pipeline execution is already in progress.");
   }
@@ -100,6 +102,7 @@ export async function runMasterPipeline(): Promise<PipelineReport> {
 
     // Step 2: Database Backup
     await executeStep(2, "Database Backup", async () => {
+      if (options.databaseBackup) return options.databaseBackup();
       const dbBackup = await backupDatabase();
       return { filename: dbBackup.filename, sizeBytes: dbBackup.sizeBytes, r2Url: dbBackup.r2Url };
     });

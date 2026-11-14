@@ -3,7 +3,7 @@ import path from "path";
 import zlib from "zlib";
 import { prisma } from "@/lib/prisma";
 
-export async function backupDatabase(targetDir: string): Promise<{
+export async function backupDatabase(targetDir: string, includeAuth = true): Promise<{
   filePath: string;
   tableCount: number;
   totalRows: number;
@@ -21,8 +21,8 @@ export async function backupDatabase(targetDir: string): Promise<{
       prisma.source.findMany(),
       prisma.timelineEvent.findMany(),
       prisma.subscriber.findMany(),
-      prisma.adminUser.findMany(),
-      prisma.refreshToken.findMany(),
+      includeAuth ? prisma.adminUser.findMany() : Promise.resolve([]),
+      includeAuth ? prisma.refreshToken.findMany() : Promise.resolve([]),
       prisma.analyticsEvent.findMany(),
     ]);
 
@@ -37,8 +37,7 @@ export async function backupDatabase(targetDir: string): Promise<{
       Source: sources,
       TimelineEvent: timeline,
       Subscriber: subscribers,
-      AdminUser: adminUsers,
-      RefreshToken: refreshTokens,
+      ...(includeAuth ? { AdminUser: adminUsers, RefreshToken: refreshTokens } : {}),
       AnalyticsEvent: analyticsEvents,
     },
   };
@@ -63,7 +62,7 @@ export async function backupDatabase(targetDir: string): Promise<{
 
   return {
     filePath: jsonBackupPath,
-    tableCount: 10,
+    tableCount: Object.keys(databaseData.tables).length,
     totalRows,
     sizeBytes: stat.size,
   };

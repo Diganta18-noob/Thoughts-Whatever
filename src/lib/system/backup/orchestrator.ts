@@ -12,7 +12,8 @@ const BACKUPS_ROOT = getBackupsDir();
 
 export async function createBackup(
   type: "full" | "database" | "media" | "content" = "full",
-  maintenanceReport?: MaintenanceReport
+  maintenanceReport?: MaintenanceReport,
+  options: { includeAuth?: boolean } = {},
 ): Promise<BackupResult> {
   const startTime = Date.now();
   const dateStr = new Date().toISOString().replace(/[:.]/g, "-");
@@ -33,7 +34,7 @@ export async function createBackup(
   // 1. Database backup
   if (type === "full" || type === "database") {
     try {
-      dbStats = await backupDatabase(backupDir);
+      dbStats = await backupDatabase(backupDir, options.includeAuth);
       checksums["database.json.gz"] = computeFileHash(dbStats.filePath);
     } catch (e: any) {
       errors.push(`Database backup error: ${e.message}`);
