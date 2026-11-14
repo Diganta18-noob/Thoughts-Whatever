@@ -3,6 +3,7 @@ import path from "path";
 import { prisma } from "@/lib/prisma";
 import { v2 as cloudinary } from "cloudinary";
 import { getBackupsDir, downloadBackupFromR2 } from "../backup/storage";
+import { computeFileHash } from "../backup/verify";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -30,51 +31,66 @@ export async function restoreBackup(backupId: string, options: { scope?: "full" 
 
   const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
   const restoredComponents: string[] = [];
+  let databaseRowsRestored: number | undefined;
 
   // 1. Restore Database
+  if (scope === "database" && !manifest.checksums?.["database.json.gz"]) {
+    throw new Error("Backup manifest does not contain a database archive.");
+  }
   if ((scope === "full" || scope === "database") && manifest.checksums["database.json.gz"]) {
     const dbBackupFile = path.join(backupDir, "database.json.gz");
+    if (computeFileHash(dbBackupFile) !== manifest.checksums["database.json.gz"]) {
+      throw new Error("Database archive checksum does not match the manifest.");
+    }
     const zlib = await import("zlib");
     const compressed = fs.readFileSync(dbBackupFile);
     const decompressed = zlib.gunzipSync(compressed).toString("utf-8");
     const dbData = JSON.parse(decompressed);
 
-    if (dbData.tables) {
-      await prisma.$transaction(
+    const tables = ["AnalyticsEvent", "TimelineEvent", "Source", "Piece", "Author", "Series", "Tag", "Subscriber"] as const;
+    const present = tables.filter((table) => Array.isArray(dbData.tables?.[table]));
+    if (present.length === 0) throw new Error("Database archive contains no supported tables.");
+    if (present.length > 0) {
+      databaseRowsRestored = await prisma.$transaction(
         async (tx) => {
+          const counts = [];
           // Clear & restore core tables safely in order
           if (dbData.tables.AnalyticsEvent) {
             await tx.analyticsEvent.deleteMany();
-            await tx.analyticsEvent.createMany({ data: dbData.tables.AnalyticsEvent });
           }
           if (dbData.tables.TimelineEvent) {
             await tx.timelineEvent.deleteMany();
-            await tx.timelineEvent.createMany({ data: dbData.tables.TimelineEvent });
           }
           if (dbData.tables.Source) {
             await tx.source.deleteMany();
-            await tx.source.createMany({ data: dbData.tables.Source });
           }
           if (dbData.tables.Piece) {
             await tx.piece.deleteMany();
-            await tx.piece.createMany({ data: dbData.tables.Piece });
           }
           if (dbData.tables.Author) {
             await tx.author.deleteMany();
-            await tx.author.createMany({ data: dbData.tables.Author });
+            counts.push(await tx.author.createMany({ data: dbData.tables.Author }));
           }
           if (dbData.tables.Series) {
             await tx.series.deleteMany();
-            await tx.series.createMany({ data: dbData.tables.Series });
+            counts.push(await tx.series.createMany({ data: dbData.tables.Series }));
           }
           if (dbData.tables.Tag) {
             await tx.tag.deleteMany();
-            await tx.tag.createMany({ data: dbData.tables.Tag });
+            counts.push(await tx.tag.createMany({ data: dbData.tables.Tag }));
           }
           if (dbData.tables.Subscriber) {
             await tx.subscriber.deleteMany();
-            await tx.subscriber.createMany({ data: dbData.tables.Subscriber });
+            counts.push(await tx.subscriber.createMany({ data: dbData.tables.Subscriber }));
           }
+          if (dbData.tables.Piece) counts.push(await tx.piece.createMany({ data: dbData.tables.Piece }));
+          if (dbData.tables.Source) counts.push(await tx.source.createMany({ data: dbData.tables.Source }));
+          if (dbData.tables.TimelineEvent) counts.push(await tx.timelineEvent.createMany({ data: dbData.tables.TimelineEvent }));
+          if (dbData.tables.AnalyticsEvent) counts.push(await tx.analyticsEvent.createMany({ data: dbData.tables.AnalyticsEvent }));
+          const restored = counts.reduce((total, result) => total + result.count, 0);
+          const expected = present.reduce((total, table) => total + dbData.tables[table].length, 0);
+          if (restored !== expected) throw new Error(`Expected to restore ${expected} rows, wrote ${restored}.`);
+          return restored;
         },
         {
           maxWait: 10000,
@@ -102,6 +118,7 @@ export async function restoreBackup(backupId: string, options: { scope?: "full" 
     backupId,
     timestamp: new Date().toISOString(),
     restoredComponents,
+    databaseRowsRestored,
     status: "SUCCESS",
   };
 }
