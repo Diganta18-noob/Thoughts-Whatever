@@ -30,7 +30,7 @@ async function main() {
     return;
   }
 
-  let result: "SUCCESS" | "WARNING" | "FAILED";
+  let result: Awaited<ReturnType<typeof runMasterPipeline>>["overallStatus"];
   try {
     const { createBackup } = await import("../src/lib/system/backup/orchestrator");
     result = (await runMasterPipeline({
